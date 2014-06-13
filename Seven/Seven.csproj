@@ -35,7 +35,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="compare.cs" />
+    <Compile Include="Compare.cs" />
     <Compile Include="Mathematics\Calc.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />
@@ -48,7 +48,7 @@
     <Compile Include="Structures\Array.cs" />
     <Compile Include="Structures\AvlTree.cs" />
     <Compile Include="Structures\BTree.cs" />
-    <Compile Include="Structures\foreach.cs" />
+    <Compile Include="Structures\Foreach.cs" />
     <Compile Include="Structures\Graph.cs" />
     <Compile Include="Structures\HashTable.cs" />
     <Compile Include="Structures\Heap.cs" />
@@ -65,12 +65,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="_README.txt" />
     <Content Include="Structures\_README.txt" />
-    <Content Include="_SUPPORT.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="_LISCENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
