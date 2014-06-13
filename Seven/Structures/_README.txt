@@ -71,11 +71,3 @@ within them. For specific sorting, see the "Sort" class, which
 contains various sorting algorithms on arrays. All the data 
 structures include "ToArray" methods, so that you can pull out
 the contents and sort it.
-
-LISCENSE:----------------------------------------------------------
-
-See "_LISCENSE.txt" in th root project directory.
-
-SUPPORT:-----------------------------------------------------------
-
-See "_SUPPORT.txt" in the root project directory.
