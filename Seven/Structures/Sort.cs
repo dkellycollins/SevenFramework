@@ -256,7 +256,7 @@ namespace Seven.Structures
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare for the sort.</param>
     /// <param name="array">The array to be sorted</param>
-    /// <remarks>Runtime: Omega(n), average(n*n!), O(n*n!). Memory: in place. Stablity: N/A.</remarks>
+    /// <remarks>Runtime: Omega(n), average(n*n!), O(n*n!). Memory: in place. Stablity: N/A (not yet analyzed).</remarks>
     public static void Slow<Type>(Compare<Type> compare, Type[] array)
     {
       Sort.Slow<Type>(compare, array, 0, array.Length);
