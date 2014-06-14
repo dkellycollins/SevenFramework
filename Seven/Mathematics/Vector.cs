@@ -17,22 +17,22 @@ namespace Seven.Mathematics
     /// <summary>Same as accessing index 1.</summary>
     public float Y
     {
-      get { try { return _vector[1]; } catch { throw new VectorException("vector does not contains a y component."); } }
-      set { try { _vector[1] = value; } catch { throw new VectorException("vector does not contains a y component."); } }
+      get { try { return _vector[1]; } catch { throw new Exception("vector does not contains a y component."); } }
+      set { try { _vector[1] = value; } catch { throw new Exception("vector does not contains a y component."); } }
     }
 
     /// <summary>Same as accessing index 2.</summary>
     public float Z
     {
-      get { try { return _vector[2]; } catch { throw new VectorException("vector does not contains a z component."); } }
-      set { try { _vector[2] = value; } catch { throw new VectorException("vector does not contains a z component."); } }
+      get { try { return _vector[2]; } catch { throw new Exception("vector does not contains a z component."); } }
+      set { try { _vector[2] = value; } catch { throw new Exception("vector does not contains a z component."); } }
     }
 
     /// <summary>Same as accessing index 3.</summary>
     public float W
     {
-      get { try { return _vector[3]; } catch { throw new VectorException("vector does not contains a w component."); } }
-      set { try { _vector[3] = value; } catch { throw new VectorException("vector does not contains a w component."); } }
+      get { try { return _vector[3]; } catch { throw new Exception("vector does not contains a w component."); } }
+      set { try { _vector[3] = value; } catch { throw new Exception("vector does not contains a w component."); } }
     }
 
     /// <summary>Gives you direct access to the values in this vector.</summary>
@@ -46,13 +46,13 @@ namespace Seven.Mathematics
     /// <returns>The value of the given index.</returns>
     public float this[int index]
     {
-      get { try { return _vector[index]; } catch { throw new VectorException("index out of bounds."); } }
-      set { try { _vector[index] = value; } catch { throw new VectorException("index out of bounds."); } }
+      get { try { return _vector[index]; } catch { throw new Exception("index out of bounds."); } }
+      set { try { _vector[index] = value; } catch { throw new Exception("index out of bounds."); } }
     }
 
     /// <summary>Creates a new vector with the given number of components.</summary>
     /// <param name="dimensions">The number of dimensions this vector will have.</param>
-    public Vector(int dimensions) { try { _vector = new float[dimensions]; } catch { throw new VectorException("invalid dimensions on vector contruction."); } }
+    public Vector(int dimensions) { try { _vector = new float[dimensions]; } catch { throw new Exception("invalid dimensions on vector contruction."); } }
 
     /// <summary>Creates a vector out of the given values.</summary>
     /// <param name="vector">The values to initialize the vector to.</param>
@@ -211,7 +211,7 @@ namespace Seven.Mathematics
       float[] leftFloats = left.Floats;
       float[] rightFloats = right.Floats;
       if (leftFloats.Length != rightFloats.Length)
-        throw new VectorException("invalid dimensions on vector addition.");
+        throw new Exception("invalid dimensions on vector addition.");
       Vector result = new Vector(leftFloats.Length);
       float[] resultFloats = result.Floats;
       for (int i = 0; i < leftFloats.Length; i++)
@@ -243,7 +243,7 @@ namespace Seven.Mathematics
       Vector result = new Vector(leftFloats.Length);
       float[] resultFloats = result.Floats;
       if (leftFloats.Length != rightFloats.Length)
-        throw new VectorException("invalid dimensions on vector subtraction.");
+        throw new Exception("invalid dimensions on vector subtraction.");
       for (int i = 0; i < leftFloats.Length; i++)
         resultFloats[i] = leftFloats[i] - rightFloats[i];
       return result;
@@ -287,7 +287,7 @@ namespace Seven.Mathematics
       float[] leftFloats = left.Floats;
       float[] rightFloats = right.Floats;
       if (leftFloats.Length != rightFloats.Length)
-        throw new VectorException("invalid dimensions on vector dot product.");
+        throw new Exception("invalid dimensions on vector dot product.");
       float result = 0;
       for (int i = 0; i < leftFloats.Length; i++)
         result += (leftFloats[i] * rightFloats[i]);
@@ -301,7 +301,7 @@ namespace Seven.Mathematics
     public static Vector CrossProduct(Vector left, Vector right)
     {
       if (left.Dimensions != right.Dimensions)
-        throw new VectorException("invalid cross product !(left.Dimensions == right.Dimensions)");
+        throw new Exception("invalid cross product !(left.Dimensions == right.Dimensions)");
       if (left.Dimensions == 3 || left.Dimensions == 4)
       {
         return new Vector(
@@ -309,7 +309,7 @@ namespace Seven.Mathematics
           left[2] * right[0] - left[0] * right[2],
           left[0] * right[1] - left[1] * right[0]);
       }
-      throw new VectorException("my cross product function is only defined for 3-component vectors.");
+      throw new Exception("my cross product function is only defined for 3-component vectors.");
     }
 
     /// <summary>Normalizes a vector.</summary>
@@ -408,7 +408,7 @@ namespace Seven.Mathematics
           y * w2 + cosHalfAngle * y2 + z * x2 - x * z2,
           z * w2 + cosHalfAngle * z2 + x * y2 - y * x2);
       }
-      throw new VectorException("my RotateBy() function is only defined for 3-component vectors.");
+      throw new Exception("my RotateBy() function is only defined for 3-component vectors.");
     }
 
     /// <summary>Rotates a vector by a quaternion.</summary>
@@ -420,7 +420,7 @@ namespace Seven.Mathematics
       if (vector.Dimensions == 3)
         return Quaternion.Rotate(rotation, vector);
       else
-        throw new VectorException("my quaternion rotations are only defined for 3-component vectors.");
+        throw new Exception("my quaternion rotations are only defined for 3-component vectors.");
     }
 
     /// <summary>Computes the linear interpolation between two vectors.</summary>
@@ -433,9 +433,9 @@ namespace Seven.Mathematics
       float[] leftFloats = left.Floats;
       float[] rightFloats = right.Floats;
       if (blend < 0 || blend > 1.0f)
-        throw new VectorException("invalid lerp blend value: (blend < 0.0f || blend > 1.0f).");
+        throw new Exception("invalid lerp blend value: (blend < 0.0f || blend > 1.0f).");
       if (leftFloats.Length != rightFloats.Length)
-        throw new VectorException("invalid lerp matrix length: (left.Dimensions != right.Dimensions)");
+        throw new Exception("invalid lerp matrix length: (left.Dimensions != right.Dimensions)");
       Vector result = new Vector(leftFloats.Length);
       float[] resultFloats = result.Floats;
       for (int i = 0; i < leftFloats.Length; i++)
@@ -451,7 +451,7 @@ namespace Seven.Mathematics
     public static Vector Slerp(Vector left, Vector right, float blend)
     {
       if (blend < 0 || blend > 1.0f)
-        throw new VectorException("invalid slerp blend value: (blend < 0.0f || blend > 1.0f).");
+        throw new Exception("invalid slerp blend value: (blend < 0.0f || blend > 1.0f).");
       float dot = Calc.Clamp(Vector.DotProduct(left, right), -1.0f, 1.0f);
       float theta = Calc.ArcCos(dot) * blend;
       return left * Calc.Cos(theta) + (right - left * dot).Normalize() * Calc.Sin(theta);
@@ -549,9 +549,9 @@ namespace Seven.Mathematics
       return Vector.EqualsReference(this, (Vector)right);
     }
 
-    private class VectorException : Exception
+    private class Exception : System.Exception
     {
-      public VectorException(string message) : base(message) { }
+      public Exception(string message) : base(message) { }
     }
   }
 

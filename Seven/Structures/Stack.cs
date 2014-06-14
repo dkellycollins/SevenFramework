@@ -11,8 +11,6 @@ namespace Seven.Structures
     Type Pop();
   }
 
-  #region StackLinked<Type>
-
   /// <summary>Implements a First-In-Last-Out stack data structure that inherits InterfaceTraversable.</summary>
   /// <typeparam name="Type">The generic type within the structure.</typeparam>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.
@@ -258,8 +256,6 @@ namespace Seven.Structures
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
     private class StackLinkedException : Exception { public StackLinkedException(string message) : base(message) { } }
   }
-
-  #endregion
 
   //#region StackLinkedThreadSafe<Type>
 
