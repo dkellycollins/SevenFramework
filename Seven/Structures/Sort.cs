@@ -5,7 +5,7 @@ namespace Seven.Structures
   /// <summary>Contains static sorting algorithms.</summary>
   public static class Sort
   {
-    /// <summary>Sorts an entire array of type IComparable in non-decreasing order using the bubble sort algorithm.</summary>
+    /// <summary>Sorts an entire array in non-decreasing order using the bubble sort algorithm.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The compare function (returns a positive value if left is greater than right).</param>
     /// <param name="array">the array to be sorted</param>
@@ -22,7 +22,7 @@ namespace Seven.Structures
           }
     }
 
-    /// <summary>Sorts an entire array of type IComparable in non-decreasing order using the selection sort algoritm.</summary>
+    /// <summary>Sorts an entire array in non-decreasing order using the selection sort algoritm.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">Returns negative if the left is less than the right.</param>
     /// <param name="array">the array to be sorted</param>
@@ -43,7 +43,7 @@ namespace Seven.Structures
       }
     }
 
-    /// <summary>Sorts an entire array of type IComparable in non-decreasing order using the insertion sort algorithm.</summary>
+    /// <summary>Sorts an entire array in non-decreasing order using the insertion sort algorithm.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">Returns positive if left greater than right.</param>
     /// <param name="array">the array to be sorted</param>
@@ -60,7 +60,7 @@ namespace Seven.Structures
       }
     }
 
-    /// <summary>Sorts an entire array of type IComparable in non-decreasing order using the quick sort algorithm.</summary>
+    /// <summary>Sorts an entire array in non-decreasing order using the quick sort algorithm.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare to be sorted by.</param>
     /// <param name="array">The array to be sorted</param>
@@ -100,7 +100,7 @@ namespace Seven.Structures
       }
     }
 
-    /// <summary>Sorts up to an array of type IComparable in non-decreasing order using the merge sort algorithm.</summary>
+    /// <summary>Sorts up to an array in non-decreasing order using the merge sort algorithm.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">Returns zero or negative if the left is less than or equal to the right.</param>
     /// <param name="array">The array to be sorted</param>
@@ -137,7 +137,7 @@ namespace Seven.Structures
       }
     }
 
-    /// <summary>Sorts an entire array of type IComparable in non-decreasing order using the heap sort algorithm.</summary>
+    /// <summary>Sorts an entire array in non-decreasing order using the heap sort algorithm.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare for the sort.</param>
     /// <param name="array">The array to be sorted</param>
@@ -177,10 +177,50 @@ namespace Seven.Structures
       }
     }
 
+    /// <summary>Method specifically for computing object keys in the Counting Sort algorithm.</summary>
+    /// <typeparam name="Type">The type of instances in the array to be sorted.</typeparam>
+    /// <param name="instance">The instance to compute a counting key for.</param>
+    /// <returns>The counting key computed from the provided instance.</returns>
+    public delegate int ComputeCountingKey<Type>(Type instance);
+
+    /// <summary>Sorts an entire array in non-decreasing order using the heap sort algorithm.</summary>
+    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <param name="computeCountingKey">Method specifically for computing object keys in the Counting Sort algorithm.</param>
+    /// <param name="array">The array to be sorted</param>
+    /// <remarks>Runtime: Theta(Max(key)). Memory: Max(key). Stablity: yes.</remarks>
+    public static void Counting<Type>(ComputeCountingKey<Type> computeCountingKey, Type[] array)
+    {
+      int[] count = new int[array.Length];
+      int maxKey = 0;
+      for (int i = 0; i < array.Length; i++)
+      {
+        int key = computeCountingKey(array[i]) / array.Length;
+        count[key] += 1;
+        if (key > maxKey)
+          maxKey = key;
+      }
+
+      int total = 0;
+      for (int i = 0; i < maxKey; i++)
+      {
+        int oldCount = count[i];
+        count[i] = total;
+        total += oldCount;
+      }
+
+      Type[] output = new Type[maxKey];
+      for (int i = 0; i < array.Length; i++)
+      {
+        int key = computeCountingKey(array[i]);
+        output[count[key]] = array[i];
+        count[computeCountingKey(array[i])] += 1;
+      }
+    }
+
     /// <summary>Sorts an entire array in a randomized order.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="array">The aray to shuffle.</param>
-    /// <remarks>Runtime: O(n). Memory: in place.</remarks>
+    /// <remarks>Runtime: O(n). Memory: in place. Stable: N/A (not a comparative sort).</remarks>
     public static void Shuffle<Type>(Type[] array)
     {
       Random random = new Random();
@@ -193,7 +233,7 @@ namespace Seven.Structures
       }
     }
 
-    /// <summary>Sorts an entire array of type IComparable in non-decreasing order using the slow sort algorithm.</summary>
+    /// <summary>Sorts an entire array in non-decreasing order using the slow sort algorithm.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare for the sort.</param>
     /// <param name="array">The array to be sorted.</param>
@@ -212,7 +252,7 @@ namespace Seven.Structures
       return true;
     }
 
-    /// <summary>Sorts an entire array of type IComparable in non-decreasing order using the slow sort algorithm.</summary>
+    /// <summary>Sorts an entire array of in non-decreasing order using the slow sort algorithm.</summary>
     /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare for the sort.</param>
     /// <param name="array">The array to be sorted</param>
