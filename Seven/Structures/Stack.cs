@@ -1,22 +1,10 @@
-﻿// SEVENENGINE LISCENSE:
-// You are free to use, modify, and distribute any or all code segments/files for any purpose
-// including commercial use under the following condition: any code using or originally taken 
-// from the SevenEngine project must include citation to its original author(s) located at the
-// top of each source code file, or you may include a reference to the SevenEngine project as
-// a whole but you must include the current SevenEngine official website URL and logo.
-// - Thanks.  :)  (support: seven@sevenengine.com)
-
-// Author(s):
-// - Zachary Aaron Patten (aka Seven) seven@sevenengine.com
-// Last Edited: 11-16-13
-
-using System;
-using System.Threading;
-using Seven.Structures;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Seven.Structures
 {
-  public interface Stack<Type> //: Structure<Type>
+  public interface Stack<Type> : Structure<Type>
   {
     void Push(Type push);
     Type Peek();
@@ -30,20 +18,20 @@ namespace Seven.Structures
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.
   /// Seven (Zachary Patten) 10-12-13.</remarks>
   [Serializable]
-  public class StackLinked<Type> : Stack<Type>
+  public class Stack_Linked<Type> : Stack<Type>
   {
     #region StackLinkedNode
 
     /// <summary>This class just holds the data for each individual node of the stack.</summary>
-    private class StackLinkedNode
+    private class Node
     {
       private Type _value;
-      private StackLinkedNode _down;
+      private Node _down;
 
       internal Type Value { get { return _value; } set { _value = value; } }
-      internal StackLinkedNode Down { get { return _down; } set { _down = value; } }
+      internal Node Down { get { return _down; } set { _down = value; } }
 
-      internal StackLinkedNode(Type data, StackLinkedNode down) 
+      internal Node(Type data, Node down) 
       {
         _value = data;
         _down = down;
@@ -52,7 +40,7 @@ namespace Seven.Structures
 
     #endregion
 
-    private StackLinkedNode _top;
+    private Node _top;
     private int _count;
 
     /// <summary>Returns the number of items in the stack.</summary>
@@ -61,7 +49,7 @@ namespace Seven.Structures
 
     /// <summary>Creates an instance of a stack.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public StackLinked()
+    public Stack_Linked()
     {
       _top = null;
       _count = 0;
@@ -72,7 +60,7 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public void Push(Type addition)
     {
-      _top = new StackLinkedNode(addition, _top);
+      _top = new Node(addition, _top);
       _count++;
     }
 
@@ -105,195 +93,160 @@ namespace Seven.Structures
       _top = null;
       _count = 0;
     }
+    
+    #region .Net Framework Compatibility
 
-    /// <summary>Performs a functional paradigm top-to-bottom traversal of the stack.</summary>
-    /// <param name="traversalFunction">The function to perform each iteration.</param>
-    /// <remarks>Runtime: O(n * foreachFunction).</remarks>
-    public bool TraverseBreakable(Func<Type, bool> traversalFunction)
+    ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    //public static explicit operator Array_Array<Type>(Type[] array)
+    //{
+    //  return new Array_Array<Type>(array);
+    //}
+
+    ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    //public static explicit operator Type[](Array_Array<Type> array)
+    //{
+    //  return array.ToArray();
+    //}
+
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    IEnumerator IEnumerable.GetEnumerator()
     {
-      StackLinkedNode looper = _top;
-      while (looper != null)
-      {
-        if (!traversalFunction(looper.Value))
-          return false;
-        looper = looper.Down;
-      }
-      return true;
+      for (Node looper = this._top; looper != null; looper = looper.Down)
+        yield return looper.Value;
     }
 
-    public void Traverse(Action<Type> traversalFunction)
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
     {
-      StackLinkedNode looper = _top;
-      while (looper != null)
-      {
-        traversalFunction(looper.Value);
-        looper = looper.Down;
-      }
-    }
-
-    /// <summary>Converts the list into a standard array.</summary>
-    /// <returns>A standard array of all the items.</returns>
-    /// <remarks>Runtime: Theta(n).</remarks>
-    public Type[] ToArray()
-    {
-      if (_count == 0)
-        return null;
-      Type[] array = new Type[_count];
-       StackLinkedNode looper = _top;
-      for (int i = 0; i < _count; i++)
-      {
-        array[i] = looper.Value;
-        looper = looper.Down;
-      }
-      return array;
-    }
-
-    /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class StackLinkedException : Exception { public StackLinkedException(string message) : base(message) { } }
-  }
-
-  #endregion
-
-  #region StackLinkedThreadSafe<Type>
-
-  /// <summary>Implements a First-In-Last-Out stack data structure that inherits InterfaceTraversable.</summary>
-  /// <typeparam name="Type">The generic type within the structure.</typeparam>
-  /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.
-  /// Seven (Zachary Patten) 10-12-13.</remarks>
-  [Serializable]
-  public class StackLinkedThreadSafe<Type> : Stack<Type>
-  {
-    #region StackLinkedNode
-
-    /// <summary>This class just holds the data for each individual node of the stack.</summary>
-    private class StackLinkedNode
-    {
-      private Type _value;
-      private StackLinkedNode _down;
-
-      internal Type Value { get { return _value; } set { _value = value; } }
-      internal StackLinkedNode Down { get { return _down; } set { _down = value; } }
-
-      internal StackLinkedNode(Type data, StackLinkedNode down)
-      {
-        _value = data;
-        _down = down;
-      }
+      for (Node looper = this._top; looper != null; looper = looper.Down)
+        yield return looper.Value;
     }
 
     #endregion
 
-    private StackLinkedNode _top;
-    private int _count;
+    /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
+    /// <remarks>Returns long.MaxValue on overflow.</remarks>
+    public long SizeOf { get { return this._count; } }
 
-    private object _lock;
-    private int _readers;
-    private int _writers;
+    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
+    //Type[] GetValues<Key>(Key key, Compare<Type, Key> compare);
 
-    /// <summary>Returns the number of items in the stack.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public int Count { get { ReaderLock(); int count = _count; ReaderUnlock(); return count; } }
+    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
+    /// <param name="values">The values that matched the given key.</param>
+    /// <returns>true if 1 or more values were found; false if no values were found.</returns>
+    //bool TryGetValues<Key>(Key key, Compare<Type, Key> compare, out Type[] values);
 
-    /// <summary>Creates an instance of a stack.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public StackLinkedThreadSafe()
+    /// <summary>Checks to see if a given object is in this data structure.</summary>
+    /// <param name="item">The item to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>true if the item is in this structure; false if not.</returns>
+    public bool Contains(Type item, Compare<Type> compare)
     {
-      _top = null;
-      _count = 0;
-      _lock = new object();
+      for (Node looper = this._top; looper != null; looper = looper.Down)
+        if (compare(looper.Value, item) == Comparison.Equal)
+          return true;
+      return false;
     }
 
-    /// <summary>Adds an item to the top of the stack.</summary>
-    /// <param name="addition">The item to add to the stack.</param>
-    /// <remarks>Runtime: O(1).</remarks>
-    public void Push(Type addition)
+    /// <summary>Checks to see if a given object is in this data structure.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>true if the item is in this structure; false if not.</returns>
+    public bool Contains<Key>(Key key, Compare<Type, Key> compare)
     {
-      WriterLock();
-      _top = new StackLinkedNode(addition, _top);
-      _count++;
-      WriterUnlock();
+      for (Node looper = this._top; looper != null; looper = looper.Down)
+        if (compare(looper.Value, key) == Comparison.Equal)
+          return true;
+      return false;
     }
 
-    /// <summary>Returns the most recent addition to the stack.</summary>
-    /// <returns>The most recent addition to the stack.</returns>
-    /// <remarks>Runtime: O(1).</remarks>
-    public Type Peek()
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    public void Foreach(Foreach<Type> function)
     {
-      ReaderLock();
-      if (_top == null)
+      for (Node looper = this._top; looper != null; looper = looper.Down)
+        function(looper.Value);
+    }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    public void Foreach(ForeachRef<Type> function)
+    {
+      for (Node looper = this._top; looper != null; looper = looper.Down)
       {
-        ReaderUnlock();
-        throw new StackLinkedException("Attempting to remove from an empty queue.");
+        Type temp = looper.Value;
+        function(ref temp);
+        looper.Value = temp;
       }
-      Type peek = _top.Value;
-      ReaderUnlock();
-      return peek;
     }
 
-    /// <summary>Removes and returns the most recent addition to the stack.</summary>
-    /// <returns>The most recent addition to the stack.</returns>
-    /// <remarks>Runtime: O(1).</remarks>
-    public Type Pop()
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    /// <returns>The resulting status of the iteration.</returns>
+    public ForeachStatus Foreach(ForeachBreak<Type> function)
     {
-      WriterLock();
-      Type x = _top.Value;
-      _top = _top.Down;
-      _count--;
-      WriterUnlock();
-      return x;
+      for (Node looper = this._top; looper != null; looper = looper.Down)
+        if (function(looper.Value) == ForeachStatus.Break)
+          return ForeachStatus.Break;
+      return ForeachStatus.Continue;
     }
 
-    /// <summary>Clears the stack to an empty state.</summary>
-    /// <remarks>Runtime: O(1). Note: causes considerable garbage collection.</remarks>
-    public void Clear()
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    /// <returns>The resulting status of the iteration.</returns>
+    public ForeachStatus Foreach(ForeachRefBreak<Type> function)
     {
-      WriterLock();
-      _top = null;
-      _count = 0;
-      WriterUnlock();
-    }
-
-    /// <summary>Performs a functional paradigm top-to-bottom traversal of the stack.</summary>
-    /// <param name="traversalFunction">The function to perform each iteration.</param>
-    /// <remarks>Runtime: O(n * foreachFunction).</remarks>
-    public bool TraverseBreakable(Func<Type, bool> traversalFunction)
-    {
-      ReaderLock();
-      StackLinkedNode looper = _top;
-      while (looper != null)
+      for (Node looper = this._top; looper != null; looper = looper.Down)
       {
-        if (!traversalFunction(looper.Value))
+        Type temp = looper.Value;
+        if (function(ref temp) == ForeachStatus.Break)
         {
-          ReaderUnlock();
-          return false;
+          looper.Value = temp;
+          return ForeachStatus.Break;
         }
-        looper = looper.Down;
+        looper.Value = temp;
       }
-      ReaderUnlock();
-      return true;
+      return ForeachStatus.Continue;
     }
 
-    public void Traverse(Action<Type> traversalFunction)
+    /// <summary>Creates a shallow clone of this data structure.</summary>
+    /// <returns>A shallow clone of this data structure.</returns>
+    public Structure<Type> Clone()
     {
-      ReaderLock();
-      StackLinkedNode looper = _top;
-      while (looper != null)
+      Stack_Linked<Type> clone = new Stack_Linked<Type>();
+      if (this._count == 0)
+        return clone;
+      Node copying = this._top;
+      Node cloneTop = new Node(this._top.Value, null);
+      Node cloning = cloneTop;
+      while (copying != null)
       {
-        traversalFunction(looper.Value);
-        looper = looper.Down;
+        copying = copying.Down;
+        cloning.Down = new Node(copying.Value, null);
+        cloning = cloning.Down;
       }
-      ReaderUnlock();
+      clone._top = cloneTop;
+      return clone;
     }
 
-    /// <summary>Converts the list into a standard array.</summary>
-    /// <returns>A standard array of all the items.</returns>
+    /// <summary>Converts the structure into an array.</summary>
+    /// <returns>An array containing all the item in the structure.</returns>
     /// <remarks>Runtime: Theta(n).</remarks>
     public Type[] ToArray()
     {
       if (_count == 0)
         return null;
       Type[] array = new Type[_count];
-      StackLinkedNode looper = _top;
+      Node looper = _top;
       for (int i = 0; i < _count; i++)
       {
         array[i] = looper.Value;
@@ -302,433 +255,587 @@ namespace Seven.Structures
       return array;
     }
 
-    /// <summary>Thread safe enterance for readers.</summary>
-    private void ReaderLock() { lock (_lock) { while (!(_writers == 0)) Monitor.Wait(_lock); _readers++; } }
-    /// <summary>Thread safe exit for readers.</summary>
-    private void ReaderUnlock() { lock (_lock) { _readers--; Monitor.Pulse(_lock); } }
-    /// <summary>Thread safe enterance for writers.</summary>
-    private void WriterLock() { lock (_lock) { while (!(_writers == 0) && !(_readers == 0)) Monitor.Wait(_lock); _writers++; } }
-    /// <summary>Thread safe exit for readers.</summary>
-    private void WriterUnlock() { lock (_lock) { _writers--; Monitor.PulseAll(_lock); } }
-
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
     private class StackLinkedException : Exception { public StackLinkedException(string message) : base(message) { } }
   }
 
   #endregion
 
-  #region StackArray<Type>
+  //#region StackLinkedThreadSafe<Type>
 
-  /// <summary>Implements a growing stack as an array (with expansions/contractions) data structure.</summary>
-  /// <typeparam name="Type">The type of objects to be placed in the list.</typeparam>
-  /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
-  public class StackArray<Type> : Stack<Type>
-  {
-    private Type[] _stack;
-    private int _count;
-    private int _minimumCapacity;
+  ///// <summary>Implements a First-In-Last-Out stack data structure that inherits InterfaceTraversable.</summary>
+  ///// <typeparam name="Type">The generic type within the structure.</typeparam>
+  ///// <remarks>The runtimes of each public member are included in the "remarks" xml tags.
+  ///// Seven (Zachary Patten) 10-12-13.</remarks>
+  //[Serializable]
+  //public class StackLinkedThreadSafe<Type> : Stack<Type>
+  //{
+  //  #region StackLinkedNode
 
-    /// <summary>Gets the number of items in the list.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public int Count
-    {
-      get
-      {
-        int returnValue = _count;
-        return returnValue;
-      }
-    }
+  //  /// <summary>This class just holds the data for each individual node of the stack.</summary>
+  //  private class StackLinkedNode
+  //  {
+  //    private Type _value;
+  //    private StackLinkedNode _down;
 
-    /// <summary>Returns true if the structure is empty.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public bool IsEmpty { get { return _count == 0; } }
+  //    internal Type Value { get { return _value; } set { _value = value; } }
+  //    internal StackLinkedNode Down { get { return _down; } set { _down = value; } }
 
-    /// <summary>Gets the current capacity of the list.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public int CurrentCapacity
-    {
-      get
-      {
-        int returnValue = _stack.Length;
-        return returnValue;
-      }
-    }
+  //    internal StackLinkedNode(Type data, StackLinkedNode down)
+  //    {
+  //      _value = data;
+  //      _down = down;
+  //    }
+  //  }
 
-    /// <summary>Allows you to adjust the minimum capacity of this list.</summary>
-    /// <remarks>Runtime: O(n), Omega(1).</remarks>
-    public int MinimumCapacity
-    {
-      get
-      {
-        int returnValue = _minimumCapacity;
-        return returnValue;
-      }
-      set
-      {
-        if (value < 1)
-          throw new ListArrayException("Attempting to set a minimum capacity to a negative or zero value.");
-        else if (value > _stack.Length)
-        {
-          Type[] newList = new Type[value];
-          _stack.CopyTo(newList, 0);
-          _stack = newList;
-        }
-        else
-          _minimumCapacity = value;
-      }
-    }
+  //  #endregion
 
-    /// <summary>Creates an instance of a ListArray, and sets it's minimum capacity.</summary>
-    /// <param name="minimumCapacity">The initial and smallest array size allowed by this list.</param>
-    /// <remarks>Runtime: O(1).</remarks>
-    public StackArray(int minimumCapacity)
-    {
-      _stack = new Type[minimumCapacity];
-      _count = 0;
-      _minimumCapacity = minimumCapacity;
-    }
+  //  private StackLinkedNode _top;
+  //  private int _count;
 
-    /// <summary>Adds an item to the end of the list.</summary>
-    /// <param name="addition">The item to be added.</param>
-    /// <remarks>Runtime: O(n), EstAvg(1). </remarks>
-    public void Push(Type addition)
-    {
-      if (_count == _stack.Length)
-      {
-        if (_stack.Length > Int32.MaxValue / 2)
-          throw new ListArrayException("your queue is so large that it can no longer double itself (Int32.MaxValue barrier reached).");
-        Type[] newStack = new Type[_stack.Length * 2];
-        for (int i = 0; i < _count; i++)
-          newStack[i] = _stack[i];
-        _stack = newStack;
-      }
-      _stack[_count++] = addition;
-    }
+  //  private object _lock;
+  //  private int _readers;
+  //  private int _writers;
 
-    /// <summary>Removes the item at a specific index.</summary>
-    /// <remarks>Runtime: Theta(n - index).</remarks>
-    public Type Pop()
-    {
-      if (_count == 0)
-        throw new ListArrayException("attempting to dequeue from an empty queue.");
-      if (_count < _stack.Length / 4 && _stack.Length / 2 > _minimumCapacity)
-      {
-        Type[] newQueue = new Type[_stack.Length / 2];
-        for (int i = 0; i < _count; i++)
-          newQueue[i] = _stack[i];
-        _stack = newQueue;
-      }
-      Type returnValue = _stack[--_count];
-      return returnValue;
-    }
+  //  /// <summary>Returns the number of items in the stack.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public int Count { get { ReaderLock(); int count = _count; ReaderUnlock(); return count; } }
 
-    public Type Peek()
-    {
-      Type returnValue = _stack[_count - 1];
-      return returnValue;
-    }
+  //  /// <summary>Creates an instance of a stack.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public StackLinkedThreadSafe()
+  //  {
+  //    _top = null;
+  //    _count = 0;
+  //    _lock = new object();
+  //  }
 
-    /// <summary>Empties the list back and reduces it back to its original capacity.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public void Clear()
-    {
-      _stack = new Type[_minimumCapacity];
-      _count = 0;
-    }
+  //  /// <summary>Adds an item to the top of the stack.</summary>
+  //  /// <param name="addition">The item to add to the stack.</param>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public void Push(Type addition)
+  //  {
+  //    WriterLock();
+  //    _top = new StackLinkedNode(addition, _top);
+  //    _count++;
+  //    WriterUnlock();
+  //  }
 
-    /// <summary>Traverses the structure and performs a function on each entry.</summary>
-    /// <param name="traversalFunction">The function within a foreach loop.</param>
-    /// <remarks>Runtime: O(n * traversalFunction).</remarks>
-    public bool TraverseBreakable(Func<Type, bool> traversalFunction)
-    {
-      for (int i = 0; i < _count; i++)
-        if (!traversalFunction(_stack[i]))
-          return false;
-      return true;
-    }
+  //  /// <summary>Returns the most recent addition to the stack.</summary>
+  //  /// <returns>The most recent addition to the stack.</returns>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public Type Peek()
+  //  {
+  //    ReaderLock();
+  //    if (_top == null)
+  //    {
+  //      ReaderUnlock();
+  //      throw new StackLinkedException("Attempting to remove from an empty queue.");
+  //    }
+  //    Type peek = _top.Value;
+  //    ReaderUnlock();
+  //    return peek;
+  //  }
 
-    /// <summary>Traverses the structure and performs a function on each entry.</summary>
-    /// <param name="traversalFunction">The function within a foreach loop.</param>
-    /// <param name="start">The index to start the traversal from.</param>
-    /// <param name="end">The index to end the traversal at.</param>
-    /// <remarks>Runtime: O((end - start) * traversalFunction).</remarks>
-    public bool TraverseBreakable(Func<Type, bool> traversalFunction, int start, int end)
-    {
-      if (start < 0 || start < end || end > _count)
-        throw new ListArrayException("invalid index parameters on traversal");
-      for (int i = start; i < end; i++)
-        if (!traversalFunction(_stack[i]))
-          return false;
-      return true;
-    }
+  //  /// <summary>Removes and returns the most recent addition to the stack.</summary>
+  //  /// <returns>The most recent addition to the stack.</returns>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public Type Pop()
+  //  {
+  //    WriterLock();
+  //    Type x = _top.Value;
+  //    _top = _top.Down;
+  //    _count--;
+  //    WriterUnlock();
+  //    return x;
+  //  }
 
-    /// <summary>Traverses the structure and performs an action on each entry.</summary>
-    /// <param name="traversalAction">The action within a foreach loop.</param>
-    /// <remarks>Runtime: O(n * traversalAction).</remarks>
-    public void Traverse(Action<Type> traversalAction)
-    {
-      for (int i = 0; i < _count; i++) traversalAction(_stack[i]);
-    }
+  //  /// <summary>Clears the stack to an empty state.</summary>
+  //  /// <remarks>Runtime: O(1). Note: causes considerable garbage collection.</remarks>
+  //  public void Clear()
+  //  {
+  //    WriterLock();
+  //    _top = null;
+  //    _count = 0;
+  //    WriterUnlock();
+  //  }
 
-    /// <summary>Traverses the structure and performs a function on each entry.</summary>
-    /// <param name="traversalAction">The action within a foreach loop.</param>
-    /// <param name="start">The index to start the traversal from.</param>
-    /// <param name="end">The index to end the traversal at.</param>
-    /// <remarks>Runtime: O((end - start) * traversalAction).</remarks>
-    public void Traverse(Action<Type> traversalAction, int start, int end)
-    {
-      if (start < 0 || start < end || end > _count)
-        throw new ListArrayException("invalid index parameters on traversal");
-      for (int i = start; i < end; i++) traversalAction(_stack[i]);
-    }
+  //  /// <summary>Performs a functional paradigm top-to-bottom traversal of the stack.</summary>
+  //  /// <param name="traversalFunction">The function to perform each iteration.</param>
+  //  /// <remarks>Runtime: O(n * foreachFunction).</remarks>
+  //  public bool TraverseBreakable(Func<Type, bool> traversalFunction)
+  //  {
+  //    ReaderLock();
+  //    StackLinkedNode looper = _top;
+  //    while (looper != null)
+  //    {
+  //      if (!traversalFunction(looper.Value))
+  //      {
+  //        ReaderUnlock();
+  //        return false;
+  //      }
+  //      looper = looper.Down;
+  //    }
+  //    ReaderUnlock();
+  //    return true;
+  //  }
 
-    /// <summary>Converts the list array into a standard array.</summary>
-    /// <returns>A standard array of all the elements.</returns>
-    public Type[] ToArray()
-    {
-      Type[] array = new Type[_count];
-      for (int i = 0; i < _count; i++) array[i] = _stack[i];
-      return array;
-    }
+  //  public void Traverse(Action<Type> traversalFunction)
+  //  {
+  //    ReaderLock();
+  //    StackLinkedNode looper = _top;
+  //    while (looper != null)
+  //    {
+  //      traversalFunction(looper.Value);
+  //      looper = looper.Down;
+  //    }
+  //    ReaderUnlock();
+  //  }
 
-    /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class ListArrayException : Exception { public ListArrayException(string message) : base(message) { } }
-  }
+  //  /// <summary>Converts the list into a standard array.</summary>
+  //  /// <returns>A standard array of all the items.</returns>
+  //  /// <remarks>Runtime: Theta(n).</remarks>
+  //  public Type[] ToArray()
+  //  {
+  //    if (_count == 0)
+  //      return null;
+  //    Type[] array = new Type[_count];
+  //    StackLinkedNode looper = _top;
+  //    for (int i = 0; i < _count; i++)
+  //    {
+  //      array[i] = looper.Value;
+  //      looper = looper.Down;
+  //    }
+  //    return array;
+  //  }
 
-  #endregion
+  //  /// <summary>Thread safe enterance for readers.</summary>
+  //  private void ReaderLock() { lock (_lock) { while (!(_writers == 0)) Monitor.Wait(_lock); _readers++; } }
+  //  /// <summary>Thread safe exit for readers.</summary>
+  //  private void ReaderUnlock() { lock (_lock) { _readers--; Monitor.Pulse(_lock); } }
+  //  /// <summary>Thread safe enterance for writers.</summary>
+  //  private void WriterLock() { lock (_lock) { while (!(_writers == 0) && !(_readers == 0)) Monitor.Wait(_lock); _writers++; } }
+  //  /// <summary>Thread safe exit for readers.</summary>
+  //  private void WriterUnlock() { lock (_lock) { _writers--; Monitor.PulseAll(_lock); } }
 
-  #region StackArrayThreadSafe<Type>
+  //  /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
+  //  private class StackLinkedException : Exception { public StackLinkedException(string message) : base(message) { } }
+  //}
 
-  /// <summary>Implements a growing stack as an array (with expansions/contractions) data structure.</summary>
-  /// <typeparam name="Type">The type of objects to be placed in the list.</typeparam>
-  /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
-  public class StackArrayThreadSafe<Type> : Stack<Type>
-  {
-    private Type[] _stack;
-    private int _count;
-    private int _minimumCapacity;
+  //#endregion
 
-    // This value determines the starting data structure size
-    // at which my traversal functions will begin dynamic multithreading
-    private object _lock;
-    private int _readers;
-    private int _writers;
+  //#region StackArray<Type>
 
-    /// <summary>Gets the number of items in the list.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public int Count
-    {
-      get
-      {
-        ReaderLock();
-        int returnValue = _count;
-        ReaderUnlock();
-        return returnValue;
-      }
-    }
+  ///// <summary>Implements a growing stack as an array (with expansions/contractions) data structure.</summary>
+  ///// <typeparam name="Type">The type of objects to be placed in the list.</typeparam>
+  ///// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
+  //[Serializable]
+  //public class StackArray<Type> : Stack<Type>
+  //{
+  //  private Type[] _stack;
+  //  private int _count;
+  //  private int _minimumCapacity;
 
-    /// <summary>Returns true if the structure is empty.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public bool IsEmpty { get { return _count == 0; } }
+  //  /// <summary>Gets the number of items in the list.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public int Count
+  //  {
+  //    get
+  //    {
+  //      int returnValue = _count;
+  //      return returnValue;
+  //    }
+  //  }
 
-    /// <summary>Gets the current capacity of the list.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public int CurrentCapacity
-    {
-      get
-      {
-        ReaderLock();
-        int returnValue = _stack.Length;
-        ReaderUnlock();
-        return returnValue;
-      }
-    }
+  //  /// <summary>Returns true if the structure is empty.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public bool IsEmpty { get { return _count == 0; } }
 
-    /// <summary>Allows you to adjust the minimum capacity of this list.</summary>
-    /// <remarks>Runtime: O(n), Omega(1).</remarks>
-    public int MinimumCapacity
-    {
-      get
-      {
-        ReaderLock();
-        int returnValue = _minimumCapacity;
-        ReaderUnlock();
-        return returnValue;
-      }
-      set
-      {
-        WriterLock();
-        if (value < 1)
-          throw new ListArrayException("Attempting to set a minimum capacity to a negative or zero value.");
-        else if (value > _stack.Length)
-        {
-          Type[] newList = new Type[value];
-          _stack.CopyTo(newList, 0);
-          _stack = newList;
-        }
-        else
-          _minimumCapacity = value;
-        WriterUnlock();
-      }
-    }
+  //  /// <summary>Gets the current capacity of the list.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public int CurrentCapacity
+  //  {
+  //    get
+  //    {
+  //      int returnValue = _stack.Length;
+  //      return returnValue;
+  //    }
+  //  }
 
-    /// <summary>Creates an instance of a ListArray, and sets it's minimum capacity.</summary>
-    /// <param name="minimumCapacity">The initial and smallest array size allowed by this list.</param>
-    /// <remarks>Runtime: O(1).</remarks>
-    public StackArrayThreadSafe(int minimumCapacity)
-    {
-      _stack = new Type[minimumCapacity];
-      _count = 0;
-      _minimumCapacity = minimumCapacity;
-      _lock = new object();
-      _readers = 0;
-      _writers = 0;
-    }
+  //  /// <summary>Allows you to adjust the minimum capacity of this list.</summary>
+  //  /// <remarks>Runtime: O(n), Omega(1).</remarks>
+  //  public int MinimumCapacity
+  //  {
+  //    get
+  //    {
+  //      int returnValue = _minimumCapacity;
+  //      return returnValue;
+  //    }
+  //    set
+  //    {
+  //      if (value < 1)
+  //        throw new ListArrayException("Attempting to set a minimum capacity to a negative or zero value.");
+  //      else if (value > _stack.Length)
+  //      {
+  //        Type[] newList = new Type[value];
+  //        _stack.CopyTo(newList, 0);
+  //        _stack = newList;
+  //      }
+  //      else
+  //        _minimumCapacity = value;
+  //    }
+  //  }
 
-    /// <summary>Adds an item to the end of the list.</summary>
-    /// <param name="addition">The item to be added.</param>
-    /// <remarks>Runtime: O(n), EstAvg(1). </remarks>
-    public void Push(Type addition)
-    {
-      WriterLock();
-      if (_count == _stack.Length)
-      {
-        if (_stack.Length > Int32.MaxValue / 2)
-        {
-          WriterUnlock();
-          throw new ListArrayException("your queue is so large that it can no longer double itself (Int32.MaxValue barrier reached).");
-        }
-        Type[] newStack = new Type[_stack.Length * 2];
-        for (int i = 0; i < _count; i++)
-          newStack[i] = _stack[i];
-        _stack = newStack;
-      }
-      _stack[_count++] = addition;
-      WriterUnlock();
-    }
+  //  /// <summary>Creates an instance of a ListArray, and sets it's minimum capacity.</summary>
+  //  /// <param name="minimumCapacity">The initial and smallest array size allowed by this list.</param>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public StackArray(int minimumCapacity)
+  //  {
+  //    _stack = new Type[minimumCapacity];
+  //    _count = 0;
+  //    _minimumCapacity = minimumCapacity;
+  //  }
 
-    /// <summary>Removes the item at a specific index.</summary>
-    /// <remarks>Runtime: Theta(n - index).</remarks>
-    public Type Pop()
-    {
-      WriterLock();
-      if (_count == 0)
-        throw new ListArrayException("attempting to dequeue from an empty queue.");
-      if (_count < _stack.Length / 4 && _stack.Length / 2 > _minimumCapacity)
-      {
-        Type[] newQueue = new Type[_stack.Length / 2];
-        for (int i = 0; i < _count; i++)
-          newQueue[i] = _stack[i];
-        _stack = newQueue;
-      }
-      Type returnValue = _stack[--_count];
-      WriterUnlock();
-      return returnValue;
-    }
+  //  /// <summary>Adds an item to the end of the list.</summary>
+  //  /// <param name="addition">The item to be added.</param>
+  //  /// <remarks>Runtime: O(n), EstAvg(1). </remarks>
+  //  public void Push(Type addition)
+  //  {
+  //    if (_count == _stack.Length)
+  //    {
+  //      if (_stack.Length > Int32.MaxValue / 2)
+  //        throw new ListArrayException("your queue is so large that it can no longer double itself (Int32.MaxValue barrier reached).");
+  //      Type[] newStack = new Type[_stack.Length * 2];
+  //      for (int i = 0; i < _count; i++)
+  //        newStack[i] = _stack[i];
+  //      _stack = newStack;
+  //    }
+  //    _stack[_count++] = addition;
+  //  }
 
-    public Type Peek()
-    {
-      ReaderLock();
-      Type returnValue = _stack[_count - 1];
-      ReaderUnlock();
-      return returnValue;
-    }
+  //  /// <summary>Removes the item at a specific index.</summary>
+  //  /// <remarks>Runtime: Theta(n - index).</remarks>
+  //  public Type Pop()
+  //  {
+  //    if (_count == 0)
+  //      throw new ListArrayException("attempting to dequeue from an empty queue.");
+  //    if (_count < _stack.Length / 4 && _stack.Length / 2 > _minimumCapacity)
+  //    {
+  //      Type[] newQueue = new Type[_stack.Length / 2];
+  //      for (int i = 0; i < _count; i++)
+  //        newQueue[i] = _stack[i];
+  //      _stack = newQueue;
+  //    }
+  //    Type returnValue = _stack[--_count];
+  //    return returnValue;
+  //  }
 
-    /// <summary>Empties the list back and reduces it back to its original capacity.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public void Clear()
-    {
-      WriterLock();
-      _stack = new Type[_minimumCapacity];
-      _count = 0;
-      WriterUnlock();
-    }
+  //  public Type Peek()
+  //  {
+  //    Type returnValue = _stack[_count - 1];
+  //    return returnValue;
+  //  }
 
-    /// <summary>Traverses the structure and performs a function on each entry.</summary>
-    /// <param name="traversalFunction">The function within a foreach loop.</param>
-    /// <remarks>Runtime: O(n * traversalFunction).</remarks>
-    public bool TraverseBreakable(Func<Type, bool> traversalFunction)
-    {
-      ReaderLock();
-      for (int i = 0; i < _count; i++)
-        if (!traversalFunction(_stack[i]))
-        {
-          ReaderUnlock();
-          return false;
-        }
-      ReaderUnlock();
-      return true;
-    }
+  //  /// <summary>Empties the list back and reduces it back to its original capacity.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public void Clear()
+  //  {
+  //    _stack = new Type[_minimumCapacity];
+  //    _count = 0;
+  //  }
 
-    /// <summary>Traverses the structure and performs a function on each entry.</summary>
-    /// <param name="traversalFunction">The function within a foreach loop.</param>
-    /// <param name="start">The index to start the traversal from.</param>
-    /// <param name="end">The index to end the traversal at.</param>
-    /// <remarks>Runtime: O((end - start) * traversalFunction).</remarks>
-    public bool TraverseBreakable(Func<Type, bool> traversalFunction, int start, int end)
-    {
-      if (start < 0 || start < end || end > _count)
-        throw new ListArrayException("invalid index parameters on traversal");
-      ReaderLock();
-      for (int i = start; i < end; i++)
-        if (!traversalFunction(_stack[i]))
-        {
-          ReaderUnlock();
-          return false;
-        }
-      ReaderUnlock();
-      return true;
-    }
+  //  /// <summary>Traverses the structure and performs a function on each entry.</summary>
+  //  /// <param name="traversalFunction">The function within a foreach loop.</param>
+  //  /// <remarks>Runtime: O(n * traversalFunction).</remarks>
+  //  public bool TraverseBreakable(Func<Type, bool> traversalFunction)
+  //  {
+  //    for (int i = 0; i < _count; i++)
+  //      if (!traversalFunction(_stack[i]))
+  //        return false;
+  //    return true;
+  //  }
 
-    /// <summary>Traverses the structure and performs an action on each entry.</summary>
-    /// <param name="traversalAction">The action within a foreach loop.</param>
-    /// <remarks>Runtime: O(n * traversalAction).</remarks>
-    public void Traverse(Action<Type> traversalAction)
-    {
-      ReaderLock();
-      for (int i = 0; i < _count; i++) traversalAction(_stack[i]);
-      ReaderUnlock();
-    }
+  //  /// <summary>Traverses the structure and performs a function on each entry.</summary>
+  //  /// <param name="traversalFunction">The function within a foreach loop.</param>
+  //  /// <param name="start">The index to start the traversal from.</param>
+  //  /// <param name="end">The index to end the traversal at.</param>
+  //  /// <remarks>Runtime: O((end - start) * traversalFunction).</remarks>
+  //  public bool TraverseBreakable(Func<Type, bool> traversalFunction, int start, int end)
+  //  {
+  //    if (start < 0 || start < end || end > _count)
+  //      throw new ListArrayException("invalid index parameters on traversal");
+  //    for (int i = start; i < end; i++)
+  //      if (!traversalFunction(_stack[i]))
+  //        return false;
+  //    return true;
+  //  }
 
-    /// <summary>Traverses the structure and performs a function on each entry.</summary>
-    /// <param name="traversalAction">The action within a foreach loop.</param>
-    /// <param name="start">The index to start the traversal from.</param>
-    /// <param name="end">The index to end the traversal at.</param>
-    /// <remarks>Runtime: O((end - start) * traversalAction).</remarks>
-    public void Traverse(Action<Type> traversalAction, int start, int end)
-    {
-      if (start < 0 || start < end || end > _count)
-        throw new ListArrayException("invalid index parameters on traversal");
-      ReaderLock();
-      for (int i = start; i < end; i++) traversalAction(_stack[i]);
-      ReaderUnlock();
-    }
+  //  /// <summary>Traverses the structure and performs an action on each entry.</summary>
+  //  /// <param name="traversalAction">The action within a foreach loop.</param>
+  //  /// <remarks>Runtime: O(n * traversalAction).</remarks>
+  //  public void Traverse(Action<Type> traversalAction)
+  //  {
+  //    for (int i = 0; i < _count; i++) traversalAction(_stack[i]);
+  //  }
 
-    /// <summary>Converts the list array into a standard array.</summary>
-    /// <returns>A standard array of all the elements.</returns>
-    public Type[] ToArray()
-    {
-      ReaderLock();
-      Type[] array = new Type[_count];
-      for (int i = 0; i < _count; i++) array[i] = _stack[i];
-      ReaderUnlock();
-      return array;
-    }
+  //  /// <summary>Traverses the structure and performs a function on each entry.</summary>
+  //  /// <param name="traversalAction">The action within a foreach loop.</param>
+  //  /// <param name="start">The index to start the traversal from.</param>
+  //  /// <param name="end">The index to end the traversal at.</param>
+  //  /// <remarks>Runtime: O((end - start) * traversalAction).</remarks>
+  //  public void Traverse(Action<Type> traversalAction, int start, int end)
+  //  {
+  //    if (start < 0 || start < end || end > _count)
+  //      throw new ListArrayException("invalid index parameters on traversal");
+  //    for (int i = start; i < end; i++) traversalAction(_stack[i]);
+  //  }
 
-    /// <summary>Thread safe enterance for readers.</summary>
-    private void ReaderLock() { lock (_lock) { while (!(_writers == 0)) Monitor.Wait(_lock); _readers++; } }
-    /// <summary>Thread safe exit for readers.</summary>
-    private void ReaderUnlock() { lock (_lock) { _readers--; Monitor.Pulse(_lock); } }
-    /// <summary>Thread safe enterance for writers.</summary>
-    private void WriterLock() { lock (_lock) { while (!(_writers == 0) && !(_readers == 0)) Monitor.Wait(_lock); _writers++; } }
-    /// <summary>Thread safe exit for readers.</summary>
-    private void WriterUnlock() { lock (_lock) { _writers--; Monitor.PulseAll(_lock); } }
+  //  /// <summary>Converts the list array into a standard array.</summary>
+  //  /// <returns>A standard array of all the elements.</returns>
+  //  public Type[] ToArray()
+  //  {
+  //    Type[] array = new Type[_count];
+  //    for (int i = 0; i < _count; i++) array[i] = _stack[i];
+  //    return array;
+  //  }
 
-    /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class ListArrayException : Exception { public ListArrayException(string message) : base(message) { } }
-  }
+  //  /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
+  //  private class ListArrayException : Exception { public ListArrayException(string message) : base(message) { } }
+  //}
 
-  #endregion
+  //#endregion
+
+  //#region StackArrayThreadSafe<Type>
+
+  ///// <summary>Implements a growing stack as an array (with expansions/contractions) data structure.</summary>
+  ///// <typeparam name="Type">The type of objects to be placed in the list.</typeparam>
+  ///// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
+  //[Serializable]
+  //public class StackArrayThreadSafe<Type> : Stack<Type>
+  //{
+  //  private Type[] _stack;
+  //  private int _count;
+  //  private int _minimumCapacity;
+
+  //  // This value determines the starting data structure size
+  //  // at which my traversal functions will begin dynamic multithreading
+  //  private object _lock;
+  //  private int _readers;
+  //  private int _writers;
+
+  //  /// <summary>Gets the number of items in the list.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public int Count
+  //  {
+  //    get
+  //    {
+  //      ReaderLock();
+  //      int returnValue = _count;
+  //      ReaderUnlock();
+  //      return returnValue;
+  //    }
+  //  }
+
+  //  /// <summary>Returns true if the structure is empty.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public bool IsEmpty { get { return _count == 0; } }
+
+  //  /// <summary>Gets the current capacity of the list.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public int CurrentCapacity
+  //  {
+  //    get
+  //    {
+  //      ReaderLock();
+  //      int returnValue = _stack.Length;
+  //      ReaderUnlock();
+  //      return returnValue;
+  //    }
+  //  }
+
+  //  /// <summary>Allows you to adjust the minimum capacity of this list.</summary>
+  //  /// <remarks>Runtime: O(n), Omega(1).</remarks>
+  //  public int MinimumCapacity
+  //  {
+  //    get
+  //    {
+  //      ReaderLock();
+  //      int returnValue = _minimumCapacity;
+  //      ReaderUnlock();
+  //      return returnValue;
+  //    }
+  //    set
+  //    {
+  //      WriterLock();
+  //      if (value < 1)
+  //        throw new ListArrayException("Attempting to set a minimum capacity to a negative or zero value.");
+  //      else if (value > _stack.Length)
+  //      {
+  //        Type[] newList = new Type[value];
+  //        _stack.CopyTo(newList, 0);
+  //        _stack = newList;
+  //      }
+  //      else
+  //        _minimumCapacity = value;
+  //      WriterUnlock();
+  //    }
+  //  }
+
+  //  /// <summary>Creates an instance of a ListArray, and sets it's minimum capacity.</summary>
+  //  /// <param name="minimumCapacity">The initial and smallest array size allowed by this list.</param>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public StackArrayThreadSafe(int minimumCapacity)
+  //  {
+  //    _stack = new Type[minimumCapacity];
+  //    _count = 0;
+  //    _minimumCapacity = minimumCapacity;
+  //    _lock = new object();
+  //    _readers = 0;
+  //    _writers = 0;
+  //  }
+
+  //  /// <summary>Adds an item to the end of the list.</summary>
+  //  /// <param name="addition">The item to be added.</param>
+  //  /// <remarks>Runtime: O(n), EstAvg(1). </remarks>
+  //  public void Push(Type addition)
+  //  {
+  //    WriterLock();
+  //    if (_count == _stack.Length)
+  //    {
+  //      if (_stack.Length > Int32.MaxValue / 2)
+  //      {
+  //        WriterUnlock();
+  //        throw new ListArrayException("your queue is so large that it can no longer double itself (Int32.MaxValue barrier reached).");
+  //      }
+  //      Type[] newStack = new Type[_stack.Length * 2];
+  //      for (int i = 0; i < _count; i++)
+  //        newStack[i] = _stack[i];
+  //      _stack = newStack;
+  //    }
+  //    _stack[_count++] = addition;
+  //    WriterUnlock();
+  //  }
+
+  //  /// <summary>Removes the item at a specific index.</summary>
+  //  /// <remarks>Runtime: Theta(n - index).</remarks>
+  //  public Type Pop()
+  //  {
+  //    WriterLock();
+  //    if (_count == 0)
+  //      throw new ListArrayException("attempting to dequeue from an empty queue.");
+  //    if (_count < _stack.Length / 4 && _stack.Length / 2 > _minimumCapacity)
+  //    {
+  //      Type[] newQueue = new Type[_stack.Length / 2];
+  //      for (int i = 0; i < _count; i++)
+  //        newQueue[i] = _stack[i];
+  //      _stack = newQueue;
+  //    }
+  //    Type returnValue = _stack[--_count];
+  //    WriterUnlock();
+  //    return returnValue;
+  //  }
+
+  //  public Type Peek()
+  //  {
+  //    ReaderLock();
+  //    Type returnValue = _stack[_count - 1];
+  //    ReaderUnlock();
+  //    return returnValue;
+  //  }
+
+  //  /// <summary>Empties the list back and reduces it back to its original capacity.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public void Clear()
+  //  {
+  //    WriterLock();
+  //    _stack = new Type[_minimumCapacity];
+  //    _count = 0;
+  //    WriterUnlock();
+  //  }
+
+  //  /// <summary>Traverses the structure and performs a function on each entry.</summary>
+  //  /// <param name="traversalFunction">The function within a foreach loop.</param>
+  //  /// <remarks>Runtime: O(n * traversalFunction).</remarks>
+  //  public bool TraverseBreakable(Func<Type, bool> traversalFunction)
+  //  {
+  //    ReaderLock();
+  //    for (int i = 0; i < _count; i++)
+  //      if (!traversalFunction(_stack[i]))
+  //      {
+  //        ReaderUnlock();
+  //        return false;
+  //      }
+  //    ReaderUnlock();
+  //    return true;
+  //  }
+
+  //  /// <summary>Traverses the structure and performs a function on each entry.</summary>
+  //  /// <param name="traversalFunction">The function within a foreach loop.</param>
+  //  /// <param name="start">The index to start the traversal from.</param>
+  //  /// <param name="end">The index to end the traversal at.</param>
+  //  /// <remarks>Runtime: O((end - start) * traversalFunction).</remarks>
+  //  public bool TraverseBreakable(Func<Type, bool> traversalFunction, int start, int end)
+  //  {
+  //    if (start < 0 || start < end || end > _count)
+  //      throw new ListArrayException("invalid index parameters on traversal");
+  //    ReaderLock();
+  //    for (int i = start; i < end; i++)
+  //      if (!traversalFunction(_stack[i]))
+  //      {
+  //        ReaderUnlock();
+  //        return false;
+  //      }
+  //    ReaderUnlock();
+  //    return true;
+  //  }
+
+  //  /// <summary>Traverses the structure and performs an action on each entry.</summary>
+  //  /// <param name="traversalAction">The action within a foreach loop.</param>
+  //  /// <remarks>Runtime: O(n * traversalAction).</remarks>
+  //  public void Traverse(Action<Type> traversalAction)
+  //  {
+  //    ReaderLock();
+  //    for (int i = 0; i < _count; i++) traversalAction(_stack[i]);
+  //    ReaderUnlock();
+  //  }
+
+  //  /// <summary>Traverses the structure and performs a function on each entry.</summary>
+  //  /// <param name="traversalAction">The action within a foreach loop.</param>
+  //  /// <param name="start">The index to start the traversal from.</param>
+  //  /// <param name="end">The index to end the traversal at.</param>
+  //  /// <remarks>Runtime: O((end - start) * traversalAction).</remarks>
+  //  public void Traverse(Action<Type> traversalAction, int start, int end)
+  //  {
+  //    if (start < 0 || start < end || end > _count)
+  //      throw new ListArrayException("invalid index parameters on traversal");
+  //    ReaderLock();
+  //    for (int i = start; i < end; i++) traversalAction(_stack[i]);
+  //    ReaderUnlock();
+  //  }
+
+  //  /// <summary>Converts the list array into a standard array.</summary>
+  //  /// <returns>A standard array of all the elements.</returns>
+  //  public Type[] ToArray()
+  //  {
+  //    ReaderLock();
+  //    Type[] array = new Type[_count];
+  //    for (int i = 0; i < _count; i++) array[i] = _stack[i];
+  //    ReaderUnlock();
+  //    return array;
+  //  }
+
+  //  /// <summary>Thread safe enterance for readers.</summary>
+  //  private void ReaderLock() { lock (_lock) { while (!(_writers == 0)) Monitor.Wait(_lock); _readers++; } }
+  //  /// <summary>Thread safe exit for readers.</summary>
+  //  private void ReaderUnlock() { lock (_lock) { _readers--; Monitor.Pulse(_lock); } }
+  //  /// <summary>Thread safe enterance for writers.</summary>
+  //  private void WriterLock() { lock (_lock) { while (!(_writers == 0) && !(_readers == 0)) Monitor.Wait(_lock); _writers++; } }
+  //  /// <summary>Thread safe exit for readers.</summary>
+  //  private void WriterUnlock() { lock (_lock) { _writers--; Monitor.PulseAll(_lock); } }
+
+  //  /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
+  //  private class ListArrayException : Exception { public ListArrayException(string message) : base(message) { } }
+  //}
+
+  //#endregion
 }

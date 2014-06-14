@@ -1,5 +1,6 @@
 ﻿using System;
 using Seven.Parallels;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Seven.Structures
@@ -8,7 +9,12 @@ namespace Seven.Structures
   /// <typeparam name="Type">The type of the instances to store in this data structure.</typeparam>
   public interface Array<Type> : Structure<Type>
   {
+    /// <summary>Allows indexed access of the array.</summary>
+    /// <param name="index">The index of the array to get/set.</param>
+    /// <returns>The value at the desired index.</returns>
     Type this[int index] { get; set; }
+
+    /// <summary>The length of the array.</summary>
     int Length { get; }
   }
 
@@ -21,25 +27,27 @@ namespace Seven.Structures
 
     #region .NET Framework Compatibility
 
-    /// <summary>Implicitly casts a Type[] to an Array_Array.</summary>
-    /// <param name="array">The array to be casted.</param>
-    /// <returns>The type casted Array_Array.</returns>
-    public static implicit operator Array_Array<Type>(Type[] array)
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    public static explicit operator Array_Array<Type>(Type[] array)
     {
       return new Array_Array<Type>(array);
     }
 
-    /// <summary>Implicitly casts an Array_Array to an array.</summary>
-    /// <param name="array">The Array_Array instance to cast.</param>
-    /// <returns>The type casted Type[].</returns>
-    public static implicit operator Type[](Array_Array<Type> array)
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    public static explicit operator Type[](Array_Array<Type> array)
     {
-      return array._array;
+      return array.ToArray();
     }
 
-    /// <summary>Gets an enumerator for foreach loops.</summary>
-    /// <returns>The enumerator yeild values.</returns>
-    public IEnumerator<Type> GetEnumerator()
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      for (int i = 0; i < _array.Length; i++)
+        yield return _array[i];
+    }
+
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
     {
       for (int i = 0; i < _array.Length; i++)
         yield return _array[i];
@@ -81,14 +89,63 @@ namespace Seven.Structures
     {
       if (size < 1)
         throw new Exception("size of the array must be at least 1.");
-      _array = new Type[size];
+      this._array = new Type[size];
     }
 
     /// <summary>Constructs by wrapping an existing array.</summary>
     /// <param name="array">The array to be wrapped.</param>
     public Array_Array(params Type[] array)
     {
-      this._array = array;
+      this._array = new Type[array.Length];
+      for (int i = 0; i < array.Length; i++)
+        this._array[i] = array[i];
+    }
+
+    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
+    public Type[] GetValues<Key>(Key key, Compare<Type, Key> compare)
+    {
+      int count = 0;
+      for (int i = 0; i < this._array.Length; i++)
+        if (compare(this._array[i], key) == Comparison.Equal)
+          count++;
+      Type[] values = new Type[count];
+      count = 0;
+      for (int i = 0; i < this._array.Length; i++)
+        if (compare(this._array[i], key) == Comparison.Equal)
+          values[count++] = this._array[i];
+      return values;
+    }
+
+    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
+    /// <param name="values">The values that matched the given key.</param>
+    /// <returns>true if 1 or more values were found; false if no values were found.</returns>
+    public bool TryGetValues<Key>(Key key, Compare<Type, Key> compare, out Type[] values)
+    {
+      int count = 0;
+      for (int i = 0; i < this._array.Length; i++)
+        if (compare(this._array[i], key) == Comparison.Equal)
+          count++;
+
+      if (count == 0)
+      {
+        values = null;
+        return false;
+      }
+
+      values = new Type[count];
+      count = 0;
+      for (int i = 0; i < this._array.Length; i++)
+        if (compare(this._array[i], key) == Comparison.Equal)
+          values[count++] = this._array[i];
+      return true;
     }
     
     /// <summary>Checks to see if a given object is in this data structure.</summary>
@@ -97,7 +154,7 @@ namespace Seven.Structures
     /// <returns>true if the item is in this structure; false if not.</returns>
     public bool Contains(Type check, Compare<Type> compare)
     {
-      for (int i = 0; i < _array.Length; i++)
+      for (int i = 0; i < this._array.Length; i++)
         if (compare(_array[i], check) == Comparison.Equal)
           return true;
       return false;

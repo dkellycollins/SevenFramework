@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Seven.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -41,7 +42,6 @@
     <Compile Include="Mathematics\Quaternion.cs" />
     <Compile Include="Mathematics\Tween.cs" />
     <Compile Include="Mathematics\Vector.cs" />
-    <Compile Include="Mathematics\Vertex.cs" />
     <Compile Include="Parallels\BackgroundThread.cs" />
     <Compile Include="Parallels\ReaderWriterLock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,6 +52,7 @@
     <Compile Include="Structures\Graph.cs" />
     <Compile Include="Structures\HashTable.cs" />
     <Compile Include="Structures\Heap.cs" />
+    <Compile Include="Structures\Ring.cs" />
     <Compile Include="Structures\Structure.cs" />
     <Compile Include="Structures\Link.cs" />
     <Compile Include="Structures\List.cs" />

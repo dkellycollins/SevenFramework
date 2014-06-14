@@ -9,9 +9,9 @@ namespace Seven.Structures
   public interface AvlTree<Type> //: Structure<Type>
   {
     void Add(Type addition);
-    bool TryAdd(Type addition);
-    void Remove(Type removal);
-    bool TryRemove(Type removal);
+    //bool TryAdd(Type addition);
+    //void Remove(Type removal);
+    //bool TryRemove(Type removal);
     int Count { get; }
     bool IsEmpty { get; }
     void Clear();
