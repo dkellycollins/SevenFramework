@@ -8,13 +8,13 @@ namespace Seven.Structures
   /// <typeparam name="Type">The type of the instances to store in this data structure.</typeparam>
   public interface Ring<Type> : Structure<Type>
   {
-    int Count { get; }
-    void Write(Type value);
-    Type Current { get; }
-    void Move(int ammount);
+    //int Count { get; }
+    //void Write(Type value);
+    //Type Current { get; }
+    //void Move(int ammount);
   }
 
-  public class Ring_Array<Type>
+  public class Ring_Array<Type> : Ring<Type>
   {
     Type[] _ring; 
     int _nextFree;
