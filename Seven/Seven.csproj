@@ -37,9 +37,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compare.cs" />
+    <Compile Include="Mathematics\Algebra.cs" />
     <Compile Include="Mathematics\Calc.cs" />
+    <Compile Include="Mathematics\Combinatorics.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />
+    <Compile Include="Mathematics\SetTheory.cs" />
+    <Compile Include="Mathematics\Trigonometry.cs" />
     <Compile Include="Mathematics\Tween.cs" />
     <Compile Include="Mathematics\Vector.cs" />
     <Compile Include="Parallels\BackgroundThread.cs" />
@@ -64,9 +68,11 @@
     <Compile Include="Structures\Stack.cs" />
     <Compile Include="Structures\Table.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Structures\_README.txt" />
+    <Folder Include="NewFolder1\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Structures\README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -49,6 +49,14 @@ namespace Seven.Structures
     protected Node _tail;
     protected int _count;
 
+    //public static implicit operator List_Linked<Type>(WhereEnumerableIterator<Type> enumerable)
+    //{
+    //  List_Linked<Type> list = new List_Linked<Type>();
+    //  foreach (Type enumerated in enumerable)
+    //    list.Add(enumerated);
+    //  return list;
+    //}
+
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
     public long SizeOf { get { return _count; } }

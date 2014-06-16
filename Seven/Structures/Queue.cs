@@ -17,31 +17,25 @@ namespace Seven.Structures
     void Clear();
   }
 
-  #region QueueLinked
-
   /// <summary>Implements First-In-First-Out queue data structure.</summary>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
   [Serializable]
   public class QueueLinked<Type> : Queue<Type>
   {
-    #region QueueNode
-
     /// <summary>This class just holds the data for each individual node of the list.</summary>
-    private class QueueNode
+    private class Node
     {
       private Type _value;
-      private QueueNode _next;
+      private Node _next;
 
       internal Type Value { get { return _value; } set { _value = value; } }
-      internal QueueNode Next { get { return _next; } set { _next = value; } }
+      internal Node Next { get { return _next; } set { _next = value; } }
 
-      internal QueueNode(Type data) { _value = data; }
+      internal Node(Type data) { _value = data; }
     }
 
-    #endregion
-
-    private QueueNode _head;
-    private QueueNode _tail;
+    private Node _head;
+    private Node _tail;
     private int _count;
 
     /// <summary>Returns the number of items in the queue.</summary>
@@ -65,9 +59,9 @@ namespace Seven.Structures
     public void Enqueue(Type enqueue)
     {
       if (_tail == null)
-        _head = _tail = new QueueNode(enqueue);
+        _head = _tail = new Node(enqueue);
       else
-        _tail = _tail.Next = new QueueNode(enqueue);
+        _tail = _tail.Next = new Node(enqueue);
       _count++;
     }
 
@@ -76,7 +70,7 @@ namespace Seven.Structures
     public Type Dequeue()
     {
       if (_head == null)
-        throw new QueueException("Attempting to remove a non-existing id value.");
+        throw new Exception("Attempting to remove a non-existing id value.");
       Type value = _head.Value;
       if (_head == _tail)
         _tail = null;
@@ -88,7 +82,7 @@ namespace Seven.Structures
     public Type Peek()
     {
       if (_head == null)
-        throw new QueueException("Attempting to remove a non-existing id value.");
+        throw new Exception("Attempting to remove a non-existing id value.");
       Type returnValue = _head.Value;
       return returnValue;
     }
@@ -106,7 +100,7 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(n * foreachFunction).</remarks>
     public bool TraverseBreakable(Func<Type, bool> traversalFunction)
     {
-      QueueNode looper = _head;
+      Node looper = _head;
       while (looper != null)
       {
         if (!traversalFunction(looper.Value))
@@ -118,7 +112,7 @@ namespace Seven.Structures
 
     public void Traverse(Action<Type> traversalFunction)
     {
-      QueueNode looper = _head;
+      Node looper = _head;
       while (looper != null)
       {
         traversalFunction(looper.Value);
@@ -134,7 +128,7 @@ namespace Seven.Structures
       if (_count == 0)
         return null;
       Type[] array = new Type[_count];
-      QueueNode looper = _head;
+      Node looper = _head;
       for (int i = 0; i < _count; i++)
       {
         array[i] = looper.Value;
@@ -142,8 +136,6 @@ namespace Seven.Structures
       }
       return array;
     }
-
-    #region Structure<Type>
 
     #region .Net Framework Compatibility
 
@@ -237,20 +229,12 @@ namespace Seven.Structures
       throw new NotImplementedException();
     }
 
-    ///// <summary>Converts the structure into an array.</summary>
-    ///// <returns>An array containing all the item in the structure.</returns>
-    //public Type[] ToArray()
-    //{
-    //  throw new NotImplementedException();
-    //}
-
-    #endregion
-
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class QueueException : Exception { public QueueException(string message) : base(message) { } }
+    private class Exception : System.Exception
+    {
+      public Exception(string message) : base(message) { }
+    }
   }
-
-  #endregion
 
   #region QueueLinkedThreadSafe
 

@@ -7,21 +7,21 @@ namespace Seven.Mathematics
   {
     #region Logic
 
-    public static float Max(float first, float second)
-    {
-      //return Math.Max(first, second);
-      if (second > first)
-        return second;
-      return first;
-    }
+    //public static float Max(float first, float second)
+    //{
+    //  //return Math.Max(first, second);
+    //  if (second > first)
+    //    return second;
+    //  return first;
+    //}
 
-    public static float Min(float first, float second)
-    {
-      //return Math.Min(first, second);
-      if (second < first)
-        return second;
-      return first;
-    }
+    //public static float Min(float first, float second)
+    //{
+    //  //return Math.Min(first, second);
+    //  if (second < first)
+    //    return second;
+    //  return first;
+    //}
 
     public static float Clamp(float value, float minimum, float maximum)
     {

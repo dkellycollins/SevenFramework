@@ -25,4 +25,11 @@
   /// <param name="right">The right operand of the comparison.</param>
   /// <returns>The Comparison operator between the operands to form a true logic statement.</returns>
   public delegate Comparison Compare<Left, Right>(Left left, Right right);
+
+  /// <summary>Inheriting classes must include a comparison method.</summary>
+  /// <typeparam name="Type">The other type of the comparison.</typeparam>
+  public interface Comparable<Type>
+  {
+    Comparison Compare(Type other);
+  }
 }
