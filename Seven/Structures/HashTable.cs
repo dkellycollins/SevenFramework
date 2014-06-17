@@ -23,7 +23,7 @@ namespace Seven.Structures
   #region HashTableLinked<ValueType, KeyType>
 
   [Serializable]
-  public class HashTableLinked<ValueType, KeyType> : HashTable<ValueType, KeyType>
+  public class HashTable_Linked<ValueType, KeyType> : HashTable<ValueType, KeyType>
   {
     /// <summary>A set of allowable table sizes, all of which are prime.</summary>
     private static readonly int[] _tableSizes = new int[]
@@ -60,10 +60,6 @@ namespace Seven.Structures
     private HashTableLinkedNode[] _table;
     private int _count;
     private int _sizeIndex;
-
-    private object _lock;
-    private int _readers;
-    private int _writers;
 
     /// <summary>Returns the current number of items in the structure.</summary>
     /// <remarks>Runetime: O(1).</remarks>
@@ -109,14 +105,11 @@ namespace Seven.Structures
 
     /// <summary>Constructs a new hash table instance.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public HashTableLinked()
+    public HashTable_Linked()
     {
       _table = new HashTableLinkedNode[107];
       _count = 0;
       _sizeIndex = 0;
-      _lock = new object();
-      _readers = 0;
-      _writers = 0;
     }
 
     public bool Contains(KeyType key)

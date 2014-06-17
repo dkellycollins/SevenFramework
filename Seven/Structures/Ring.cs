@@ -28,9 +28,9 @@ namespace Seven.Structures
       _location = 0;
     }
 
-    public void Add(Type o)
+    public void Add(Type item)
     {
-      _ring[_nextFree] = o;
+      _ring[_nextFree] = item;
       _nextFree = (_nextFree+1) % _ring.Length;
     }
 

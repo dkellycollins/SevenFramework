@@ -2,8 +2,8 @@
 using System.Threading;
 using Seven.Structures;
 
-using System.Collections;
-using System.Collections.Generic;
+// using System.Collections; IEnumerable
+// using System.Collections.Generic; IEnumerable<Type>
 
 namespace Seven.Structures
 {
@@ -140,7 +140,8 @@ namespace Seven.Structures
     #region .Net Framework Compatibility
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator 
+      System.Collections.IEnumerable.GetEnumerator()
     {
       Node current = this._head;
       while (current != null)
@@ -151,7 +152,8 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<Type>
+      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
     {
       Node current = this._head;
       while (current != null)
@@ -952,13 +954,15 @@ namespace Seven.Structures
     #region .Net Framework Compatibility
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       throw new NotImplementedException();
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<Type>
+      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
     {
       throw new NotImplementedException();
     }

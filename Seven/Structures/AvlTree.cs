@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-using System;
-using Seven;
+﻿using Seven;
 using Seven.Parallels;
+
+// using System; Exception, Serializable
+// using System.Collections; IEnumerable
+// using System.Collections.Generic; IEnumerable<Type>
 
 namespace Seven.Structures
 {
@@ -57,7 +57,7 @@ namespace Seven.Structures
 
   /// <summary>Implements an AVL Tree where the items are sorted by string id values.</summary>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class AvlTree_Linked<Type> : AvlTree<Type>
   {
     #region Node
@@ -156,7 +156,8 @@ namespace Seven.Structures
     #endregion
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator 
+      System.Collections.IEnumerable.GetEnumerator()
     {
       Stack<Node> forks = new Stack_Linked<Node>();
       Node current = _avlTree;
@@ -177,7 +178,8 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<Type> 
+      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
     {
       Stack<Node> forks = new Stack_Linked<Node>();
       Node current = _avlTree;
@@ -497,7 +499,15 @@ namespace Seven.Structures
     protected void SetHeight(Node avlTree)
     {
       if (Height(avlTree.LeftChild) < Height(avlTree.RightChild))
-        avlTree.Height = Math.Max(Height(avlTree.LeftChild), Height(avlTree.RightChild)) + 1;
+        avlTree.Height = Max(Height(avlTree.LeftChild), Height(avlTree.RightChild)) + 1;
+    }
+
+    private static int Max(int left, int right)
+    {
+      if (left > right)
+        return left;
+      else
+        return right;
     }
 
     /// <summary>Standard balancing algorithm for an AVL Tree.</summary>
@@ -1136,7 +1146,7 @@ namespace Seven.Structures
 
   /// <summary>Implements an AVL Tree where the items are sorted by string id values.</summary>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class AvlTreeLinkedThreadSafe<Type> : AvlTree_Linked<Type>
   {
     ReaderWriterLock _readerWriterLock;
@@ -1588,8 +1598,8 @@ namespace Seven.Structures
 
   /// <summary>Implements an AVL Tree where the items are sorted by string id values.</summary>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
-  public class AvlTree_Array<Type>// : AvlTree<Type>
+  [System.Serializable]
+  public class AvlTree_Array<Type> //: AvlTree<Type>
   {
     public struct Node
     {

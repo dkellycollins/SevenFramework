@@ -68,7 +68,9 @@
     <Compile Include="Structures\Stack.cs" />
     <Compile Include="Structures\Table.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Structures\Structures.cd" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Structures\README.txt" />
   </ItemGroup>
