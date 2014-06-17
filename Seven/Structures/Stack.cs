@@ -6,6 +6,7 @@ namespace Seven.Structures
 {
   public interface Stack<Type> : Structure<Type>
   {
+    int Count { get; }
     void Push(Type push);
     Type Peek();
     Type Pop();

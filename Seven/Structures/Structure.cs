@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Seven.Structures
 {
-  /// <summary>Polymorphism base for data structures in the Seven framework.</summary>
+  /// <summary>Polymorphism base for all data structures in the Seven framework.</summary>
   /// <typeparam name="Type">The type of the instances to store in this data structure.</typeparam>
   public interface Structure<Type> : IEnumerable<Type>
   {
@@ -100,7 +100,7 @@ namespace Seven.Structures
   }
 
   /// <summary>Contains the implementations of the methods in the Structure interface.</summary>
-  internal static class StructureImplementation
+  internal static class Structure
   {
     internal static Structure<Type> Union<Type>(Structure<Type> left, Structure<Type> right, Compare<Type> compare)
     {
@@ -114,8 +114,22 @@ namespace Seven.Structures
       return union;
     }
 
+    //internal static Structure<Type> Union<Type>(this Structure<Type> left, Structure<Type> right, Compare<Type> compare)
+    //{
+    //  List<Type> union = new List_Linked<Type>();
+    //  foreach (Type leftLoop in left)
+    //    union.Add(leftLoop);
+    //  //foreach (Type rightLoop in right)
+    //  //  if (!left.Contains(rightLoop, compare))
+    //  //    union.Add(rightLoop);
+    //  throw new NotImplementedException();
+    //  return union;
+    //}
+
     internal static Structure<Type> Intersection<Type>(Structure<Type> left, Structure<Type> right, Compare<Type> compare)
     {
+      //Structure.Union<Type>(null, null, (Type left1, Type right1) => { return Comparison.Less; });
+
       List<Type> intersection = new List_Linked<Type>();
       foreach (Type leftLoop in left)
         foreach (Type rightLoop in right)

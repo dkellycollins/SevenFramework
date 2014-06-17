@@ -170,6 +170,9 @@ namespace Seven.Structures
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 2; } }
 
+    /// <summary>The left item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeOne One { get { return this._one; } set { this._one = value; } }
     /// <summary>The right item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public TypeTwo Two { get { return this._two; } set { this._two = value; } }
@@ -326,6 +329,12 @@ namespace Seven.Structures
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 3; } }
 
+    /// <summary>The left item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    /// <summary>The right item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
     /// <summary>The third item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public TypeThree Three { get { return this._three; } set { this._three = value; } }
@@ -506,6 +515,15 @@ namespace Seven.Structures
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 4; } }
 
+    /// <summary>The left item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    /// <summary>The right item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    /// <summary>The third item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeThree Three { get { return this._three; } set { this._three = value; } }
     /// <summary>The fourth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public TypeFour Four { get { return this._four; } set { this._four = value; } }
@@ -709,6 +727,18 @@ namespace Seven.Structures
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 5; } }
 
+    /// <summary>The left item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    /// <summary>The right item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    /// <summary>The third item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeThree Three { get { return this._three; } set { this._three = value; } }
+    /// <summary>The fourth item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeFour Four { get { return this._four; } set { this._four = value; } }
     /// <summary>The fifth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public TypeFive Five { get { return this._five; } set { this._five = value; } }
@@ -931,6 +961,21 @@ namespace Seven.Structures
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 6; } }
 
+    /// <summary>The left item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    /// <summary>The right item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    /// <summary>The third item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeThree Three { get { return this._three; } set { this._three = value; } }
+    /// <summary>The fourth item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeFour Four { get { return this._four; } set { this._four = value; } }
+    /// <summary>The fifth item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeFive Five { get { return this._five; } set { this._five = value; } }
     /// <summary>The sixth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public TypeSix Six { get { return this._six; } set { this._six = value; } }
@@ -1172,6 +1217,24 @@ namespace Seven.Structures
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 7; } }
 
+    /// <summary>The left item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    /// <summary>The right item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    /// <summary>The third item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeThree Three { get { return this._three; } set { this._three = value; } }
+    /// <summary>The fourth item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeFour Four { get { return this._four; } set { this._four = value; } }
+    /// <summary>The fifth item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeFive Five { get { return this._five; } set { this._five = value; } }
+    /// <summary>The sixth item in the link.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public TypeSix Six { get { return this._six; } set { this._six = value; } }
     /// <summary>The sixth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public TypeSeven Seven { get { return this._seven; } set { this._seven = value; } }

@@ -20,7 +20,7 @@ namespace Seven.Structures
   /// <summary>Implements First-In-First-Out queue data structure.</summary>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
   [Serializable]
-  public class QueueLinked<Type> : Queue<Type>
+  public class Queue_Linked<Type> : Queue<Type>
   {
     /// <summary>This class just holds the data for each individual node of the list.</summary>
     private class Node
@@ -47,7 +47,7 @@ namespace Seven.Structures
 
     /// <summary>Creates an instance of a queue.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public QueueLinked()
+    public Queue_Linked()
     {
       _head = _tail = null;
       _count = 0;
@@ -142,13 +142,23 @@ namespace Seven.Structures
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     IEnumerator IEnumerable.GetEnumerator()
     {
-      throw new NotImplementedException();
+      Node current = this._head;
+      while (current != null)
+      {
+        yield return current.Value;
+        current = current.Next;
+      }
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
     {
-      throw new NotImplementedException();
+      Node current = this._head;
+      while (current != null)
+      {
+        yield return current.Value;
+        current = current.Next;
+      }
     }
 
     #endregion
@@ -196,7 +206,12 @@ namespace Seven.Structures
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     public void Foreach(Foreach<Type> function)
     {
-      throw new NotImplementedException();
+      Node current = this._head;
+      while (current != null)
+      {
+        function(current.Value);
+        current = current.Next;
+      }
     }
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>

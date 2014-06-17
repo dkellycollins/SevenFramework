@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="Seven.Structures.Structure&lt;Type&gt;" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAABAAFA=</HashCode>
+      <FileName>Structures\Structure.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.Array&lt;Type&gt;" Collapsed="true">
+    <Position X="2.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structures\Array.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.AvlTree&lt;Type&gt;" Collapsed="true">
+    <Position X="11" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAJAAAAAAAgBAABAAAAABAQAAAAAAAAAAAABAABQAAA=</HashCode>
+      <FileName>Structures\AvlTree.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.Heap&lt;Type&gt;" Collapsed="true">
+    <Position X="9.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAEAAAAAAAAAAQAAAAABAAAAAAAAABAAAA=</HashCode>
+      <FileName>Structures\Heap.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.Link" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structures\Link.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.List&lt;Type&gt;" Collapsed="true">
+    <Position X="4" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAJAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Structures\List.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.Octree&lt;Type&gt;" Collapsed="true">
+    <Position X="16.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAZAAIAAAAAAAAAAAAAAAASAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structures\Octree.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.Queue&lt;Type&gt;" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAEAAAAAAAAAAQAAAAABAAAAAAAAABAAAA=</HashCode>
+      <FileName>Structures\Queue.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.RedBlackTree&lt;Type&gt;" Collapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAJAAAAAAAAAAAAAAAAABAQAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Structures\RedBlackTree.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.Ring&lt;Type&gt;" Collapsed="true">
+    <Position X="14.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structures\Ring.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Seven.Structures.Stack&lt;Type&gt;" Collapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAACAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Structures\Stack.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
