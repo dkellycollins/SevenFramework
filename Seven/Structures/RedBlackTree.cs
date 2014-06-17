@@ -34,21 +34,21 @@ namespace Seven.Structures
 
     #region RedBlackTreeNode
 
-    protected class RedBlackLinkedNode
+    protected class Node
     {
       private bool _color;
       private Type _value;
-      private RedBlackLinkedNode _leftChild;
-      private RedBlackLinkedNode _rightChild;
-      private RedBlackLinkedNode _parent;
+      private Node _leftChild;
+      private Node _rightChild;
+      private Node _parent;
 
       internal bool Color { get { return _color; } set { _color = value; } }
       internal Type Value { get { return _value; } set { _value = value; } }
-      internal RedBlackLinkedNode LeftChild { get { return _leftChild; } set { _leftChild = value; } }
-      internal RedBlackLinkedNode RightChild { get { return _rightChild; } set { _rightChild = value; } }
-      internal RedBlackLinkedNode Parent { get { return _parent; } set { _parent = value; } }
+      internal Node LeftChild { get { return _leftChild; } set { _leftChild = value; } }
+      internal Node RightChild { get { return _rightChild; } set { _rightChild = value; } }
+      internal Node Parent { get { return _parent; } set { _parent = value; } }
 
-      internal RedBlackLinkedNode()
+      internal Node()
       {
         _color = Red;
       }
@@ -56,29 +56,28 @@ namespace Seven.Structures
 
     #endregion
 
-    protected Func<Type, Type, int> _valueComparisonFunction;
+    protected Compare<Type> _compare;
 
     protected int _count;
-    protected RedBlackLinkedNode _redBlackTree;
-    protected static RedBlackLinkedNode _sentinelNode;
+    protected Node _redBlackTree;
+    protected static Node _sentinelNode;
 
     public int Count { get { return _count; } }
 
     public bool IsEmpty { get { return _redBlackTree == null; } }
 
-    public RedBlackTreeLinked(
-      Func<Type, Type, int> valueComparisonFunction)
+    public RedBlackTreeLinked(Compare<Type> valueComparisonFunction)
     {
-      _sentinelNode = new RedBlackLinkedNode();
+      _sentinelNode = new Node();
       _sentinelNode.Color = Black;
       _redBlackTree = _sentinelNode;
-      _valueComparisonFunction = valueComparisonFunction;
+      _compare = valueComparisonFunction;
     }
 
     public Type Get<Key>(Key key, Func<Type, Key, int> comparison)
     {
       int compareResult;
-      RedBlackLinkedNode treeNode = _redBlackTree;
+      Node treeNode = _redBlackTree;
       while (treeNode != _sentinelNode)
       {
         compareResult = comparison(treeNode.Value, key);
@@ -95,7 +94,7 @@ namespace Seven.Structures
     public bool TryGet<Key>(Key key, Func<Type, Key, int> comparison, out Type returnValue)
     {
       int compareResult;
-      RedBlackLinkedNode treeNode = _redBlackTree;
+      Node treeNode = _redBlackTree;
       while (treeNode != _sentinelNode)
       {
         compareResult = comparison(treeNode.Value, key);
@@ -115,16 +114,15 @@ namespace Seven.Structures
 
     public bool Contains(Type item)
     {
-      int compareResult;
-      RedBlackLinkedNode treeNode = _redBlackTree;
+      Node treeNode = _redBlackTree;
       while (treeNode != _sentinelNode)
       {
-        compareResult = _valueComparisonFunction(treeNode.Value, item);
-        if (compareResult == 0)
+        Comparison compareResult = _compare(treeNode.Value, item);
+        if (compareResult == Comparison.Equal)
           return true;
-        if (compareResult > 0)
+        if (compareResult == Comparison.Greater)
           treeNode = treeNode.LeftChild;
-        else
+        else // (compareResult == Comparison.Less)
           treeNode = treeNode.RightChild;
       }
       return false;
@@ -133,7 +131,7 @@ namespace Seven.Structures
     public bool Contains<Key>(Key key, Func<Type, Key, int> comparison)
     {
       int compareResult;
-      RedBlackLinkedNode treeNode = _redBlackTree;
+      Node treeNode = _redBlackTree;
       while (treeNode != _sentinelNode)
       {
         compareResult = comparison(treeNode.Value, key);
@@ -151,18 +149,17 @@ namespace Seven.Structures
     {
       if (data == null)
         throw (new RedBlackLinkedException("RedBlackNode key and data must not be null"));
-      int result = 0;
-      RedBlackLinkedNode addition = new RedBlackLinkedNode();
-      RedBlackLinkedNode temp = _redBlackTree;
+      Node addition = new Node();
+      Node temp = _redBlackTree;
       while (temp != _sentinelNode)
       {
         addition.Parent = temp;
-        result = _valueComparisonFunction(data, temp.Value);
-        if (result == 0)
+        Comparison result = _compare(data, temp.Value);
+        if (result == Comparison.Equal)
           throw (new RedBlackLinkedException("A Node with the same key already exists"));
-        if (result > 0)
+        else if (result == Comparison.Greater)
           temp = temp.RightChild;
-        else
+        else // (result == Comparison.Less)
           temp = temp.LeftChild;
       }
       addition.Value = data;
@@ -170,10 +167,10 @@ namespace Seven.Structures
       addition.RightChild = _sentinelNode;
       if (addition.Parent != null)
       {
-        result = _valueComparisonFunction(addition.Value, addition.Parent.Value);
-        if (result > 0)
+        Comparison result = _compare(addition.Value, addition.Parent.Value);
+        if (result == Comparison.Greater)
           addition.Parent.RightChild = addition;
-        else
+        else // (result == Comparison.Less)
           addition.Parent.LeftChild = addition;
       }
       else
@@ -182,9 +179,9 @@ namespace Seven.Structures
       _count = _count + 1;
     }
 
-    protected void BalanceAddition(RedBlackLinkedNode balancing)
+    protected void BalanceAddition(Node balancing)
     {
-      RedBlackLinkedNode temp;
+      Node temp;
       while (balancing != _redBlackTree && balancing.Parent.Color == Red)
       {
         if (balancing.Parent == balancing.Parent.Parent.LeftChild)
@@ -235,9 +232,9 @@ namespace Seven.Structures
       _redBlackTree.Color = Black;
     }
 
-    protected void RotateLeft(RedBlackLinkedNode redBlackTree)
+    protected void RotateLeft(Node redBlackTree)
     {
-      RedBlackLinkedNode temp = redBlackTree.RightChild;
+      Node temp = redBlackTree.RightChild;
       redBlackTree.RightChild = temp.LeftChild;
       if (temp.LeftChild != _sentinelNode)
         temp.LeftChild.Parent = redBlackTree;
@@ -257,9 +254,9 @@ namespace Seven.Structures
         redBlackTree.Parent = temp;
     }
 
-    protected void RotateRight(RedBlackLinkedNode redBlacktree)
+    protected void RotateRight(Node redBlacktree)
     {
-      RedBlackLinkedNode temp = redBlacktree.LeftChild;
+      Node temp = redBlacktree.LeftChild;
       redBlacktree.LeftChild = temp.RightChild;
       if (temp.RightChild != _sentinelNode)
         temp.RightChild.Parent = redBlacktree;
@@ -281,7 +278,7 @@ namespace Seven.Structures
 
     public Type GetMin()
     {
-      RedBlackLinkedNode treeNode = _redBlackTree;
+      Node treeNode = _redBlackTree;
       if (treeNode == null || treeNode == _sentinelNode)
         throw new RedBlackLinkedException("attempting to get the minimum value from an empty tree.");
       while (treeNode.LeftChild != _sentinelNode)
@@ -292,7 +289,7 @@ namespace Seven.Structures
 
     public Type GetMax()
     {
-      RedBlackLinkedNode treeNode = _redBlackTree;
+      Node treeNode = _redBlackTree;
       if (treeNode == null || treeNode == _sentinelNode)
       {
         throw (new RedBlackLinkedException("attempting to get the maximum value from an empty tree."));
@@ -308,25 +305,28 @@ namespace Seven.Structures
       if (value is object)
         if (((object)value) == null)
           throw new RedBlackLinkedException("Attempting to remove a null value from the tree.");
-      int result;
-      RedBlackLinkedNode node;
+      //int result;
+      Node node;
       node = _redBlackTree;
       while (node != _sentinelNode)
       {
-        result = _valueComparisonFunction(node.Value, value);
-        if (result == 0) break;
-        if (result > 0) node = node.LeftChild;
-        else node = node.RightChild;
+        Comparison result = _compare(node.Value, value);
+        if (result == Comparison.Equal)
+          break;
+        if (result == Comparison.Greater)
+          node = node.LeftChild;
+        else // (result == Comparison.Less)
+          node = node.RightChild;
       }
       if (node == _sentinelNode) return;
       Remove(node);
       _count = _count - 1;
     }
 
-    protected void Remove(RedBlackLinkedNode removal)
+    protected void Remove(Node removal)
     {
-      RedBlackLinkedNode x = new RedBlackLinkedNode();
-      RedBlackLinkedNode temp;
+      Node x = new Node();
+      Node temp;
       if (removal.LeftChild == _sentinelNode || removal.RightChild == _sentinelNode)
         temp = removal;
       else
@@ -352,9 +352,9 @@ namespace Seven.Structures
       if (temp.Color == Black) BalanceRemoval(x);
     }
 
-    protected void BalanceRemoval(RedBlackLinkedNode balancing)
+    protected void BalanceRemoval(Node balancing)
     {
-      RedBlackLinkedNode temp;
+      Node temp;
       while (balancing != _redBlackTree && balancing.Color == Black)
       {
         if (balancing == balancing.Parent.LeftChild)
@@ -448,7 +448,7 @@ namespace Seven.Structures
         return false;
       return true;
     }
-    private bool TraversalInOrder(Func<Type, bool> traversalFunction, RedBlackLinkedNode avltreeNode)
+    private bool TraversalInOrder(Func<Type, bool> traversalFunction, Node avltreeNode)
     {
       if (avltreeNode != null)
       {
@@ -463,7 +463,7 @@ namespace Seven.Structures
     {
       TraversalInOrder(traversalFunction, _redBlackTree);
     }
-    protected void TraversalInOrder(Action<Type> traversalFunction, RedBlackLinkedNode avltreeNode)
+    protected void TraversalInOrder(Action<Type> traversalFunction, Node avltreeNode)
     {
       if (avltreeNode != null)
       {
@@ -482,7 +482,7 @@ namespace Seven.Structures
         return false;
       return true;
     }
-    protected bool TraversalPostOrder(Func<Type, bool> traversalFunction, RedBlackLinkedNode avltreeNode)
+    protected bool TraversalPostOrder(Func<Type, bool> traversalFunction, Node avltreeNode)
     {
       if (avltreeNode != null)
       {
@@ -503,7 +503,7 @@ namespace Seven.Structures
         return false;
       return true;
     }
-    protected bool TraversalPreOrder(Func<Type, bool> traversalFunction, RedBlackLinkedNode avltreeNode)
+    protected bool TraversalPreOrder(Func<Type, bool> traversalFunction, Node avltreeNode)
     {
       if (avltreeNode != null)
       {
@@ -528,7 +528,7 @@ namespace Seven.Structures
       ToArrayInOrder(array, _redBlackTree, 0);
       return array;
     }
-    protected void ToArrayInOrder(Type[] array, RedBlackLinkedNode avltreeNode, int position)
+    protected void ToArrayInOrder(Type[] array, Node avltreeNode, int position)
     {
       if (avltreeNode != null)
       {
@@ -547,7 +547,7 @@ namespace Seven.Structures
       ToArrayPostOrder(array, _redBlackTree, 0);
       return array;
     }
-    protected void ToArrayPostOrder(Type[] array, RedBlackLinkedNode avltreeNode, int position)
+    protected void ToArrayPostOrder(Type[] array, Node avltreeNode, int position)
     {
       if (avltreeNode != null)
       {
@@ -564,13 +564,45 @@ namespace Seven.Structures
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     IEnumerator IEnumerable.GetEnumerator()
     {
-      throw new NotImplementedException();
+      Stack<Node> forks = new Stack_Linked<Node>();
+      Node current = _redBlackTree;
+      while (current != null && current.LeftChild != null && current.RightChild != null || forks.Count > 0)
+      {
+        if (current != null)
+        {
+          forks.Push(current);
+          current = current.LeftChild;
+        }
+        else if (forks.Count > 0)
+        {
+          current = forks.Pop();
+          if (current.LeftChild != null && current.RightChild != null)
+            yield return current.Value;
+          current = current.RightChild;
+        }
+      }
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
     {
-      throw new NotImplementedException();
+      Stack<Node> forks = new Stack_Linked<Node>();
+      Node current = _redBlackTree;
+      while (current != null && current.LeftChild != null && current.RightChild != null || forks.Count > 0)
+      {
+        if (current != null)
+        {
+          forks.Push(current);
+          current = current.LeftChild;
+        }
+        else if (forks.Count > 0)
+        {
+          current = forks.Pop();
+          if (current.LeftChild != null && current.RightChild != null)
+            yield return current.Value;
+          current = current.RightChild;
+        }
+      }
     }
 
     #endregion
@@ -618,7 +650,21 @@ namespace Seven.Structures
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     public void Foreach(Foreach<Type> function)
     {
-      throw new NotImplementedException();
+      ForeachInOrder(function);
+    }
+
+    public void ForeachInOrder(Foreach<Type> function)
+    {
+      ForeachInOrder(function, _redBlackTree);
+    }
+    protected void ForeachInOrder(Foreach<Type> function, Node node)
+    {
+      if (node != null && node.LeftChild != null && node.RightChild != null)
+      {
+        ForeachInOrder(function, node.LeftChild);
+        function(node.Value);
+        ForeachInOrder(function, node.RightChild);
+      }
     }
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>

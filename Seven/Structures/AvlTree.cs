@@ -158,221 +158,44 @@ namespace Seven.Structures
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     IEnumerator IEnumerable.GetEnumerator()
     {
-      bool rightChildCheck = false;
       Stack<Node> forks = new Stack_Linked<Node>();
       Node current = _avlTree;
-
-      if (current != null || forks.Count != 0)
+      while (current != null || forks.Count > 0)
+      {
+        if (current != null)
         {
-          if (current != null)
-          {
-            if (rightChildCheck)
-            {
-              forks.Push(current);
-              current = current.RightChild;
-              rightChildCheck = false;
-            }
-            else
-            {
-              if (current.LeftChild == null)
-              {
-                Node fork;
-                do
-                {
-                  if (forks.Count == 0)
-                    goto End;// false;
-                  fork = forks.Pop();
-                }
-                while (fork.RightChild == null);
-                rightChildCheck = true;
-              }
-              else
-              {
-                forks.Push(current);
-                current = current.LeftChild;
-              }
-            }
-          }
-          else
-          {
-            Node fork;
-            do
-            { 
-             if (forks.Count == 0)
-               goto End;// false; 
-              fork = forks.Pop();
-            }
-            while (fork.RightChild == null);
-            rightChildCheck = true;
-          }
-          yield return current.Value;
+          forks.Push(current);
+          current = current.LeftChild;
         }
-        else
-          goto End;// false;
-
-    End:
-
-      rightChildCheck = false;
+        else if (forks.Count > 0)
+        {
+          current = forks.Pop();
+          yield return current.Value;
+          current = current.RightChild;
+        }
+      }
     }
-
-    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    //IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
-    //{
-    //  while (true)
-    //    yield return (Type)AvlTree_Linked<Type>.GetEnumerator(this._avlTree);
-    //}
-
-    //private static IEnumerator<Type> GetEnumerator(Node avltreeNode)
-    //{
-    //  if (avltreeNode != null)
-    //  {
-    //    AvlTree_Linked<Type>.GetEnumerator(avltreeNode.LeftChild);
-    //    yield return avltreeNode.Value;
-    //    AvlTree_Linked<Type>.GetEnumerator(avltreeNode.RightChild);
-    //  }
-    //}
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
     {
-      bool rightChildCheck = false;
       Stack<Node> forks = new Stack_Linked<Node>();
       Node current = _avlTree;
-
-      if (current != null || forks.Count != 0)
+      while (current != null || forks.Count > 0)
       {
         if (current != null)
         {
-          if (rightChildCheck)
-          {
-            forks.Push(current);
-            current = current.RightChild;
-            rightChildCheck = false;
-          }
-          else
-          {
-            if (current.LeftChild == null)
-            {
-              Node fork;
-              do
-              {
-                if (forks.Count == 0)
-                  goto End;// false;
-                fork = forks.Pop();
-              }
-              while (fork.RightChild == null);
-              rightChildCheck = true;
-            }
-            else
-            {
-              forks.Push(current);
-              current = current.LeftChild;
-            }
-          }
+          forks.Push(current);
+          current = current.LeftChild;
         }
-        else
+        else if (forks.Count > 0)
         {
-          Node fork;
-          do
-          {
-            if (forks.Count == 0)
-              goto End;// false; 
-            fork = forks.Pop();
-          }
-          while (fork.RightChild == null);
-          rightChildCheck = true;
+          current = forks.Pop();
+          yield return current.Value;
+          current = current.RightChild;
         }
-        yield return current.Value;
       }
-      else
-        goto End;// false;
-
-    End:
-
-      rightChildCheck = false;
     }
-
-    //public class Enumerator : IEnumerator<Type>
-    //{
-    //  // Assume "Node" is a binary tree node with a left 
-    //  //   and right child and no parent pointer.
-    //  // "Type" is the generic type of the data structure
-    //  Node _current;
-    //  Node _first;
-    //  bool _rightChildCheck;
-    //  Stack<Node> _forks;
-
-    //  public Enumerator(Node first)
-    //  {
-    //    //The "Node" constructor takes the value and the next Node
-    //    _first = new Node(default(Type));
-    //    _first.LeftChild = first;
-    //    _current = _first;
-    //    _forks = new Stack_Linked<Node>();
-    //  }
-
-    //  public Type Current { get { return _current.Value; } }
-
-    //  public void Reset()
-    //  {
-    //    _current = _first;
-    //    _forks = new Stack_Linked<Node>();
-    //  }
-
-    //  public bool MoveNext()
-    //  {
-    //    if (_current != null || _forks.Count != 0)
-    //    {
-    //      if (_current != null)
-    //      {
-    //        if (_rightChildCheck)
-    //        {
-    //          _forks.Push(_current); _current = _current.RightChild;
-    //          _rightChildCheck = false;
-    //        }
-    //        else
-    //        {
-    //          if (_current.LeftChild == null)
-    //          {
-    //            AvlTreeNode fork;
-    //            do
-    //            { if (_forks.Count == 0) return false;
-    //              fork = _forks.Pop();
-    //            } while (fork.RightChild == null);
-    //            _rightChildCheck = true;
-    //          }
-    //          else { _forks.Push(_current); _current = _current.LeftChild; }
-    //        }
-    //      }
-    //      else
-    //      {
-    //        AvlTreeNode fork;
-    //        do { 
-    //         if (_forks.Count == 0) return false; 
-    //          fork = _forks.Pop();
-    //        } while (fork.RightChild == null);
-    //        _rightChildCheck = true;
-    //      }
-    //      return true;
-    //    }
-    //    else return false;
-    //  }
-    //}
-
-    //public IEnumerator<Type> GetEnumerator()
-    //{
-    //  return AvlTree_Linked<Type>.GetEnumerator(this._avlTree);
-    //}
-    //private static IEnumerator<Type> GetEnumerator(Node avltreeNode)
-    //{
-    //  if (avltreeNode != null)
-    //  {
-    //    AvlTree_Linked<Type>.GetEnumerator(avltreeNode.LeftChild);
-    //    yield return avltreeNode.Value;
-    //    AvlTree_Linked<Type>.GetEnumerator(avltreeNode.RightChild);
-    //  }
-    //}
-
 
     public virtual bool Contains<Key>(Key key, Compare<Type, Key> comparison)
     {

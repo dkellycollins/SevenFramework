@@ -22,6 +22,17 @@ namespace Testing
     {
       int test = 10;
 
+      Console.WriteLine("Testing Link");
+      Link link = new Link<int, int, int, int, int, int>(0, 1, 2, 3, 4, 5);
+      Console.Write("Delegate: ");
+      link.Foreach((dynamic current) => { Console.Write(current); });
+      Console.WriteLine();
+      Console.Write("IEnumerator: ");
+      foreach (dynamic value in link)
+        Console.Write(value);
+      Console.WriteLine();
+      Console.WriteLine();
+
       Console.WriteLine("Testing Array_Array<Type>");
       Array<int> array = new Array_Array<int>(10);
       for (int i = 0; i < test; i++)
@@ -96,6 +107,19 @@ namespace Testing
       Console.WriteLine();
       Console.Write("IEnumerator: ");
       foreach (int current in avlTree_linked)
+        Console.Write(current);
+      Console.WriteLine();
+      Console.WriteLine();
+
+      Console.WriteLine("Testing RedBlack_Linked<Type>");
+      RedBlackTree<int> redBlackTree_linked = new RedBlackTreeLinked<int>(Compare);
+      for (int i = 0; i < test; i++)
+        redBlackTree_linked.Add(i);
+      Console.Write("Delegate: ");
+      redBlackTree_linked.Foreach((int current) => { Console.Write(current); });
+      Console.WriteLine();
+      Console.Write("IEnumerator: ");
+      foreach (int current in redBlackTree_linked)
         Console.Write(current);
       Console.WriteLine();
       Console.WriteLine();
