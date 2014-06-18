@@ -810,7 +810,10 @@ namespace Seven.Structures
     private void WriterUnlock() { lock (_lock) { _writers--; Monitor.PulseAll(_lock); } }
 
     /// <summary>This is used for throwing OcTree exceptions only to make debugging faster.</summary>
-    private class OctreeLinkedException : Exception { public OctreeLinkedException(string message) : base(message) { } }
+    private class OctreeLinkedException : Error
+    {
+      public OctreeLinkedException(string message) : base(message) { }
+    }
   }
 
   #endregion

@@ -549,7 +549,7 @@ namespace Seven.Mathematics
       return Vector.EqualsReference(this, (Vector)right);
     }
 
-    private class Exception : System.Exception
+    private class Exception : Error
     {
       public Exception(string message) : base(message) { }
     }

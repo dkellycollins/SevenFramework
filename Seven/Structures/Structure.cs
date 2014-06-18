@@ -1,20 +1,38 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Seven.Structures
 {
+  public enum Structures
+  {
+    Array,
+    AvlTree,
+    BTree,
+    Graph,
+    HashTable,
+    Heap,
+    Link,
+    List,
+    Octree,
+    QuadTree,
+    ReadBlackTree,
+    Ring,
+    Stack
+  }
+
   /// <summary>Polymorphism base for all data structures in the Seven framework.</summary>
   /// <typeparam name="Type">The type of the instances to store in this data structure.</typeparam>
-  public interface Structure<Type> : IEnumerable<Type>
+  public interface Structure<Type> : 
+    System.Collections.Generic.IEnumerable<Type>
+    // System.ICloneable
+    // 
   {
     #region .Net Framework Compatibility
 
     /// <summary>FOR COMPATIBILITY ONLY. DO NO USE. AVOID IF POSSIBLE.</summary>
-    //IEnumerator IEnumerable.GetEnumerator();
+    //System.Collections.IEnumerator GetEnumerator();
 
     /// <summary>FOR COMPATIBILITY ONLY. DO NO USE. AVOID IF POSSIBLE.</summary>
-    //IEnumerator<Type> IEnumerable<Type>.GetEnumerator();
+    //System.Collections.Generic.IEnumerator<Type> GetEnumerator();
 
     #endregion
 
@@ -102,17 +120,17 @@ namespace Seven.Structures
   /// <summary>Contains the implementations of the methods in the Structure interface.</summary>
   internal static class Structure
   {
-    //internal static Structure<Type> Union<Type>(Structure<Type> left, Structure<Type> right, Compare<Type> compare)
-    //{
-    //  List<Type> union = new List_Linked<Type>();
-    //  foreach (Type leftLoop in left)
-    //    union.Add(leftLoop);
-    //  //foreach (Type rightLoop in right)
-    //  //  if (!left.Contains(rightLoop, compare))
-    //  //    union.Add(rightLoop);
-    //  throw new NotImplementedException();
-    //  return union;
-    //}
+    internal static Structure<Type> Union<Type>(Structure<Type> left, Structure<Type> right, Compare<Type> compare)
+    {
+      List<Type> union = new List_Linked<Type>();
+      foreach (Type leftLoop in left)
+        union.Add(leftLoop);
+      //foreach (Type rightLoop in right)
+      //  if (!left.Contains(rightLoop, compare))
+      //    union.Add(rightLoop);
+      throw new NotImplementedException();
+      //return union;
+    }
 
     //internal static Structure<Type> Union<Type>(this Structure<Type> left, Structure<Type> right, Compare<Type> compare)
     //{
@@ -126,17 +144,17 @@ namespace Seven.Structures
     //  return union;
     //}
 
-    //internal static Structure<Type> Intersection<Type>(Structure<Type> left, Structure<Type> right, Compare<Type> compare)
-    //{
-    //  //Structure.Union<Type>(null, null, (Type left1, Type right1) => { return Comparison.Less; });
+    internal static Structure<Type> Intersection<Type>(Structure<Type> left, Structure<Type> right, Compare<Type> compare)
+    {
+      //Structure.Union<Type>(null, null, (Type left1, Type right1) => { return Comparison.Less; });
 
-    //  List<Type> intersection = new List_Linked<Type>();
-    //  foreach (Type leftLoop in left)
-    //    foreach (Type rightLoop in right)
-    //      if (compare(leftLoop, rightLoop) == Comparison.Equal)
-    //        intersection.Add(leftLoop);
-    //  return intersection;
-    //}
+      List<Type> intersection = new List_Linked<Type>();
+      foreach (Type leftLoop in left)
+        foreach (Type rightLoop in right)
+          if (compare(leftLoop, rightLoop) == Comparison.Equal)
+            intersection.Add(leftLoop);
+      return intersection;
+    }
 
 
 

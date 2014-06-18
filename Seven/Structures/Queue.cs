@@ -2,8 +2,8 @@
 using System.Threading;
 using Seven.Structures;
 
-// using System.Collections; IEnumerable
-// using System.Collections.Generic; IEnumerable<Type>
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Seven.Structures
 {
@@ -140,8 +140,7 @@ namespace Seven.Structures
     #region .Net Framework Compatibility
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    System.Collections.IEnumerator 
-      System.Collections.IEnumerable.GetEnumerator()
+    IEnumerator IEnumerable.GetEnumerator()
     {
       Node current = this._head;
       while (current != null)
@@ -152,8 +151,7 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    System.Collections.Generic.IEnumerator<Type>
-      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
+    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
     {
       Node current = this._head;
       while (current != null)
@@ -247,7 +245,7 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Exception : System.Exception
+    private class Exception : Error
     {
       public Exception(string message) : base(message) { }
     }
@@ -954,15 +952,13 @@ namespace Seven.Structures
     #region .Net Framework Compatibility
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    System.Collections.IEnumerator
-      System.Collections.IEnumerable.GetEnumerator()
+    IEnumerator IEnumerable.GetEnumerator()
     {
       throw new NotImplementedException();
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    System.Collections.Generic.IEnumerator<Type>
-      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
+    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
     {
       throw new NotImplementedException();
     }
@@ -1055,7 +1051,10 @@ namespace Seven.Structures
     #endregion
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class ListArrayException : Exception { public ListArrayException(string message) : base(message) { } }
+    private class ListArrayException : Error
+    {
+      public ListArrayException(string message) : base(message) { }
+    }
   }
 
   #endregion

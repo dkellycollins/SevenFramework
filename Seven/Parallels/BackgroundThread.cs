@@ -5,8 +5,6 @@ namespace Seven
 {
   public class BackgroundThread
   {
-    #region RunEventArgs
-
     public class RecreateEventArgs : EventArgs
     {
       private object argument;
@@ -15,10 +13,6 @@ namespace Seven
 
       public RecreateEventArgs(object argument) { this.argument = argument; }
     }
-
-    #endregion
-
-    #region RunEventArgs
 
     public class RunEventArgs : EventArgs
     {
@@ -32,10 +26,6 @@ namespace Seven
 
       public RunEventArgs(object argument) { this.argument = argument; }
     }
-
-    #endregion
-
-    #region ReportEventArgs
 
     public class ReportEventArgs : EventArgs
     {
@@ -52,10 +42,6 @@ namespace Seven
         this.userState = userState;
       }
     }
-
-    #endregion
-
-    #region ResultEventArgs
 
     public class ResultEventArgs : EventArgs
     {
@@ -86,10 +72,6 @@ namespace Seven
           throw new BackgroundThreadException("BS");
       }
     }
-
-    #endregion
-
-    #region AsyncOp
 
     public sealed class AsyncOperation
     {
@@ -153,17 +135,15 @@ namespace Seven
       private void VerifyNotCompleted()
       {
         if (this.alreadyCompleted)
-          throw new Exception("BS");
+          throw new Exception("No hacks for you.");
       }
 
       private void VerifyDelegateNotNull(SendOrPostCallback d)
       {
         if (d == null)
-          throw new Exception("BS");
+          throw new Exception("No hacks for you.");
       }
     }
-
-    #endregion
 
     public delegate void RecreateEventHandler(object sender, RecreateEventArgs e);
     public delegate void RunEventHandler(object sender, RunEventArgs e);
@@ -286,6 +266,9 @@ namespace Seven
     }
 
     /// <summary>This is used for throwing BackgroundThread Tree exceptions only to make debugging faster.</summary>
-    protected class BackgroundThreadException : Exception { public BackgroundThreadException(string message) : base(message) { } }
+    protected class BackgroundThreadException : Error
+    {
+      public BackgroundThreadException(string message) : base(message) { }
+    }
   }
 }

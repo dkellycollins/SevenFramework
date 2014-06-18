@@ -23,7 +23,7 @@ namespace Seven.Structures
   #region HashTableLinked<ValueType, KeyType>
 
   [Serializable]
-  public class HashTable_Linked<ValueType, KeyType> : HashTable<ValueType, KeyType>
+  public class HashTableLinked<ValueType, KeyType> : HashTable<ValueType, KeyType>
   {
     /// <summary>A set of allowable table sizes, all of which are prime.</summary>
     private static readonly int[] _tableSizes = new int[]
@@ -105,7 +105,7 @@ namespace Seven.Structures
 
     /// <summary>Constructs a new hash table instance.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public HashTable_Linked()
+    public HashTableLinked()
     {
       _table = new HashTableLinkedNode[107];
       _count = 0;
@@ -393,7 +393,10 @@ namespace Seven.Structures
     #endregion
 
     /// <summary>This is used for throwing hash table exceptions only to make debugging faster.</summary>
-    private class HashTableListException : Exception { public HashTableListException(string message) : base(message) { } }
+    private class HashTableListException : Error
+    {
+      public HashTableListException(string message) : base(message) { }
+    }
   }
 
   #endregion

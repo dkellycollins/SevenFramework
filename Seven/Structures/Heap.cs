@@ -574,7 +574,10 @@ namespace Seven.Structures
     #endregion
 
     /// <summary>This is used for throwing imutable priority queue exceptions only to make debugging faster.</summary>
-    private class HeapArrayStaticException : Exception { public HeapArrayStaticException(string message) : base(message) { } }
+    private class HeapArrayStaticException : Error
+    {
+      public HeapArrayStaticException(string message) : base(message) { }
+    }
   }
 
   #endregion
@@ -609,7 +612,7 @@ namespace Seven.Structures
 
     private int _count;
     private HeapArrayDynamicLink[] _heapArray;
-    private HashTable_Linked<int, Type> _indexingReference;
+    private HashTableLinked<int, Type> _indexingReference;
 
     private object _lock;
     private int _readers;
@@ -636,7 +639,7 @@ namespace Seven.Structures
     /// <remarks>Runtime: Theta(capacity).</remarks>
     public HeapArrayDynamic(int capacity)
     {
-      _indexingReference = new HashTable_Linked<int, Type>();
+      _indexingReference = new HashTableLinked<int, Type>();
       _heapArray = new HeapArrayDynamicLink[capacity + 1];
       _heapArray[0] = new HeapArrayDynamicLink(int.MaxValue, default(Type));
       for (int i = 1; i < capacity; i++)
@@ -945,7 +948,10 @@ namespace Seven.Structures
     #endregion
 
     /// <summary>This is used for throwing mutable priority queue exceptions only to make debugging faster.</summary>
-    private class HeapArrayDynamicException : Exception { public HeapArrayDynamicException(string message) : base(message) { } }
+    private class HeapArrayDynamicException : Error
+    {
+      public HeapArrayDynamicException(string message) : base(message) { }
+    }
   }
   
   #endregion

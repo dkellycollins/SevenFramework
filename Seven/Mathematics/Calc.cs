@@ -772,7 +772,7 @@ namespace Seven.Mathematics
 
     #endregion
 
-    private class CalcException : Exception
+    private class CalcException : Error
     {
       public CalcException(string Message) : base(Message) { }
     }

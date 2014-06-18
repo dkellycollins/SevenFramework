@@ -28,14 +28,15 @@ namespace Seven.Structures
     #region .NET Framework Compatibility
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    public static explicit operator Array_Array<Type>(Type[] array)
+    public static implicit operator Array_Array<Type>(Type[] array)
     {
       return new Array_Array<Type>(array);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    public static explicit operator Type[](Array_Array<Type> array)
+    public static implicit operator Type[](Array_Array<Type> array)
     {
+      
       return array.ToArray();
     }
 
@@ -262,7 +263,7 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Exception : System.Exception
+    private class Exception : Error
     {
       public Exception(string message) : base(message) { }
     }

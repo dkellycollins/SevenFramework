@@ -891,7 +891,7 @@ namespace Seven.Mathematics
       return Matrix.EqualsByReference(this, (Matrix)right);
     }
 
-    private class MatrixException : Exception
+    private class MatrixException : Error
     {
       public MatrixException(string Message) : base(Message) { }
     }

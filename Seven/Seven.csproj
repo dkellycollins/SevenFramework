@@ -37,12 +37,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compare.cs" />
-    <Compile Include="Mathematics\Algebra.cs" />
+    <Compile Include="Equate.cs" />
+    <Compile Include="Error.cs" />
     <Compile Include="Mathematics\Calc.cs" />
-    <Compile Include="Mathematics\Combinatorics.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />
-    <Compile Include="Mathematics\SetTheory.cs" />
     <Compile Include="Mathematics\Trigonometry.cs" />
     <Compile Include="Mathematics\Tween.cs" />
     <Compile Include="Mathematics\Vector.cs" />
@@ -57,6 +56,8 @@
     <Compile Include="Structures\HashTable.cs" />
     <Compile Include="Structures\Heap.cs" />
     <Compile Include="Structures\Ring.cs" />
+    <Compile Include="Structures\SkipList.cs" />
+    <Compile Include="Structures\Sorted.cs" />
     <Compile Include="Structures\Structure.cs" />
     <Compile Include="Structures\Link.cs" />
     <Compile Include="Structures\List.cs" />
@@ -67,9 +68,6 @@
     <Compile Include="Structures\Sort.cs" />
     <Compile Include="Structures\Stack.cs" />
     <Compile Include="Structures\Table.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Structures\Structures.cd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Structures\README.txt" />

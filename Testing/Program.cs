@@ -85,19 +85,6 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine("Testing Stack_Array<Type>");
-      Stack<int> stack_array = new Stack_Array<int>(10);
-      for (int i = 0; i < test; i++)
-        stack_array.Push(i);
-      Console.Write("Delegate: ");
-      stack_array.Foreach((int current) => { Console.Write(current); });
-      Console.WriteLine();
-      Console.Write("IEnumerator: ");
-      foreach (int current in stack_array)
-        Console.Write(current);
-      Console.WriteLine();
-      Console.WriteLine();
-
       Console.WriteLine("Testing Queue_Linked<Type>");
       Queue<int> queue_linked = new Queue_Linked<int>();
       for (int i = 0; i < test; i++)
@@ -125,7 +112,7 @@ namespace Testing
       Console.WriteLine();
 
       Console.WriteLine("Testing RedBlack_Linked<Type>");
-      RedBlackTree<int> redBlackTree_linked = new RedBlackTree_Linked<int>(Compare);
+      RedBlackTree<int> redBlackTree_linked = new RedBlackTreeLinked<int>(Compare);
       for (int i = 0; i < test; i++)
         redBlackTree_linked.Add(i);
       Console.Write("Delegate: ");

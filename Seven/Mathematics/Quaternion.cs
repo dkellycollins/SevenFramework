@@ -482,7 +482,7 @@ namespace Seven.Mathematics
       return false;
     }
 
-    private class QuaternionException : Exception
+    private class QuaternionException : Error
     {
       public QuaternionException(string message) : base(message) { }
     }

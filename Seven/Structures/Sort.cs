@@ -177,6 +177,41 @@ namespace Seven.Structures
       }
     }
 
+    /// <summary>Sorts an entire array in non-decreasing order using the odd-even sort algorithm.</summary>
+    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <param name="compare">The method of compare for the sort.</param>
+    /// <param name="array">The array to be sorted</param>
+    /// <remarks>Runtime: Omega(n), average(n^2), O(n^2). Memory: in place. Stablity: yes.</remarks>
+    public static void OddEven<Type>(Compare<Type> compare, Type[] array)
+    {
+      var sorted = false;
+      while (!sorted)
+      {
+        sorted = true;
+        for (var i = 1; i < array.Length - 1; i += 2)
+        {
+          if (compare(array[i], array[i + 1]) == Comparison.Greater)
+          {
+            Type temp = array[i];
+            array[i] = array[i + 1];
+            array[i + 1] = temp;
+            sorted = false;
+          }
+        }
+
+        for (var i = 0; i < array.Length - 1; i += 2)
+        {
+          if (compare(array[i], array[i + 1]) == Comparison.Greater)
+          {
+            Type temp = array[i];
+            array[i] = array[i + 1];
+            array[i + 1] = temp;
+            sorted = false;
+          }
+        }
+      }
+    }
+
     /// <summary>Method specifically for computing object keys in the Counting Sort algorithm.</summary>
     /// <typeparam name="Type">The type of instances in the array to be sorted.</typeparam>
     /// <param name="instance">The instance to compute a counting key for.</param>

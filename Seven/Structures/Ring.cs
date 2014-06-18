@@ -26,12 +26,14 @@ namespace Seven.Structures
       _ring = new Type[length];
       _nextFree = 0;
       _location = 0;
+      _count = 0;
     }
 
-    public void Add(Type item)
+    public void Add(Type o)
     {
-      _ring[_nextFree] = item;
+      _ring[_nextFree] = o;
       _nextFree = (_nextFree+1) % _ring.Length;
+      _count++;
     }
 
     #region .Net Framework Compatibility

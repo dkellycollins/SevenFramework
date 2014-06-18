@@ -350,7 +350,7 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Exception : System.Exception { public Exception(string message) : base(message) { } }
+    private class Exception : Error { public Exception(string message) : base(message) { } }
   }
 
   /// <summary>Implements a growing, singularly-linked list data structure that inherits InterfaceTraversable.</summary>
@@ -371,7 +371,7 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Exception : System.Exception { public Exception(string message) : base(message) { } }
+    private class Exception : Error { public Exception(string message) : base(message) { } }
   }
 
   /// <summary>Implements a growing list as an array (with expansions/contractions) 
@@ -677,7 +677,7 @@ namespace Seven.Structures
     }
     
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    protected class Exception : System.Exception { public Exception(string message) : base(message) { } }
+    protected class Exception : Error { public Exception(string message) : base(message) { } }
   }
 
   /// <summary>Implements a growing, singularly-linked list data structure that inherits InterfaceTraversable.</summary>
@@ -699,6 +699,6 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private new class Exception : System.Exception { public Exception(string message) : base(message) { } }
+    private new class Exception : Error { public Exception(string message) : base(message) { } }
   }
 }
