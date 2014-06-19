@@ -1,4 +1,6 @@
-﻿Seven _LISCENSE.txt
+﻿Seven LISCENSE.txt
+
+https://github.com/53V3N1X/SevenFramework
 
 The MIT License (MIT)
 

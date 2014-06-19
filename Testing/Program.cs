@@ -2,6 +2,7 @@
 
 using Seven;
 using Seven.Structures;
+using System.Diagnostics;
 
 namespace Testing
 {
@@ -72,6 +73,19 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
+      Console.WriteLine("Testing List_Delegate<Type>");
+      List<int> list_delegate = new List_Delegate<int>();
+      for (int i = 0; i < test; i++)
+        list_delegate.Add(i);
+      Console.Write("Delegate: ");
+      list_delegate.Foreach((int current) => { Console.Write(current); });
+      Console.WriteLine();
+      Console.Write("IEnumerator: NOT SUPPORTED");
+      //foreach (int current in list_delegate)
+      //  Console.Write(current);
+      Console.WriteLine();
+      Console.WriteLine();
+
       Console.WriteLine("Testing Stack_Linked<Type>");
       Stack<int> stack_linked = new Stack_Linked<int>();
       for (int i = 0; i < test; i++)
@@ -124,8 +138,46 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
+      Console.WriteLine("SPEED TEST");
+      SpeedTest();
+
       Console.WriteLine("Testing Complete...");
       Console.ReadLine();
+    }
+
+    public static void SpeedTest()
+    {
+      int iterations = 100000;
+
+      Stopwatch timer = new Stopwatch();
+      int check;
+
+      check = 0;
+      timer.Restart();
+      List<int> list_array = new List_Array<int>(10);
+      for (int i = 0; i < iterations; i++)
+        list_array.Add(i);
+      list_array.Foreach((int current) => { check += current; });
+      timer.Stop();
+      Console.WriteLine("list_array (" + check + "):" + timer.ElapsedTicks);
+
+      check = 0;
+      timer.Restart();
+      List<int> list_linked = new List_Linked<int>();
+      for (int i = 0; i < iterations; i++)
+        list_linked.Add(i);
+      list_linked.Foreach((int current) => { check += current; });
+      timer.Stop();
+      Console.WriteLine("list_linked (" + check + "):" + timer.ElapsedTicks);
+
+      check = 0;
+      timer.Restart();
+      List<int> list_delegate = new List_Delegate<int>();
+      for (int i = 0; i < iterations; i++)
+        list_delegate.Add(i);
+      list_delegate.Foreach((int current) => { check += current; });
+      timer.Stop();
+      Console.WriteLine("list_delegate (" + check + "):" + timer.ElapsedTicks);
     }
   }
 }

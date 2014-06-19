@@ -1,4 +1,9 @@
-﻿namespace Seven
+﻿// Seven
+// https://github.com/53V3N1X/SevenFramework
+// LISCENSE: See "LISCENSE.txt" in th root project directory.
+// SUPPORT: See "README.txt" in the root project directory.
+
+namespace Seven
 {
   /// <summary>Delegate for equating two instances of the same type.</summary>
   /// <typeparam name="Type">The types of the istances to compare.</typeparam>

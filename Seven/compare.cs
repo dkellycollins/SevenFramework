@@ -1,4 +1,9 @@
-﻿namespace Seven
+﻿// Seven
+// https://github.com/53V3N1X/SevenFramework
+// LISCENSE: See "LISCENSE.txt" in th root project directory.
+// SUPPORT: See "README.txt" in the root project directory.
+
+namespace Seven
 {
   /// <summary>Comparison operator between two operands in a logical expression.</summary>
   public enum Comparison

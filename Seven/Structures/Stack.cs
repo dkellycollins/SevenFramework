@@ -1,4 +1,9 @@
-﻿using Seven;
+﻿// Seven
+// https://github.com/53V3N1X/SevenFramework
+// LISCENSE: See "LISCENSE.txt" in th root project directory.
+// SUPPORT: See "README.txt" in the root project directory.
+
+using Seven;
 using Seven.Parallels;
 
 // using System; // Exception, Serializable

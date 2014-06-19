@@ -1,4 +1,9 @@
-﻿//// SEVENENGINE LISCENSE:
+﻿// Seven
+// https://github.com/53V3N1X/SevenFramework
+// LISCENSE: See "LISCENSE.txt" in th root project directory.
+// SUPPORT: See "README.txt" in the root project directory.
+
+//// SEVENENGINE LISCENSE:
 //// You are free to use, modify, and distribute any or all code segments/files for any purpose
 //// including commercial use under the following condition: any code using or originally taken 
 //// from the SevenEngine project must include citation to its original author(s) located at the

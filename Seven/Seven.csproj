@@ -51,6 +51,7 @@
     <Compile Include="Structures\Array.cs" />
     <Compile Include="Structures\AvlTree.cs" />
     <Compile Include="Structures\BTree.cs" />
+    <Compile Include="Structures\Compatibility.cs" />
     <Compile Include="Structures\Foreach.cs" />
     <Compile Include="Structures\Graph.cs" />
     <Compile Include="Structures\HashTable.cs" />
@@ -67,7 +68,6 @@
     <Compile Include="Structures\RedBlackTree.cs" />
     <Compile Include="Structures\Sort.cs" />
     <Compile Include="Structures\Stack.cs" />
-    <Compile Include="Structures\Table.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Structures\README.txt" />

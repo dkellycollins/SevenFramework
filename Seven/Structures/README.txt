@@ -1,5 +1,7 @@
 ﻿Seven/Structures README.txt
 
+https://github.com/53V3N1X/SevenFramework
+
 IMPORTANT COMMENTS:-------------------------------------------------
 
 The Seven/Structures directory contains a collection of generic
@@ -11,45 +13,50 @@ IEnumerable, IList, etc.).
 
 POLYMORPHISM TREE:--------------------------------------------------
 
-  --- Structure<Type> (interface)
+    - Structure<Type>
     |
-    |--- Link<...>
+    |----- Link
+    |    |--- Link<Type...>
     |
-    |--- Array<Type>
-    |  |--- Array_Array<Type>
+    |----- Array<Type>
+    |    |--- Array_Array<Type>
     |
-    |--- List<Type>
-    |  |--- ListLinked<Type>
-    |  |  |--- List_Linked_ReaderWriter<Type>
-    |  |--- ListArray<Type>
+    |----- List<Type>
+    |    |----- List_Linked<Type>
+    |    |    |----- List_Linked_ReaderWriterLock<Type>
+    |    |----- List_Array<Type>
+    |         |----- List_Array_ReaderWriterLock<Type>
     |
-    |--- Stack<Type>
-    |  |--- StackLinked<Type>
-    |  |--- StackArray<Type>
+    |----- Stack<Type>
+    |    |----- Stack_Linked<Type>
+    |    |----- Stack_Array<Type>
     |
-    |--- Queue<Type>
-    |  |--- QueueLinked<Type>
-    |  |--- QueueArray<Type>
+    |----- Queue<Type>
+    |    |----- Queue_Linked<Type>
+    |    |----- Queue_Array<Type>
     |
-    |--- Heap<Type>
-    |  |--- HeapArrayStatic<Type>
-    |  |--- HeapArrayDynamic<Type>
+    |----- Heap<Type>
+    |    |----- Heap_Array_Static<Type>
+    |    |----- Heap_Array_Dynamic<Type>
     |
-    |--- HashTable<ValueType, KeyType>
-    |  |--- HashTableLinked<ValueType, KeyType>
+    |----- HashTable<ValueType, KeyType>
+    |    |----- HashTable_Linked<ValueType, KeyType>
     |
-    |--- AvlTree<ValueType, Keytype>
-    |  |--- AvlTreeLinked<ValueType, Keytype>
-    |  |--- AvlTree<ValueType, FirstKeytype, SecondKeyType>
-    |     |--- AvlTreeLinked<ValueType, FirstKeytype, SecondKeyType>
+    |----- AvlTree<Type>
+    |    |----- AvlTree_Linked<Type>
+    |         |----- AvlTree_Linked_ReaderWriterLock<Type>
+    |    |----- AvlTree_Array<Type>
     |
-    |--- ReadBlackTree<ValueType, Keytype>
-    |  |--- RedBlackTreeLinked<ValueType, Keytype>
-    |  |--- RedBlackTree<ValueType, FirstKeytype, SecondKeyType>
-    |     |--- RedBlackTreeLinked<ValueType, FirstKeytype, SecondKeyType>
+    |----- ReadBlackTree<Type>
+    |    |----- RedBlackTree_Linked<Type>
+    |         |----- RedBlackTree_Linked_ReaderWriterLock<Type>
+    |    |----- RedBlackTree_Array<Type>
     |
-    |--- Octree<ValueType, Keytype>
-       |--+ OctreeLinked<ValueType, Keytype>
+    |----- Quadtree<Type>
+    |    |----- Quadtree_Linked<Type>
+    |
+    |----- Octree<Type>
+         |----- Octree_Linked<Type>
 
 RUNTIME ANALYSIS:--------------------------------------------------
 
