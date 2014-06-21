@@ -33,7 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compare.cs" />
@@ -68,9 +67,6 @@
     <Compile Include="Structures\RedBlackTree.cs" />
     <Compile Include="Structures\Sort.cs" />
     <Compile Include="Structures\Stack.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Structures\README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

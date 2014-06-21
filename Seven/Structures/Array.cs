@@ -5,8 +5,9 @@
 
 using System;
 using Seven.Parallels;
-using System.Collections;
-using System.Collections.Generic;
+
+//using System.Collections;
+//using System.Collections.Generic;
 
 namespace Seven.Structures
 {
@@ -46,14 +47,16 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       for (int i = 0; i < _array.Length; i++)
         yield return _array[i];
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<Type>
+      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
     {
       for (int i = 0; i < _array.Length; i++)
         yield return _array[i];

@@ -5,10 +5,16 @@
 
 namespace Seven.Structures
 {
+  /// <summary></summary>
+  /// <typeparam name="Type"></typeparam>
   public interface ComparisonSorted<Type>
   {
+    /// <summary></summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
     bool Contains(Type item);
 
+    /// <summary></summary>
     Compare<Type> SortingTechnique { get; }
   }
 }

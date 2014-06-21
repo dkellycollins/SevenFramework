@@ -26,7 +26,7 @@ namespace Seven.Structures
   public class Link<TypeOne>
     : Link
   {
-    protected dynamic _one;
+    protected object _one;
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
@@ -37,7 +37,7 @@ namespace Seven.Structures
 
     /// <summary>The left item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    public TypeOne One { get { return (TypeOne)this._one; } set { this._one = value; } }
 
     #region .NET Framework Compatibility
 
@@ -54,7 +54,7 @@ namespace Seven.Structures
     /// <returns>The System.Tuple casted Seven.Structures.Link.</returns>
     public static explicit operator Tuple<TypeOne>(Link<TypeOne> link)
     {
-      return new Tuple<TypeOne>(link._one);
+      return new Tuple<TypeOne>((TypeOne)link._one);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
@@ -93,7 +93,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains(dynamic item, Compare<dynamic> compare)
+    public bool Contains(object item, Compare<object> compare)
     {
       if (compare(this._one, item) == Comparison.Equal)
         return true;
@@ -104,7 +104,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains<Key>(Key key, Compare<dynamic, Key> compare)
+    public bool Contains<Key>(Key key, Compare<object, Key> compare)
     {
       if (compare(this._one, key) == Comparison.Equal)
         return true;
@@ -113,14 +113,14 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public void Foreach(Foreach<dynamic> function)
+    public void Foreach(Foreach<object> function)
     {
       function(this._one);
     }
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public void Foreach(ForeachRef<dynamic> function)
+    public void Foreach(ForeachRef<object> function)
     {
       function(ref this._one);
     }
@@ -128,7 +128,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public ForeachStatus Foreach(ForeachBreak<dynamic> function)
+    public ForeachStatus Foreach(ForeachBreak<object> function)
     {
       return function(this._one);
     }
@@ -136,7 +136,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public ForeachStatus Foreach(ForeachRefBreak<dynamic> function)
+    public ForeachStatus Foreach(ForeachRefBreak<object> function)
     {
       return function(ref this._one);
     }
@@ -145,14 +145,14 @@ namespace Seven.Structures
     /// <returns>A shallow clone of this data structure.</returns>
     public Structure<object> Clone()
     {
-      return new Link<TypeOne>(this._one);
+      return new Link<TypeOne>((TypeOne)this._one);
     }
 
     /// <summary>Converts the structure into an array.</summary>
     /// <returns>An array containing all the item in the structure.</returns>
-    public virtual dynamic[] ToArray()
+    public virtual object[] ToArray()
     {
-      return new dynamic[]
+      return new object[]
       {
         this._one
       };
@@ -165,8 +165,8 @@ namespace Seven.Structures
   [Serializable]
   public class Link<TypeOne, TypeTwo> : Link
   {
-    protected dynamic _one;
-    protected dynamic _two;
+    protected object _one;
+    protected object _two;
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
@@ -177,10 +177,10 @@ namespace Seven.Structures
 
     /// <summary>The left item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    public TypeOne One { get { return (TypeOne)this._one; } set { this._one = value; } }
     /// <summary>The right item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    public TypeTwo Two { get { return (TypeTwo)this._two; } set { this._two = value; } }
 
     #region .NET Framework Compatibility
 
@@ -193,7 +193,7 @@ namespace Seven.Structures
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     public static explicit operator Tuple<TypeOne, TypeTwo>(Link<TypeOne, TypeTwo> link)
     {
-      return new Tuple<TypeOne, TypeTwo>(link._one, link._two);
+      return new Tuple<TypeOne, TypeTwo>((TypeOne)link._one, (TypeTwo)link._two);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
@@ -237,7 +237,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains(dynamic item, Compare<dynamic> compare)
+    public  bool Contains(object item, Compare<object> compare)
     {
       if (compare(this._one, item) == Comparison.Equal)
         return true;
@@ -250,7 +250,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains<Key>(Key key, Compare<dynamic, Key> compare)
+    public bool Contains<Key>(Key key, Compare<object, Key> compare)
     {
       if (compare(this._one, key) == Comparison.Equal)
         return true;
@@ -261,7 +261,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public void Foreach(Foreach<dynamic> function)
+    public void Foreach(Foreach<object> function)
     {
       function(this._one);
       function(this._two);
@@ -269,7 +269,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public void Foreach(ForeachRef<dynamic> function)
+    public void Foreach(ForeachRef<object> function)
     {
       function(ref this._one);
       function(ref this._two);
@@ -278,7 +278,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachBreak<object> function)
     {
       if (function(this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -289,7 +289,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachRefBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachRefBreak<object> function)
     {
       if (function(ref this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -301,14 +301,14 @@ namespace Seven.Structures
     /// <returns>A shallow clone of this data structure.</returns>
     public  Structure<object> Clone()
     {
-      return new Link<TypeOne, TypeTwo>(this._one, this._two);
+      return new Link<TypeOne, TypeTwo>((TypeOne)this._one, (TypeTwo)this._two);
     }
 
     /// <summary>Converts the structure into an array.</summary>
     /// <returns>An array containing all the item in the structure.</returns>
-    public  dynamic[] ToArray()
+    public  object[] ToArray()
     {
-      return new dynamic[]
+      return new object[]
       {
         this._one,
         this._two
@@ -323,9 +323,9 @@ namespace Seven.Structures
   [Serializable]
   public class Link<TypeOne, TypeTwo, TypeThree> : Link
   {
-    protected dynamic _one;
-    protected dynamic _two;
-    protected dynamic _three;
+    protected object _one;
+    protected object _two;
+    protected object _three;
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
@@ -336,13 +336,13 @@ namespace Seven.Structures
 
     /// <summary>The left item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    public TypeOne One { get { return (TypeOne)this._one; } set { this._one = value; } }
     /// <summary>The right item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    public TypeTwo Two { get { return (TypeTwo)this._two; } set { this._two = value; } }
     /// <summary>The third item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeThree Three { get { return this._three; } set { this._three = value; } }
+    public TypeThree Three { get { return (TypeThree)this._three; } set { this._three = value; } }
 
     #region .NET Framework Compatibility
 
@@ -359,7 +359,7 @@ namespace Seven.Structures
     /// <returns>The System.Tuple casted Seven.Structures.Link.</returns>
     public static explicit operator Tuple<TypeOne, TypeTwo, TypeThree>(Link<TypeOne, TypeTwo, TypeThree> link)
     {
-      return new Tuple<TypeOne, TypeTwo, TypeThree>(link._one, link._two, link._three);
+      return new Tuple<TypeOne, TypeTwo, TypeThree>((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
@@ -408,7 +408,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains(dynamic item, Compare<dynamic> compare)
+    public  bool Contains(object item, Compare<object> compare)
     {
       if (compare(this._one, item) == Comparison.Equal)
         return true;
@@ -423,7 +423,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains<Key>(Key key, Compare<dynamic, Key> compare)
+    public  bool Contains<Key>(Key key, Compare<object, Key> compare)
     {
       if (compare(this._one, key) == Comparison.Equal)
         return true;
@@ -436,7 +436,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(Foreach<dynamic> function)
+    public  void Foreach(Foreach<object> function)
     {
       function(this._one);
       function(this._two);
@@ -445,7 +445,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(ForeachRef<dynamic> function)
+    public  void Foreach(ForeachRef<object> function)
     {
       function(ref this._one);
       function(ref this._two);
@@ -455,7 +455,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachBreak<object> function)
     {
       if (function(this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -468,7 +468,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachRefBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachRefBreak<object> function)
     {
       if (function(ref this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -483,14 +483,14 @@ namespace Seven.Structures
     public  Structure<object> Clone()
     {
       return new Link<TypeOne, TypeTwo, TypeThree>
-        (this._one, this._two, this._three);
+        ((TypeOne)this._one, (TypeTwo)this._two, (TypeThree)this._three);
     }
 
     /// <summary>Converts the structure into an array.</summary>
     /// <returns>An array containing all the item in the structure.</returns>
-    public  dynamic[] ToArray()
+    public  object[] ToArray()
     {
-      return new dynamic[]
+      return new object[]
       {
         this._one,
         this._two,
@@ -508,10 +508,10 @@ namespace Seven.Structures
   public class Link<TypeOne, TypeTwo, TypeThree, TypeFour>
     : Link
   {
-    protected dynamic _one;
-    protected dynamic _two;
-    protected dynamic _three;
-    protected dynamic _four;
+    protected object _one;
+    protected object _two;
+    protected object _three;
+    protected object _four;
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
@@ -522,16 +522,16 @@ namespace Seven.Structures
 
     /// <summary>The left item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    public TypeOne One { get { return (TypeOne)this._one; } set { this._one = value; } }
     /// <summary>The right item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    public TypeTwo Two { get { return (TypeTwo)this._two; } set { this._two = value; } }
     /// <summary>The third item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeThree Three { get { return this._three; } set { this._three = value; } }
+    public TypeThree Three { get { return (TypeThree)this._three; } set { this._three = value; } }
     /// <summary>The fourth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeFour Four { get { return this._four; } set { this._four = value; } }
+    public TypeFour Four { get { return (TypeFour)this._four; } set { this._four = value; } }
 
     #region .NET Framework Compatibility
 
@@ -551,7 +551,8 @@ namespace Seven.Structures
     public static explicit operator Tuple<TypeOne, TypeTwo, TypeThree, TypeFour>
       (Link<TypeOne, TypeTwo, TypeThree, TypeFour> link)
     {
-      return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour>(link._one, link._two, link._three, link._four);
+      return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour>
+        ((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three, (TypeFour)link._four);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
@@ -605,7 +606,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains(dynamic item, Compare<dynamic> compare)
+    public  bool Contains(object item, Compare<object> compare)
     {
       if (compare(this._one, item) == Comparison.Equal)
         return true;
@@ -623,7 +624,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains<Key>(Key key, Compare<dynamic, Key> compare)
+    public  bool Contains<Key>(Key key, Compare<object, Key> compare)
     {
       if (compare(this._one, key) == Comparison.Equal)
         return true;
@@ -639,7 +640,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(Foreach<dynamic> function)
+    public  void Foreach(Foreach<object> function)
     {
       function(this._one);
       function(this._two);
@@ -649,7 +650,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(ForeachRef<dynamic> function)
+    public  void Foreach(ForeachRef<object> function)
     {
       function(ref this._one);
       function(ref this._two);
@@ -660,7 +661,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachBreak<object> function)
     {
       if (function(this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -675,7 +676,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachRefBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachRefBreak<object> function)
     {
       if (function(ref this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -692,14 +693,14 @@ namespace Seven.Structures
     public  Structure<object> Clone()
     {
       return new Link<TypeOne, TypeTwo, TypeThree, TypeFour>
-        (this._one, this._two, this._three, this._four);
+        ((TypeOne)this._one, (TypeTwo)this._two, (TypeThree)this._three, (TypeFour)this._four);
     }
 
     /// <summary>Converts the structure into an array.</summary>
     /// <returns>An array containing all the item in the structure.</returns>
-    public  dynamic[] ToArray()
+    public  object[] ToArray()
     {
-      return new dynamic[]
+      return new object[]
       {
         this._one,
         this._two,
@@ -719,11 +720,11 @@ namespace Seven.Structures
   public class Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
     : Link
   {
-    protected dynamic _one;
-    protected dynamic _two;
-    protected dynamic _three;
-    protected dynamic _four;
-    protected dynamic _five;
+    protected object _one;
+    protected object _two;
+    protected object _three;
+    protected object _four;
+    protected object _five;
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
@@ -734,19 +735,19 @@ namespace Seven.Structures
 
     /// <summary>The left item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    public TypeOne One { get { return (TypeOne)this._one; } set { this._one = value; } }
     /// <summary>The right item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    public TypeTwo Two { get { return (TypeTwo)this._two; } set { this._two = value; } }
     /// <summary>The third item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeThree Three { get { return this._three; } set { this._three = value; } }
+    public TypeThree Three { get { return (TypeThree)this._three; } set { this._three = value; } }
     /// <summary>The fourth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeFour Four { get { return this._four; } set { this._four = value; } }
+    public TypeFour Four { get { return (TypeFour)this._four; } set { this._four = value; } }
     /// <summary>The fifth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeFive Five { get { return this._five; } set { this._five = value; } }
+    public TypeFive Five { get { return (TypeFive)this._five; } set { this._five = value; } }
 
     #region .NET Framework Compatibility
 
@@ -767,7 +768,7 @@ namespace Seven.Structures
       (Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive> link)
     {
       return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
-        (link._one, link._two, link._three, link._four, link._five);
+        ((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three, (TypeFour)link._four, (TypeFive)link._five);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
@@ -826,7 +827,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains(dynamic item, Compare<dynamic> compare)
+    public  bool Contains(object item, Compare<object> compare)
     {
       if (compare(this._one, item) == Comparison.Equal)
         return true;
@@ -846,7 +847,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains<Key>(Key key, Compare<dynamic, Key> compare)
+    public  bool Contains<Key>(Key key, Compare<object, Key> compare)
     {
       if (compare(this._one, key) == Comparison.Equal)
         return true;
@@ -864,7 +865,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(Foreach<dynamic> function)
+    public  void Foreach(Foreach<object> function)
     {
       function(this._one);
       function(this._two);
@@ -875,7 +876,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(ForeachRef<dynamic> function)
+    public  void Foreach(ForeachRef<object> function)
     {
       function(ref this._one);
       function(ref this._two);
@@ -887,7 +888,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachBreak<object> function)
     {
       if (function(this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -904,7 +905,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachRefBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachRefBreak<object> function)
     {
       if (function(ref this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -923,14 +924,14 @@ namespace Seven.Structures
     public  Structure<object> Clone()
     {
       return new Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
-        (this._one, this._two, this._three, this._four, this._five);
+        ((TypeOne)this._one, (TypeTwo)this._two, (TypeThree)this._three, (TypeFour)this._four, (TypeFive)this._five);
     }
 
     /// <summary>Converts the structure into an array.</summary>
     /// <returns>An array containing all the item in the structure.</returns>
-    public  dynamic[] ToArray()
+    public  object[] ToArray()
     {
-      return new dynamic[]
+      return new object[]
       {
         this._one,
         this._two,
@@ -952,12 +953,12 @@ namespace Seven.Structures
   public class Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
     : Link
   {
-    protected dynamic _one;
-    protected dynamic _two;
-    protected dynamic _three;
-    protected dynamic _four;
-    protected dynamic _five;
-    protected dynamic _six;
+    protected object _one;
+    protected object _two;
+    protected object _three;
+    protected object _four;
+    protected object _five;
+    protected object _six;
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
@@ -968,22 +969,22 @@ namespace Seven.Structures
 
     /// <summary>The left item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    public TypeOne One { get { return (TypeOne)this._one; } set { this._one = value; } }
     /// <summary>The right item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    public TypeTwo Two { get { return (TypeTwo)this._two; } set { this._two = value; } }
     /// <summary>The third item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeThree Three { get { return this._three; } set { this._three = value; } }
+    public TypeThree Three { get { return (TypeThree)this._three; } set { this._three = value; } }
     /// <summary>The fourth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeFour Four { get { return this._four; } set { this._four = value; } }
+    public TypeFour Four { get { return (TypeFour)this._four; } set { this._four = value; } }
     /// <summary>The fifth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeFive Five { get { return this._five; } set { this._five = value; } }
+    public TypeFive Five { get { return (TypeFive)this._five; } set { this._five = value; } }
     /// <summary>The sixth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeSix Six { get { return this._six; } set { this._six = value; } }
+    public TypeSix Six { get { return (TypeSix)this._six; } set { this._six = value; } }
 
     #region .NET Framework Compatibility
 
@@ -1006,7 +1007,7 @@ namespace Seven.Structures
       (Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix> link)
     {
       return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
-        (link._one, link._two, link._three, link._four, link._five, link._six);
+        ((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three, (TypeFour)link._four, (TypeFive)link._five, (TypeSix)link._six);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
@@ -1070,7 +1071,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains(dynamic item, Compare<dynamic> compare)
+    public  bool Contains(object item, Compare<object> compare)
     {
       if (compare(this._one, item) == Comparison.Equal)
         return true;
@@ -1092,7 +1093,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains<Key>(Key key, Compare<dynamic, Key> compare)
+    public  bool Contains<Key>(Key key, Compare<object, Key> compare)
     {
       if (compare(this._one, key) == Comparison.Equal)
         return true;
@@ -1112,7 +1113,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(Foreach<dynamic> function)
+    public  void Foreach(Foreach<object> function)
     {
       function(this._one);
       function(this._two);
@@ -1124,7 +1125,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(ForeachRef<dynamic> function)
+    public  void Foreach(ForeachRef<object> function)
     {
       function(ref this._one);
       function(ref this._two);
@@ -1137,7 +1138,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachBreak<object> function)
     {
       if (function(this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -1156,7 +1157,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachRefBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachRefBreak<object> function)
     {
       if (function(ref this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -1177,14 +1178,14 @@ namespace Seven.Structures
     public  Structure<object> Clone()
     {
       return new Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
-        (this._one, this._two, this._three, this._four, this._five, this._six);
+        ((TypeOne)this._one, (TypeTwo)this._two, (TypeThree)this._three, (TypeFour)this._four, (TypeFive)this._five, (TypeSix)this._six);
     }
 
     /// <summary>Converts the structure into an array.</summary>
     /// <returns>An array containing all the item in the structure.</returns>
-    public  dynamic[] ToArray()
+    public  object[] ToArray()
     {
-      return new dynamic[]
+      return new object[]
       {
         this._one,
         this._two,
@@ -1207,13 +1208,13 @@ namespace Seven.Structures
   public class Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
     : Link
   {
-    protected dynamic _one;
-    protected dynamic _two;
-    protected dynamic _three;
-    protected dynamic _four;
-    protected dynamic _five;
-    protected dynamic _six;
-    protected dynamic _seven;
+    protected object _one;
+    protected object _two;
+    protected object _three;
+    protected object _four;
+    protected object _five;
+    protected object _six;
+    protected object _seven;
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
@@ -1224,25 +1225,25 @@ namespace Seven.Structures
 
     /// <summary>The left item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeOne One { get { return this._one; } set { this._one = value; } }
+    public TypeOne One { get { return (TypeOne)this._one; } set { this._one = value; } }
     /// <summary>The right item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeTwo Two { get { return this._two; } set { this._two = value; } }
+    public TypeTwo Two { get { return (TypeTwo)this._two; } set { this._two = value; } }
     /// <summary>The third item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeThree Three { get { return this._three; } set { this._three = value; } }
+    public TypeThree Three { get { return (TypeThree)this._three; } set { this._three = value; } }
     /// <summary>The fourth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeFour Four { get { return this._four; } set { this._four = value; } }
+    public TypeFour Four { get { return (TypeFour)this._four; } set { this._four = value; } }
     /// <summary>The fifth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeFive Five { get { return this._five; } set { this._five = value; } }
+    public TypeFive Five { get { return (TypeFive)this._five; } set { this._five = value; } }
     /// <summary>The sixth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeSix Six { get { return this._six; } set { this._six = value; } }
+    public TypeSix Six { get { return (TypeSix)this._six; } set { this._six = value; } }
     /// <summary>The sixth item in the link.</summary>
     /// <remarks>Runtime: O(1).</remarks>
-    public TypeSeven Seven { get { return this._seven; } set { this._seven = value; } }
+    public TypeSeven Seven { get { return (TypeSeven)this._seven; } set { this._seven = value; } }
 
     #region .NET Framework Compatibility
 
@@ -1265,7 +1266,7 @@ namespace Seven.Structures
       (Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven> link)
     {
       return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
-        (link._one, link._two, link._three, link._four, link._five, link._six, link._seven);
+        ((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three, (TypeFour)link._four, (TypeFive)link._five, (TypeSix)link._six, (TypeSeven)link._seven);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
@@ -1333,7 +1334,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains(dynamic item, Compare<dynamic> compare)
+    public  bool Contains(object item, Compare<object> compare)
     {
       if (compare(this._one, item) == Comparison.Equal)
         return true;
@@ -1356,7 +1357,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public  bool Contains<Key>(Key key, Compare<dynamic, Key> compare)
+    public  bool Contains<Key>(Key key, Compare<object, Key> compare)
     {
       if (compare(this._one, key) == Comparison.Equal)
         return true;
@@ -1378,7 +1379,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(Foreach<dynamic> function)
+    public  void Foreach(Foreach<object> function)
     {
       function(this._one);
       function(this._two);
@@ -1391,7 +1392,7 @@ namespace Seven.Structures
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public  void Foreach(ForeachRef<dynamic> function)
+    public  void Foreach(ForeachRef<object> function)
     {
       function(ref this._one);
       function(ref this._two);
@@ -1405,7 +1406,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachBreak<object> function)
     {
       if (function(this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -1426,7 +1427,7 @@ namespace Seven.Structures
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     /// <returns>The resulting status of the iteration.</returns>
-    public  ForeachStatus Foreach(ForeachRefBreak<dynamic> function)
+    public  ForeachStatus Foreach(ForeachRefBreak<object> function)
     {
       if (function(ref this._one) == ForeachStatus.Break)
         return ForeachStatus.Break;
@@ -1449,14 +1450,14 @@ namespace Seven.Structures
     public  Structure<object> Clone()
     {
       return new Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
-        (this._one, this._two, this._three, this._four, this._five, this._six, this._seven);
+        ((TypeOne)this._one, (TypeTwo)this._two, (TypeThree)this._three, (TypeFour)this._four, (TypeFive)this._five, (TypeSix)this._six, (TypeSeven)this._seven);
     }
 
     /// <summary>Converts the structure into an array.</summary>
     /// <returns>An array containing all the item in the structure.</returns>
-    public  dynamic[] ToArray()
+    public  object[] ToArray()
     {
-      return new dynamic[]
+      return new object[]
       {
         this._one,
         this._two,

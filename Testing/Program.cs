@@ -73,18 +73,21 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine("Testing List_Delegate<Type>");
-      List<int> list_delegate = new List_Delegate<int>();
-      for (int i = 0; i < test; i++)
-        list_delegate.Add(i);
-      Console.Write("Delegate: ");
-      list_delegate.Foreach((int current) => { Console.Write(current); });
-      Console.WriteLine();
-      Console.Write("IEnumerator: NOT SUPPORTED");
-      //foreach (int current in list_delegate)
-      //  Console.Write(current);
-      Console.WriteLine();
-      Console.WriteLine();
+      // This is an experimental version of a list.
+      // It has no purpose; it is purely educational.
+
+      //Console.WriteLine("Testing List_Delegate<Type>");
+      //List<int> list_delegate = new List_Delegate<int>();
+      //for (int i = 0; i < test; i++)
+      //  list_delegate.Add(i);
+      //Console.Write("Delegate: ");
+      //list_delegate.Foreach((int current) => { Console.Write(current); });
+      //Console.WriteLine();
+      //Console.Write("IEnumerator: NOT SUPPORTED");
+      ////foreach (int current in list_delegate)
+      ////  Console.Write(current);
+      //Console.WriteLine();
+      //Console.WriteLine();
 
       Console.WriteLine("Testing Stack_Linked<Type>");
       Stack<int> stack_linked = new Stack_Linked<int>();

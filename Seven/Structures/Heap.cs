@@ -14,7 +14,7 @@ namespace Seven.Structures
 {
   public interface Heap<Type> : Structure<Type>
   {
-    void Enqueue(Type addition, int priority);
+    //void Enqueue(Type addition, int priority);
     Type Dequeue();
     Type Peek();
     int Count { get; }
@@ -297,7 +297,7 @@ namespace Seven.Structures
     /// <summary>The number of items in the queue.</summary
     /// <remarks>Runtime: O(1).</remarks>
     public int Count { get { return _count; } }
-    
+
     /// <summary>True if full, false if there is still room.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public bool IsFull { get { return _count == _heapArray.Length - 1; } }
@@ -313,7 +313,7 @@ namespace Seven.Structures
     {
       _heapArray = new HeapArrayLink[capacity + 1];
       _heapArray[0] = new HeapArrayLink(int.MaxValue, default(Type));
-      for (int i = 1; i < capacity; i ++)
+      for (int i = 1; i < capacity; i++)
         _heapArray[i] = new HeapArrayLink(int.MinValue, default(Type));
       _count = 0;
       _lock = new object();
@@ -586,6 +586,332 @@ namespace Seven.Structures
   }
 
   #endregion
+
+  /// <summary>Implements a priority heap with static priorities using an array.</summary>
+  /// <typeparam name="Type">The type of item to be stored in this priority heap.</typeparam>
+  /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
+  [Serializable]
+  public class Heap_Array<Type> : Heap<Type>
+  {
+    /// <summary>Determines the priority of an item.</summary>
+    /// <param name="item">The item to determine the priority of.</param>
+    /// <returns>The determined priority.</returns>
+    public delegate double Prioritize(Type item);
+
+    //private Node[] _heapArray;
+    private Prioritize _prioritize;
+    private Type[] _heap;
+    private int _minimumCapacity;
+    private int _count;
+
+    /// <summary>The maximum items the queue can hold.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public int CurrentCapacity { get { return this._heap.Length - 1; } }
+
+    /// <summary>The minumum capacity of this queue to limit low-level resizing.</summary>
+    public int MinimumCapacity { get { return this._minimumCapacity; } }
+
+    /// <summary>The number of items in the queue.</summary
+    /// <remarks>Runtime: O(1).</remarks>
+    public int Count { get { return this._count; } }
+
+    /// <summary>Returns true if the structure is empty.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public bool IsEmpty { get { return this._count == 0; } }
+
+    /// <summary>Generates a priority queue with a capacity of the parameter. Runtime O(1).</summary>
+    /// <param name="minimumCapacity">The capacity you want this priority queue to have.</param>
+    /// <remarks>Runtime: Theta(capacity).</remarks>
+    public Heap_Array(Prioritize prioritize)
+    {
+      this._prioritize = prioritize;
+      this._heap = new Type[2];
+      this._minimumCapacity = 1;
+      this._count = 0;
+    }
+
+    /// <summary>Generates a priority queue with a capacity of the parameter. Runtime O(1).</summary>
+    /// <param name="prioritize">Delegate for determining priority of a single item.</param>
+    /// <param name="minimumCapacity">The capacity you want this priority queue to have.</param>
+    /// <remarks>Runtime: Theta(capacity).</remarks>
+    public Heap_Array(Prioritize prioritize, int minimumCapacity)
+    {
+      this._prioritize = prioritize;
+      this._heap = new Type[minimumCapacity + 1];
+      this._minimumCapacity = minimumCapacity;
+      this._count = 0;
+    }
+
+    /// <summary>Enqueue an item into the priority queue and let it works its magic.</summary>
+    /// <param name="addition">The item to be added.</param>
+    /// <param name="priority">The priority of the addition. (LARGER PRIORITY -> HIGHER PRIORITY)</param>
+    /// <remarks>Runtime: O(ln(n)), Omega(1), EstAvg(ln(n)).</remarks>
+    public void Enqueue(Type addition)
+    {
+      if (!(_count < _heap.Length - 1))
+      {
+        throw new HeapArrayStaticException("Attempting to add to a full priority queue.");
+      }
+      this._count++;
+      this._heap[this._count] = addition;
+      this.ShiftUp(this._count);
+    }
+
+    /// <summary>The root index of the heap.</summary>
+    private const int _root = 1;
+
+    /// <summary>Gets the index of the left child of the provided item.</summary>
+    /// <param name="parent">The item to find the left child of.</param>
+    /// <returns>The index of the left child of the provided item.</returns>
+    private static int LeftChild(int parent)
+    {
+      return parent * 2;
+    }
+
+    /// <summary>Gets the index of the right child of the provided item.</summary>
+    /// <param name="parent">The item to find the right child of.</param>
+    /// <returns>The index of the right child of the provided item.</returns>
+    private static int RightChild(int parent)
+    {
+      return parent * 2 + 1;
+    }
+
+    /// <summary>Gets the index of the parent of the provided item.</summary>
+    /// <param name="child">The item to find the parent of.</param>
+    /// <returns>The index of the parent of the provided item.</returns>
+    private static int Parent(int child)
+    {
+      return child / 2;
+    }
+
+    /// <summary>Dequeues the item with the highest priority.</summary>
+    /// <returns>The item of the highest priority.</returns>
+    /// <remarks>Runtime: Theta(ln(n)).</remarks>
+    public Type Dequeue()
+    {
+      if (_count > 0)
+      {
+        Type removal = this._heap[_root];
+        this.ArraySwap(1, this._count);
+        this._count--;
+        this.ShiftDown(_root);
+        return removal;
+      }
+      throw new HeapArrayStaticException("Attempting to remove from an empty priority queue.");
+    }
+
+    /// <summary>This lets you peek at the top priority WITHOUT REMOVING it.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public Type Peek()
+    {
+      if (this._count > 0)
+        return this._heap[_root];
+      throw new HeapArrayStaticException("Attempting to peek at an empty priority queue.");
+    }
+
+    /// <summary>Standard priority queue algorithm for up sifting.</summary>
+    /// <param name="index">The index to be up sifted.</param>
+    /// <remarks>Runtime: O(ln(n)), Omega(1).</remarks>
+    private void ShiftUp(int index)
+    {
+      int parent = Parent(index);
+      while (this._prioritize(_heap[index]) > this._prioritize(_heap[parent]))
+      {
+        this.ArraySwap(index, parent);
+        index = parent;
+        parent = Parent(index);
+      }
+    }
+
+    /// <summary>Standard priority queue algorithm for sifting down.</summary>
+    /// <param name="index">The index to be down sifted.</param>
+    /// <remarks>Runtime: O(ln(n)), Omega(1).</remarks>
+    private void ShiftDown(int index)
+    {
+      int leftChild, rightChild;
+      while ((leftChild = LeftChild(index)) <= this._count)
+      {
+        int down = leftChild;
+        if ((rightChild = RightChild(index)) <= this._count &&
+          this._prioritize(this._heap[rightChild]) < this._prioritize(this._heap[index]))
+          down = rightChild;
+        if (this._prioritize(this._heap[index]) >= this._prioritize(this._heap[down]))
+          break;
+        this.ArraySwap(index, down);
+        index = down;
+      }
+    }
+
+    /// <summary>Standard array swap method.</summary>
+    /// <param name="indexOne">The first index of the swap.</param>
+    /// <param name="indexTwo">The second index of the swap.</param>
+    /// <remarks>Runtime: O(1).</remarks>
+    private void ArraySwap(int indexOne, int indexTwo)
+    {
+      Type temp = this._heap[indexTwo];
+      this._heap[indexTwo] = this._heap[indexOne];
+      this._heap[indexOne] = temp;
+    }
+
+    /// <summary>Returns this queue to an empty state.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public void Clear() { this._count = 0; }
+
+    ///// <summary>Traversal function for a heap. Following a pre-order traversal.</summary>
+    ///// <param name="traversalFunction">The function to perform per iteration.</param>
+    ///// <returns>A determining a break in the traversal. (true = continue, false = break)</returns>
+    //public bool TraverseBreakable(Func<Type, bool> traversalFunction) { return TraversalPreOrderBreakable(traversalFunction); }
+
+    ///// <summary>Traversal function for a heap. Following a pre-order traversal.</summary>
+    ///// <param name="traversalFunction">The function to perform per iteration.</param>
+    //public void Traverse(Action<Type> traversalFunction) { TraversalPreOrder(traversalFunction); }
+
+    ///// <summary>Implements an imperative traversal of the structure.</summary>
+    ///// <param name="traversalFunction">The function to perform per node in the traversal.</param>
+    ///// <remarks>Runtime: O(n * traversalFunction).</remarks>
+    //public bool TraversalPreOrderBreakable(Func<Type, bool> traversalFunction)
+    //{
+    //  for (int i = 0; i < _count; i++)
+    //    if (!traversalFunction(_heapArray[i].Value))
+    //      return false;
+    //  return true;
+    //}
+
+    ///// <summary>Implements an imperative traversal of the structure.</summary>
+    ///// <param name="traversalAction">The action to perform per node in the traversal.</param>
+    ///// <remarks>Runtime: O(n * traversalAction).</remarks>
+    //public void TraversalPreOrder(Action<Type> traversalAction)
+    //{
+    //  for (int i = 0; i < _count; i++)
+    //    traversalAction(_heapArray[i].Value);
+    //}
+
+    /// <summary>Converts the heap into an array using pre-order traversal (WARNING: items are not ordered).</summary>
+    /// <returns>The array of priority-sorted items.</returns>
+    public Type[] ToArray()
+    {
+      Type[] array = new Type[this._count];
+      for (int i = 1; i <= this._count; i++)
+        array[i] = this._heap[i];
+      return array;
+    }
+
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
+    /// <remarks>Returns long.MaxValue on overflow.</remarks>
+    public long SizeOf { get { return this._heap.Length; } }
+
+    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
+    //Type[] GetValues<Key>(Key key, Compare<Type, Key> compare);
+
+    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
+    /// <param name="values">The values that matched the given key.</param>
+    /// <returns>true if 1 or more values were found; false if no values were found.</returns>
+    //bool TryGetValues<Key>(Key key, Compare<Type, Key> compare, out Type[] values);
+
+    /// <summary>Checks to see if a given object is in this data structure.</summary>
+    /// <param name="item">The item to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>true if the item is in this structure; false if not.</returns>
+    public bool Contains(Type item, Compare<Type> compare)
+    {
+      for (int i = 1; i <= this._count; i++)
+        if (compare(this._heap[i], item) == Comparison.Equal)
+          return true;
+      return false;
+    }
+
+    /// <summary>Checks to see if a given object is in this data structure.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>true if the item is in this structure; false if not.</returns>
+    public bool Contains<Key>(Key key, Compare<Type, Key> compare)
+    {
+      for (int i = 1; i <= this._count; i++)
+        if (compare(this._heap[i], key) == Comparison.Equal)
+          return true;
+      return false;
+    }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    public void Foreach(Foreach<Type> function)
+    {
+      for (int i = 1; i <= this._count; i++)
+        function(this._heap[i]);
+    }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    public void Foreach(ForeachRef<Type> function)
+    {
+      for (int i = 1; i <= this._count; i++)
+        function(ref this._heap[i]);
+    }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    /// <returns>The resulting status of the iteration.</returns>
+    public ForeachStatus Foreach(ForeachBreak<Type> function)
+    {
+      for (int i = 1; i <= this._count; i++)
+        if (function(this._heap[i]) == ForeachStatus.Break)
+          return ForeachStatus.Break;
+      return ForeachStatus.Continue;
+    }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    /// <returns>The resulting status of the iteration.</returns>
+    public ForeachStatus Foreach(ForeachRefBreak<Type> function)
+    {
+      for (int i = 1; i <= this._count; i++)
+        if (function(ref this._heap[i]) == ForeachStatus.Break)
+          return ForeachStatus.Break;
+      return ForeachStatus.Continue;
+    }
+
+    /// <summary>Creates a shallow clone of this data structure.</summary>
+    /// <returns>A shallow clone of this data structure.</returns>
+    public Structure<Type> Clone()
+    {
+      Heap_Array<Type> clone =
+        new Heap_Array<Type>(this._prioritize);
+      Type[] cloneItems = new Type[this._heap.Length];
+      for (int i = 1; i < this._count; i++)
+        cloneItems[i] = _heap[i];
+      clone._heap = cloneItems;
+      clone._count = this._count;
+      clone._minimumCapacity = this._minimumCapacity;
+      return clone;
+    }
+    
+    /// <summary>This is used for throwing imutable priority queue exceptions only to make debugging faster.</summary>
+    private class HeapArrayStaticException : Error
+    {
+      public HeapArrayStaticException(string message) : base(message) { }
+    }
+  }
 
   #region HeapArrayDynamic
 

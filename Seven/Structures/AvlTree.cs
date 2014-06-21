@@ -3,12 +3,12 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System.Collections;
-using System.Collections.Generic;
-
 using System;
 using Seven;
 using Seven.Parallels;
+
+//using System.Collections;
+//using System.Collections.Generic;
 
 namespace Seven.Structures
 {
@@ -161,7 +161,8 @@ namespace Seven.Structures
     #endregion
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       Stack<Node> forks = new Stack_Linked<Node>();
       Node current = _avlTree;
@@ -182,7 +183,8 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<Type>
+      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
     {
       Stack<Node> forks = new Stack_Linked<Node>();
       Node current = _avlTree;

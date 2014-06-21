@@ -290,9 +290,6 @@ namespace Seven.Structures
       _branchFactor = branchFactor;
       _top = new OctreeLinkedLeaf(x, y, z, scale, null, _branchFactor);
       _count = 0;
-      _lock = new object();
-      _readers = 0;
-      _writers = 0;
 
       _comparisonFunction = comparisonFunction;
 
@@ -314,10 +311,8 @@ namespace Seven.Structures
     /// <param name="z">The z coordinate of the addition's location.</param>
     public void Add(Type addition)
     {
-      WriterLock();
       _referenceDatabase.Add(new OctreeLinkedReference(addition, Add(addition, _top)));
       _count++;
-      WriterUnlock();
     }
 
     /// <summary>Recursively adds an item to the octree and returns the node where the addition was placed
@@ -386,11 +381,10 @@ namespace Seven.Structures
     /// <param name="id">The string id of the removal that was given to the item when it was added.</param>
     public void Remove(Type key)
     {
-      WriterLock();
+      throw new NotImplementedException();
       //Remove(key, _referenceDatabase.Get<Type>(key, _referenceComparison).Leaf);
       //_referenceDatabase.Remove<Type>(key, _referenceComparison);
       _count--;
-      WriterUnlock();
     }
 
     private void Remove(Type key, OctreeLinkedLeaf leaf)
@@ -436,7 +430,6 @@ namespace Seven.Structures
     /// <param name="z">The z coordinate of the new position of the item.</param>
     public void Move(Type key, float x, float y, float z)
     {
-      WriterLock();
       OctreeLinkedLeaf leaf = null;// _referenceDatabase.Get<Type>(key, _referenceComparison).Leaf;
       Type entry = default(Type);
       bool found = false;
@@ -461,29 +454,20 @@ namespace Seven.Structures
         Remove(key, leaf);
         Add(entry, _top);
       }
-      WriterLock();
     }
 
     /// <summary>Iterates through the entire tree and ensures each item is in the proper node.</summary>
     public void Update()
     {
-      WriterLock();
-      WriterUnlock();
       throw new NotImplementedException("Sorry, I'm still working on the update function.");
-      //WriterUnlock();
     }
 
     /// <summary>Performs a functional paradigm traversal of the octree.</summary>
     /// <param name="traversalFunction"></param>
     public bool TraverseBreakable(Func<Type, bool> traversalFunction)
     {
-      ReaderLock();
       if (!TraverseBreakable(traversalFunction, _top))
-      {
-        ReaderUnlock();
         return false;
-      }
-      ReaderUnlock();
       return true;
     }
     private bool TraverseBreakable(Func<Type, bool> traversalFunctionBreakable, OctreeLinkedNode octreeNode)
@@ -514,9 +498,7 @@ namespace Seven.Structures
 
     public void Traverse(Action<Type> traversalFunction)
     {
-      ReaderLock();
       Traverse(traversalFunction, _top);
-      ReaderUnlock();
     }
     private void Traverse(Action<Type> traversalFunction, OctreeLinkedNode octreeNode)
     {
@@ -553,10 +535,7 @@ namespace Seven.Structures
     /// <param name="zMax">The maximum z of a rectangular prism to query the octree.</param>
     public bool TraverseBreakable(Func<Type, bool> traversalFunction, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
-      ReaderLock();
-      bool returnValue = TraverseBreakable(traversalFunction, _top, xMin, yMin, zMin, xMax, yMax, zMax);
-      ReaderUnlock();
-      return returnValue;
+      return TraverseBreakable(traversalFunction, _top, xMin, yMin, zMin, xMax, yMax, zMax);
     }
     private bool TraverseBreakable(Func<Type, bool> traversalFunction, OctreeLinkedNode octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
@@ -614,9 +593,7 @@ namespace Seven.Structures
 
     public void Traverse(Action<Type> traversalFunction, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
-      ReaderLock();
       Traverse(traversalFunction, _top, xMin, yMin, zMin, xMax, yMax, zMax);
-      ReaderUnlock();
     }
     private void Traverse(Action<Type> traversalFunction, OctreeLinkedNode octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
@@ -664,13 +641,11 @@ namespace Seven.Structures
 
     public Type[] ToArray()
     {
-      ReaderLock();
       int finalIndex;
       Type[] array = new Type[_count];
       ToArray(_top, array, 0, out finalIndex);
       if (array.Length != finalIndex)
         throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
-      ReaderUnlock();
       return array;
     }
     private void ToArray(OctreeLinkedNode octreeNode, Type[] array, int entryIndex, out int returnIndex)
@@ -804,16 +779,7 @@ namespace Seven.Structures
     //}
 
     #endregion
-
-    /// <summary>Thread safe enterance for readers.</summary>
-    private void ReaderLock() { lock (_lock) { while (!(_writers == 0)) Monitor.Wait(_lock); _readers++; } }
-    /// <summary>Thread safe exit for readers.</summary>
-    private void ReaderUnlock() { lock (_lock) { _readers--; Monitor.Pulse(_lock); } }
-    /// <summary>Thread safe enterance for writers.</summary>
-    private void WriterLock() { lock (_lock) { while (!(_writers == 0) && !(_readers == 0)) Monitor.Wait(_lock); _writers++; } }
-    /// <summary>Thread safe exit for readers.</summary>
-    private void WriterUnlock() { lock (_lock) { _writers--; Monitor.PulseAll(_lock); } }
-
+    
     /// <summary>This is used for throwing OcTree exceptions only to make debugging faster.</summary>
     private class OctreeLinkedException : Error
     {

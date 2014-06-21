@@ -23,8 +23,6 @@ namespace Seven.Structures
   /// <typeparam name="Type">The type of the instances to store in this data structure.</typeparam>
   public interface Structure<Type> : 
     System.Collections.Generic.IEnumerable<Type>
-    // System.ICloneable
-    // 
   {
     #region .Net Framework Compatibility
 
