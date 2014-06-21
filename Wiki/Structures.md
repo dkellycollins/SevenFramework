@@ -1,3 +1,6 @@
+>- [Home](https://github.com/53V3N1X/SevenFramework/wiki)<br />
+>  - Structures
+
 ##### Summary
 
 >The "Seven/Structures" directory contains a collection of generic
@@ -8,7 +11,7 @@
 ##### Polymorphism Tree
 
 > - Structure<Type>
->   - Link
+>   - [List](https://github.com/53V3N1X/SevenFramework/wiki/List)<br />
 >   - Array<Type>
 >   - List<Type>
 >   - Stack<Type>
