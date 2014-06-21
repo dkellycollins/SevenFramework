@@ -69,7 +69,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public long SizeOf { get { return _array.Length; } }
+    public int SizeOf { get { return _array.Length; } }
 
     /// <summary>Allows indexed access of the array.</summary>
     /// <param name="index">The index of the array to get/set.</param>

@@ -96,7 +96,7 @@ namespace Seven.Structures
 
     protected Compare<Type> _compare;
 
-    public long SizeOf { get { return _count; } }
+    public int SizeOf { get { return _count; } }
 
     /// <summary>Gets the number of elements in the collection.</summary>
     /// <remarks>Runtime: O(1).</remarks>

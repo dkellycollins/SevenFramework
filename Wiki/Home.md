@@ -1,6 +1,3 @@
-### Home
-========
-
 ##### Summary
 
 >The Seven code library aims to be the most advanced general-purpose 

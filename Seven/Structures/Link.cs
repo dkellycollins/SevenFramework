@@ -30,7 +30,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public long SizeOf { get { return 1; } }
+    public int SizeOf { get { return 1; } }
 
     /// <summary>The number of objects in the tuple.</summary>
     public int Size { get { return 1; } }
@@ -170,7 +170,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public  long SizeOf { get { return 2; } }
+    public  int SizeOf { get { return 2; } }
 
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 2; } }
@@ -329,7 +329,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public  long SizeOf { get { return 3; } }
+    public  int SizeOf { get { return 3; } }
 
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 3; } }
@@ -515,7 +515,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public  long SizeOf { get { return 4; } }
+    public  int SizeOf { get { return 4; } }
 
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 4; } }
@@ -728,7 +728,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public  long SizeOf { get { return 5; } }
+    public  int SizeOf { get { return 5; } }
 
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 5; } }
@@ -962,7 +962,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public  long SizeOf { get { return 6; } }
+    public  int SizeOf { get { return 6; } }
 
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 6; } }
@@ -1218,7 +1218,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public  long SizeOf { get { return 7; } }
+    public  int SizeOf { get { return 7; } }
 
     /// <summary>The number of objects in the tuple.</summary>
     public  int Size { get { return 7; } }

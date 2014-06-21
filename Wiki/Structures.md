@@ -1,6 +1,3 @@
-### Structures
-========
-
 ##### Summary
 
 >The "Seven/Structures" directory contains a collection of generic

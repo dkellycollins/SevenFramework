@@ -34,9 +34,9 @@ namespace Seven.Structures
 
     #endregion
 
-    /// <summary>Gets the current memory imprint of this structure.</summary>
+    /// <summary>The current allocation size of the structure.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    long SizeOf { get; }
+    int SizeOf { get; }
 
     /// <summary>Gets all the equalities found within a structure.</summary>
     /// <typeparam name="Key">The type of the key to check for.</typeparam>

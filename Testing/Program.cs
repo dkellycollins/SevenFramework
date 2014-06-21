@@ -4,6 +4,8 @@ using Seven;
 using Seven.Structures;
 using System.Diagnostics;
 
+using System.Linq;
+
 namespace Testing
 {
   class Program
@@ -17,6 +19,11 @@ namespace Testing
         return Comparison.Greater;
       else
         return Comparison.Equal;
+    }
+
+    public static double Prioritize(int item)
+    {
+      return -item;
     }
 
     static void Main(string[] args)
@@ -115,6 +122,19 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
+      Console.WriteLine("Testing Heap_Array<Type>");
+      Heap<int> heap_array = new Heap_Array<int>(Compare);
+      for (int i = 0; i < test; i++)
+        heap_array.Enqueue(i);
+      Console.Write("Delegate: ");
+      heap_array.Foreach((int current) => { Console.Write(current); });
+      Console.WriteLine();
+      Console.Write("IEnumerator: ");
+      foreach (int current in heap_array)
+        Console.Write(current);
+      Console.WriteLine();
+      Console.WriteLine();
+
       Console.WriteLine("Testing AvlTree_Linked<Type>");
       AvlTree<int> avlTree_linked = new AvlTree_Linked<int>(Compare);
       for (int i = 0; i < test; i++)
@@ -141,8 +161,8 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine("SPEED TEST");
-      SpeedTest();
+      //Console.WriteLine("SPEED TEST");
+      //SpeedTest();
 
       Console.WriteLine("Testing Complete...");
       Console.ReadLine();

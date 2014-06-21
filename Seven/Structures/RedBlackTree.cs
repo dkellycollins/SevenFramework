@@ -614,7 +614,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public long SizeOf { get { throw new NotImplementedException(); } }
+    public int SizeOf { get { throw new NotImplementedException(); } }
 
     /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
     /// <typeparam name="Key">The type of the key to check for.</typeparam>
@@ -1346,7 +1346,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public long SizeOf { get { throw new NotImplementedException(); } }
+    public int SizeOf { get { throw new NotImplementedException(); } }
 
     /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
     /// <typeparam name="Key">The type of the key to check for.</typeparam>
