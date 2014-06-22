@@ -3,8 +3,7 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
-using Seven.Structures;
+using Seven;
 
 //using System.Collections;
 //using System.Collections.Generic;
@@ -40,7 +39,7 @@ namespace Seven.Structures
   /// <summary>Implements a priority heap with static priorities using an array.</summary>
   /// <typeparam name="Type">The type of item to be stored in this priority heap.</typeparam>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class Heap_Array<Type> : Heap<Type>
   {
     private Compare<Type> _compare;
@@ -147,6 +146,21 @@ namespace Seven.Structures
         return removal;
       }
       throw new Error("Attempting to remove from an empty priority queue.");
+    }
+
+    /// <summary>Requeues an item after a change has occured.</summary>
+    /// <param name="item">The item to requeue.</param>
+    /// <remarks>Runtime: O(n).</remarks>
+    public void Requeue(Type item)
+    {
+      int i;
+      for (i = 1; i <= this._count; i++)
+        if (this._compare(item, this._heap[i]) == Comparison.Equal)
+          break;
+      if (i > this._count)
+        throw new Error("Attempting to re-queue an item that is not in the heap.");
+      ShiftUp(i);
+      ShiftDown(i);
     }
 
     /// <summary>This lets you peek at the top priority WITHOUT REMOVING it.</summary>
@@ -260,14 +274,16 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       for (int i = 0; i <= _count; i++)
         yield return this._heap[i];
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<Type>
+      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
     {
       for (int i = 0; i <= _count; i++)
         yield return this._heap[i];

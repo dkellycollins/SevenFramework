@@ -3,12 +3,17 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
 using Seven;
 using Seven.Parallels;
 
+// using System; Serializable
+
 namespace Seven.Structures
 {
+  /// <summary>
+  /// 
+  /// </summary>
+  /// <typeparam name="Type"></typeparam>
   public interface List<Type> : Structure<Type>
   {
     /// <summary>Adds an item to the list.</summary>
@@ -34,9 +39,9 @@ namespace Seven.Structures
   }
 
   /// <summary>Implements a growing, singularly-linked list data structure that inherits InterfaceTraversable.</summary>
-  /// <typeparam name="InterfaceStringId">The type of objects to be placed in the list.</typeparam>
+  /// <typeparam name="Type">The type of objects to be placed in the list.</typeparam>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class List_Linked<Type> : List<Type>
   {
     /// <summary>This class just holds the data for each individual node of the list.</summary>
@@ -356,7 +361,7 @@ namespace Seven.Structures
   /// <summary>Implements a growing, singularly-linked list data structure that inherits InterfaceTraversable.</summary>
   /// <typeparam name="InterfaceStringId">The type of objects to be placed in the list.</typeparam>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class List_Linked_ThreadSafe<Type> : List_Linked<Type>
   {
     ReaderWriterLock _readerWriterLock;
@@ -366,8 +371,7 @@ namespace Seven.Structures
     public List_Linked_ThreadSafe() : base()
     {
       this._readerWriterLock = new ReaderWriterLock();
-
-      throw new NotImplementedException();
+      throw new Error("the thread safe version wrappers are not yet finished. sorry.");
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
@@ -378,7 +382,7 @@ namespace Seven.Structures
   /// data structure that inherits InterfaceTraversable.</summary>
   /// <typeparam name="Type">The type of objects to be placed in the list.</typeparam>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class List_Array<Type> : List<Type>
   {
     protected Type[] _list;
@@ -537,6 +541,15 @@ namespace Seven.Structures
       throw new Exception("attempting to remove a non-existing value.");
     }
 
+    /// <summary>Resizes this allocation to the current count.</summary>
+    public void Trim()
+    {
+      Type[] newList = new Type[this._count];
+      for (int i = 0; i < this._count; i++)
+        newList[i] = this._list[i];
+      this._list = newList;
+    }
+
     /// <summary>Empties the list back and reduces it back to its original capacity.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public void Clear()
@@ -685,7 +698,7 @@ namespace Seven.Structures
   /// <summary>Implements a growing, singularly-linked list data structure that inherits InterfaceTraversable.</summary>
   /// <typeparam name="InterfaceStringId">The type of objects to be placed in the list.</typeparam>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class List_Array_ThreadSafe<Type> : List_Array<Type>
   {
     ReaderWriterLock _readerWriterLock;
@@ -697,198 +710,198 @@ namespace Seven.Structures
     {
       this._readerWriterLock = new ReaderWriterLock();
 
-      throw new NotImplementedException();
+      throw new Error("thread safe wrappers are not yet complete. sorry.");
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
     private new class Exception : Error { public Exception(string message) : base(message) { } }
   }
 
-  /// <summary>WARNING: THIS IMPLEMENTATION IS INTENDED FOR EDUCATIONAL PURPOSES VS USAGE.</summary>
-  /// <typeparam name="Type">The type of objects to be placed in the list.</typeparam>
-  /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
-  public class List_Delegate<Type> : List<Type>
-  {
-    protected delegate void List();
-    protected List _list;
-    protected Foreach<Type> _operation;
-    protected int _count;
+  ///// <summary>WARNING: THIS IMPLEMENTATION IS INTENDED FOR EDUCATIONAL PURPOSES VS USAGE.</summary>
+  ///// <typeparam name="Type">The type of objects to be placed in the list.</typeparam>
+  ///// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
+  //[System.Serializable]
+  //public class List_Delegate<Type> : List<Type>
+  //{
+  //  protected delegate void List();
+  //  protected List _list;
+  //  protected Foreach<Type> _operation;
+  //  protected int _count;
 
-    /// <summary>Gets the number of items in the list.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public int Count { get { return _count; } }
+  //  /// <summary>Gets the number of items in the list.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public int Count { get { return _count; } }
 
-    /// <summary>Returns true if the structure is empty.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public bool IsEmpty { get { return _count == 0; } }
+  //  /// <summary>Returns true if the structure is empty.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public bool IsEmpty { get { return _count == 0; } }
     
-    /// <summary>Creates an instance of a ListArray, and sets it's minimum capacity.</summary>
-    /// <param name="minimumCapacity">The initial and smallest array size allowed by this list.</param>
-    /// <remarks>Runtime: O(1).</remarks>
-    public List_Delegate()
-    {
-      _count = 0;
-    }
+  //  /// <summary>Creates an instance of a ListArray, and sets it's minimum capacity.</summary>
+  //  /// <param name="minimumCapacity">The initial and smallest array size allowed by this list.</param>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public List_Delegate()
+  //  {
+  //    _count = 0;
+  //  }
 
-    /// <summary>Determines if an object reference exists in the array.</summary>
-    /// <param name="reference">The reference to the object.</param>
-    /// <returns>Whether or not the object reference exists.</returns>
-    public bool Contains(Type reference)
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-    }
+  //  /// <summary>Determines if an object reference exists in the array.</summary>
+  //  /// <param name="reference">The reference to the object.</param>
+  //  /// <returns>Whether or not the object reference exists.</returns>
+  //  public bool Contains(Type reference)
+  //  {
+  //    throw new Error("not implemented");
+  //  }
 
-    /// <summary>Adds an item to the end of the list.</summary>
-    /// <param name="addition">The item to be added.</param>
-    /// <remarks>Runtime: O(n), EstAvg(1). </remarks>
-    public void Add(Type addition)
-    {
-      this._list += () => { this._operation(addition); };
-      this._count++;
-    }
+  //  /// <summary>Adds an item to the end of the list.</summary>
+  //  /// <param name="addition">The item to be added.</param>
+  //  /// <remarks>Runtime: O(n), EstAvg(1). </remarks>
+  //  public void Add(Type addition)
+  //  {
+  //    this._list = () => { this._list(); this._operation(addition); };
+  //    this._count++;
+  //  }
 
-    /// <summary>Removes the first equality by object reference.</summary>
-    /// <param name="removal">The reference to the item to remove.</param>
-    public void RemoveFirst(Type removal)
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-      //this._list -= () => { this._operation(addition); };
-      //this._count--;
-    }
+  //  /// <summary>Removes the first equality by object reference.</summary>
+  //  /// <param name="removal">The reference to the item to remove.</param>
+  //  public void RemoveFirst(Type removal)
+  //  {
+  //    throw new Error("not implemented");
+  //    //this._list -= () => { this._operation(addition); };
+  //    //this._count--;
+  //  }
 
-    /// <summary>Empties the list back and reduces it back to its original capacity.</summary>
-    /// <remarks>Runtime: O(1).</remarks>
-    public void Clear()
-    {
-      _list = null;
-      _count = 0;
-    }
+  //  /// <summary>Empties the list back and reduces it back to its original capacity.</summary>
+  //  /// <remarks>Runtime: O(1).</remarks>
+  //  public void Clear()
+  //  {
+  //    _list = null;
+  //    _count = 0;
+  //  }
 
-    #region .Net Framework Compatibility
+  //  #region .Net Framework Compatibility
 
-    ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    //public static explicit operator System.Collections.Generic.L<Type>(Type[] array)
-    //{
-    //  return new Array_Array<Type>(array);
-    //}
+  //  ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+  //  //public static explicit operator System.Collections.Generic.L<Type>(Type[] array)
+  //  //{
+  //  //  return new Array_Array<Type>(array);
+  //  //}
 
-    ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    //public static explicit operator Type[](Array_Array<Type> array)
-    //{
-    //  return array._array;
-    //}
+  //  ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+  //  //public static explicit operator Type[](Array_Array<Type> array)
+  //  //{
+  //  //  return array._array;
+  //  //}
 
-    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    System.Collections.IEnumerator
-      System.Collections.IEnumerable.GetEnumerator()
-    {
-      //_operation = (Type current) => { yield return current; };
+  //  /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+  //  System.Collections.IEnumerator
+  //    System.Collections.IEnumerable.GetEnumerator()
+  //  {
+  //    //_operation = (Type current) => { yield return current; };
 
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-      //yield return this._list();
-    }
+  //    throw new Error("List_Delegate does not support contains checking");
+  //    //yield return this._list();
+  //  }
 
-    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    System.Collections.Generic.IEnumerator<Type>
-      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-      //_operation = () => yield return 
-      //yield return this._list();
-    }
-    #endregion
+  //  /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+  //  System.Collections.Generic.IEnumerator<Type>
+  //    System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
+  //  {
+  //    throw new Error("List_Delegate does not support contains checking");
+  //    //_operation = () => yield return 
+  //    //yield return this._list();
+  //  }
+  //  #endregion
 
-    /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
-    /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public int SizeOf { get { return this._count; } }
+  //  /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
+  //  /// <remarks>Returns long.MaxValue on overflow.</remarks>
+  //  public int SizeOf { get { return this._count; } }
 
-    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
-    /// <typeparam name="Key">The type of the key to check for.</typeparam>
-    /// <param name="key">The key to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
-    //Type[] GetValues<Key>(Key key, Compare<Type, Key> compare);
+  //  /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
+  //  /// <typeparam name="Key">The type of the key to check for.</typeparam>
+  //  /// <param name="key">The key to check for.</param>
+  //  /// <param name="compare">Delegate representing comparison technique.</param>
+  //  /// <returns>An array containing all the values matching the key or null if non were found.</returns>
+  //  //Type[] GetValues<Key>(Key key, Compare<Type, Key> compare);
 
-    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
-    /// <typeparam name="Key">The type of the key to check for.</typeparam>
-    /// <param name="key">The key to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
-    /// <param name="values">The values that matched the given key.</param>
-    /// <returns>true if 1 or more values were found; false if no values were found.</returns>
-    //bool TryGetValues<Key>(Key key, Compare<Type, Key> compare, out Type[] values);
+  //  /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
+  //  /// <typeparam name="Key">The type of the key to check for.</typeparam>
+  //  /// <param name="key">The key to check for.</param>
+  //  /// <param name="compare">Delegate representing comparison technique.</param>
+  //  /// <returns>An array containing all the values matching the key or null if non were found.</returns>
+  //  /// <param name="values">The values that matched the given key.</param>
+  //  /// <returns>true if 1 or more values were found; false if no values were found.</returns>
+  //  //bool TryGetValues<Key>(Key key, Compare<Type, Key> compare, out Type[] values);
 
-    /// <summary>Checks to see if a given object is in this data structure.</summary>
-    /// <param name="item">The item to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains(Type item, Compare<Type> compare)
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-    }
+  //  /// <summary>Checks to see if a given object is in this data structure.</summary>
+  //  /// <param name="item">The item to check for.</param>
+  //  /// <param name="compare">Delegate representing comparison technique.</param>
+  //  /// <returns>true if the item is in this structure; false if not.</returns>
+  //  public bool Contains(Type item, Compare<Type> compare)
+  //  {
+  //    throw new Error("List_Delegate does not support contains checking");
+  //  }
 
-    /// <summary>Checks to see if a given object is in this data structure.</summary>
-    /// <typeparam name="Key">The type of the key to check for.</typeparam>
-    /// <param name="key">The key to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains<Key>(Key key, Compare<Type, Key> compare)
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-    }
+  //  /// <summary>Checks to see if a given object is in this data structure.</summary>
+  //  /// <typeparam name="Key">The type of the key to check for.</typeparam>
+  //  /// <param name="key">The key to check for.</param>
+  //  /// <param name="compare">Delegate representing comparison technique.</param>
+  //  /// <returns>true if the item is in this structure; false if not.</returns>
+  //  public bool Contains<Key>(Key key, Compare<Type, Key> compare)
+  //  {
+  //    throw new Error("List_Delegate does not support contains checking");
+  //  }
 
-    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
-    /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public void Foreach(Foreach<Type> function)
-    {
-      this._operation = function;
-      this._list();
-    }
+  //  /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+  //  /// <param name="function">The delegate to invoke on each item in the structure.</param>
+  //  public void Foreach(Foreach<Type> function)
+  //  {
+  //    this._operation = function;
+  //    this._list();
+  //  }
 
-    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
-    /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    public void Foreach(ForeachRef<Type> function)
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-    }
+  //  /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+  //  /// <param name="function">The delegate to invoke on each item in the structure.</param>
+  //  public void Foreach(ForeachRef<Type> function)
+  //  {
+  //    throw new Error("List_Delegate does not support contains checking");
+  //  }
 
-    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
-    /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    /// <returns>The resulting status of the iteration.</returns>
-    public ForeachStatus Foreach(ForeachBreak<Type> function)
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-      //this._operation = function;
-      //this._list();
-    }
+  //  /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+  //  /// <param name="function">The delegate to invoke on each item in the structure.</param>
+  //  /// <returns>The resulting status of the iteration.</returns>
+  //  public ForeachStatus Foreach(ForeachBreak<Type> function)
+  //  {
+  //    throw new Error("List_Delegate does not support contains checking");
+  //    //this._operation = function;
+  //    //this._list();
+  //  }
 
-    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
-    /// <param name="function">The delegate to invoke on each item in the structure.</param>
-    /// <returns>The resulting status of the iteration.</returns>
-    public ForeachStatus Foreach(ForeachRefBreak<Type> function)
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-    }
+  //  /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+  //  /// <param name="function">The delegate to invoke on each item in the structure.</param>
+  //  /// <returns>The resulting status of the iteration.</returns>
+  //  public ForeachStatus Foreach(ForeachRefBreak<Type> function)
+  //  {
+  //    throw new Error("List_Delegate does not support contains checking");
+  //  }
 
-    /// <summary>Creates a shallow clone of this data structure.</summary>
-    /// <returns>A shallow clone of this data structure.</returns>
-    public Structure<Type> Clone()
-    {
-      List_Delegate<Type> clone = new List_Delegate<Type>();
-      clone._list = (List)this._list.Clone();
-      clone._count = this._count;
-      return clone;
-    }
+  //  /// <summary>Creates a shallow clone of this data structure.</summary>
+  //  /// <returns>A shallow clone of this data structure.</returns>
+  //  public Structure<Type> Clone()
+  //  {
+  //    List_Delegate<Type> clone = new List_Delegate<Type>();
+  //    clone._list = (List)this._list.Clone();
+  //    clone._count = this._count;
+  //    return clone;
+  //  }
 
-    /// <summary>Converts the list array into a standard array.</summary>
-    /// <returns>A standard array of all the elements.</returns>
-    public Type[] ToArray()
-    {
-      throw new NotSupportedException("List_Delegate does not support contains checking");
-    }
+  //  /// <summary>Converts the list array into a standard array.</summary>
+  //  /// <returns>A standard array of all the elements.</returns>
+  //  public Type[] ToArray()
+  //  {
+  //    throw new Error("List_Delegate does not support contains checking");
+  //  }
 
-    /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    protected class Exception : Error { public Exception(string message) : base(message) { } }
-  }
+  //  /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
+  //  protected class Exception : Error { public Exception(string message) : base(message) { } }
+  //}
 }

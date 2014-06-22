@@ -14,7 +14,6 @@
 >  - List
 >     - List_Array
 >     - List_Linked
->     - List_Recursive
 
 ##### Implementations
 
@@ -34,16 +33,8 @@
 >Visual: 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 >
 >This implementation of a list uses nodes that are allocated each time an item
->is added to the list.
->
->**List_Recursive**
->
->Visual: 0( 1( 2( 3( 4( 5( 6( 7() ) ) ) ) ) ) )
->
->This implementation of a list uses recursive delegates. When adding to the
->list, delegates are made to recursively call each successive item. As of
->writing this wiki post, I have found no practical use for this implementation
-> other than purely educational applications.
+>is added to the list. Because it does not require re-allocations, it can be
+>multi-threaded without the overhead of reader-writer locking.
 
 ##### Runtimes and Memory
 
@@ -53,11 +44,7 @@
 
 >Lists are very basic data structures, and they are often used when another data 
 >structure should be chosen instead. A list should be used when:
+>
 >- processing unkown amounts of data
 >- all the data will have to be processed every usage
 >- the data can't/shouldn't be sorted
->
->As far as which implementations of a List to chose, use List_Array when the amount 
->of data is relatively static, and use List_Linked when constantly adding/removing
->from the list. As stated, the List_Recursive implementation should probably be 
->avoided.

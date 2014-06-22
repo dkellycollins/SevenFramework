@@ -36,7 +36,7 @@ namespace Testing
       link.Foreach((dynamic current) => { Console.Write(current); });
       Console.WriteLine();
       Console.Write("IEnumerator: ");
-      foreach (dynamic value in link)
+      foreach (object value in link)
         Console.Write(value);
       Console.WriteLine();
       Console.WriteLine();
@@ -79,23 +79,7 @@ namespace Testing
         Console.Write(current);
       Console.WriteLine();
       Console.WriteLine();
-
-      // This is an experimental version of a list.
-      // It has no purpose; it is purely educational.
-
-      //Console.WriteLine("Testing List_Delegate<Type>");
-      //List<int> list_delegate = new List_Delegate<int>();
-      //for (int i = 0; i < test; i++)
-      //  list_delegate.Add(i);
-      //Console.Write("Delegate: ");
-      //list_delegate.Foreach((int current) => { Console.Write(current); });
-      //Console.WriteLine();
-      //Console.Write("IEnumerator: NOT SUPPORTED");
-      ////foreach (int current in list_delegate)
-      ////  Console.Write(current);
-      //Console.WriteLine();
-      //Console.WriteLine();
-
+      
       Console.WriteLine("Testing Stack_Linked<Type>");
       Stack<int> stack_linked = new Stack_Linked<int>();
       for (int i = 0; i < test; i++)
@@ -162,7 +146,7 @@ namespace Testing
       Console.WriteLine();
 
       //Console.WriteLine("SPEED TEST");
-      //SpeedTest();
+      SpeedTest();
 
       Console.WriteLine("Testing Complete...");
       Console.ReadLine();
@@ -170,37 +154,53 @@ namespace Testing
 
     public static void SpeedTest()
     {
-      int iterations = 100000;
+      int test = 10000000;
 
       Stopwatch timer = new Stopwatch();
-      int check;
 
-      check = 0;
+      Console.WriteLine("Speed Testing List:");
+      Console.WriteLine("BE SURE TO RUN THE EXE OUTSIDE VISUAL STUDIO FOR FAIR TESTING");
+
       timer.Restart();
-      List<int> list_array = new List_Array<int>(10);
-      for (int i = 0; i < iterations; i++)
-        list_array.Add(i);
-      list_array.Foreach((int current) => { check += current; });
+      System.Collections.Generic.List<int> list_net =
+        new System.Collections.Generic.List<int>(test);
+      for (int i = 0; i < test; i++)
+        list_net.Add(i);
+      System.Collections.Generic.List<int> list_net2 =
+        new System.Collections.Generic.List<int>(test);
+      list_net.ForEach((int current) => { list_net2.Add(current); });
       timer.Stop();
-      Console.WriteLine("list_array (" + check + "):" + timer.ElapsedTicks);
+      Console.WriteLine("System.Collections.Generic.List<Type>: " + (float)timer.ElapsedMilliseconds / 1000.0f);
 
-      check = 0;
+      timer.Restart();
+      List<int> list_array = new List_Array<int>(test);
+      for (int i = 0; i < test; i++)
+        list_array.Add(i);
+      List<int> list_array2 = new List_Array<int>(test);
+      list_array.Foreach((int current) => { list_array2.Add(current); });
+      timer.Stop();
+      Console.WriteLine("Seven.Structures.List_Array<Type>: " + (float)timer.ElapsedMilliseconds / 1000.0f);
+
+      timer.Restart();
+      System.Collections.Generic.LinkedList<int> linkedlist_net =
+        new System.Collections.Generic.LinkedList<int>();
+      for (int i = 0; i < test; i++)
+        linkedlist_net.AddLast(i);
+      System.Collections.Generic.LinkedList<int> linkedlist_net2 =
+        new System.Collections.Generic.LinkedList<int>();
+      foreach (int current in linkedlist_net)
+        linkedlist_net2.AddLast(current);
+      timer.Stop();
+      Console.WriteLine("System.Collections.Generic.LinkedList<Type>: " + (float)timer.ElapsedMilliseconds / 1000.0f);
+
       timer.Restart();
       List<int> list_linked = new List_Linked<int>();
-      for (int i = 0; i < iterations; i++)
+      for (int i = 0; i < test; i++)
         list_linked.Add(i);
-      list_linked.Foreach((int current) => { check += current; });
+      List<int> list_linked2 = new List_Linked<int>();
+      list_linked.Foreach((int current) => { list_linked2.Add(current); });
       timer.Stop();
-      Console.WriteLine("list_linked (" + check + "):" + timer.ElapsedTicks);
-
-      check = 0;
-      timer.Restart();
-      List<int> list_delegate = new List_Delegate<int>();
-      for (int i = 0; i < iterations; i++)
-        list_delegate.Add(i);
-      list_delegate.Foreach((int current) => { check += current; });
-      timer.Stop();
-      Console.WriteLine("list_delegate (" + check + "):" + timer.ElapsedTicks);
+      Console.WriteLine("Seven.Structures.List_Linked<Type>: " + (float)timer.ElapsedMilliseconds / 1000.0f);
     }
   }
 }

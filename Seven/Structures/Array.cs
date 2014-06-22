@@ -3,11 +3,11 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
 using Seven.Parallels;
 
-//using System.Collections;
-//using System.Collections.Generic;
+// using System; Serializable
+// using System.Collections; IEnumerable
+// using System.Collections.Generic; IEnumerable<Type>
 
 namespace Seven.Structures
 {
@@ -26,12 +26,10 @@ namespace Seven.Structures
 
   /// <summary>Implements a standard array that inherits InterfaceTraversable.</summary>
   /// <typeparam name="Type">The generic type within the structure.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Array_Array<Type> : Array<Type>
   {
     protected Type[] _array;
-
-    #region .NET Framework Compatibility
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     public static implicit operator Array_Array<Type>(Type[] array)
@@ -61,8 +59,6 @@ namespace Seven.Structures
       for (int i = 0; i < _array.Length; i++)
         yield return _array[i];
     }
-
-    #endregion
 
     /// <summary>The length of the array.</summary>
     public int Length { get { return _array.Length; } }
