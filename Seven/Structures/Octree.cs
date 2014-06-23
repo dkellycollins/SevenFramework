@@ -21,16 +21,679 @@ namespace Seven.Structures
   }
 
   public interface Octree<Type> : Structure<Type>
-    where Type : IOctreeEntry
   {
     int Count { get; }
     bool IsEmpty { get; }
     void Add(Type addition);
     //void Remove(KeyType removal);
-    bool TraverseBreakable(Func<Type, bool> traversalFunction, float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
-    void Traverse(Action<Type> traversalAction, float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
     //void Move(KeyType moving);
-    void Update();
+    //void Update();
+  }
+
+  [Serializable]
+  public class Octree_Linked<Type> : Octree<Type>
+  {
+    #region OctreeLinkedNode
+
+    /// <summary>Represents a single node of the octree. Includes references both upwards and
+    /// downwards the tree.</summary>
+    private abstract class OctreeLinkedNode
+    {
+      private float _x, _y, _z, _scale;
+      private OctreeLinkedBranch _parent;
+
+      internal float X { get { return _x; } }
+      internal float Y { get { return _y; } }
+      internal float Z { get { return _z; } }
+      internal float Scale { get { return _scale; } }
+      internal OctreeLinkedBranch Parent { get { return _parent; } }
+
+      internal OctreeLinkedNode(float x, float y, float z, float scale, OctreeLinkedBranch parent)
+      {
+        _x = x;
+        _y = y;
+        _z = z;
+        _scale = scale;
+        _parent = parent;
+      }
+    }
+
+    #endregion
+
+    #region OctreeLinkedLeaf
+
+    /// <summary>Represents a single node of the octree. Includes references both upwards and
+    /// downwards the tree.</summary>
+    private class OctreeLinkedLeaf : OctreeLinkedNode
+    {
+      //private OctreeEntry[] _contents;
+      private Type[] _contents;
+      private int _count;
+
+      //internal OctreeEntry[] Contents { get { return _contents; } }
+      internal Type[] Contents { get { return _contents; } }
+      internal int Count { get { return _count; } set { _count = value; } }
+      internal bool IsFull { get { return _count == _contents.Length; } }
+
+      internal OctreeLinkedLeaf(float x, float y, float z, float scale, OctreeLinkedBranch parent, int branchFactor)
+        : base(x, y, z, scale, parent)
+      { _contents = new Type[branchFactor]; }
+
+      internal OctreeLinkedLeaf Add(Type addition)
+      {
+        if (_count == _contents.Length)
+          throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
+        _contents[_count++] = addition;
+        return this;
+      }
+    }
+
+    #endregion
+
+    #region OctreelinkedBranch
+
+    /// <summary>Represents a single node of the octree. Includes references both upwards and
+    /// downwards the tree.</summary>
+    private class OctreeLinkedBranch : OctreeLinkedNode
+    {
+      // The children are indexed as follows (relative to this node's center):
+      // 0: (-x, -y, -z)   1: (-x, -y, z)   2: (-x, y, -z)   3: (-x, y, z)
+      // 4: (x, -y, -z)   5: (x, -y, z)   6: (x, y, -z)   7: (x, y, z)
+      public OctreeLinkedNode[] _children;
+
+      public OctreeLinkedNode[] Children { get { return this._children; } }
+      
+      internal bool IsEmpty
+      {
+        get
+        {
+          foreach (OctreeLinkedNode child in this._children)
+            if (child != null)
+              return false;
+          return true;
+        }
+      }
+
+      internal OctreeLinkedBranch(float x, float y, float z, float scale, OctreeLinkedBranch parent)
+        : base(x, y, z, scale, parent)
+      {
+        this._children = new OctreeLinkedNode[8];
+      }
+    }
+
+    #endregion
+
+    public delegate void Locate<Type>(Type item, out double x, out double y, out double z);
+    private Locate<Type> _locate;
+    private int _branchFactor;
+    private int _count;
+    private OctreeLinkedNode _top;
+
+    public int Count { get { return _count; } }
+    public bool IsEmpty { get { return _count == 0; } }
+
+    /// <summary>Creates an octree for three dimensional space partitioning.</summary>
+    /// <param name="x">The x coordinate of the center of the octree.</param>
+    /// <param name="y">The y coordinate of the center of the octree.</param>
+    /// <param name="z">The z coordinate of the center of the octree.</param>
+    /// <param name="scale">How far the tree expands along each dimension.</param>
+    /// <param name="branchFactor">The maximum items per octree node before expansion.</param>
+    public Octree_Linked(float x, float y, float z, float scale, int branchFactor, Locate<Type> locate)
+    {
+      this._branchFactor = branchFactor;
+      this._top = new OctreeLinkedLeaf(x, y, z, scale, null, _branchFactor);
+      this._count = 0;
+      this._locate = locate;
+    }
+
+    /// <summary>Adds an item to the Octree.</summary>
+    /// <param name="id">The id associated with the addition.</param>
+    /// <param name="addition">The addition.</param>
+    /// <param name="x">The x coordinate of the addition's location.</param>
+    /// <param name="y">The y coordinate of the addition's location.</param>
+    /// <param name="z">The z coordinate of the addition's location.</param>
+    public void Add(Type addition)
+    {
+      this.Add(addition, _top);
+      this._count++;
+    }
+
+    /// <summary>Recursively adds an item to the octree and returns the node where the addition was placed
+    /// and adjusts the octree structure as needed.</summary>
+    private OctreeLinkedLeaf Add(Type addition, OctreeLinkedNode octreeNode)
+    {
+      // If the node is a leaf we have reached the bottom of the tree
+      if (octreeNode is OctreeLinkedLeaf)
+      {
+        OctreeLinkedLeaf leaf = (OctreeLinkedLeaf)octreeNode;
+        if (!leaf.IsFull)
+        {
+          // We found a proper leaf, and the leaf has room, just add it
+          leaf.Add(addition);
+          return leaf;
+        }
+        else
+        {
+          // The leaf is full so we need to grow out the tree
+          OctreeLinkedBranch parent = octreeNode.Parent;
+          OctreeLinkedBranch growth;
+          if (parent == null)
+            growth = (OctreeLinkedBranch)(_top = new OctreeLinkedBranch(_top.X, _top.Y, _top.Z, _top.Scale, null));
+          else
+          {
+            double x, y, z;
+            this._locate(addition, out x, out y, out z);
+            growth = GrowBranch(parent, this.DetermineChild(parent, x, y, z));
+          }
+          //foreach (Type entry in leaf.Contents)
+          //  _referenceDatabase.Get<Type>(entry, _referenceComparison).Leaf = Add(entry, growth);
+          return Add(addition, growth);
+        }
+      }
+      // We are still traversing the tree, determine the next move
+      else
+      {
+        OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+        double x, y, z;
+        this._locate(addition, out x, out y, out z);
+        int child = this.DetermineChild(branch, x, y, z);
+        // If the leaf is null, we must grow one before attempting to add to it
+        if (branch.Children[child] == null)
+          return GrowLeaf(branch, child).Add(addition);
+        return Add(addition, branch.Children[child]);
+      }
+    }
+
+    // Grows a branch on the tree at the desired location
+    private OctreeLinkedBranch GrowBranch(OctreeLinkedBranch branch, int child)
+    {
+      // values for the new node
+      float x, y, z, scale;
+      this.DetermineChildBounds(branch, child, out x, out y, out z, out scale);
+      branch.Children[child] = new OctreeLinkedBranch(x, y, z, scale, branch);
+      return (OctreeLinkedBranch)branch.Children[child];
+    }
+
+    // Grows a leaf on the tree at the desired location
+    private OctreeLinkedLeaf GrowLeaf(OctreeLinkedBranch branch, int child)
+    {
+      if (branch.Children[child] != null)
+        throw new OctreeLinkedException("My octree has a glitched, sorry.");
+      // values for new node
+      float x, y, z, scale;
+      this.DetermineChildBounds(branch, child, out x, out y, out z, out scale);
+      branch.Children[child] = new OctreeLinkedLeaf(x, y, z, scale, branch, _branchFactor);
+      return (OctreeLinkedLeaf)branch.Children[child];
+    }
+
+    /// <summary>Finds the child index relative to "this" node given x, y, and z coordinates.</summary>
+    private int DetermineChild(OctreeLinkedNode node, double x, double y, double z)
+    {
+      // Finds the child given an x, y, and z
+      // Possible child (all): 0, 1, 2, 3, 4, 5, 6, 7
+      if (z < node.Z)
+      {
+        // Possible child: 0, 2, 4, 6
+        if (y < node.Y)
+          // Possible child: 0, 4
+          if (x < node.X)
+            return 0;
+          else
+            return 4;
+        else
+          // Possible child: 2, 6, 
+          if (x < node.X)
+            return 2;
+          else
+            return 6;
+      }
+      else
+      {
+        // Possible child: 1, 3, 5, 7
+        if (y < node.Y)
+          // Possible child: 1, 5
+          if (x < node.X)
+            return 1;
+          else
+            return 5;
+        else
+          // Possible child: 3, 7 
+          if (x < node.X)
+            return 3;
+          else
+            return 7;
+      }
+    }
+
+    /// <summary>Determins the bounds of a child node.</summary>
+    private void DetermineChildBounds(OctreeLinkedNode node, int child, out float x, out float y, out float z, out float scale)
+    {
+      float halfScale = node.Scale * .5f;
+      switch (child)
+      {
+        case 0: x = node.X - halfScale; y = node.Y - halfScale; z = node.Z - halfScale; scale = halfScale; return;
+        case 1: x = node.X - halfScale; y = node.Y - halfScale; z = node.Z + halfScale; scale = halfScale; return;
+        case 2: x = node.X - halfScale; y = node.Y + halfScale; z = node.Z - halfScale; scale = halfScale; return;
+        case 3: x = node.X - halfScale; y = node.Y + halfScale; z = node.Z + halfScale; scale = halfScale; return;
+        case 4: x = node.X + halfScale; y = node.Y - halfScale; z = node.Z - halfScale; scale = halfScale; return;
+        case 5: x = node.X + halfScale; y = node.Y - halfScale; z = node.Z + halfScale; scale = halfScale; return;
+        case 6: x = node.X + halfScale; y = node.Y + halfScale; z = node.Z - halfScale; scale = halfScale; return;
+        case 7: x = node.X + halfScale; y = node.Y + halfScale; z = node.Z + halfScale; scale = halfScale; return;
+        default: throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
+      }
+    }
+
+    private bool ContainsBounds(OctreeLinkedNode node, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    {
+      return !(node == null ||
+          xMax < node.X - node.Scale || xMin > node.X + node.Scale ||
+          yMax < node.Y - node.Scale || yMin > node.Y + node.Scale ||
+          zMax < node.Z - node.Scale || zMin > node.Z + node.Scale);
+    }
+
+    private bool ContainsCoordinate(OctreeLinkedNode node, float x, float y, float z)
+    {
+      return !(node == null ||
+          x < node.X - node.Scale || x > node.X + node.Scale ||
+          y < node.Y - node.Scale || y > node.Y + node.Scale ||
+          z < node.Z - node.Scale || z > node.Z + node.Scale);
+    }
+
+    ///// <summary>Removes an item from the octree by the id that was assigned to it.</summary>
+    ///// <param name="id">The string id of the removal that was given to the item when it was added.</param>
+    //public void Remove(Type key)
+    //{
+    //  throw new NotImplementedException();
+    //  //Remove(key, _referenceDatabase.Get<Type>(key, _referenceComparison).Leaf);
+    //  //_referenceDatabase.Remove<Type>(key, _referenceComparison);
+    //  _count--;
+    //}
+
+    //private void Remove(Type key, OctreeLinkedLeaf leaf)
+    //{
+    //  if (leaf.Count > 1)
+    //  {
+    //    Type[] contents = leaf.Contents;
+    //    for (int i = 0; i < leaf.Count; i++)
+    //      if (_comparisonFunction(contents[i], key) == 0)
+    //      {
+    //        Type temp = contents[_count - 1];
+    //        contents[_count - 1] = contents[i];
+    //        contents[i] = temp;
+    //        break;
+    //      }
+    //  }
+    //  else PluckLeaf(leaf.Parent, OctreeLinkedNode.DetermineChild(leaf.Parent, leaf.X, leaf.Y, leaf.Z));
+    //}
+
+    private void PluckLeaf(OctreeLinkedBranch branch, int child)
+    {
+      if (!(branch.Children[child] is OctreeLinkedLeaf) || ((OctreeLinkedLeaf)branch.Children[child]).Count > 1)
+        throw new OctreeLinkedException("There is a glitch in my octree, sorry.");
+      branch.Children[child] = null;
+      while (branch.IsEmpty)
+      {
+        ChopBranch(branch.Parent, this.DetermineChild(branch.Parent, branch.X, branch.Y, branch.Z));
+        branch = branch.Parent;
+      }
+    }
+
+    private void ChopBranch(OctreeLinkedBranch branch, int child)
+    {
+      if (branch.Children[child] == null)
+        throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
+      branch.Children[child] = null;
+    }
+
+    ///// <summary>Moves an existing item from one position to another.</summary>
+    ///// <param name="key">The key of the item to be moved.</param>
+    ///// <param name="x">The x coordinate of the new position of the item.</param>
+    ///// <param name="y">The y coordinate of the new position of the item.</param>
+    ///// <param name="z">The z coordinate of the new position of the item.</param>
+    //public void Move(Type key, float x, float y, float z)
+    //{
+    //  OctreeLinkedLeaf leaf = null;// _referenceDatabase.Get<Type>(key, _referenceComparison).Leaf;
+    //  Type entry = default(Type);
+    //  bool found = false;
+    //  foreach (Type value in leaf.Contents)
+    //    if (_comparisonFunction(value, key) == 0)
+    //    {
+    //      entry = value;
+    //      found = true;
+    //      break;
+    //    }
+    //  if (found == false)
+    //    throw new OctreeLinkedException("attempting to move a non-existing value.");
+    //  entry.Position.X = x;
+    //  entry.Position.Y = y;
+    //  entry.Position.Z = z;
+    //  if ((x > leaf.X - leaf.Scale && x < leaf.X + leaf.Scale)
+    //    && (y > leaf.Y - leaf.Scale && y < leaf.Y + leaf.Scale)
+    //    && (z > leaf.Z - leaf.Scale && z < leaf.Z + leaf.Scale))
+    //    return;
+    //  else
+    //  {
+    //    Remove(key, leaf);
+    //    Add(entry, _top);
+    //  }
+    //}
+
+    /// <summary>Iterates through the entire tree and ensures each item is in the proper node.</summary>
+    public void Update()
+    {
+      throw new NotImplementedException("Sorry, I'm still working on the update function.");
+    }
+    
+    public void Foreach(Foreach<Type> function)
+    {
+      Foreach(function, _top);
+    }
+    private void Foreach(Foreach<Type> function, OctreeLinkedNode octreeNode)
+    {
+      if (octreeNode != null)
+      {
+        if (octreeNode is OctreeLinkedLeaf)
+        {
+          int count = ((OctreeLinkedLeaf)octreeNode).Count;
+          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          for (int i = 0; i < count; i++)
+            function(items[i]);
+        }
+        else
+        {
+          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          for (int i = 0; i < 8; i++)
+            Foreach(function, branch.Children[i]);
+        }
+      }
+    }
+
+    public void Foreach(ForeachRef<Type> function)
+    {
+      Foreach(function, _top);
+    }
+    private void Foreach(ForeachRef<Type> function, OctreeLinkedNode octreeNode)
+    {
+      if (octreeNode != null)
+      {
+        if (octreeNode is OctreeLinkedLeaf)
+        {
+          int count = ((OctreeLinkedLeaf)octreeNode).Count;
+          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          for (int i = 0; i < count; i++)
+            function(ref items[i]);
+        }
+        else
+        {
+          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          for (int i = 0; i < 8; i++)
+            Foreach(function, branch.Children[i]);
+        }
+      }
+    }
+
+    public ForeachStatus Foreach(ForeachBreak<Type> function)
+    {
+      return Foreach(function, _top);
+    }
+    private ForeachStatus Foreach(ForeachBreak<Type> function, OctreeLinkedNode octreeNode)
+    {
+      if (octreeNode != null)
+      {
+        if (octreeNode is OctreeLinkedLeaf)
+        {
+          int count = ((OctreeLinkedLeaf)octreeNode).Count;
+          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          for (int i = 0; i < count; i++)
+            if (function(items[i]) == ForeachStatus.Break)
+              return ForeachStatus.Break;
+          return ForeachStatus.Continue;
+        }
+        else
+        {
+          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          for (int i = 0; i < 8; i++)
+            if (Foreach(function, branch.Children[i]) == ForeachStatus.Break)
+              return ForeachStatus.Break;
+          return ForeachStatus.Continue;
+        }
+      }
+      return ForeachStatus.Continue;
+    }
+
+    public ForeachStatus Foreach(ForeachRefBreak<Type> function)
+    {
+      return Foreach(function, _top);
+    }
+    private ForeachStatus Foreach(ForeachRefBreak<Type> function, OctreeLinkedNode octreeNode)
+    {
+      if (octreeNode != null)
+      {
+        if (octreeNode is OctreeLinkedLeaf)
+        {
+          int count = ((OctreeLinkedLeaf)octreeNode).Count;
+          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          for (int i = 0; i < count; i++)
+            if (function(ref items[i]) == ForeachStatus.Break)
+              return ForeachStatus.Break;
+          return ForeachStatus.Continue;
+        }
+        else
+        {
+          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          for (int i = 0; i < 8; i++)
+            if (Foreach(function, branch.Children[i]) == ForeachStatus.Break)
+              return ForeachStatus.Break;
+          return ForeachStatus.Continue;
+        }
+      }
+      return ForeachStatus.Continue;
+    }
+
+    /// <summary>Performs a functional paradigm traversal of the octree with data structure optimization.</summary>
+    /// <param name="function">The function to perform per iteration.</param>
+    /// <param name="xMin">The minimum x of a rectangular prism to query the octree.</param>
+    /// <param name="yMin">The minimum y of a rectangular prism to query the octree.</param>
+    /// <param name="zMin">The minimum z of a rectangular prism to query the octree.</param>
+    /// <param name="xMax">The maximum x of a rectangular prism to query the octree.</param>
+    /// <param name="yMax">The maximum y of a rectangular prism to query the octree.</param>
+    /// <param name="zMax">The maximum z of a rectangular prism to query the octree.</param>
+    public ForeachStatus Foreach(ForeachBreak<Type> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    {
+      return Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
+    }
+    private ForeachStatus Foreach(ForeachBreak<Type> function, OctreeLinkedNode octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    {
+      if (octreeNode != null)
+      {
+        if (octreeNode is OctreeLinkedLeaf)
+        {
+          int count = ((OctreeLinkedLeaf)octreeNode).Count;
+          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          for (int i = 0; i < count; i++)
+          {
+            double x, y, z;
+            this._locate(items[i], out x, out y, out z);
+            if (items[i] != null &&
+              x > xMin && x < xMax &&
+              y > yMin && y < yMax &&
+              z > zMin && z < zMax)
+                if (function(items[i]) == ForeachStatus.Break)
+                  return ForeachStatus.Break;
+          }
+        }
+        else
+        {
+          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          for (int i = 0; i < 8; i++)
+            if (Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax) == ForeachStatus.Break)
+              return ForeachStatus.Break;
+          return ForeachStatus.Continue;
+        }
+      }
+      return ForeachStatus.Continue;
+    }
+
+    /// <summary>Performs a functional paradigm traversal of the octree with data structure optimization.</summary>
+    /// <param name="function">The function to perform per iteration.</param>
+    /// <param name="xMin">The minimum x of a rectangular prism to query the octree.</param>
+    /// <param name="yMin">The minimum y of a rectangular prism to query the octree.</param>
+    /// <param name="zMin">The minimum z of a rectangular prism to query the octree.</param>
+    /// <param name="xMax">The maximum x of a rectangular prism to query the octree.</param>
+    /// <param name="yMax">The maximum y of a rectangular prism to query the octree.</param>
+    /// <param name="zMax">The maximum z of a rectangular prism to query the octree.</param>
+    public ForeachStatus Foreach(ForeachRefBreak<Type> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    {
+      return Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
+    }
+    private ForeachStatus Foreach(ForeachRefBreak<Type> function, OctreeLinkedNode octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    {
+      if (octreeNode != null)
+      {
+        if (octreeNode is OctreeLinkedLeaf)
+        {
+          int count = ((OctreeLinkedLeaf)octreeNode).Count;
+          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          for (int i = 0; i < count; i++)
+          {
+            double x, y, z;
+            this._locate(items[i], out x, out y, out z);
+            if (items[i] != null &&
+              x > xMin && x < xMax &&
+              y > yMin && y < yMax &&
+              z > zMin && z < zMax)
+              if (function(ref items[i]) == ForeachStatus.Break)
+                return ForeachStatus.Break;
+          }
+        }
+        else
+        {
+          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          for (int i = 0; i < 8; i++)
+            if (Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax) == ForeachStatus.Break)
+              return ForeachStatus.Break;
+          return ForeachStatus.Continue;
+        }
+      }
+      return ForeachStatus.Continue;
+    }
+
+    public void Foreach(Foreach<Type> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    {
+      Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
+    }
+    private void Foreach(Foreach<Type> function, OctreeLinkedNode octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    {
+      if (octreeNode != null)
+      {
+        if (octreeNode is OctreeLinkedLeaf)
+        {
+          int count = ((OctreeLinkedLeaf)octreeNode).Count;
+          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          for (int i = 0; i < count; i++)
+          {
+            double x, y, z;
+            this._locate(items[i], out x, out y, out z);
+            if (items[i] != null &&
+                x > xMin && x < xMax &&
+                y > yMin && y < yMax &&
+                z > zMin && z < zMax)
+              function(items[i]);
+          }
+        }
+        else
+        {
+          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          for (int i = 0; i < 8; i++)
+            Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax);
+        }
+      }
+    }
+
+    public Type[] ToArray()
+    {
+      int finalIndex;
+      Type[] array = new Type[_count];
+      ToArray(_top, array, 0, out finalIndex);
+      if (array.Length != finalIndex)
+        throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
+      return array;
+    }
+    private void ToArray(OctreeLinkedNode octreeNode, Type[] array, int entryIndex, out int returnIndex)
+    {
+      if (octreeNode != null)
+      {
+        if (octreeNode is OctreeLinkedLeaf)
+        {
+          returnIndex = entryIndex;
+          foreach (Type item in ((OctreeLinkedLeaf)octreeNode).Contents)
+            array[returnIndex++] = item;
+        }
+        else
+        {
+          // The current node is a branch
+          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          for (int i = 0; i < 8; i++)
+            ToArray(branch.Children[i], array, entryIndex, out entryIndex);
+          returnIndex = entryIndex;
+        }
+      }
+      else
+        returnIndex = entryIndex;
+    }
+
+    #region Structure<Type>
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+      Type[] array = this.ToArray();
+      return array.GetEnumerator();
+    }
+
+    /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
+    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    {
+      Type[] array = this.ToArray();
+      return ((IEnumerable<Type>)array).GetEnumerator();
+    }
+
+    /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
+    /// <remarks>Returns long.MaxValue on overflow.</remarks>
+    public int SizeOf { get { throw new NotImplementedException(); } }
+    
+    /// <summary>Checks to see if a given object is in this data structure.</summary>
+    /// <param name="item">The item to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>true if the item is in this structure; false if not.</returns>
+    public bool Contains(Type item, Compare<Type> compare)
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>Checks to see if a given object is in this data structure.</summary>
+    /// <typeparam name="Key">The type of the key to check for.</typeparam>
+    /// <param name="key">The key to check for.</param>
+    /// <param name="compare">Delegate representing comparison technique.</param>
+    /// <returns>true if the item is in this structure; false if not.</returns>
+    public bool Contains<Key>(Key key, Compare<Type, Key> compare)
+    {
+      throw new NotImplementedException();
+    }
+
+    /// <summary>Creates a shallow clone of this data structure.</summary>
+    /// <returns>A shallow clone of this data structure.</returns>
+    public Structure<Type> Clone()
+    {
+      throw new NotImplementedException();
+    }
+
+    #endregion
+
+    /// <summary>This is used for throwing OcTree exceptions only to make debugging faster.</summary>
+    private class OctreeLinkedException : Error
+    {
+      public OctreeLinkedException(string message) : base(message) { }
+    }
   }
 
   #region OctreeLinked

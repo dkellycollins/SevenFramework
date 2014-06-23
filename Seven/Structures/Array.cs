@@ -29,7 +29,7 @@ namespace Seven.Structures
   [System.Serializable]
   public class Array_Array<Type> : Array<Type>
   {
-    protected Type[] _array;
+    public Type[] _array;
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     public static implicit operator Array_Array<Type>(Type[] array)
@@ -40,7 +40,6 @@ namespace Seven.Structures
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     public static implicit operator Type[](Array_Array<Type> array)
     {
-      
       return array.ToArray();
     }
 
@@ -52,6 +51,7 @@ namespace Seven.Structures
         yield return _array[i];
     }
 
+    System.Collections.Generic.IEnumerator<Type> enumer;
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     System.Collections.Generic.IEnumerator<Type>
       System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
@@ -75,14 +75,14 @@ namespace Seven.Structures
       get
       {
         if (index < 0 || index > _array.Length)
-          throw new Exception("index out of bounds.");
+          throw new Error("index out of bounds.");
         Type returnValue = _array[index];
         return returnValue;
       }
       set
       {
         if (index < 0 || index > _array.Length)
-          throw new Exception("index out of bounds.");
+          throw new Error("index out of bounds.");
         _array[index] = value;
       }
     }
@@ -93,7 +93,7 @@ namespace Seven.Structures
     public Array_Array(int size)
     {
       if (size < 1)
-        throw new Exception("size of the array must be at least 1.");
+        throw new Error("size of the array must be at least 1.");
       this._array = new Type[size];
     }
 
@@ -187,7 +187,7 @@ namespace Seven.Structures
       for (int i = 0; i < _array.Length; i++)
         if (compare(_array[i], key) == Comparison.Equal)
           return _array[i];
-      throw new Exception("key not found.");
+      throw new Error("key not found.");
     }
 
     /// <summary>Trys to look up an item this structure by a given key.</summary>
@@ -212,6 +212,7 @@ namespace Seven.Structures
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     public void Foreach(Foreach<Type> function)
     {
+
       for (int i = 0; i < _array.Length; i++)
         function(_array[i]);
     }
@@ -267,9 +268,9 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Exception : Error
+    private class Error : Seven.Error
     {
-      public Exception(string message) : base(message) { }
+      public Error(string message) : base(message) { }
     }
   }
 }

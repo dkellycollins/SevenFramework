@@ -5,6 +5,7 @@
 
 namespace Seven
 {
+  /// <summary>The polymorphism base of all the errors in the Seven framework.</summary>
   public class Error : System.Exception
   {
     private string _memberName;

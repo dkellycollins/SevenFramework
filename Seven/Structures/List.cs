@@ -7,27 +7,35 @@ using Seven;
 using Seven.Parallels;
 
 // using System; Serializable
+// using System.Collections; IEnumerable
+// using System.Collections.Generic; IEnumerable<Type>
 
 namespace Seven.Structures
 {
-  /// <summary>
-  /// 
-  /// </summary>
+  /// <summary>A primitive dynamic sized data structure.</summary>
   /// <typeparam name="Type"></typeparam>
   public interface List<Type> : Structure<Type>
   {
-    /// <summary>Adds an item to the list.</summary>
+    /// <summary>Adds an item to the end of this list.</summary>
     /// <param name="addition">The item to add to the list.</param>
     void Add(Type addition);
 
-    //void RemoveFirst(Type removal, Compare<Type> compare);
-    
-    //bool TryRemoveFirst(Type removal, Compare<Type> compare);
-    
-    //Type GetFirst<Key>(Key key, Compare<Type, Key> compare);
-    
-    //bool TryGetFirst<Key>(Key key, Compare<Type, Key> compare, out Type item);
+    /// <summary>Removes the first occurence of an item in the list.</summary>
+    /// <param name="removal">The item to remove.</param>
+    /// <param name="compare">The function to determine equality.</param>
+    void RemoveFirst(Type removal, Compare<Type> compare);
 
+    /// <summary>Removes the first occurence of an item in the list or returns false.</summary>
+    /// <param name="removal">The item to remove.</param>
+    /// <param name="compare">The function to determine equality.</param>
+    /// <returns>True if the item was found and removed; False if not.</returns>
+    bool TryRemoveFirst(Type removal, Compare<Type> compare);
+
+    /// <summary>Removes all occurences of an item in the list.</summary>
+    /// <param name="removal">The item to genocide (hell yeah that is a verb...).</param>
+    /// <param name="compare">The function to determine equality.</param>
+    void RemoveAll(Type removal, Compare<Type> compare);
+    
     /// <summary>Returns the number of items in the list.</summary>
     int Count { get; }
 
@@ -138,11 +146,11 @@ namespace Seven.Structures
 
     /// <summary>Removes the first equality by object reference.</summary>
     /// <param name="removal">The reference to the item to remove.</param>
-    public void RemoveFirst(Type removal)
+    public void RemoveFirst(Type removal, Compare<Type> compare)
     {
       if (_head == null)
         throw new Exception("Attempting to remove a non-existing id value.");
-      if (_head.Value.Equals(removal))
+      if (compare(removal, _head.Value) == Comparison.Equal)
       {
         _head = _head.Next;
         _count--;
@@ -153,7 +161,7 @@ namespace Seven.Structures
       {
         if (listNode.Next == null)
           throw new Exception("Attempting to remove a non-existing id value.");
-        else if (_head.Value.Equals(removal))
+        else if (compare(removal, _head.Value) == Comparison.Equal)
         {
           if (listNode.Next.Equals(_tail))
             _tail = listNode;
@@ -164,6 +172,63 @@ namespace Seven.Structures
           listNode = listNode.Next;
       }
       throw new Exception("Attempting to remove a non-existing id value.");
+    }
+
+    /// <summary>Removes the first equality by object reference.</summary>
+    /// <param name="removal">The reference to the item to remove.</param>
+    /// <returns>True if the item was removed; false if not.</returns>
+    public bool TryRemoveFirst(Type removal, Compare<Type> compare)
+    {
+      if (_head == null)
+        return false;
+      if (compare(removal, _head.Value) == Comparison.Equal)
+      {
+        _head = _head.Next;
+        _count--;
+        return true;
+      }
+      Node listNode = _head;
+      while (listNode != null)
+      {
+        if (listNode.Next == null)
+          return false;
+        else if (compare(removal, _head.Value) == Comparison.Equal)
+        {
+          if (listNode.Next.Equals(_tail))
+            _tail = listNode;
+          listNode.Next = listNode.Next.Next;
+          return true;
+        }
+        else
+          listNode = listNode.Next;
+      }
+      return false;
+    }
+
+    /// <summary>Removes the first equality by object reference.</summary>
+    /// <param name="removal">The reference to the item to remove.</param>
+    public void RemoveAll(Type removal, Compare<Type> compare)
+    {
+      if (_head == null)
+        return;
+      if (compare(removal, _head.Value) == Comparison.Equal)
+      {
+        _head = _head.Next;
+        _count--;
+      }
+      Node listNode = _head;
+      while (listNode != null)
+      {
+        if (listNode.Next == null)
+          break;
+        else if (compare(removal, _head.Value) == Comparison.Equal)
+        {
+          if (listNode.Next.Equals(_tail))
+            _tail = listNode;
+          listNode.Next = listNode.Next.Next;
+        }
+        listNode = listNode.Next;
+      }
     }
 
     /// <summary>Resets the list to an empty state. WARNING could cause excessive garbage collection.</summary>
@@ -427,7 +492,7 @@ namespace Seven.Structures
       set
       {
         if (value < 1)
-          throw new Exception("Attempting to set a minimum capacity to a negative or zero value.");
+          throw new Error("Attempting to set a minimum capacity to a negative or zero value.");
         else if (value > _list.Length)
         {
           Type[] newList = new Type[value];
@@ -448,7 +513,7 @@ namespace Seven.Structures
       {
         if (index < 0 || index > _count)
         {
-          throw new Exception("Attempting an index look-up outside the ListArray's current size.");
+          throw new Error("Attempting an index look-up outside the ListArray's current size.");
         }
         Type returnValue = _list[index];
         return returnValue;
@@ -457,10 +522,19 @@ namespace Seven.Structures
       {
         if (index < 0 || index > _count)
         {
-          throw new Exception("Attempting an index assignment outside the ListArray's current size.");
+          throw new Error("Attempting an index assignment outside the ListArray's current size.");
         }
         _list[index] = value;
       }
+    }
+
+    /// <summary>Creates an instance of a ListArray, and sets it's minimum capacity.</summary>
+    /// <remarks>Runtime: O(1).</remarks>
+    public List_Array()
+    {
+      _list = new Type[1];
+      _count = 0;
+      _minimumCapacity = 1;
     }
 
     /// <summary>Creates an instance of a ListArray, and sets it's minimum capacity.</summary>
@@ -492,7 +566,7 @@ namespace Seven.Structures
       if (_count == _list.Length)
       {
         if (_list.Length > int.MaxValue / 2)
-          throw new Exception("Your list is so large that it can no longer double itself (int.MaxValue barrier reached).");
+          throw new Error("Your list is so large that it can no longer double itself (int.MaxValue barrier reached).");
         Type[] newList = new Type[_list.Length * 2];
         _list.CopyTo(newList, 0);
         _list = newList;
@@ -501,12 +575,44 @@ namespace Seven.Structures
     }
 
     /// <summary>Removes the item at a specific index.</summary>
+    /// <param name="removal">The item to be removed.</param>
+    /// <param name="compare">The technique of determining equality.</param>
+    /// <remarks>Runtime: Theta(n).</remarks>
+    public void RemoveFirst(Type removal, Compare<Type> compare)
+    {
+      int i;
+      for (i = 0; i < this._count; i++)
+        if (compare(removal, this._list[i]) == Comparison.Equal)
+          break;
+      if (i == this._count)
+        throw new Error("Attempting to remove a non-existing item from this list.");
+      Remove(i);
+    }
+
+    /// <summary>Removes the item at a specific index.</summary>
+    /// <param name="removal">The item to be removed.</param>
+    /// <param name="compare">The technique of determining equality.</param>
+    /// <returns>True if the item was found and removed; false if not.</returns>
+    /// <remarks>Runtime: Theta(n).</remarks>
+    public bool TryRemoveFirst(Type removal, Compare<Type> compare)
+    {
+      int i;
+      for (i = 0; i < this._count; i++)
+        if (compare(removal, this._list[i]) == Comparison.Equal)
+          break;
+      if (i == this._count)
+        return false;
+      Remove(i);
+      return true;
+    }
+
+    /// <summary>Removes the item at a specific index.</summary>
     /// <param name="index">The index of the item to be removed.</param>
     /// <remarks>Runtime: Theta(n - index).</remarks>
     public void Remove(int index)
     {
       if (index < 0 || index > _count)
-        throw new Exception("Attempting to remove an index outside the ListArray's current size.");
+        throw new Error("Attempting to remove an index outside the ListArray's current size.");
       if (_count < _list.Length / 4 && _list.Length / 2 > _minimumCapacity)
       {
         Type[] newList = new Type[_list.Length / 2];
@@ -519,26 +625,27 @@ namespace Seven.Structures
       _count--;
     }
 
-    /// <summary>Removes the first equality by object reference.</summary>
-    /// <param name="removal">The reference to the item to remove.</param>
-    public void RemoveFirst(Type removal)
+    /// <summary>Removes all occurences of a given item.</summary>
+    /// <param name="item">The itme to genocide.</param>
+    /// <remarks>Runtime: Theta(n).</remarks>
+    public void RemoveAll(Type item, Compare<Type> compare)
     {
-      for (int index = 0; index < _count; index++)
-        if (_list[index].Equals(removal))
-        {
-          if (_count < _list.Length / 4 && _list.Length / 2 > _minimumCapacity)
-          {
-            Type[] newList = new Type[_list.Length / 2];
-            for (int i = 0; i < _count; i++)
-              newList[i] = _list[i];
-            _list = newList;
-          }
-          for (int i = index; i < _count - 1; i++)
-            _list[i] = _list[i + 1];
-          _count--;
-          return;
-        }
-      throw new Exception("attempting to remove a non-existing value.");
+      if (this._count == 0)
+        return;
+      int removed = 0;
+      for (int i = 0; i < this._count; i++)
+        if (compare(item, this._list[i]) == Comparison.Equal)
+          removed++;
+        else
+          this._list[i - removed] = this._list[i];
+      this._count -= removed;
+      if (_count < _list.Length / 4 && _list.Length / 2 > _minimumCapacity)
+      {
+        Type[] newList = new Type[_list.Length / 2];
+        for (int i = 0; i < this._count; i++)
+          newList[i] = this._list[i];
+        this._list = newList;
+      }
     }
 
     /// <summary>Resizes this allocation to the current count.</summary>
@@ -692,7 +799,10 @@ namespace Seven.Structures
     }
     
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    protected class Exception : Error { public Exception(string message) : base(message) { } }
+    private class Error : Seven.Error
+    {
+      public Error(string message) : base(message) { }
+    }
   }
 
   /// <summary>Implements a growing, singularly-linked list data structure that inherits InterfaceTraversable.</summary>

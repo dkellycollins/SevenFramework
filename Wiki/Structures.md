@@ -11,9 +11,8 @@
 ##### Polymorphism Tree
 
 > - Structure<Type>
->   - [List](https://github.com/53V3N1X/SevenFramework/wiki/List)<br />
 >   - Array<Type>
->   - List<Type>
+>   - [List](https://github.com/53V3N1X/SevenFramework/wiki/List)<br />
 >   - Stack<Type>
 >   - Queue<Type>
 >   - Heap<Type>
