@@ -146,20 +146,22 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      // I just introduced a bug in my Octree... Ill fix soon
-      //Console.WriteLine(" Testing Octree_Linked<Type>----------------");
-      //Octree<int> octree_linked = new Octree_Linked<int>(0, 0, 0, test + 1, 3,
+      // I just introduced a bug in my Octree... Ill fix soon -Seven 6-23-14
+      Console.WriteLine(" Testing Octree_Linked<Type>----------------");
+      //Octree<int> octree_linked = new Octree_Linked<int>(11, 11, 11, test + 2, test,
       //  (int i, out double x, out double y, out double z) => { x = i; y = i; z = i; });
-      //for (int i = 0; i < test; i++)
-      //  octree_linked.Add(i);
-      //Console.Write("   Delegate: ");
-      //octree_linked.Foreach((int current) => { Console.Write(current); });
-      //Console.WriteLine();
+      Octree<int> octree_linked = new Octree_Linked<int>(0, 0, 0, test + 1, 3,
+        (int i, out double x, out double y, out double z) => { x = i; y = i; z = i; });
+      for (int i = 0; i < test; i++)
+        octree_linked.Add(i);
+      Console.Write("   Delegate: ");
+      octree_linked.Foreach((int current) => { Console.Write(current); });
+      Console.WriteLine();
       //Console.Write("   IEnumerator: ");
       //foreach (int current in octree_linked)
       //  Console.Write(current);
       //Console.WriteLine();
-      //Console.WriteLine();
+      Console.WriteLine();
 
       //Console.WriteLine(" SPEED TEST");
       //SpeedTest();
