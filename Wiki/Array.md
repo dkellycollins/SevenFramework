@@ -10,9 +10,10 @@
 
 ##### Polymorphism Tree
 
-> - [Structure](https://github.com/53V3N1X/SevenFramework/wiki/Structure)
->   - Array
+> - [Structure](https://github.com/53V3N1X/SevenFramework/wiki/Structure)<br />
+>   - [Array](https://github.com/53V3N1X/SevenFramework/wiki/Array)<br />
 >   - [List](https://github.com/53V3N1X/SevenFramework/wiki/List)<br />
+>   - List
 >   - Stack
 >   - Queue
 >   - Heap
