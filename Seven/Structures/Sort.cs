@@ -11,28 +11,45 @@ namespace Seven.Structures
   public static class Sort
   {
     /// <summary>Sorts an entire array in non-decreasing order using the bubble sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The compare function (returns a positive value if left is greater than right).</param>
     /// <param name="array">the array to be sorted</param>
     /// <remarks>Runtime: Omega(n), average(n^2), O(n^2). Memory: in place. Stability: yes.</remarks>
-    public static void Bubble<Type>(Compare<Type> compare, Type[] array)
+    public static void Bubble<T>(Compare<T> compare, T[] array)
     {
       for (int i = 0; i < array.Length; i++)
         for (int j = 0; j < array.Length - 1; j++)
           if (compare(array[j], array[j + 1]) == Comparison.Greater)
           {
-            Type temp = array[j + 1];
+            T temp = array[j + 1];
+            array[j + 1] = array[j];
+            array[j] = temp;
+          }
+    }
+
+    /// <summary>Sorts an entire array in non-decreasing order using the bubble sort algorithm.</summary>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
+    /// <param name="compare">The compare function (returns a positive value if left is greater than right).</param>
+    /// <param name="array">the array to be sorted</param>
+    /// <remarks>Runtime: Omega(n), average(n^2), O(n^2). Memory: in place. Stability: yes.</remarks>
+    public static void Bubble<T>(Compare<T> compare, T[] array, int start, int end)
+    {
+      for (int i = start; i < end; i++)
+        for (int j = start; j < end - 1; j++)
+          if (compare(array[j], array[j + 1]) == Comparison.Greater)
+          {
+            T temp = array[j + 1];
             array[j + 1] = array[j];
             array[j] = temp;
           }
     }
 
     /// <summary>Sorts an entire array in non-decreasing order using the selection sort algoritm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">Returns negative if the left is less than the right.</param>
     /// <param name="array">the array to be sorted</param>
     /// <remarks>Runtime: Omega(n^2), average(n^2), O(n^2). Memory: in place. Stablity: no.</remarks>
-    public static void Selection<Type>(Compare<Type> compare, Type[] array)
+    public static void Selection<T>(Compare<T> compare, T[] array)
     {
       for (int i = 0; i < array.Length; i++)
       {
@@ -41,7 +58,7 @@ namespace Seven.Structures
           if (compare(array[j], array[min]) == Comparison.Less)
           {
             min = j;
-            Type temp = array[i];
+            T temp = array[i];
             array[i] = array[min];
             array[min] = temp;
           }
@@ -49,15 +66,15 @@ namespace Seven.Structures
     }
 
     /// <summary>Sorts an entire array in non-decreasing order using the insertion sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">Returns positive if left greater than right.</param>
     /// <param name="array">the array to be sorted</param>
     /// <remarks>Runtime: Omega(n), average(n^2), O(n^2). Memory: in place. Stablity: yes.</remarks>
-    public static void Insertion<Type>(Compare<Type> compare, Type[] array)
+    public static void Insertion<T>(Compare<T> compare, T[] array)
     {
       for (int i = 1; i < array.Length; i++)
       {
-        Type temp = array[i];
+        T temp = array[i];
         int j;
         for (j = i; j > 0 && compare(array[j - 1], temp) == Comparison.Greater; j--)
           array[j] = array[j - 1];
@@ -66,20 +83,20 @@ namespace Seven.Structures
     }
 
     /// <summary>Sorts an entire array in non-decreasing order using the quick sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare to be sorted by.</param>
     /// <param name="array">The array to be sorted</param>
     /// <remarks>Runtime: Omega(n*ln(n)), average(n*ln(n)), O(n^2). Memory: ln(n). Stablity: no.</remarks>
-    public static void Quick<Type>(Compare<Type> compare, Type[] array)
+    public static void Quick<T>(Compare<T> compare, T[] array)
     {
       Sort.Quick(compare, array, 0, array.Length);
     }
 
-    private static void Quick<Type>(Compare<Type> compare, Type[] array, int start, int len)
+    private static void Quick<T>(Compare<T> compare, T[] array, int start, int len)
     {
       if (len > 1)
       {
-        Type pivot = array[start];
+        T pivot = array[start];
         int i = start;
         int j = start + len - 1;
         int k = j;
@@ -87,7 +104,7 @@ namespace Seven.Structures
         {
           if (compare(array[j], pivot) == Comparison.Less)
           {
-            Type temp = array[i];
+            T temp = array[i];
             array[i++] = array[j];
             array[j] = temp;
           }
@@ -95,7 +112,7 @@ namespace Seven.Structures
             j--;
           else
           {
-            Type temp = array[k];
+            T temp = array[k];
             array[k--] = array[j];
             array[j--] = temp;
           }
@@ -106,23 +123,23 @@ namespace Seven.Structures
     }
 
     /// <summary>Sorts up to an array in non-decreasing order using the merge sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">Returns zero or negative if the left is less than or equal to the right.</param>
     /// <param name="array">The array to be sorted</param>
     /// <remarks>Runtime: Omega(n*ln(n)), average(n*ln(n)), O(n*ln(n)). Memory: n. Stablity: yes.</remarks>
-    public static void Merge<Type>(Compare<Type> compare, Type[] array)
+    public static void Merge<T>(Compare<T> compare, T[] array)
     {
-      Merge<Type>(compare, array, 0, array.Length);
+      Merge<T>(compare, array, 0, array.Length);
     }
 
-    private static void Merge<Type>(Compare<Type> compare, Type[] array, int start, int len)
+    private static void Merge<T>(Compare<T> compare, T[] array, int start, int len)
     {
       if (len > 1)
       {
         int half = len / 2;
-        Sort.Merge<Type>(compare, array, start, half);
-        Sort.Merge<Type>(compare, array, start + half, len - half);
-        Type[] sorted = new Type[len];
+        Sort.Merge<T>(compare, array, start, half);
+        Sort.Merge<T>(compare, array, start + half, len - half);
+        T[] sorted = new T[len];
         int i = start;
         int j = start + half;
         int k = 0;
@@ -143,18 +160,18 @@ namespace Seven.Structures
     }
 
     /// <summary>Sorts an entire array in non-decreasing order using the heap sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare for the sort.</param>
     /// <param name="array">The array to be sorted</param>
     /// <remarks>Runtime: Omega(n*ln(n)), average(n*ln(n)), O(n^2). Memory: in place. Stablity: no.</remarks>
-    public static void Heap<Type>(Compare<Type> compare, Type[] array)
+    public static void Heap<T>(Compare<T> compare, T[] array)
     {
       int heapSize = array.Length;
       for (int i = (heapSize - 1) / 2; i >= 0; i--)
         Sort.MaxHeapify(compare, array, heapSize, i);
       for (int i = array.Length - 1; i > 0; i--)
       {
-        Type temp = array[0];
+        T temp = array[0];
         array[0] = array[i];
         array[i] = temp;
         heapSize--;
@@ -162,7 +179,7 @@ namespace Seven.Structures
       }
     }
 
-    private static void MaxHeapify<Type>(Compare<Type> compare, Type[] array, int heapSize, int index)
+    private static void MaxHeapify<T>(Compare<T> compare, T[] array, int heapSize, int index)
     {
       int left = (index + 1) * 2 - 1;
       int right = (index + 1) * 2;
@@ -175,7 +192,7 @@ namespace Seven.Structures
         largest = right;
       if (largest != index)
       {
-        Type temp = array[index];
+        T temp = array[index];
         array[index] = array[largest];
         array[largest] = temp;
         Sort.MaxHeapify(compare, array, heapSize, largest);
@@ -183,11 +200,11 @@ namespace Seven.Structures
     }
 
     /// <summary>Sorts an entire array in non-decreasing order using the odd-even sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare for the sort.</param>
     /// <param name="array">The array to be sorted</param>
     /// <remarks>Runtime: Omega(n), average(n^2), O(n^2). Memory: in place. Stablity: yes.</remarks>
-    public static void OddEven<Type>(Compare<Type> compare, Type[] array)
+    public static void OddEven<T>(Compare<T> compare, T[] array)
     {
       var sorted = false;
       while (!sorted)
@@ -197,7 +214,7 @@ namespace Seven.Structures
         {
           if (compare(array[i], array[i + 1]) == Comparison.Greater)
           {
-            Type temp = array[i];
+            T temp = array[i];
             array[i] = array[i + 1];
             array[i + 1] = temp;
             sorted = false;
@@ -208,7 +225,7 @@ namespace Seven.Structures
         {
           if (compare(array[i], array[i + 1]) == Comparison.Greater)
           {
-            Type temp = array[i];
+            T temp = array[i];
             array[i] = array[i + 1];
             array[i + 1] = temp;
             sorted = false;
@@ -218,17 +235,17 @@ namespace Seven.Structures
     }
 
     /// <summary>Method specifically for computing object keys in the Counting Sort algorithm.</summary>
-    /// <typeparam name="Type">The type of instances in the array to be sorted.</typeparam>
+    /// <typeparam name="T">The type of instances in the array to be sorted.</typeparam>
     /// <param name="instance">The instance to compute a counting key for.</param>
     /// <returns>The counting key computed from the provided instance.</returns>
-    public delegate int ComputeCountingKey<Type>(Type instance);
+    public delegate int ComputeCountingKey<T>(T instance);
 
     /// <summary>Sorts an entire array in non-decreasing order using the heap sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="computeCountingKey">Method specifically for computing object keys in the Counting Sort algorithm.</param>
     /// <param name="array">The array to be sorted</param>
     /// <remarks>Runtime: Theta(Max(key)). Memory: Max(key). Stablity: yes.</remarks>
-    public static void Counting<Type>(ComputeCountingKey<Type> computeCountingKey, Type[] array)
+    public static void Counting<T>(ComputeCountingKey<T> computeCountingKey, T[] array)
     {
       int[] count = new int[array.Length];
       int maxKey = 0;
@@ -248,7 +265,7 @@ namespace Seven.Structures
         total += oldCount;
       }
 
-      Type[] output = new Type[maxKey];
+      T[] output = new T[maxKey];
       for (int i = 0; i < array.Length; i++)
       {
         int key = computeCountingKey(array[i]);
@@ -258,33 +275,33 @@ namespace Seven.Structures
     }
 
     /// <summary>Sorts an entire array in a randomized order.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="array">The aray to shuffle.</param>
     /// <remarks>Runtime: O(n). Memory: in place. Stable: N/A (not a comparative sort).</remarks>
-    public static void Shuffle<Type>(Type[] array)
+    public static void Shuffle<T>(T[] array)
     {
       Random random = new Random();
       for (int i = 0; i < array.Length; i++)
       {
         int randomIndex = random.Next(0, array.Length);
-        Type temp = array[i];
+        T temp = array[i];
         array[i] = array[randomIndex];
         array[randomIndex] = temp;
       }
     }
 
     /// <summary>Sorts an entire array in non-decreasing order using the slow sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare for the sort.</param>
     /// <param name="array">The array to be sorted.</param>
     /// <remarks>Runtime: Omega(n), average(n*n!), O(infinity). Memory: in place. Stablity: no.</remarks>
-    public static void Bogo<Type>(Compare<Type> compare, Type[] array)
+    public static void Bogo<T>(Compare<T> compare, T[] array)
     {
-      while (!BogoCheck<Type>(compare, array))
+      while (!BogoCheck<T>(compare, array))
         Sort.Shuffle(array);
     }
 
-    private static bool BogoCheck<Type>(Compare<Type> compare, Type[] array)
+    private static bool BogoCheck<T>(Compare<T> compare, T[] array)
     {
       for (int i = 0; i < array.Length - 1; i++)
         if (compare(array[i], array[i + 1]) == Comparison.Greater)
@@ -293,16 +310,16 @@ namespace Seven.Structures
     }
 
     /// <summary>Sorts an entire array of in non-decreasing order using the slow sort algorithm.</summary>
-    /// <typeparam name="Type">The type of objects stored within the array.</typeparam>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare for the sort.</param>
     /// <param name="array">The array to be sorted</param>
     /// <remarks>Runtime: Omega(n), average(n*n!), O(n*n!). Memory: in place. Stablity: N/A (not yet analyzed).</remarks>
-    public static void Slow<Type>(Compare<Type> compare, Type[] array)
+    public static void Slow<T>(Compare<T> compare, T[] array)
     {
-      Sort.Slow<Type>(compare, array, 0, array.Length);
+      Sort.Slow<T>(compare, array, 0, array.Length);
     }
 
-    private static void Slow<Type>(Compare<Type> compare, Type[] array, int i, int j)
+    private static void Slow<T>(Compare<T> compare, T[] array, int i, int j)
     {
       if (i >= j)
         return;
@@ -311,7 +328,7 @@ namespace Seven.Structures
       Sort.Slow(compare, array, m + 1, j);
       if (compare(array[m], array[j]) == Comparison.Less)
       {
-        Type temp = array[j];
+        T temp = array[j];
         array[j] = array[m];
         array[m] = temp;
       }

@@ -5,38 +5,15 @@
 
 namespace Seven.Structures
 {
-  public enum Structures
-  {
-    Array,
-    AvlTree,
-    BTree,
-    Graph,
-    Map,
-    Heap,
-    Link,
-    List,
-    Octree,
-    QuadTree,
-    ReadBlackTree,
-    Ring,
-    Stack
-  }
-
   /// <summary>Polymorphism base for all data structures in the Seven framework.</summary>
   /// <typeparam name="Type">The type of the instances to store in this data structure.</typeparam>
   public interface Structure<Type> : 
+
+    // for those who can't live without their IEnumerables... shame on you
     System.Collections.Generic.IEnumerable<Type>
+
+
   {
-    #region .Net Framework Compatibility
-
-    /// <summary>FOR COMPATIBILITY ONLY. DO NO USE. AVOID IF POSSIBLE.</summary>
-    //System.Collections.IEnumerator GetEnumerator();
-
-    /// <summary>FOR COMPATIBILITY ONLY. DO NO USE. AVOID IF POSSIBLE.</summary>
-    //System.Collections.Generic.IEnumerator<Type> GetEnumerator();
-
-    #endregion
-
     /// <summary>The current allocation size of the structure.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
     int SizeOf { get; }
@@ -256,5 +233,10 @@ namespace Seven.Structures
     }
 
     #endregion
+
+    public class Error : Seven.Error
+    {
+      public Error(string message) : base(message) { }
+    }
   }
 }

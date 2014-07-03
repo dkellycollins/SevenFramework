@@ -824,7 +824,7 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private new class Exception : Error { public Exception(string message) : base(message) { } }
+    private class Exception : Error { public Exception(string message) : base(message) { } }
   }
 
   ///// <summary>WARNING: THIS IMPLEMENTATION IS INTENDED FOR EDUCATIONAL PURPOSES VS USAGE.</summary>

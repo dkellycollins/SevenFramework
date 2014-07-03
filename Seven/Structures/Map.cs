@@ -62,7 +62,7 @@ namespace Seven.Structures
       }
     }
 
-    private const decimal _maxLoadFactor = 1.0M;
+    private const double _maxLoadFactor = 1.0d;
 
     private Equate<K> _equate;
     private Map.Hash<K> _hash;
@@ -249,44 +249,7 @@ namespace Seven.Structures
       _count = 0;
       _sizeIndex = 0;
     }
-
-    /// <summary>Does an imperative traversal of the structure.</summary>
-    /// <param name="traversalAction">The action to perform during traversal.</param>
-    /// <returns>Whether or not the traversal was broken.</returns>
-    /// <remarks>Runtime: O(n * traversalAction).</remarks>
-    public bool TraverseBreakable(Func<T, bool> traversalAction)
-    {
-      for (int i = 0; i < _table.Length; i++)
-      {
-        if (_table[i] == null) continue;
-        Node looper = _table[i];
-        while (looper != null)
-        {
-          if (!traversalAction(looper.Value))
-            return false;
-          looper = looper.Next;
-        }
-      }
-      return true;
-    }
-
-    /// <summary>Does an imperative traversal of the structure.</summary>
-    /// <param name="traversalAction">The action to perform during the traversal.</param>
-    /// <remarks>Runtime: O(n * traversalAction).</remarks>
-    public void Traverse(Action<T> traversalAction)
-    {
-      for (int i = 0; i < _table.Length; i++)
-      {
-        if (_table[i] == null) continue;
-        Node looper = _table[i];
-        while (looper != null)
-        {
-          traversalAction(looper.Value);
-          looper = looper.Next;
-        }
-      }
-    }
-
+    
     public T[] ToArray()
     {
       T[] array = new T[_count];
@@ -395,13 +358,6 @@ namespace Seven.Structures
     {
       throw new NotImplementedException();
     }
-
-    ///// <summary>Converts the structure into an array.</summary>
-    ///// <returns>An array containing all the item in the structure.</returns>
-    //public Type[] ToArray()
-    //{
-    //  throw new NotImplementedException();
-    //}
 
     /// <summary>This is used for throwing hash table exceptions only to make debugging faster.</summary>
     private class Error : Seven.Error

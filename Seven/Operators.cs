@@ -5,6 +5,21 @@
 
 namespace Seven
 {
+  /// <summary>Delegate for equating two instances of the same type.</summary>
+  /// <typeparam name="T">The types of the istances to compare.</typeparam>
+  /// <param name="left">The left operand of the comparison.</param>
+  /// <param name="right">The right operand of the comparison.</param>
+  /// <returns>Whether the equate is valid (true) or not (false).</returns>
+  public delegate bool Equate<T>(T left, T right);
+
+  /// <summary>Delegate for equating two instances of different types.</summary>
+  /// <typeparam name="L">The type of the left istance to compare.</typeparam>
+  /// <typeparam name="R">The type of the right instance to compare.</typeparam>
+  /// <param name="left">The left operand of the equating.</param>
+  /// <param name="right">The right operand of the equating.</param>
+  /// <returns>Whether the equate is valid (true) or not (false).</returns>
+  public delegate bool Equate<L, R>(L left, R right);
+
   /// <summary>Comparison operator between two operands in a logical expression.</summary>
   public enum Comparison
   {
@@ -31,10 +46,16 @@ namespace Seven
   /// <returns>The Comparison operator between the operands to form a true logic statement.</returns>
   public delegate Comparison Compare<Left, Right>(Left left, Right right);
 
-  /// <summary>Inheriting classes must include a comparison method.</summary>
-  /// <typeparam name="Type">The other type of the comparison.</typeparam>
-  public interface Comparable<Type>
-  {
-    Comparison Compare(Type other);
-  }
+  /// <summary>A unary computational operator.</summary>
+  /// <typeparam name="T">The type this operator can perform on.</typeparam>
+  /// <param name="value">The operand of this operator.</param>
+  /// <returns>The result of the operator.</returns>
+  public delegate T Unary<T>(T value);
+
+  /// <summary>A binary computational operator.</summary>
+  /// <typeparam name="T">The type this operator can perform on.</typeparam>
+  /// <param name="left">The left operand of the operation.</param>
+  /// <param name="right">The right operand of the operation.</param>
+  /// <returns>The result of the operation.</returns>
+  public delegate T Binary<T>(T left, T right);
 }

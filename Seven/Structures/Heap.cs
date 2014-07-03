@@ -39,6 +39,11 @@ namespace Seven.Structures
   /// <summary>Implements a priority heap with static priorities using an array.</summary>
   /// <typeparam name="Type">The type of item to be stored in this priority heap.</typeparam>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
+  /// <citation>
+  /// This AVL tree imlpementation was originally developed by 
+  /// Rodney Howell of Kansas State University. However, it has 
+  /// been modified since its addition into the Seven framework.
+  /// </citation>
   [System.Serializable]
   public class Heap_Array<Type> : Heap<Type>
   {

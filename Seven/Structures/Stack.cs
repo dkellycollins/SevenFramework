@@ -390,9 +390,9 @@ namespace Seven.Structures
     }
     
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class StackLinkedException : Error
+    private class Error : Structure.Error
     {
-      public StackLinkedException(string message) : base(message) { }
+      public Error(string message) : base(message) { }
     }
   }
 
@@ -444,7 +444,7 @@ namespace Seven.Structures
       set
       {
         if (value < 1)
-          throw new Exception("Attempting to set a minimum capacity to a negative or zero value.");
+          throw new Error("Attempting to set a minimum capacity to a negative or zero value.");
         else if (value > _stack.Length)
         {
           Type[] newList = new Type[value];
@@ -474,7 +474,7 @@ namespace Seven.Structures
       if (_count == _stack.Length)
       {
         if (_stack.Length > System.Int32.MaxValue / 2)
-          throw new Exception("your queue is so large that it can no longer double itself (Int32.MaxValue barrier reached).");
+          throw new Error("your queue is so large that it can no longer double itself (Int32.MaxValue barrier reached).");
         Type[] newStack = new Type[_stack.Length * 2];
         for (int i = 0; i < _count; i++)
           newStack[i] = _stack[i];
@@ -488,7 +488,7 @@ namespace Seven.Structures
     public Type Pop()
     {
       if (_count == 0)
-        throw new Exception("attempting to dequeue from an empty queue.");
+        throw new Error("attempting to dequeue from an empty queue.");
       if (_count < _stack.Length / 4 && _stack.Length / 2 > _minimumCapacity)
       {
         Type[] newQueue = new Type[_stack.Length / 2];
@@ -638,9 +638,9 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Exception : Error
+    private class Error : Structure.Error
     {
-      public Exception(string message) : base(message) { }
+      public Error(string message) : base(message) { }
     }
   }
 

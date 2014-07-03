@@ -140,7 +140,7 @@ namespace Testing
       Console.WriteLine();
 
       Console.WriteLine(" Testing RedBlack_Linked<Type>---------------");
-      RedBlackTree<int> redBlackTree_linked = new RedBlackTreeLinked<int>(Compare);
+      RedBlackTree<int> redBlackTree_linked = new RedBlackTree_Linked<int>(Compare);
       for (int i = 0; i < test; i++)
         redBlackTree_linked.Add(i);
       Console.Write("   Delegate: ");

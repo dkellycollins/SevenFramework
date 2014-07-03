@@ -3,8 +3,6 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
-
 namespace Seven.Mathematics
 {
   public class Tween
@@ -57,24 +55,24 @@ namespace Seven.Mathematics
     {
       if (timePassed == duration)
         return start + distance;
-      return (float)(distance * (-Math.Pow(2, -10 * timePassed / duration) + 1) + start);
+      return (float)(distance * (-System.Math.Pow(2, -10 * timePassed / duration) + 1) + start);
     }
 
     public static float EaseInExpo(float timePassed, float start, float distance, float duration)
     {
       if (timePassed == 0)
         return start;
-      return (float)(distance * Math.Pow(2, 10 * (timePassed / duration - 1)) + start);
+      return (float)(distance * System.Math.Pow(2, 10 * (timePassed / duration - 1)) + start);
     }
 
     public static float EaseOutCirc(float timePassed, float start, float distance, float duration)
     {
-      return (float)(distance * Math.Sqrt(1 - (timePassed = timePassed / duration - 1) * timePassed) + start);
+      return (float)(distance * System.Math.Sqrt(1 - (timePassed = timePassed / duration - 1) * timePassed) + start);
     }
 
     public static float EaseInCirc(float timePassed, float start, float distance, float duration)
     {
-      return (float)(-distance * (Math.Sqrt(1 - (timePassed /= duration) * timePassed) - 1) + start);
+      return (float)(-distance * (System.Math.Sqrt(1 - (timePassed /= duration) * timePassed) - 1) + start);
     }
   }
 }

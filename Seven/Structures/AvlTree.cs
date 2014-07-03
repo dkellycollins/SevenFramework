@@ -3,12 +3,14 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
+// Citations:
+// This AVL tree imlpementation was originally developed by 
+// Rodney Howell of Kansas State University. However, it has 
+// been modified since its addition into the Seven framework.
+
 using System;
 using Seven;
 using Seven.Parallels;
-
-//using System.Collections;
-//using System.Collections.Generic;
 
 namespace Seven.Structures
 {
@@ -62,6 +64,11 @@ namespace Seven.Structures
 
   /// <summary>Implements an AVL Tree where the items are sorted by string id values.</summary>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
+  /// <citation>
+  /// This AVL tree imlpementation was originally developed by 
+  /// Rodney Howell of Kansas State University. However, it has 
+  /// been modified since its addition into the Seven framework.
+  /// </citation>
   [Serializable]
   public class AvlTree_Linked<Type> : AvlTree<Type>
   {

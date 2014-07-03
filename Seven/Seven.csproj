@@ -37,12 +37,14 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compare.cs" />
-    <Compile Include="Equate.cs" />
+    <Compile Include="fraction.cs" />
+    <Compile Include="Mathematics\Algebra.cs" />
+    <Compile Include="Mathematics\Logic.cs" />
+    <Compile Include="Operators.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="Mathematics\Calc.cs" />
-    <Compile Include="Mathematics\Calculator.cs" />
-    <Compile Include="Mathematics\Function.cs" />
+    <Compile Include="Mathematics\Arithmetic.cs" />
+    <Compile Include="Mathematics\Functions.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />
     <Compile Include="Mathematics\Trigonometry.cs" />

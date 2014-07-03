@@ -10,8 +10,14 @@ namespace Seven.Structures
 
   }
 
-
   /// <summary>Represents a collection of key-and-value pairs.</summary>
+  /// <citation>
+  /// This SkipList imlpementation was originally developed by 
+  /// Leslie Sanford and hosted as an open source project on 
+  /// CodeProject.com. However, it has been modified since its
+  /// addition into the Seven framework.
+  /// http://www.codeproject.com/Articles/4897/A-Skip-List-in-C
+  /// </citation>
   public class SkipList_Linked<T> : System.Collections.IEnumerable, System.Collections.IDictionary, SkipList<T>
   {
     /// <summary>The current allocation size of the structure.</summary>

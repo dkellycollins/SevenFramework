@@ -1,13 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Seven
+// https://github.com/53V3N1X/SevenFramework
+// LISCENSE: See "LISCENSE.txt" in th root project directory.
+// SUPPORT: See "README.txt" in the root project directory.
 
 namespace Seven.Structures
 {
   public interface Trie<T> : Structure<T>
   {
+  }
+
+  public static class Trie
+  {
+    public delegate bool HasSplit<T>(T item, int i);
+    public delegate T Split<T>(T item, int i);
   }
 
   public class Trie_Linked<T> : Trie<T>

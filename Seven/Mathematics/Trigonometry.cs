@@ -7,6 +7,24 @@ using System;
 
 namespace Seven.Mathematics
 {
+  /// <summary>Provides trigonometric operations for mathematical computation.</summary>
+  /// <typeparam name="T">The type this trigonometry library can perform on.</typeparam>
+  public interface Trigonometry<T>
+  {
+    Unary<T> sin { get; }
+    Unary<T> cos { get; }
+    Unary<T> tan { get; }
+    Unary<T> sec { get; }
+    Unary<T> csc { get; }
+    Unary<T> cot { get; }
+    Unary<T> arcsin { get; }
+    Unary<T> arccos { get; }
+    Unary<T> arctan { get; }
+    Unary<T> arccsc { get; }
+    Unary<T> arcsec { get; }
+    Unary<T> arccot { get; }
+  }
+
   public static class Trigonometry
   {
     public const float Pi = 3.1415926535897932384626433832795028841971693993751f;

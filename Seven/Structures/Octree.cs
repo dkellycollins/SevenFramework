@@ -7,34 +7,34 @@ using System;
 
 namespace Seven.Structures
 {
-  public interface Octree<Type> : Structure<Type>
+  public interface Octree<T> : Structure<T>
   {
     int Count { get; }
     bool IsEmpty { get; }
-    void Add(Type addition);
+    void Add(T addition);
     //void Move(KeyType moving);
     //void Update();
   }
 
   /// <summary>Stores objects efficiently in 3-Dimensional space by x, y, and z coordinates.</summary>
-  /// <typeparam name="Type">The generice type of items to be stored in this octree.</typeparam>
+  /// <typeparam name="T">The generice type of items to be stored in this octree.</typeparam>
   [Serializable]
-  public class Octree_Linked<Type> : Octree<Type>
+  public class Octree_Linked<T> : Octree<T>
   {
     /// <summary>Represents a single node of the octree. Includes references both upwards and
     /// downwards the tree.</summary>
-    private abstract class OctreeLinkedNode
+    private abstract class Node
     {
       private float _x, _y, _z, _scale;
-      private OctreeLinkedBranch _parent;
+      private Branch _parent;
 
       internal float X { get { return _x; } }
       internal float Y { get { return _y; } }
       internal float Z { get { return _z; } }
       internal float Scale { get { return _scale; } }
-      internal OctreeLinkedBranch Parent { get { return _parent; } }
+      internal Branch Parent { get { return _parent; } }
 
-      internal OctreeLinkedNode(float x, float y, float z, float scale, OctreeLinkedBranch parent)
+      internal Node(float x, float y, float z, float scale, Branch parent)
       {
         _x = x;
         _y = y;
@@ -46,24 +46,24 @@ namespace Seven.Structures
 
     /// <summary>Represents a single node of the octree. Includes references both upwards and
     /// downwards the tree.</summary>
-    private class OctreeLinkedLeaf : OctreeLinkedNode
+    private class Leaf : Node
     {
-      private Type[] _contents;
+      private T[] _contents;
       private int _count;
 
-      internal Type[] Contents { get { return _contents; } }
+      internal T[] Contents { get { return _contents; } }
       internal int Count { get { return _count; } set { _count = value; } }
       internal bool IsFull { get { return _count == _contents.Length; } }
 
-      internal OctreeLinkedLeaf(float x, float y, float z, float scale, OctreeLinkedBranch parent, int branchFactor)
+      internal Leaf(float x, float y, float z, float scale, Branch parent, int branchFactor)
         : base(x, y, z, scale, parent)
-      { _contents = new Type[branchFactor]; }
+      { _contents = new T[branchFactor]; }
 
-      internal OctreeLinkedLeaf Add(Type addition)
+      internal Leaf Add(T addition)
       {
         Console.WriteLine("Placing " + addition + ", in " + this.X + ", " + this.Y + ", " + this.Z);
         if (_count == _contents.Length)
-          throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
+          throw new Error("There is a glitch in my octree, sorry...");
         _contents[_count++] = addition;
         return this;
       }
@@ -71,35 +71,35 @@ namespace Seven.Structures
 
     /// <summary>Represents a single node of the octree. Includes references both upwards and
     /// downwards the tree.</summary>
-    private class OctreeLinkedBranch : OctreeLinkedNode
+    private class Branch : Node
     {
-      public OctreeLinkedNode[] _children;
+      public Node[] _children;
 
-      public OctreeLinkedNode[] Children { get { return this._children; } }
+      public Node[] Children { get { return this._children; } }
       
       internal bool IsEmpty
       {
         get
         {
-          foreach (OctreeLinkedNode child in this._children)
+          foreach (Node child in this._children)
             if (child != null)
               return false;
           return true;
         }
       }
 
-      internal OctreeLinkedBranch(float x, float y, float z, float scale, OctreeLinkedBranch parent)
+      internal Branch(float x, float y, float z, float scale, Branch parent)
         : base(x, y, z, scale, parent)
       {
-        this._children = new OctreeLinkedNode[8];
+        this._children = new Node[8];
       }
     }
 
     public delegate void Locate<Type>(Type item, out double x, out double y, out double z);
-    private Locate<Type> _locate;
+    private Locate<T> _locate;
     private int _loadFactor;
     private int _count;
-    private OctreeLinkedNode _top;
+    private Node _top;
 
     public int Count { get { return _count; } }
     public bool IsEmpty { get { return _count == 0; } }
@@ -110,10 +110,10 @@ namespace Seven.Structures
     /// <param name="z">The z coordinate of the center of the octree.</param>
     /// <param name="scale">How far the tree expands along each dimension.</param>
     /// <param name="loadFactor">The maximum items per octree node before expansion.</param>
-    public Octree_Linked(float x, float y, float z, float scale, int loadFactor, Locate<Type> locate)
+    public Octree_Linked(float x, float y, float z, float scale, int loadFactor, Locate<T> locate)
     {
       this._loadFactor = loadFactor;
-      this._top = new OctreeLinkedLeaf(x, y, z, scale, null, _loadFactor);
+      this._top = new Leaf(x, y, z, scale, null, _loadFactor);
       this._count = 0;
       this._locate = locate;
     }
@@ -121,7 +121,7 @@ namespace Seven.Structures
     /// <summary>Adds an item to the Octree.</summary>
     /// <param name="id">The id associated with the addition.</param>
     /// <param name="addition">The addition.</param>
-    public void Add(Type addition)
+    public void Add(T addition)
     {
       this.Add(addition, _top);
       this._count++;
@@ -129,14 +129,14 @@ namespace Seven.Structures
 
     /// <summary>Recursively adds an item to the octree and returns the node where the addition was placed
     /// and adjusts the octree structure as needed.</summary>
-    private OctreeLinkedLeaf Add(Type addition, OctreeLinkedNode octreeNode)
+    private Leaf Add(T addition, Node octreeNode)
     {
       Console.WriteLine("Adding " + addition + " to " + octreeNode.X + ", " + octreeNode.Y + ", " + octreeNode.Z);
 
       // If the node is a leaf we have reached the bottom of the tree
-      if (octreeNode is OctreeLinkedLeaf)
+      if (octreeNode is Leaf)
       {
-        OctreeLinkedLeaf leaf = (OctreeLinkedLeaf)octreeNode;
+        Leaf leaf = (Leaf)octreeNode;
         if (!leaf.IsFull)
         {
           // We found a proper leaf, and the leaf has room, just add it
@@ -146,10 +146,10 @@ namespace Seven.Structures
         else
         {
           // The leaf is full so we need to grow out the tree
-          OctreeLinkedBranch parent = octreeNode.Parent;
-          OctreeLinkedBranch growth;
+          Branch parent = octreeNode.Parent;
+          Branch growth;
           if (parent == null)
-            growth = (OctreeLinkedBranch)(_top = new OctreeLinkedBranch(_top.X, _top.Y, _top.Z, _top.Scale, null));
+            growth = (Branch)(_top = new Branch(_top.X, _top.Y, _top.Z, _top.Scale, null));
           else
           {
             double x, y, z;
@@ -162,7 +162,7 @@ namespace Seven.Structures
       // We are still traversing the tree, determine the next move
       else
       {
-        OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+        Branch branch = (Branch)octreeNode;
         double x, y, z;
         this._locate(addition, out x, out y, out z);
         int child = this.DetermineChild(branch, x, y, z);
@@ -174,27 +174,27 @@ namespace Seven.Structures
     }
 
     // Grows a branch on the tree at the desired location
-    private OctreeLinkedBranch GrowBranch(OctreeLinkedBranch branch, int child)
+    private Branch GrowBranch(Branch branch, int child)
     {
       // values for the new node
       float x, y, z, scale;
       this.DetermineChildBounds(branch, child, out x, out y, out z, out scale);
-      branch.Children[child] = new OctreeLinkedBranch(x, y, z, scale, branch);
+      branch.Children[child] = new Branch(x, y, z, scale, branch);
       Console.WriteLine("Growing branch " + x + ", " + y + ", " + z);
-      return (OctreeLinkedBranch)branch.Children[child];
+      return (Branch)branch.Children[child];
     }
 
     // Grows a leaf on the tree at the desired location
-    private OctreeLinkedLeaf GrowLeaf(OctreeLinkedBranch branch, int child)
+    private Leaf GrowLeaf(Branch branch, int child)
     {
       if (branch.Children[child] != null)
-        throw new OctreeLinkedException("My octree has a glitched, sorry.");
+        throw new Error("My octree has a glitched, sorry.");
       // values for new node
       float x, y, z, scale;
       this.DetermineChildBounds(branch, child, out x, out y, out z, out scale);
-      branch.Children[child] = new OctreeLinkedLeaf(x, y, z, scale, branch, _loadFactor);
+      branch.Children[child] = new Leaf(x, y, z, scale, branch, _loadFactor);
       Console.WriteLine("Growing leaf " + x + ", " + y + ", " + z);
-      return (OctreeLinkedLeaf)branch.Children[child];
+      return (Leaf)branch.Children[child];
     }
 
     /// <summary>
@@ -208,7 +208,7 @@ namespace Seven.Structures
     /// 6: (+x, +y, -z)
     /// 7: (+x, +y, +z)
     /// </summary>
-    private int DetermineChild(OctreeLinkedNode node, double x, double y, double z)
+    private int DetermineChild(Node node, double x, double y, double z)
     {
       if (z < node.Z)
         if (y < node.Y)
@@ -235,7 +235,7 @@ namespace Seven.Structures
     }
 
     /// <summary>Determins the bounds of a child node.</summary>
-    private void DetermineChildBounds(OctreeLinkedNode node, int child, out float x, out float y, out float z, out float scale)
+    private void DetermineChildBounds(Node node, int child, out float x, out float y, out float z, out float scale)
     {
       float halfScale = node.Scale * 0.5f;
       switch (child)
@@ -289,11 +289,11 @@ namespace Seven.Structures
           scale = halfScale;
           return;
         default:
-          throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
+          throw new Error("There is a glitch in my octree, sorry...");
       }
     }
 
-    private bool ContainsBounds(OctreeLinkedNode node, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    private bool ContainsBounds(Node node, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
       return !(node == null ||
           xMax < node.X - node.Scale || xMin > node.X + node.Scale ||
@@ -301,7 +301,7 @@ namespace Seven.Structures
           zMax < node.Z - node.Scale || zMin > node.Z + node.Scale);
     }
 
-    private bool ContainsCoordinate(OctreeLinkedNode node, float x, float y, float z)
+    private bool ContainsCoordinate(Node node, float x, float y, float z)
     {
       return !(node == null ||
           x < node.X - node.Scale || x > node.X + node.Scale ||
@@ -309,10 +309,10 @@ namespace Seven.Structures
           z < node.Z - node.Scale || z > node.Z + node.Scale);
     }
 
-    private void PluckLeaf(OctreeLinkedBranch branch, int child)
+    private void PluckLeaf(Branch branch, int child)
     {
-      if (!(branch.Children[child] is OctreeLinkedLeaf) || ((OctreeLinkedLeaf)branch.Children[child]).Count > 1)
-        throw new OctreeLinkedException("There is a glitch in my octree, sorry.");
+      if (!(branch.Children[child] is Leaf) || ((Leaf)branch.Children[child]).Count > 1)
+        throw new Error("There is a glitch in my octree, sorry.");
       branch.Children[child] = null;
       while (branch.IsEmpty)
       {
@@ -321,10 +321,10 @@ namespace Seven.Structures
       }
     }
 
-    private void ChopBranch(OctreeLinkedBranch branch, int child)
+    private void ChopBranch(Branch branch, int child)
     {
       if (branch.Children[child] == null)
-        throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
+        throw new Error("There is a glitch in my octree, sorry...");
       branch.Children[child] = null;
     }
 
@@ -334,66 +334,66 @@ namespace Seven.Structures
       throw new NotImplementedException("Sorry, I'm still working on the update function.");
     }
     
-    public void Foreach(Foreach<Type> function)
+    public void Foreach(Foreach<T> function)
     {
       Foreach(function, _top);
     }
-    private void Foreach(Foreach<Type> function, OctreeLinkedNode octreeNode)
+    private void Foreach(Foreach<T> function, Node octreeNode)
     {
       if (octreeNode != null)
       {
-        if (octreeNode is OctreeLinkedLeaf)
+        if (octreeNode is Leaf)
         {
-          int count = ((OctreeLinkedLeaf)octreeNode).Count;
-          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          int count = ((Leaf)octreeNode).Count;
+          T[] items = ((Leaf)octreeNode).Contents;
           for (int i = 0; i < count; i++)
             function(items[i]);
         }
         else
         {
-          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          Branch branch = (Branch)octreeNode;
           for (int i = 0; i < 8; i++)
             Foreach(function, branch.Children[i]);
         }
       }
     }
 
-    public void Foreach(ForeachRef<Type> function)
+    public void Foreach(ForeachRef<T> function)
     {
       Foreach(function, _top);
     }
-    private void Foreach(ForeachRef<Type> function, OctreeLinkedNode octreeNode)
+    private void Foreach(ForeachRef<T> function, Node octreeNode)
     {
       if (octreeNode != null)
       {
-        if (octreeNode is OctreeLinkedLeaf)
+        if (octreeNode is Leaf)
         {
-          int count = ((OctreeLinkedLeaf)octreeNode).Count;
-          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          int count = ((Leaf)octreeNode).Count;
+          T[] items = ((Leaf)octreeNode).Contents;
           for (int i = 0; i < count; i++)
             function(ref items[i]);
         }
         else
         {
-          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          Branch branch = (Branch)octreeNode;
           for (int i = 0; i < 8; i++)
             Foreach(function, branch.Children[i]);
         }
       }
     }
 
-    public ForeachStatus Foreach(ForeachBreak<Type> function)
+    public ForeachStatus Foreach(ForeachBreak<T> function)
     {
       return Foreach(function, _top);
     }
-    private ForeachStatus Foreach(ForeachBreak<Type> function, OctreeLinkedNode octreeNode)
+    private ForeachStatus Foreach(ForeachBreak<T> function, Node octreeNode)
     {
       if (octreeNode != null)
       {
-        if (octreeNode is OctreeLinkedLeaf)
+        if (octreeNode is Leaf)
         {
-          int count = ((OctreeLinkedLeaf)octreeNode).Count;
-          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          int count = ((Leaf)octreeNode).Count;
+          T[] items = ((Leaf)octreeNode).Contents;
           for (int i = 0; i < count; i++)
             if (function(items[i]) == ForeachStatus.Break)
               return ForeachStatus.Break;
@@ -401,7 +401,7 @@ namespace Seven.Structures
         }
         else
         {
-          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          Branch branch = (Branch)octreeNode;
           for (int i = 0; i < 8; i++)
             if (Foreach(function, branch.Children[i]) == ForeachStatus.Break)
               return ForeachStatus.Break;
@@ -411,18 +411,18 @@ namespace Seven.Structures
       return ForeachStatus.Continue;
     }
 
-    public ForeachStatus Foreach(ForeachRefBreak<Type> function)
+    public ForeachStatus Foreach(ForeachRefBreak<T> function)
     {
       return Foreach(function, _top);
     }
-    private ForeachStatus Foreach(ForeachRefBreak<Type> function, OctreeLinkedNode octreeNode)
+    private ForeachStatus Foreach(ForeachRefBreak<T> function, Node octreeNode)
     {
       if (octreeNode != null)
       {
-        if (octreeNode is OctreeLinkedLeaf)
+        if (octreeNode is Leaf)
         {
-          int count = ((OctreeLinkedLeaf)octreeNode).Count;
-          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          int count = ((Leaf)octreeNode).Count;
+          T[] items = ((Leaf)octreeNode).Contents;
           for (int i = 0; i < count; i++)
             if (function(ref items[i]) == ForeachStatus.Break)
               return ForeachStatus.Break;
@@ -430,7 +430,7 @@ namespace Seven.Structures
         }
         else
         {
-          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          Branch branch = (Branch)octreeNode;
           for (int i = 0; i < 8; i++)
             if (Foreach(function, branch.Children[i]) == ForeachStatus.Break)
               return ForeachStatus.Break;
@@ -448,18 +448,18 @@ namespace Seven.Structures
     /// <param name="xMax">The maximum x of a rectangular prism to query the octree.</param>
     /// <param name="yMax">The maximum y of a rectangular prism to query the octree.</param>
     /// <param name="zMax">The maximum z of a rectangular prism to query the octree.</param>
-    public ForeachStatus Foreach(ForeachBreak<Type> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    public ForeachStatus Foreach(ForeachBreak<T> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
       return Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
     }
-    private ForeachStatus Foreach(ForeachBreak<Type> function, OctreeLinkedNode octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    private ForeachStatus Foreach(ForeachBreak<T> function, Node octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
       if (octreeNode != null)
       {
-        if (octreeNode is OctreeLinkedLeaf)
+        if (octreeNode is Leaf)
         {
-          int count = ((OctreeLinkedLeaf)octreeNode).Count;
-          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          int count = ((Leaf)octreeNode).Count;
+          T[] items = ((Leaf)octreeNode).Contents;
           for (int i = 0; i < count; i++)
           {
             double x, y, z;
@@ -474,7 +474,7 @@ namespace Seven.Structures
         }
         else
         {
-          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          Branch branch = (Branch)octreeNode;
           for (int i = 0; i < 8; i++)
             if (Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax) == ForeachStatus.Break)
               return ForeachStatus.Break;
@@ -492,18 +492,18 @@ namespace Seven.Structures
     /// <param name="xMax">The maximum x of a rectangular prism to query the octree.</param>
     /// <param name="yMax">The maximum y of a rectangular prism to query the octree.</param>
     /// <param name="zMax">The maximum z of a rectangular prism to query the octree.</param>
-    public ForeachStatus Foreach(ForeachRefBreak<Type> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    public ForeachStatus Foreach(ForeachRefBreak<T> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
       return Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
     }
-    private ForeachStatus Foreach(ForeachRefBreak<Type> function, OctreeLinkedNode octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    private ForeachStatus Foreach(ForeachRefBreak<T> function, Node octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
       if (octreeNode != null)
       {
-        if (octreeNode is OctreeLinkedLeaf)
+        if (octreeNode is Leaf)
         {
-          int count = ((OctreeLinkedLeaf)octreeNode).Count;
-          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          int count = ((Leaf)octreeNode).Count;
+          T[] items = ((Leaf)octreeNode).Contents;
           for (int i = 0; i < count; i++)
           {
             double x, y, z;
@@ -518,7 +518,7 @@ namespace Seven.Structures
         }
         else
         {
-          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          Branch branch = (Branch)octreeNode;
           for (int i = 0; i < 8; i++)
             if (Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax) == ForeachStatus.Break)
               return ForeachStatus.Break;
@@ -528,18 +528,18 @@ namespace Seven.Structures
       return ForeachStatus.Continue;
     }
 
-    public void Foreach(Foreach<Type> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    public void Foreach(Foreach<T> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
       Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
     }
-    private void Foreach(Foreach<Type> function, OctreeLinkedNode octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    private void Foreach(Foreach<T> function, Node octreeNode, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
     {
       if (octreeNode != null)
       {
-        if (octreeNode is OctreeLinkedLeaf)
+        if (octreeNode is Leaf)
         {
-          int count = ((OctreeLinkedLeaf)octreeNode).Count;
-          Type[] items = ((OctreeLinkedLeaf)octreeNode).Contents;
+          int count = ((Leaf)octreeNode).Count;
+          T[] items = ((Leaf)octreeNode).Contents;
           for (int i = 0; i < count; i++)
           {
             double x, y, z;
@@ -553,36 +553,36 @@ namespace Seven.Structures
         }
         else
         {
-          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          Branch branch = (Branch)octreeNode;
           for (int i = 0; i < 8; i++)
             Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax);
         }
       }
     }
 
-    public Type[] ToArray()
+    public T[] ToArray()
     {
       int finalIndex;
-      Type[] array = new Type[_count];
+      T[] array = new T[_count];
       ToArray(_top, array, 0, out finalIndex);
       if (array.Length != finalIndex)
-        throw new OctreeLinkedException("There is a glitch in my octree, sorry...");
+        throw new Error("There is a glitch in my octree, sorry...");
       return array;
     }
-    private void ToArray(OctreeLinkedNode octreeNode, Type[] array, int entryIndex, out int returnIndex)
+    private void ToArray(Node octreeNode, T[] array, int entryIndex, out int returnIndex)
     {
       if (octreeNode != null)
       {
-        if (octreeNode is OctreeLinkedLeaf)
+        if (octreeNode is Leaf)
         {
           returnIndex = entryIndex;
-          foreach (Type item in ((OctreeLinkedLeaf)octreeNode).Contents)
+          foreach (T item in ((Leaf)octreeNode).Contents)
             array[returnIndex++] = item;
         }
         else
         {
           // The current node is a branch
-          OctreeLinkedBranch branch = (OctreeLinkedBranch)octreeNode;
+          Branch branch = (Branch)octreeNode;
           for (int i = 0; i < 8; i++)
             ToArray(branch.Children[i], array, entryIndex, out entryIndex);
           returnIndex = entryIndex;
@@ -597,16 +597,16 @@ namespace Seven.Structures
     System.Collections.IEnumerator
       System.Collections.IEnumerable.GetEnumerator()
     {
-      Type[] array = this.ToArray();
+      T[] array = this.ToArray();
       return array.GetEnumerator();
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    System.Collections.Generic.IEnumerator<Type>
-      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<T>
+      System.Collections.Generic.IEnumerable<T>.GetEnumerator()
     {
-      Type[] array = this.ToArray();
-      return ((System.Collections.Generic.IEnumerable<Type>)array).GetEnumerator();
+      T[] array = this.ToArray();
+      return ((System.Collections.Generic.IEnumerable<T>)array).GetEnumerator();
     }
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
@@ -617,7 +617,7 @@ namespace Seven.Structures
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains(Type item, Compare<Type> compare)
+    public bool Contains(T item, Compare<T> compare)
     {
       throw new NotImplementedException();
     }
@@ -627,14 +627,14 @@ namespace Seven.Structures
     /// <param name="key">The key to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
     /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains<Key>(Key key, Compare<Type, Key> compare)
+    public bool Contains<Key>(Key key, Compare<T, Key> compare)
     {
       throw new NotImplementedException();
     }
 
     /// <summary>Creates a shallow clone of this data structure.</summary>
     /// <returns>A shallow clone of this data structure.</returns>
-    public Structure<Type> Clone()
+    public Structure<T> Clone()
     {
       throw new NotImplementedException();
     }
@@ -642,9 +642,9 @@ namespace Seven.Structures
     #endregion
 
     /// <summary>This is used for throwing OcTree exceptions only to make debugging faster.</summary>
-    private class OctreeLinkedException : Error
+    private class Error : Seven.Error
     {
-      public OctreeLinkedException(string message) : base(message) { }
+      public Error(string message) : base(message) { }
     }
   }
 
