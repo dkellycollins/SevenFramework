@@ -52,7 +52,8 @@ namespace Seven.Mathematics
     public static bool IsPrime(int candidate)
     {
       if (candidate == 2) return true;
-      for (int divisor = 3; divisor <= SquareRoot(candidate); divisor += 2)
+      int squareRoot = (int)SquareRoot(candidate);
+      for (int divisor = 3; divisor <= squareRoot; divisor += 2)
         if ((candidate % divisor) == 0)
           return false;
       return true;

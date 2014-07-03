@@ -19,11 +19,4 @@ namespace Seven
   /// <param name="right">The right operand of the equating.</param>
   /// <returns>Whether the equate is valid (true) or not (false).</returns>
   public delegate bool Equate<Left, Right>(Left left, Right right);
-
-  /// <summary>Inheriting classes must include a comparison method.</summary>
-  /// <typeparam name="Type">The other type of the comparison.</typeparam>
-  public interface Equatable<Type>
-  {
-    bool Equate(Type other);
-  }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Seven
+// https://github.com/53V3N1X/SevenFramework
+// LISCENSE: See "LISCENSE.txt" in th root project directory.
+// SUPPORT: See "README.txt" in the root project directory.
 
 namespace Seven.Structures
 {
@@ -8,7 +11,7 @@ namespace Seven.Structures
     AvlTree,
     BTree,
     Graph,
-    HashTable,
+    Map,
     Heap,
     Link,
     List,
@@ -38,26 +41,6 @@ namespace Seven.Structures
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
     int SizeOf { get; }
 
-    /// <summary>Gets all the equalities found within a structure.</summary>
-    /// <typeparam name="Key">The type of the key to check for.</typeparam>
-    /// <param name="key">The key to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>A structure containing all the equalities found.</returns>
-    //Structure<Type> GetAll<Key>(Key key, Compare<Type, Key> compare);
-    
-    /// <summary>Searches the entire structure for the given item.</summary>
-    /// <param name="item">The item to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>true if the item is in this structure; false if not.</returns>
-    //bool Contains(Type item, Compare<Type> compare);
-
-    /// <summary>Searches the entire structure for the given key.</summary>
-    /// <typeparam name="Key">The type of the key to check for.</typeparam>
-    /// <param name="key">The key to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>true if the item is in this structure; false if not.</returns>
-    //bool Contains<Key>(Key key, Compare<Type, Key> compare);
-
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     void Foreach(Foreach<Type> function);
@@ -76,36 +59,6 @@ namespace Seven.Structures
     /// <returns>The resulting status of the iteration.</returns>
     ForeachStatus Foreach(ForeachRefBreak<Type> function);
 
-    /// <summary>Set theory union between two sets (structures).</summary>
-    /// <param name="other">The other structure to union with this one.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>The result of the union operation.</returns>
-    //Structure<Type> Union(Structure<Type> other, Compare<Type> compare);
-
-    /// <summary>Set theory intersection between two sets (structures).</summary>
-    /// <param name="other">The other structure to intersect with this one.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>The result of the intersection operation.</returns>
-    //Structure<Type> Intersection(Structure<Type> other, Compare<Type> compare);
-
-    /// <summary>Set theory set difference between two sets (structures).</summary>
-    /// <param name="right">The other structure to set diference with this one.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>The result of the set difference operation.</returns>
-    //Structure<Type> SetDifference(Structure<Type> right, Compare<Type> compare);
-
-    /// <summary>Set theory symmetric difference between two sets (structures).</summary>
-    /// <param name="right">The other structure to symmetric diference with this one.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>The result of the symmetric difference operation.</returns>
-    //Structure<Type> SymmetricDifference(Structure<Type> right, Compare<Type> compare);
-
-    /// <summary>Set theory cartesian product between two sets (structures).</summary>
-    /// <param name="other">The other structure to cartesian product with this one.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>The result of the cartesian product operation.</returns>
-    //Structure<Type> CartesianProduct(Structure<Type> other, Compare<Type> compare);
-
     /// <summary>Creates a shallow clone of this data structure.</summary>
     /// <returns>A shallow clone of this data structure.</returns>
     Structure<Type> Clone();
@@ -118,43 +71,190 @@ namespace Seven.Structures
   /// <summary>Contains the implementations of the methods in the Structure interface.</summary>
   internal static class Structure
   {
-    internal static Structure<Type> Union<Type>(Structure<Type> left, Structure<Type> right, Compare<Type> compare)
+    public enum Selection { Left, Right };
+    public delegate Selection Select<T>(T left, T right);
+    public delegate Selection Select<L, R>(L left, R right);
+
+    #region Unions
+
+    public static void Union<T>(this Structure<T> left, Structure<T> right, Equate<T> equate, Foreach<T> function, Selection selection)
     {
-      List<Type> union = new List_Linked<Type>();
-      foreach (Type leftLoop in left)
-        union.Add(leftLoop);
-      //foreach (Type rightLoop in right)
-      //  if (!left.Contains(rightLoop, compare))
-      //    union.Add(rightLoop);
-      throw new NotImplementedException();
-      //return union;
+
+      left.Foreach(
+      (T l) =>
+      {
+        
+      });
+
+      right.Foreach(
+      (T r) =>
+      {
+          
+      });
     }
 
-    //internal static Structure<Type> Union<Type>(this Structure<Type> left, Structure<Type> right, Compare<Type> compare)
-    //{
-    //  List<Type> union = new List_Linked<Type>();
-    //  foreach (Type leftLoop in left)
-    //    union.Add(leftLoop);
-    //  //foreach (Type rightLoop in right)
-    //  //  if (!left.Contains(rightLoop, compare))
-    //  //    union.Add(rightLoop);
-    //  throw new NotImplementedException();
-    //  return union;
-    //}
-
-    internal static Structure<Type> Intersection<Type>(Structure<Type> left, Structure<Type> right, Compare<Type> compare)
+    public static void Union<L, R>(this Structure<L> left, Structure<R> right, Equate<L, R> equate, Foreach<L> function_left, Foreach<R> function_right, Selection selection)
     {
-      //Structure.Union<Type>(null, null, (Type left1, Type right1) => { return Comparison.Less; });
-
-      List<Type> intersection = new List_Linked<Type>();
-      foreach (Type leftLoop in left)
-        foreach (Type rightLoop in right)
-          if (compare(leftLoop, rightLoop) == Comparison.Equal)
-            intersection.Add(leftLoop);
-      return intersection;
+      if (selection == Selection.Left)
+      {
+        left.Foreach(
+        (L l) =>
+        {
+          right.Foreach(
+          (R r) =>
+          {
+            if (equate(l, r))
+              function_left(l);
+          });
+        });
+      }
+      else
+      {
+        left.Foreach(
+        (L l) =>
+        {
+          right.Foreach(
+          (R r) =>
+          {
+            if (equate(l, r))
+              function_right(r);
+          });
+        });
+      }
     }
 
+    public static void Union<T>(this Structure<T> left, Structure<T> right, Equate<T> equate, Foreach<T> function, Select<T> select)
+    {
+      left.Foreach(
+        (T l) =>
+        {
+          right.Foreach(
+          (T r) =>
+          {
+            if (equate(l, r))
+              if (select(l, r) == Selection.Left)
+                function(l);
+              else
+                function(r);
+          });
+        });
+    }
 
+    public static void Union<L, R>(this Structure<L> left, Structure<R> right, Equate<L, R> equate, Foreach<L> function_left, Foreach<R> function_right, Select<L, R> select)
+    {
+      left.Foreach(
+        (L l) =>
+        {
+          right.Foreach(
+          (R r) =>
+          {
+            if (equate(l, r))
+              if (select(l, r) == Selection.Left)
+                function_left(l);
+              else
+                function_right(r);
+          });
+        });
+    }
 
+    #endregion
+
+    #region Intersects
+
+    public static void Intersect<T>(this Structure<T> left, Structure<T> right, Equate<T> equate, Foreach<T> function, Selection selection)
+    {
+      if (selection == Selection.Left)
+      {
+        left.Foreach(
+        (T l) =>
+        {
+          right.Foreach(
+          (T r) =>
+          {
+            if (equate(l, r))
+              function(l);
+          });
+        });
+      }
+      else
+      {
+        left.Foreach(
+        (T l) =>
+        {
+          right.Foreach(
+          (T r) =>
+          {
+            if (equate(l, r))
+              function(l);
+          });
+        });
+      }
+    }
+
+    public static void Intersect<L, R>(this Structure<L> left, Structure<R> right, Equate<L, R> equate, Foreach<L> function_left, Foreach<R> function_right, Selection selection)
+    {
+      if (selection == Selection.Left)
+      {
+        left.Foreach(
+        (L l) =>
+        {
+          right.Foreach(
+          (R r) =>
+          {
+            if (equate(l, r))
+              function_left(l);
+          });
+        });
+      }
+      else
+      {
+        left.Foreach(
+        (L l) =>
+        {
+          right.Foreach(
+          (R r) =>
+          {
+            if (equate(l, r))
+              function_right(r);
+          });
+        });
+      }
+    }
+
+    public static void Intersect<T>(this Structure<T> left, Structure<T> right, Equate<T> equate, Foreach<T> function, Select<T> select)
+    {
+      left.Foreach(
+        (T l) =>
+        {
+          right.Foreach(
+          (T r) =>
+          {
+            if (equate(l, r))
+              if (select(l, r) == Selection.Left)
+                function(l);
+              else
+                function(r);
+          });
+        });
+    }
+
+    public static void Intersect<L, R>(this Structure<L> left, Structure<R> right, Equate<L, R> equate, Foreach<L> function_left, Foreach<R> function_right, Select<L, R> select)
+    {
+      left.Foreach(
+        (L l) =>
+        {
+          right.Foreach(
+          (R r) =>
+          {
+            if (equate(l, r))
+              if (select(l, r) == Selection.Left)
+                function_left(l);
+              else
+                function_right(r);
+          });
+        });
+    }
+
+    #endregion
   }
 }

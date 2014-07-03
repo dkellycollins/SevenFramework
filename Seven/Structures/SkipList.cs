@@ -3,14 +3,65 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
-//using System.Collections;
-
 namespace Seven.Structures
 {
-  /// <summary>Represents a collection of key-and-value pairs.</summary>
-  public class SkipList : System.Collections.IEnumerable, System.Collections.IDictionary
+  public interface SkipList<T> : Structure<T>
   {
+
+  }
+
+
+  /// <summary>Represents a collection of key-and-value pairs.</summary>
+  public class SkipList_Linked<T> : System.Collections.IEnumerable, System.Collections.IDictionary, SkipList<T>
+  {
+    /// <summary>The current allocation size of the structure.</summary>
+    /// <remarks>Returns long.MaxValue on overflow.</remarks>
+    public int SizeOf { get { throw new System.NotImplementedException(); } }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    public void Foreach(Foreach<T> function)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    public void Foreach(ForeachRef<T> function)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    /// <returns>The resulting status of the iteration.</returns>
+    public ForeachStatus Foreach(ForeachBreak<T> function)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    /// <summary>Invokes a delegate for each entry in the data structure.</summary>
+    /// <param name="function">The delegate to invoke on each item in the structure.</param>
+    /// <returns>The resulting status of the iteration.</returns>
+    public ForeachStatus Foreach(ForeachRefBreak<T> function)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    /// <summary>Creates a shallow clone of this data structure.</summary>
+    /// <returns>A shallow clone of this data structure.</returns>
+    public Structure<T> Clone()
+    {
+      throw new System.NotImplementedException();
+    }
+
+    /// <summary>Converts the structure into an array.</summary>
+    /// <returns>An array containing all the item in the structure.</returns>
+    public T[] ToArray()
+    {
+      throw new System.NotImplementedException();
+    }
+
     //public struct DictionaryEntry
     //{
     //  private object _key;
@@ -27,7 +78,7 @@ namespace Seven.Structures
     //}
 
     /// <summary>Represents a node in the SkipList.</summary>
-    private class Node : IDisposable
+    private class Node : System.IDisposable
     {
       // References to nodes further along in the skip list.
       public Node[] forward;
@@ -74,7 +125,7 @@ namespace Seven.Structures
     private System.Collections.IComparer _comparer;
 
     // Random number generator for generating random node levels.
-    private Random _random = new Random();
+    private System.Random _random = new System.Random();
 
     // Current maximum list level.
     private int _listLevel;
@@ -119,7 +170,7 @@ namespace Seven.Structures
     /// implement the IComparable interface to be capable of comparisons 
     /// with every other key in the SkipList.
     /// </remarks>
-    public SkipList(System.Collections.IComparer comparer)
+    public SkipList_Linked(System.Collections.IComparer comparer)
     {
       // Initialize comparer with the client provided comparer.
       this._comparer = comparer;
@@ -133,7 +184,7 @@ namespace Seven.Structures
       //    this.GetType().Assembly);
     }
 
-    ~SkipList() { Clear(); }
+    ~SkipList_Linked() { Clear(); }
 
     /// <summary>
     /// Initializes the SkipList.
@@ -361,7 +412,7 @@ namespace Seven.Structures
         Node[] update)
     {
       // Make sure key is comparable.
-      if (!(key is IComparable))
+      if (!(key is System.IComparable))
       {
         throw new Error("Comparable");
       }
@@ -469,7 +520,7 @@ namespace Seven.Structures
     private class SkipListEnumerator : System.Collections.IDictionaryEnumerator
     {
       // The skip list to enumerate.
-      private SkipList _skiplist;
+      private SkipList_Linked<T> _skiplist;
 
       // The current node.
       private Node _current;
@@ -483,7 +534,7 @@ namespace Seven.Structures
 
       /// <summary>Initializes an instance of a SkipListEnumerator.</summary>
       /// <param name="list"></param>
-      public SkipListEnumerator(SkipList list)
+      public SkipListEnumerator(SkipList_Linked<T> list)
       {
         this._skiplist = list;
         _version = list._version;
@@ -777,7 +828,7 @@ namespace Seven.Structures
     /// <summary>Copies the elements of the SkipList to an Array, starting at a particular Array index.</summary>
     /// <param name="array">The one-dimensional Array that is the destination of the elements copied from SkipList.</param>
     /// <param name="index">The zero-based index in array at which copying begins.</param>
-    public void CopyTo(Array array, int index)
+    public void CopyTo(System.Array array, int index)
     {
       if (array == null)
         throw new Error("NullArrayCopyTo");
@@ -820,6 +871,13 @@ namespace Seven.Structures
       System.Collections.IEnumerable.GetEnumerator()
     {
       return new SkipListEnumerator(this);
+    }
+
+    System.Collections.Generic.IEnumerator<T>
+      System.Collections.Generic.IEnumerable<T>.GetEnumerator()
+    {
+      throw new System.NotImplementedException();
+      //return new SkipListEnumerator(this);
     }
   }
 }

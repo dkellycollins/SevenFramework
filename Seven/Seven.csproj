@@ -41,6 +41,7 @@
     <Compile Include="Equate.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="Mathematics\Calc.cs" />
+    <Compile Include="Mathematics\Function.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />
     <Compile Include="Mathematics\Trigonometry.cs" />
@@ -52,14 +53,13 @@
     <Compile Include="Structures\Array.cs" />
     <Compile Include="Structures\AvlTree.cs" />
     <Compile Include="Structures\BTree.cs" />
-    <Compile Include="Structures\Compatibility.cs" />
     <Compile Include="Structures\Foreach.cs" />
     <Compile Include="Structures\Graph.cs" />
-    <Compile Include="Structures\HashTable.cs" />
+    <Compile Include="Structures\Map.cs" />
     <Compile Include="Structures\Heap.cs" />
     <Compile Include="Structures\Ring.cs" />
+    <Compile Include="Structures\Set.cs" />
     <Compile Include="Structures\SkipList.cs" />
-    <Compile Include="Structures\Sorted.cs" />
     <Compile Include="Structures\Structure.cs" />
     <Compile Include="Structures\Link.cs" />
     <Compile Include="Structures\List.cs" />
@@ -69,6 +69,8 @@
     <Compile Include="Structures\RedBlackTree.cs" />
     <Compile Include="Structures\Sort.cs" />
     <Compile Include="Structures\Stack.cs" />
+    <Compile Include="Structures\Tree.cs" />
+    <Compile Include="Structures\Trie.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

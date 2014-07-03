@@ -4,21 +4,9 @@
 // SUPPORT: See "README.txt" in the root project directory.
 
 using System;
-//using Seven.Mathematics;
-using Seven.Structures;
-
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Seven.Structures
 {
-  ///// <summary>Implementing classes contain a vector indicating X, Y, and Z position coordinates.</summary>
-  //public interface IOctreeEntry
-  //{
-  //  /// <summary>Indicates an object's X, Y, and Z position coordinates.</summary>
-  //  Vector Position { get; set; }
-  //}
-
   public interface Octree<Type> : Structure<Type>
   {
     int Count { get; }
@@ -606,17 +594,19 @@ namespace Seven.Structures
 
     #region Structure<Type>
 
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       Type[] array = this.ToArray();
       return array.GetEnumerator();
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<Type> IEnumerable<Type>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<Type>
+      System.Collections.Generic.IEnumerable<Type>.GetEnumerator()
     {
       Type[] array = this.ToArray();
-      return ((IEnumerable<Type>)array).GetEnumerator();
+      return ((System.Collections.Generic.IEnumerable<Type>)array).GetEnumerator();
     }
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>

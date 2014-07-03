@@ -26,6 +26,12 @@ namespace Testing
     {
       int test = 10;
 
+      string message =
+      @"HELLO! WELCOME TO THE SEVEN FRAMEWORK! The framework is a general framework to help with any form of programming. Currently, the most useful component of the framwork is the library of data structures. This library includes the folloing: Links (aka Tuples), Arrays, Lists, Queues, Stacks, Heaps, HashTables, AvlTrees, RedBlackTrees, Octrees, and SkipLists. The followoing data is testing for each structure:";
+
+      Console.WriteLine(message);
+      Console.WriteLine();
+
       Console.WriteLine("Functionality Testing=======================");
       Console.WriteLine();
       Console.WriteLine("items to store (int): 0 - " + test);
@@ -146,17 +152,36 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
+      Console.WriteLine(" Testing HashTable_Linked<Type>---------------");
+      Map<int, int> hashTable_linked = new Map_Linked<int, int>(
+        (int left, int right) => { return left == right; },
+        (int integer) => { return integer; });
+      for (int i = 0; i < test; i++)
+        hashTable_linked.Add(i, i);
+      Console.Write("   Look Ups: ");
+      for (int i = 0; i < test; i++)
+        Console.Write(hashTable_linked[i]);
+      Console.WriteLine();
+      Console.Write("   Delegate: ");
+      hashTable_linked.Foreach((int current) => { Console.Write(current); });
+      Console.WriteLine();
+      Console.Write("   IEnumerator: ");
+      foreach (int current in hashTable_linked)
+        Console.Write(current);
+      Console.WriteLine();
+      Console.WriteLine();
+
       // I just introduced a bug in my Octree... Ill fix soon -Seven 6-23-14
-      Console.WriteLine(" Testing Octree_Linked<Type>----------------");
+      //Console.WriteLine(" Testing Octree_Linked<Type>----------------");
       //Octree<int> octree_linked = new Octree_Linked<int>(11, 11, 11, test + 2, test,
       //  (int i, out double x, out double y, out double z) => { x = i; y = i; z = i; });
-      Octree<int> octree_linked = new Octree_Linked<int>(0, 0, 0, test + 1, 3,
-        (int i, out double x, out double y, out double z) => { x = i; y = i; z = i; });
-      for (int i = 0; i < test; i++)
-        octree_linked.Add(i);
-      Console.Write("   Delegate: ");
-      octree_linked.Foreach((int current) => { Console.Write(current); });
-      Console.WriteLine();
+      //Octree<int> octree_linked = new Octree_Linked<int>(0, 0, 0, test + 1, 3,
+      //  (int i, out double x, out double y, out double z) => { x = i; y = i; z = i; });
+      //for (int i = 0; i < test; i++)
+      //  octree_linked.Add(i);
+      //Console.Write("   Delegate: ");
+      //octree_linked.Foreach((int current) => { Console.Write(current); });
+      //Console.WriteLine();
       //Console.Write("   IEnumerator: ");
       //foreach (int current in octree_linked)
       //  Console.Write(current);
