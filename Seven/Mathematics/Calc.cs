@@ -101,7 +101,7 @@ namespace Seven.Mathematics
       //if (left > right)
       //  throw new CalcException("invalid lerp values: (left > right).");
       if (blend < 0 || blend > 1.0f)
-        throw new CalcException("invalid lerp blend value: (blend < 0.0f || blend > 1.0f).");
+        throw new Error("invalid lerp blend value: (blend < 0.0f || blend > 1.0f).");
         return left + blend * (right - left);
     }
 
@@ -363,7 +363,7 @@ namespace Seven.Mathematics
     public static float[,] Add(float[,] left, float[,] right)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-        throw new CalcException("invalid addition (size miss-match).");
+        throw new Error("invalid addition (size miss-match).");
       float[,] result = new float[left.GetLength(0), left.GetLength(1)];
       for (int i = 0; i < result.GetLength(0); i++)
         for (int j = 0; j < result.GetLength(1); j++)
@@ -378,7 +378,7 @@ namespace Seven.Mathematics
     public static float[,] Subtract(float[,] left, float[,] right)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-        throw new CalcException("invalid subtraction (size miss-match).");
+        throw new Error("invalid subtraction (size miss-match).");
       float[,] result = new float[left.GetLength(0), left.GetLength(1)];
       for (int i = 0; i < result.GetLength(0); i++)
         for (int j = 0; j < result.GetLength(1); j++)
@@ -393,7 +393,7 @@ namespace Seven.Mathematics
     public static float[,] Multiply(float[,] left, float[,] right)
     {
       if (left.GetLength(1) != right.GetLength(0))
-        throw new CalcException("invalid multiplication (size miss-match).");
+        throw new Error("invalid multiplication (size miss-match).");
       float[,] result = new float[left.GetLength(0), right.GetLength(1)];
       for (int i = 0; i < result.GetLength(0); i++)
         for (int j = 0; j < result.GetLength(1); j++)
@@ -500,7 +500,7 @@ namespace Seven.Mathematics
     public static float[,] ConcatenateRowWise(float[,] left, float[,] right)
     {
       if (left.GetLength(0) != right.GetLength(0))
-        throw new CalcException("invalid row-wise concatenation !(left.Rows == right.Rows).");
+        throw new Error("invalid row-wise concatenation !(left.Rows == right.Rows).");
       float[,] result = new float[left.GetLength(0), left.GetLength(1) + right.GetLength(1)];
       for (int i = 0; i < result.GetLength(0); i++)
         for (int j = 0; j < result.GetLength(1); j++)
@@ -759,7 +759,7 @@ namespace Seven.Mathematics
         sum += subsets[i];
       }
       if (sum > set)
-        throw new CalcException("invalid combination (set < Count(subsets)).");
+        throw new Error("invalid combination (set < Count(subsets)).");
       return result;
     }
 
@@ -770,7 +770,7 @@ namespace Seven.Mathematics
     public static float Choose(int top, int bottom)
     {
       if (!(top <= bottom || top >= 0))
-        throw new CalcException("invalid choose values !(top <= bottom || top >= 0)");
+        throw new Error("invalid choose values !(top <= bottom || top >= 0)");
       return Calc.Factorial(top) / (float)(Calc.Factorial(top) * Calc.Factorial(bottom - top));
     }
 
@@ -778,9 +778,9 @@ namespace Seven.Mathematics
 
     #endregion
 
-    private class CalcException : Error
+    private class Error : Seven.Error
     {
-      public CalcException(string Message) : base(Message) { }
+      public Error(string Message) : base(Message) { }
     }
   }
 }

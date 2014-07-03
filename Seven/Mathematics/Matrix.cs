@@ -7,8 +7,89 @@ using System;
 
 namespace Seven.Mathematics
 {
+  public interface Matrix<T>
+  {
+    /// <summary>The number of rows in the matrix.</summary>
+    int Rows { get; }
+    /// <summary>The number of columns in the matrix.</summary>
+    int Columns { get; }
+    /// <summary>Determines if the matrix is square.</summary>
+    bool IsSquare { get; }
+    /// <summary>Determines if the matrix is a vector.</summary>
+    bool IsVector { get; }
+    /// <summary>Determines if the matrix is a 2 component vector.</summary>
+    bool Is2x1 { get; }
+    /// <summary>Determines if the matrix is a 3 component vector.</summary>
+    bool Is3x1 { get; }
+    /// <summary>Determines if the matrix is a 4 component vector.</summary>
+    bool Is4x1 { get; }
+    /// <summary>Determines if the matrix is a 2 square matrix.</summary>
+    bool Is2x2 { get; }
+    /// <summary>Determines if the matrix is a 3 square matrix.</summary>
+    bool Is3x3 { get; }
+    /// <summary>Determines if the matrix is a 4 square matrix.</summary>
+    bool Is4x4 { get; }
+
+    /// <summary>Standard row-major matrix indexing.</summary>
+    /// <param name="row">The row index.</param>
+    /// <param name="column">The column index.</param>
+    /// <returns>The value at the given indeces.</returns>
+    T this[int row, int column] { get; set; }
+
+    /// <summary>Negates all the values in this matrix.</summary>
+    /// <returns>The resulting matrix after the negations.</returns>
+    Matrix<T> Negate();
+    /// <summary>Does a standard matrix addition.</summary>
+    /// <param name="right">The matrix to add to this matrix.</param>
+    /// <returns>The resulting matrix after the addition.</returns>
+    Matrix<T> Add(Matrix<T> right);
+    /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+    /// <param name="right">The matrix to multiply this matrix by.</param>
+    /// <returns>The resulting matrix after the multiplication.</returns>
+    Matrix<T> Multiply(Matrix<T> right);
+    /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+    /// <param name="right">The scalar to multiply all the matrix values by.</param>
+    /// <returns>The retulting matrix after the multiplications.</returns>
+    Matrix<T> Multiply(float right);
+    /// <summary>Divides all the values in this matrix by a scalar.</summary>
+    /// <param name="right">The scalar to divide the matrix values by.</param>
+    /// <returns>The resulting matrix after teh divisions.</returns>
+    Matrix<T> Divide(float right);
+    /// <summary>Gets the minor of a matrix.</summary>
+    /// <param name="row">The restricted row of the minor.</param>
+    /// <param name="column">The restricted column of the minor.</param>
+    /// <returns>The minor from the row/column restrictions.</returns>
+    Matrix<T> Minor(int row, int column);
+    /// <summary>Combines two matrices from left to right 
+    /// (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+    /// <param name="right">The matrix to combine with on the right side.</param>
+    /// <returns>The resulting row-wise concatination.</returns>
+    Matrix<T> ConcatenateRowWise(Matrix<T> right);
+    /// <summary>Computes the determinent if this matrix is square.</summary>
+    /// <returns>The computed determinent if this matrix is square.</returns>
+    T Determinent();
+    /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+    /// <returns>The computed echelon form of this matrix (aka REF).</returns>
+    Matrix<T> Echelon();
+    /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+    /// <returns>The computed reduced echelon form of this matrix (aka RREF).</returns>
+    Matrix<T> ReducedEchelon();
+    /// <summary>Computes the inverse of this matrix.</summary>
+    /// <returns>The inverse of this matrix.</returns>
+    Matrix<T> Inverse();
+    /// <summary>Gets the adjoint of this matrix.</summary>
+    /// <returns>The adjoint of this matrix.</returns>
+    Matrix<T> Adjoint();
+    /// <summary>Transposes this matrix.</summary>
+    /// <returns>The transpose of this matrix.</returns>
+    Matrix<T> Transpose();
+    /// <summary>Copies this matrix.</summary>
+    /// <returns>The copy of this matrix.</returns>
+    Matrix<T> Clone();
+  }
+
   /// <summary>A matrix implemented as a flattened float array to perform matrix theory in row major order. Enjoy :)</summary>
-  public class Matrix
+  public class Matrix_Flattened
   {
     private float[] _matrix;
     private int _columns;
@@ -70,7 +151,7 @@ namespace Seven.Mathematics
     /// <summary>Constructs a new zero-matrix of the given dimensions.</summary>
     /// <param name="rows">The number of row dimensions.</param>
     /// <param name="columns">The number of column dimensions.</param>
-    public Matrix(int rows, int columns)
+    public Matrix_Flattened(int rows, int columns)
     {
       _rows = rows;
       _columns = columns;
@@ -80,7 +161,7 @@ namespace Seven.Mathematics
 
     /// <summary>Wraps a float[] inside of a matrix class.</summary>
     /// <param name="matrix">The float[] to wrap in a matrix class.</param>
-    public Matrix(int rows, int columns, params float[] matrix)
+    public Matrix_Flattened(int rows, int columns, params float[] matrix)
     {
       float[] floats = new float[matrix.Length];
       Buffer.BlockCopy(matrix, 0, floats, 0, floats.Length * sizeof(float));
@@ -92,7 +173,7 @@ namespace Seven.Mathematics
     /// <summary>This is a special constructor to make a vector into a matrix
     /// without copying the data for efficiency purposes.</summary>
     /// <param name="vector">The values the new matrix will point to.</param>
-    private Matrix(Vector vector)
+    private Matrix_Flattened(Vector vector)
     {
       _matrix = vector.Floats;
       _rows = _matrix.Length;
@@ -103,15 +184,15 @@ namespace Seven.Mathematics
     /// new matrix point to the same float[].</summary>
     /// <param name="vector">The vector who will share the data as the constructed matrix.</param>
     /// <returns>The constructed matrix sharing the data with the vector.</returns>
-    public static Matrix UnsafeFactoryFromVector(Vector vector) { return new Matrix(vector); }
+    public static Matrix_Flattened UnsafeFactoryFromVector(Vector vector) { return new Matrix_Flattened(vector); }
 
     /// <summary>Constructs a new zero-matrix of the given dimensions.</summary>
     /// <param name="rows">The number of rows of the matrix.</param>
     /// <param name="columns">The number of columns of the matrix.</param>
     /// <returns>The newly constructed zero-matrix.</returns>
-    public static Matrix FactoryZero(int rows, int columns)
+    public static Matrix_Flattened FactoryZero(int rows, int columns)
     {
-      try { return new Matrix(rows, columns); }
+      try { return new Matrix_Flattened(rows, columns); }
       catch { throw new MatrixException("invalid dimensions."); }
     }
 
@@ -119,10 +200,10 @@ namespace Seven.Mathematics
     /// <param name="rows">The number of rows of the matrix.</param>
     /// <param name="columns">The number of columns of the matrix.</param>
     /// <returns>The newly constructed identity-matrix.</returns>
-    public static Matrix FactoryIdentity(int rows, int columns)
+    public static Matrix_Flattened FactoryIdentity(int rows, int columns)
     {
-      Matrix matrix;
-      try { matrix = new Matrix(rows, columns); }
+      Matrix_Flattened matrix;
+      try { matrix = new Matrix_Flattened(rows, columns); }
       catch { throw new MatrixException("invalid dimensions."); }
       if (rows <= columns)
         for (int i = 0; i < rows; i++)
@@ -137,10 +218,10 @@ namespace Seven.Mathematics
     /// <param name="rows">The number of rows of the matrix.</param>
     /// <param name="columns">The number of columns of the matrix.</param>
     /// <returns>The newly constructed matrix filled with 1's.</returns>
-    public static Matrix FactoryOne(int rows, int columns)
+    public static Matrix_Flattened FactoryOne(int rows, int columns)
     {
-      Matrix matrix;
-      try { matrix = new Matrix(rows, columns); }
+      Matrix_Flattened matrix;
+      try { matrix = new Matrix_Flattened(rows, columns); }
       catch { throw new MatrixException("invalid dimensions."); }
       for (int i = 0; i < rows; i++)
         for (int j = 0; j < columns; j++)
@@ -153,10 +234,10 @@ namespace Seven.Mathematics
     /// <param name="columns">The number of columns of the matrix.</param>
     /// <param name="uniform">The value to assign every spot in the matrix.</param>
     /// <returns>The newly constructed matrix filled with the uniform value.</returns>
-    public static Matrix FactoryUniform(int rows, int columns, float uniform)
+    public static Matrix_Flattened FactoryUniform(int rows, int columns, float uniform)
     {
-      Matrix matrix;
-      try { matrix = new Matrix(rows, columns); }
+      Matrix_Flattened matrix;
+      try { matrix = new Matrix_Flattened(rows, columns); }
       catch { throw new MatrixException("invalid dimensions."); }
       for (int i = 0; i < rows; i++)
         for (int j = 0; j < columns; j++)
@@ -166,58 +247,58 @@ namespace Seven.Mathematics
 
     /// <summary>Constructs a 2-component vector matrix with all values being 0.</summary>
     /// <returns>The constructed 2-component vector matrix.</returns>
-    public static Matrix Factory2x1() { return new Matrix(2, 1); }
+    public static Matrix_Flattened Factory2x1() { return new Matrix_Flattened(2, 1); }
     /// <summary>Constructs a 3-component vector matrix with all values being 0.</summary>
     /// <returns>The constructed 3-component vector matrix.</returns>
-    public static Matrix Factory3x1() { return new Matrix(3, 1); }
+    public static Matrix_Flattened Factory3x1() { return new Matrix_Flattened(3, 1); }
     /// <summary>Constructs a 4-component vector matrix with all values being 0.</summary>
     /// <returns>The constructed 4-component vector matrix.</returns>
-    public static Matrix Factory4x1() { return new Matrix(4, 1); }
+    public static Matrix_Flattened Factory4x1() { return new Matrix_Flattened(4, 1); }
 
     /// <summary>Constructs a 2x2 matrix with all values being 0.</summary>
     /// <returns>The constructed 2x2 matrix.</returns>
-    public static Matrix Factory2x2() { return new Matrix(2, 2); }
+    public static Matrix_Flattened Factory2x2() { return new Matrix_Flattened(2, 2); }
     /// <summary>Constructs a 3x3 matrix with all values being 0.</summary>
     /// <returns>The constructed 3x3 matrix.</returns>
-    public static Matrix Factory3x3() { return new Matrix(3, 3); }
+    public static Matrix_Flattened Factory3x3() { return new Matrix_Flattened(3, 3); }
     /// <summary>Constructs a 4x4 matrix with all values being 0.</summary>
     /// <returns>The constructed 4x4 matrix.</returns>
-    public static Matrix Factory4x4() { return new Matrix(4, 4); }
+    public static Matrix_Flattened Factory4x4() { return new Matrix_Flattened(4, 4); }
 
     /// <param name="angle">Angle of rotation in radians.</param>
-    public static Matrix Factory3x3RotationX(float angle)
+    public static Matrix_Flattened Factory3x3RotationX(float angle)
     {
       float cos = Calc.Cos(angle);
       float sin = Calc.Sin(angle);
-      return new Matrix(3, 3, new float[] { 1, 0, 0, 0, cos, sin, 0, -sin, cos });
+      return new Matrix_Flattened(3, 3, new float[] { 1, 0, 0, 0, cos, sin, 0, -sin, cos });
     }
 
     /// <param name="angle">Angle of rotation in radians.</param>
-    public static Matrix Factory3x3RotationY(float angle)
+    public static Matrix_Flattened Factory3x3RotationY(float angle)
     {
       float cos = Calc.Cos(angle);
       float sin = Calc.Sin(angle);
-      return new Matrix(3, 3, new float[] { cos, 0, -sin, 0, 1, 0, sin, 0, cos });
+      return new Matrix_Flattened(3, 3, new float[] { cos, 0, -sin, 0, 1, 0, sin, 0, cos });
     }
 
     /// <param name="angle">Angle of rotation in radians.</param>
-    public static Matrix Factory3x3RotationZ(float angle)
+    public static Matrix_Flattened Factory3x3RotationZ(float angle)
     {
       float cos = Calc.Cos(angle);
       float sin = Calc.Sin(angle);
-      return new Matrix(3, 3, new float[] { cos, -sin, 0, sin, cos, 0, 0, 0, 1 });
+      return new Matrix_Flattened(3, 3, new float[] { cos, -sin, 0, sin, cos, 0, 0, 0, 1 });
     }
 
     /// <param name="angleX">Angle about the X-axis in radians.</param>
     /// <param name="angleY">Angle about the Y-axis in radians.</param>
     /// <param name="angleZ">Angle about the Z-axis in radians.</param>
-    public static Matrix Factory3x3RotationXthenYthenZ(float angleX, float angleY, float angleZ)
+    public static Matrix_Flattened Factory3x3RotationXthenYthenZ(float angleX, float angleY, float angleZ)
     {
       float
         xCos = Calc.Cos(angleX), xSin = Calc.Sin(angleX),
         yCos = Calc.Cos(angleY), ySin = Calc.Sin(angleY),
         zCos = Calc.Cos(angleZ), zSin = Calc.Sin(angleZ);
-      return new Matrix(3, 3,
+      return new Matrix_Flattened(3, 3,
         new float[] {
           yCos * zCos, -yCos * zSin, ySin,
           xCos * zSin + xSin * ySin * zCos, xCos * zCos + xSin * ySin * zSin, -xSin * yCos,
@@ -227,13 +308,13 @@ namespace Seven.Mathematics
     /// <param name="angleX">Angle about the X-axis in radians.</param>
     /// <param name="angleY">Angle about the Y-axis in radians.</param>
     /// <param name="angleZ">Angle about the Z-axis in radians.</param>
-    public static Matrix Factory3x3RotationZthenYthenX(float angleX, float angleY, float angleZ)
+    public static Matrix_Flattened Factory3x3RotationZthenYthenX(float angleX, float angleY, float angleZ)
     {
       float
         xCos = Calc.Cos(angleX), xSin = Calc.Sin(angleX),
         yCos = Calc.Cos(angleY), ySin = Calc.Sin(angleY),
         zCos = Calc.Cos(angleZ), zSin = Calc.Sin(angleZ);
-      return new Matrix(3, 3, new float[] { yCos * zCos, zCos * xSin * ySin - xCos * zSin, xCos * zCos * ySin + xSin * zSin,
+      return new Matrix_Flattened(3, 3, new float[] { yCos * zCos, zCos * xSin * ySin - xCos * zSin, xCos * zCos * ySin + xSin * zSin,
         yCos * zSin, xCos * zCos + xSin * ySin * zSin, -zCos * xSin + xCos * ySin * zSin, -ySin, yCos * xSin, xCos * yCos });
     }
 
@@ -245,62 +326,62 @@ namespace Seven.Mathematics
     /// <param name="shearZbyX">The shear along the Z-axis in the X-direction.</param>
     /// <param name="shearZbyY">The shear along the Z-axis in the Y-direction.</param>
     /// <returns>The constructed shearing matrix.</returns>
-    public static Matrix Factory3x3Shear(
+    public static Matrix_Flattened Factory3x3Shear(
       float shearXbyY, float shearXbyZ, float shearYbyX,
       float shearYbyZ, float shearZbyX, float shearZbyY)
     {
-      return new Matrix(3, 3, new float[] { 1, shearYbyX, shearZbyX, shearXbyY, 1, shearYbyZ, shearXbyZ, shearYbyZ, 1 });
+      return new Matrix_Flattened(3, 3, new float[] { 1, shearYbyX, shearZbyX, shearXbyY, 1, shearYbyZ, shearXbyZ, shearYbyZ, 1 });
     }
 
     /// <summary>Negates all the values in a matrix.</summary>
     /// <param name="matrix">The matrix to have its values negated.</param>
     /// <returns>The resulting matrix after the negations.</returns>
-    public static Matrix operator -(Matrix matrix) { return Matrix.Negate(matrix); }
+    public static Matrix_Flattened operator -(Matrix_Flattened matrix) { return Matrix_Flattened.Negate(matrix); }
     /// <summary>Does a standard matrix addition.</summary>
     /// <param name="left">The left matrix of the addition.</param>
     /// <param name="right">The right matrix of the addition.</param>
     /// <returns>The resulting matrix after teh addition.</returns>
-    public static Matrix operator +(Matrix left, Matrix right) { return Matrix.Add(left, right); }
+    public static Matrix_Flattened operator +(Matrix_Flattened left, Matrix_Flattened right) { return Matrix_Flattened.Add(left, right); }
     /// <summary>Does a standard matrix subtraction.</summary>
     /// <param name="left">The left matrix of the subtraction.</param>
     /// <param name="right">The right matrix of the subtraction.</param>
     /// <returns>The result of the matrix subtraction.</returns>
-    public static Matrix operator -(Matrix left, Matrix right) { return Matrix.Subtract(left, right); }
+    public static Matrix_Flattened operator -(Matrix_Flattened left, Matrix_Flattened right) { return Matrix_Flattened.Subtract(left, right); }
     /// <summary>Does a standard matrix multiplication.</summary>
     /// <param name="left">The left matrix of the multiplication.</param>
     /// <param name="right">The right matrix of the multiplication.</param>
     /// <returns>The resulting matrix after the multiplication.</returns>
-    public static Matrix operator *(Matrix left, Matrix right) { return Matrix.Multiply(left, right); }
+    public static Matrix_Flattened operator *(Matrix_Flattened left, Matrix_Flattened right) { return Matrix_Flattened.Multiply(left, right); }
     /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
     /// <param name="left">The matrix to have its values multiplied.</param>
     /// <param name="right">The scalar to multiply the values by.</param>
     /// <returns>The resulting matrix after the multiplications.</returns>
-    public static Matrix operator *(Matrix left, float right) { return Matrix.Multiply(left, right); }
+    public static Matrix_Flattened operator *(Matrix_Flattened left, float right) { return Matrix_Flattened.Multiply(left, right); }
     /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
     /// <param name="left">The scalar to multiply the values by.</param>
     /// <param name="right">The matrix to have its values multiplied.</param>
     /// <returns>The resulting matrix after the multiplications.</returns>
-    public static Matrix operator *(float left, Matrix right) { return Matrix.Multiply(right, left); }
+    public static Matrix_Flattened operator *(float left, Matrix_Flattened right) { return Matrix_Flattened.Multiply(right, left); }
     /// <summary>Divides all the values in a matrix by a scalar.</summary>
     /// <param name="left">The matrix to have its values divided.</param>
     /// <param name="right">The scalar to divide the values by.</param>
     /// <returns>The resulting matrix after the divisions.</returns>
-    public static Matrix operator /(Matrix left, float right) { return Matrix.Divide(left, right); }
+    public static Matrix_Flattened operator /(Matrix_Flattened left, float right) { return Matrix_Flattened.Divide(left, right); }
     /// <summary>Applies a power to a matrix.</summary>
     /// <param name="left">The matrix to apply a power to.</param>
     /// <param name="right">The power to apply to the matrix.</param>
     /// <returns>The result of the power operation.</returns>
-    public static Matrix operator ^(Matrix left, int right) { return Matrix.Power(left, right); }
+    public static Matrix_Flattened operator ^(Matrix_Flattened left, int right) { return Matrix_Flattened.Power(left, right); }
     /// <summary>Checks for equality by value.</summary>
     /// <param name="left">The left matrix of the equality check.</param>
     /// <param name="right">The right matrix of the equality check.</param>
     /// <returns>True if the values of the matrices are equal, false if not.</returns>
-    public static bool operator ==(Matrix left, Matrix right) { return Matrix.EqualsByValue(left, right); }
+    public static bool operator ==(Matrix_Flattened left, Matrix_Flattened right) { return Matrix_Flattened.EqualsByValue(left, right); }
     /// <summary>Checks for false-equality by value.</summary>
     /// <param name="left">The left matrix of the false-equality check.</param>
     /// <param name="right">The right matrix of the false-equality check.</param>
     /// <returns>True if the values of the matrices are not equal, false if they are.</returns>
-    public static bool operator !=(Matrix left, Matrix right) { return !Matrix.EqualsByValue(left, right); }
+    public static bool operator !=(Matrix_Flattened left, Matrix_Flattened right) { return !Matrix_Flattened.EqualsByValue(left, right); }
     /// <summary>Automatically converts a matrix into a float[,] if necessary.</summary>
     /// <param name="matrix">The matrix to convert to a float[,].</param>
     /// <returns>The reference to the float[,] representing the matrix.</returns>
@@ -308,60 +389,60 @@ namespace Seven.Mathematics
 
     /// <summary>Negates all the values in this matrix.</summary>
     /// <returns>The resulting matrix after the negations.</returns>
-    private Matrix Negate() { return Matrix.Negate(this); }
+    private Matrix_Flattened Negate() { return Matrix_Flattened.Negate(this); }
     /// <summary>Does a standard matrix addition.</summary>
     /// <param name="right">The matrix to add to this matrix.</param>
     /// <returns>The resulting matrix after the addition.</returns>
-    private Matrix Add(Matrix right) { return Matrix.Add(this, right); }
+    private Matrix_Flattened Add(Matrix_Flattened right) { return Matrix_Flattened.Add(this, right); }
     /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
     /// <param name="right">The matrix to multiply this matrix by.</param>
     /// <returns>The resulting matrix after the multiplication.</returns>
-    private Matrix Multiply(Matrix right) { return Matrix.Multiply(this, right); }
+    private Matrix_Flattened Multiply(Matrix_Flattened right) { return Matrix_Flattened.Multiply(this, right); }
     /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
     /// <param name="right">The scalar to multiply all the matrix values by.</param>
     /// <returns>The retulting matrix after the multiplications.</returns>
-    private Matrix Multiply(float right) { return Matrix.Multiply(this, right); }
+    private Matrix_Flattened Multiply(float right) { return Matrix_Flattened.Multiply(this, right); }
     /// <summary>Divides all the values in this matrix by a scalar.</summary>
     /// <param name="right">The scalar to divide the matrix values by.</param>
     /// <returns>The resulting matrix after teh divisions.</returns>
-    private Matrix Divide(float right) { return Matrix.Divide(this, right); }
+    private Matrix_Flattened Divide(float right) { return Matrix_Flattened.Divide(this, right); }
     /// <summary>Gets the minor of a matrix.</summary>
     /// <param name="row">The restricted row of the minor.</param>
     /// <param name="column">The restricted column of the minor.</param>
     /// <returns>The minor from the row/column restrictions.</returns>
-    public Matrix Minor(int row, int column) { return Matrix.Minor(this, row, column); }
+    public Matrix_Flattened Minor(int row, int column) { return Matrix_Flattened.Minor(this, row, column); }
     /// <summary>Combines two matrices from left to right (result.Columns == left.Columns + right.Columns).</summary>
     /// <param name="right">The matrix to combine with on the right side.</param>
     /// <returns>The resulting row-wise concatination.</returns>
-    public Matrix ConcatenateRowWise(Matrix right) { return Matrix.ConcatenateRowWise(this, right); }
+    public Matrix_Flattened ConcatenateRowWise(Matrix_Flattened right) { return Matrix_Flattened.ConcatenateRowWise(this, right); }
     /// <summary>Computes the determinent if this matrix is square.</summary>
     /// <returns>The computed determinent if this matrix is square.</returns>
-    public float Determinent() { return Matrix.Determinent(this); }
+    public float Determinent() { return Matrix_Flattened.Determinent(this); }
     /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
     /// <returns>The computed echelon form of this matrix (aka REF).</returns>
-    public Matrix Echelon() { return Matrix.Echelon(this); }
+    public Matrix_Flattened Echelon() { return Matrix_Flattened.Echelon(this); }
     /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
     /// <returns>The computed reduced echelon form of this matrix (aka RREF).</returns>
-    public Matrix ReducedEchelon() { return Matrix.ReducedEchelon(this); }
+    public Matrix_Flattened ReducedEchelon() { return Matrix_Flattened.ReducedEchelon(this); }
     /// <summary>Computes the inverse of this matrix.</summary>
     /// <returns>The inverse of this matrix.</returns>
-    public Matrix Inverse() { return Matrix.Inverse(this); }
+    public Matrix_Flattened Inverse() { return Matrix_Flattened.Inverse(this); }
     /// <summary>Gets the adjoint of this matrix.</summary>
     /// <returns>The adjoint of this matrix.</returns>
-    public Matrix Adjoint() { return Matrix.Adjoint(this); }
+    public Matrix_Flattened Adjoint() { return Matrix_Flattened.Adjoint(this); }
     /// <summary>Transposes this matrix.</summary>
     /// <returns>The transpose of this matrix.</returns>
-    public Matrix Transpose() { return Matrix.Transpose(this); }
+    public Matrix_Flattened Transpose() { return Matrix_Flattened.Transpose(this); }
     /// <summary>Copies this matrix.</summary>
     /// <returns>A copy of this matrix.</returns>
-    public Matrix Clone() { return Matrix.Clone(this); }
+    public Matrix_Flattened Clone() { return Matrix_Flattened.Clone(this); }
 
     /// <summary>Negates all the values in a matrix.</summary>
     /// <param name="matrix">The matrix to have its values negated.</param>
     /// <returns>The resulting matrix after the negations.</returns>
-    public static Matrix Negate(Matrix matrix)
+    public static Matrix_Flattened Negate(Matrix_Flattened matrix)
     {
-      Matrix result = new Matrix(matrix.Rows, matrix.Columns, matrix.Floats);
+      Matrix_Flattened result = new Matrix_Flattened(matrix.Rows, matrix.Columns, matrix.Floats);
       float[] resultFloats = result.Floats;
       float[] matrixFloats = matrix.Floats;
       int length = resultFloats.Length;
@@ -374,11 +455,11 @@ namespace Seven.Mathematics
     /// <param name="left">The left matrix of the addition.</param>
     /// <param name="right">The right matrix of the addition.</param>
     /// <returns>The resulting matrix after the addition.</returns>
-    public static Matrix Add(Matrix left, Matrix right)
+    public static Matrix_Flattened Add(Matrix_Flattened left, Matrix_Flattened right)
     {
       if (left.Rows != right.Rows || left.Columns != right.Columns)
         throw new MatrixException("invalid addition (size miss-match).");
-      Matrix result = new Matrix(left.Rows, left.Columns);
+      Matrix_Flattened result = new Matrix_Flattened(left.Rows, left.Columns);
       float[]
         resultFloats = result.Floats,
         leftFloats = left.Floats,
@@ -393,11 +474,11 @@ namespace Seven.Mathematics
     /// <param name="left">The matrix to have the values subtracted from.</param>
     /// <param name="right">The scalar to subtract from all the matrix values.</param>
     /// <returns>The resulting matrix after the subtractions.</returns>
-    public static Matrix Subtract(Matrix left, Matrix right)
+    public static Matrix_Flattened Subtract(Matrix_Flattened left, Matrix_Flattened right)
     {
       if (left.Rows != right.Rows || left.Columns != right.Columns)
         throw new MatrixException("invalid subtraction (size miss-match).");
-      Matrix result = new Matrix(left.Rows, left.Columns);
+      Matrix_Flattened result = new Matrix_Flattened(left.Rows, left.Columns);
       float[] resultFloats = result.Floats,
         leftFloats = left.Floats,
         rightFloats = right.Floats;
@@ -411,11 +492,11 @@ namespace Seven.Mathematics
     /// <param name="left">The left matrix of the multiplication.</param>
     /// <param name="right">The right matrix of the multiplication.</param>
     /// <returns>The resulting matrix of the multiplication.</returns>
-    public static Matrix Multiply(Matrix left, Matrix right)
+    public static Matrix_Flattened Multiply(Matrix_Flattened left, Matrix_Flattened right)
     {
       float[] leftFloats = left.Floats, rightFloats = right.Floats, resultFloats;
       int leftRows = left.Rows, leftCols = left.Columns, rightRows = right.Rows, rightCols = right.Columns;
-      Matrix result = new Matrix(leftRows, rightCols);
+      Matrix_Flattened result = new Matrix_Flattened(leftRows, rightCols);
       resultFloats = result.Floats;
       #region Optimizations
       if (leftRows < 5)
@@ -466,9 +547,9 @@ namespace Seven.Mathematics
     /// <param name="left">The matrix to have the values multiplied.</param>
     /// <param name="right">The scalar to multiply the values by.</param>
     /// <returns>The resulting matrix after the multiplications.</returns>
-    public static Matrix Multiply(Matrix left, float right)
+    public static Matrix_Flattened Multiply(Matrix_Flattened left, float right)
     {
-      Matrix result = new Matrix(left.Rows, left.Columns);
+      Matrix_Flattened result = new Matrix_Flattened(left.Rows, left.Columns);
       float[] resultFloats = result.Floats;
       float[] leftFloats = left.Floats;
       for (int i = 0; i < resultFloats.Length; i++)
@@ -480,15 +561,15 @@ namespace Seven.Mathematics
     /// <param name="matrix">The matrix to be powered by.</param>
     /// <param name="power">The power to apply to the matrix.</param>
     /// <returns>The resulting matrix of the power operation.</returns>
-    public static Matrix Power(Matrix matrix, int power)
+    public static Matrix_Flattened Power(Matrix_Flattened matrix, int power)
     {
       if (!(matrix.Rows == matrix.Columns))
         throw new MatrixException("invalid power (!matrix.IsSquare).");
       if (!(power > -1))
         throw new MatrixException("invalid power !(power > -1)");
       if (power == 0)
-        return Matrix.FactoryIdentity(matrix.Rows, matrix.Columns);
-      Matrix result = matrix.Clone();
+        return Matrix_Flattened.FactoryIdentity(matrix.Rows, matrix.Columns);
+      Matrix_Flattened result = matrix.Clone();
       for (int i = 0; i < power; i++)
         result *= matrix;
       return result;
@@ -498,17 +579,17 @@ namespace Seven.Mathematics
     /// <param name="left">The matrix to divide the values of.</param>
     /// <param name="right">The scalar to divide all the matrix values by.</param>
     /// <returns>The resulting matrix with the divided values.</returns>
-    public static Matrix Divide(Matrix left, float right) { return Matrix.Multiply(left, 1.0f / right); }
+    public static Matrix_Flattened Divide(Matrix_Flattened left, float right) { return Matrix_Flattened.Multiply(left, 1.0f / right); }
 
     /// <summary>Gets the minor of a matrix.</summary>
     /// <param name="matrix">The matrix to get the minor of.</param>
     /// <param name="row">The restricted row to form the minor.</param>
     /// <param name="column">The restricted column to form the minor.</param>
     /// <returns>The minor of the matrix.</returns>
-    public static Matrix Minor(Matrix matrix, int row, int column)
+    public static Matrix_Flattened Minor(Matrix_Flattened matrix, int row, int column)
     {
       int matrixRows = matrix.Rows, matrixCols = matrix.Columns, resultCols = matrix.Columns - 1;
-      Matrix result = new Matrix(matrix.Rows - 1, resultCols);
+      Matrix_Flattened result = new Matrix_Flattened(matrix.Rows - 1, resultCols);
       float[] resultFloats = result.Floats;
       float[] matrixFloats = matrix.Floats;
       int m = 0, n = 0;
@@ -524,7 +605,7 @@ namespace Seven.Mathematics
       return result;
     }
 
-    private static void RowMultiplication(Matrix matrix, int row, float scalar)
+    private static void RowMultiplication(Matrix_Flattened matrix, int row, float scalar)
     {
       float[] matrixFloats = matrix.Floats;
       int start = row * matrix.Columns, end = row * matrix.Columns + matrix.Columns;
@@ -532,7 +613,7 @@ namespace Seven.Mathematics
         matrixFloats[j] *= scalar;
     }
 
-    private static void RowAddition(Matrix matrix, int target, int second, float scalar)
+    private static void RowAddition(Matrix_Flattened matrix, int target, int second, float scalar)
     {
       float[] matrixfloats = matrix.Floats;
       int columns = matrix.Columns,
@@ -542,7 +623,7 @@ namespace Seven.Mathematics
         matrixfloats[targetOffset + j] += (matrixfloats[secondOffset + j] * scalar);
     }
 
-    private static void SwapRows(Matrix matrix, int row1, int row2)
+    private static void SwapRows(Matrix_Flattened matrix, int row1, int row2)
     {
       float[] matrixFloats = matrix.Floats;
       int columns = matrix.Columns, row1Offset = row1 * columns, row2Offset = row2 * columns;
@@ -559,13 +640,13 @@ namespace Seven.Mathematics
     /// <param name="left">The left matrix of the concatenation.</param>
     /// <param name="right">The right matrix of the concatenation.</param>
     /// <returns>The resulting matrix of the concatenation.</returns>
-    public static Matrix ConcatenateRowWise(Matrix left, Matrix right)
+    public static Matrix_Flattened ConcatenateRowWise(Matrix_Flattened left, Matrix_Flattened right)
     {
       if (left.Rows != right.Rows)
         throw new MatrixException("invalid row-wise concatenation !(left.Rows == right.Rows).");
       int resultRows = left.Rows, resultCols = left.Columns + right.Columns,
         leftCols = left.Columns, rightCols = right.Columns;
-      Matrix result = new Matrix(resultRows, resultCols);
+      Matrix_Flattened result = new Matrix_Flattened(resultRows, resultCols);
       float[]
         resultfloats = result.Floats,
         leftFloats = left.Floats,
@@ -582,7 +663,7 @@ namespace Seven.Mathematics
     /// <summary>Calculates the determinent of a square matrix.</summary>
     /// <param name="matrix">The matrix to calculate the determinent of.</param>
     /// <returns>The determinent of the matrix.</returns>
-    public static float Determinent(Matrix matrix)
+    public static float Determinent(Matrix_Flattened matrix)
     {
       int rows = matrix.Rows, columns = matrix.Columns;
       if (!(rows == matrix.Columns))
@@ -598,15 +679,15 @@ namespace Seven.Mathematics
             for (int j = i + 1; j < rows; j++)
               if (rref[j * columns + i] != 0)
               {
-                Matrix.SwapRows(matrix, i, j);
+                Matrix_Flattened.SwapRows(matrix, i, j);
                 det *= -1;
               }
           det *= rref[i * columns + i];
-          Matrix.RowMultiplication(matrix, i, 1 / rref[i * columns + i]);
+          Matrix_Flattened.RowMultiplication(matrix, i, 1 / rref[i * columns + i]);
           for (int j = i + 1; j < rows; j++)
-            Matrix.RowAddition(matrix, j, i, -rref[j * columns + i]);
+            Matrix_Flattened.RowAddition(matrix, j, i, -rref[j * columns + i]);
           for (int j = i - 1; j >= 0; j--)
-            Matrix.RowAddition(matrix, j, i, -rref[j * columns + i]);
+            Matrix_Flattened.RowAddition(matrix, j, i, -rref[j * columns + i]);
         }
         return det;
       }
@@ -616,28 +697,28 @@ namespace Seven.Mathematics
     /// <summary>Calculates the echelon of a matrix (aka REF).</summary>
     /// <param name="matrix">The matrix to calculate the echelon of (aka REF).</param>
     /// <returns>The echelon of the matrix (aka REF).</returns>
-    public static Matrix Echelon(Matrix matrix)
+    public static Matrix_Flattened Echelon(Matrix_Flattened matrix)
     {
       try
       {
         int rows = matrix.Rows, columns = matrix.Columns;
-        Matrix result = new Matrix(rows, columns, matrix.Floats);
+        Matrix_Flattened result = new Matrix_Flattened(rows, columns, matrix.Floats);
         float[] resultfloats = result.Floats;
         for (int i = 0; i < rows; i++)
         {
           if (resultfloats[i * columns + i] == 0)
             for (int j = i + 1; j < rows; j++)
               if (resultfloats[j * columns + i] != 0)
-                Matrix.SwapRows(result, i, j);
+                Matrix_Flattened.SwapRows(result, i, j);
           if (resultfloats[i * columns + i] == 0)
             continue;
           if (resultfloats[i * columns + i] != 1)
             for (int j = i + 1; j < rows; j++)
               if (resultfloats[j * columns + i] == 1)
-                Matrix.SwapRows(result, i, j);
-          Matrix.RowMultiplication(result, i, 1 / resultfloats[i * columns + i]);
+                Matrix_Flattened.SwapRows(result, i, j);
+          Matrix_Flattened.RowMultiplication(result, i, 1 / resultfloats[i * columns + i]);
           for (int j = i + 1; j < rows; j++)
-            Matrix.RowAddition(result, j, i, -resultfloats[j * columns + i]);
+            Matrix_Flattened.RowAddition(result, j, i, -resultfloats[j * columns + i]);
         }
         return result;
       }
@@ -647,29 +728,29 @@ namespace Seven.Mathematics
     /// <summary>Calculates the echelon of a matrix and reduces it (aka RREF).</summary>
     /// <param name="matrix">The matrix matrix to calculate the reduced echelon of (aka RREF).</param>
     /// <returns>The reduced echelon of the matrix (aka RREF).</returns>
-    public static Matrix ReducedEchelon(Matrix matrix)
+    public static Matrix_Flattened ReducedEchelon(Matrix_Flattened matrix)
     {
       try
       {
         int rows = matrix.Rows, columns = matrix.Columns;
-        Matrix result = new Matrix(rows, columns, matrix.Floats);
+        Matrix_Flattened result = new Matrix_Flattened(rows, columns, matrix.Floats);
         float[] resultFloats = result.Floats;
         for (int i = 0; i < rows; i++)
         {
           if (resultFloats[i * columns + i] == 0)
             for (int j = i + 1; j < rows; j++)
               if (resultFloats[j * columns + i] != 0)
-                Matrix.SwapRows(result, i, j);
+                Matrix_Flattened.SwapRows(result, i, j);
           if (resultFloats[i * columns + i] == 0) continue;
           if (resultFloats[i * columns + i] != 1)
             for (int j = i + 1; j < rows; j++)
               if (resultFloats[j * columns + i] == 1)
-                Matrix.SwapRows(result, i, j);
-          Matrix.RowMultiplication(result, i, 1 / resultFloats[i * columns + i]);
+                Matrix_Flattened.SwapRows(result, i, j);
+          Matrix_Flattened.RowMultiplication(result, i, 1 / resultFloats[i * columns + i]);
           for (int j = i + 1; j < rows; j++)
-            Matrix.RowAddition(result, j, i, -resultFloats[j * columns + i]);
+            Matrix_Flattened.RowAddition(result, j, i, -resultFloats[j * columns + i]);
           for (int j = i - 1; j >= 0; j--)
-            Matrix.RowAddition(result, j, i, -resultFloats[j * columns + i]);
+            Matrix_Flattened.RowAddition(result, j, i, -resultFloats[j * columns + i]);
         }
         return result;
       }
@@ -679,34 +760,34 @@ namespace Seven.Mathematics
     /// <summary>Calculates the inverse of a matrix.</summary>
     /// <param name="matrix">The matrix to calculate the inverse of.</param>
     /// <returns>The inverse of the matrix.</returns>
-    public static Matrix Inverse(Matrix matrix)
+    public static Matrix_Flattened Inverse(Matrix_Flattened matrix)
     {
-      if (Matrix.Determinent(matrix) == 0)
+      if (Matrix_Flattened.Determinent(matrix) == 0)
         throw new MatrixException("inverse calculation failed.");
       try
       {
-        Matrix identity = Matrix.FactoryIdentity(matrix.Rows, matrix.Columns);
-        Matrix rref = Matrix.Clone(matrix);
+        Matrix_Flattened identity = Matrix_Flattened.FactoryIdentity(matrix.Rows, matrix.Columns);
+        Matrix_Flattened rref = Matrix_Flattened.Clone(matrix);
         for (int i = 0; i < matrix.Rows; i++)
         {
           if (rref[i, i] == 0)
             for (int j = i + 1; j < rref.Rows; j++)
               if (rref[j, i] != 0)
               {
-                Matrix.SwapRows(rref, i, j);
-                Matrix.SwapRows(identity, i, j);
+                Matrix_Flattened.SwapRows(rref, i, j);
+                Matrix_Flattened.SwapRows(identity, i, j);
               }
-          Matrix.RowMultiplication(identity, i, 1 / rref[i, i]);
-          Matrix.RowMultiplication(rref, i, 1 / rref[i, i]);
+          Matrix_Flattened.RowMultiplication(identity, i, 1 / rref[i, i]);
+          Matrix_Flattened.RowMultiplication(rref, i, 1 / rref[i, i]);
           for (int j = i + 1; j < rref.Rows; j++)
           {
-            Matrix.RowAddition(identity, j, i, -rref[j, i]);
-            Matrix.RowAddition(rref, j, i, -rref[j, i]);
+            Matrix_Flattened.RowAddition(identity, j, i, -rref[j, i]);
+            Matrix_Flattened.RowAddition(rref, j, i, -rref[j, i]);
           }
           for (int j = i - 1; j >= 0; j--)
           {
-            Matrix.RowAddition(identity, j, i, -rref[j, i]);
-            Matrix.RowAddition(rref, j, i, -rref[j, i]);
+            Matrix_Flattened.RowAddition(identity, j, i, -rref[j, i]);
+            Matrix_Flattened.RowAddition(rref, j, i, -rref[j, i]);
           }
         }
         return identity;
@@ -717,26 +798,26 @@ namespace Seven.Mathematics
     /// <summary>Calculates the adjoint of a matrix.</summary>
     /// <param name="matrix">The matrix to calculate the adjoint of.</param>
     /// <returns>The adjoint of the matrix.</returns>
-    public static Matrix Adjoint(Matrix matrix)
+    public static Matrix_Flattened Adjoint(Matrix_Flattened matrix)
     {
       if (!(matrix.Rows == matrix.Columns))
         throw new MatrixException("Adjoint of a non-square matrix does not exists");
-      Matrix AdjointMatrix = new Matrix(matrix.Rows, matrix.Columns);
+      Matrix_Flattened AdjointMatrix = new Matrix_Flattened(matrix.Rows, matrix.Columns);
       for (int i = 0; i < matrix.Rows; i++)
         for (int j = 0; j < matrix.Columns; j++)
           if ((i + j) % 2 == 0)
-            AdjointMatrix[i, j] = Matrix.Determinent(Matrix.Minor(matrix, i, j));
+            AdjointMatrix[i, j] = Matrix_Flattened.Determinent(Matrix_Flattened.Minor(matrix, i, j));
           else
-            AdjointMatrix[i, j] = -Matrix.Determinent(Matrix.Minor(matrix, i, j));
-      return Matrix.Transpose(AdjointMatrix);
+            AdjointMatrix[i, j] = -Matrix_Flattened.Determinent(Matrix_Flattened.Minor(matrix, i, j));
+      return Matrix_Flattened.Transpose(AdjointMatrix);
     }
 
     /// <summary>Returns the transpose of a matrix.</summary>
     /// <param name="matrix">The matrix to transpose.</param>
     /// <returns>The transpose of the matrix.</returns>
-    public static Matrix Transpose(Matrix matrix)
+    public static Matrix_Flattened Transpose(Matrix_Flattened matrix)
     {
-      Matrix result = new Matrix(matrix.Columns, matrix.Rows);
+      Matrix_Flattened result = new Matrix_Flattened(matrix.Columns, matrix.Rows);
       float[] matrixfloats = matrix.Floats;
       int rows = matrix.Columns, columns = matrix.Rows;
       float[] resultFloats = result.Floats;
@@ -750,12 +831,12 @@ namespace Seven.Mathematics
     /// <param name="matrix">The matrix to decompose.</param>
     /// <param name="Lower">The computed lower triangular matrix.</param>
     /// <param name="Upper">The computed upper triangular matrix.</param>
-    public static void DecomposeLU(Matrix matrix, out Matrix Lower, out Matrix Upper)
+    public static void DecomposeLU(Matrix_Flattened matrix, out Matrix_Flattened Lower, out Matrix_Flattened Upper)
     {
       if (!(matrix.Rows == matrix.Columns))
         throw new MatrixException("The matrix is not square!");
-      Lower = Matrix.FactoryIdentity(matrix.Rows, matrix.Columns);
-      Upper = Matrix.Clone(matrix);
+      Lower = Matrix_Flattened.FactoryIdentity(matrix.Rows, matrix.Columns);
+      Upper = Matrix_Flattened.Clone(matrix);
       int[] permutation = new int[matrix.Rows];
       for (int i = 0; i < matrix.Rows; i++) permutation[i] = i;
       float p = 0, pom2, detOfP = 1;
@@ -801,7 +882,7 @@ namespace Seven.Mathematics
     /// <param name="left">The first matrix to check for equality.</param>
     /// <param name="right">The second matrix to check for equality.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(Matrix left, Matrix right)
+    public static bool EqualsByValue(Matrix_Flattened left, Matrix_Flattened right)
     {
       int rows = left.Rows, columns = left.Columns;
       if (rows != right.Rows || columns != right.Columns)
@@ -819,7 +900,7 @@ namespace Seven.Mathematics
     /// <param name="right">The second matrix to check for equality.</param>
     /// <param name="leniency">How much the values can vary but still be considered equal.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(Matrix left, Matrix right, float leniency)
+    public static bool EqualsByValue(Matrix_Flattened left, Matrix_Flattened right, float leniency)
     {
       int rows = left.Rows, columns = left.Columns;
       if (rows != right.Rows || columns != right.Columns)
@@ -836,7 +917,7 @@ namespace Seven.Mathematics
     /// <param name="left">The left matric of the equality check.</param>
     /// <param name="right">The right matrix of the equality check.</param>
     /// <returns>True if the references are equal, false if not.</returns>
-    public static bool EqualsByReference(Matrix left, Matrix right)
+    public static bool EqualsByReference(Matrix_Flattened left, Matrix_Flattened right)
     {
       if (left == null || right == null) return false;
       return object.ReferenceEquals(left, right) || object.ReferenceEquals(left.Floats, right.Floats);
@@ -844,17 +925,17 @@ namespace Seven.Mathematics
 
     /// <summary>Copies a matrix.</summary>
     /// <returns>The copy of this matrix.</returns>
-    public static Matrix Clone(Matrix matrix)
+    public static Matrix_Flattened Clone(Matrix_Flattened matrix)
     {
       float[] floats = new float[matrix.Size];
       Buffer.BlockCopy(matrix.Floats, 0, floats, 0, floats.Length * sizeof(float));
-      return new Matrix(matrix.Rows, matrix.Columns, floats);
+      return new Matrix_Flattened(matrix.Rows, matrix.Columns, floats);
     }
 
     /// <summary>Converts the matrix into a vector if (matrix.IsVector).</summary>
     /// <param name="matrix">The matrix to convert.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector ToVector(Matrix matrix)
+    public static Vector ToVector(Matrix_Flattened matrix)
     {
       if (!matrix.IsVector)
         throw new MatrixException("invalid conversion from matrix to vector.");
@@ -892,8 +973,8 @@ namespace Seven.Mathematics
     /// <returns>True if the references are equal, false if not.</returns>
     public override bool Equals(object right)
     {
-      if (!(right is Matrix)) return false;
-      return Matrix.EqualsByReference(this, (Matrix)right);
+      if (!(right is Matrix_Flattened)) return false;
+      return Matrix_Flattened.EqualsByReference(this, (Matrix_Flattened)right);
     }
 
     private class MatrixException : Error
@@ -902,883 +983,876 @@ namespace Seven.Mathematics
     }
   }
 
-  // This version uses a 2D float array; however, it is not as faster as the 
-  // flattened array implementation. If you are attempting to copy the matrix
-  // code into another project, you shoudl probably start with this version.
-  #region Matrix (2-D Array)
+  /// <summary>A matrix wrapper for float[,] to perform matrix theory in row major order. Enjoy :)</summary>
+  public class Matrix_2dArray //: Matrix<float>
+  {
+    private float[,] _matrix;
 
-  ///// <summary>A matrix wrapper for float[,] to perform matrix theory in row major order. Enjoy :)</summary>
-  //public class Matrix
-  //{
-  //  private float[,] _matrix;
+    /// <summary>The float[,] reference of this matrix.</summary>
+    public float[,] Floats { get { return _matrix; } }
+    /// <summary>The number of rows in the matrix.</summary>
+    public int Rows { get { return _matrix.GetLength(0); } }
+    /// <summary>The number of columns in the matrix.</summary>
+    public int Columns { get { return _matrix.GetLength(1); } }
+    /// <summary>Determines if the matrix is square.</summary>
+    public bool IsSquare { get { return Rows == Columns; } }
+    /// <summary>Determines if the matrix is a vector.</summary>
+    public bool IsVector { get { return Columns == 1; } }
+    /// <summary>Determines if the matrix is a 2 component vector.</summary>
+    public bool Is2x1 { get { return Rows == 2 && Columns == 1; } }
+    /// <summary>Determines if the matrix is a 3 component vector.</summary>
+    public bool Is3x1 { get { return Rows == 3 && Columns == 1; } }
+    /// <summary>Determines if the matrix is a 4 component vector.</summary>
+    public bool Is4x1 { get { return Rows == 4 && Columns == 1; } }
+    /// <summary>Determines if the matrix is a 2 square matrix.</summary>
+    public bool Is2x2 { get { return Rows == 2 && Columns == 2; } }
+    /// <summary>Determines if the matrix is a 3 square matrix.</summary>
+    public bool Is3x3 { get { return Rows == 3 && Columns == 3; } }
+    /// <summary>Determines if the matrix is a 4 square matrix.</summary>
+    public bool Is4x4 { get { return Rows == 4 && Columns == 4; } }
 
-  //  /// <summary>The float[,] reference of this matrix.</summary>
-  //  public float[,] Floats { get { return _matrix; } }
-  //  /// <summary>The number of rows in the matrix.</summary>
-  //  public int Rows { get { return _matrix.GetLength(0); } }
-  //  /// <summary>The number of columns in the matrix.</summary>
-  //  public int Columns { get { return _matrix.GetLength(1); } }
-  //  /// <summary>Determines if the matrix is square.</summary>
-  //  public bool IsSquare { get { return Rows == Columns; } }
-  //  /// <summary>Determines if the matrix is a vector.</summary>
-  //  public bool IsVector { get { return Columns == 1; } }
-  //  /// <summary>Determines if the matrix is a 2 component vector.</summary>
-  //  public bool Is2x1 { get { return Rows == 2 && Columns == 1; } }
-  //  /// <summary>Determines if the matrix is a 3 component vector.</summary>
-  //  public bool Is3x1 { get { return Rows == 3 && Columns == 1; } }
-  //  /// <summary>Determines if the matrix is a 4 component vector.</summary>
-  //  public bool Is4x1 { get { return Rows == 4 && Columns == 1; } }
-  //  /// <summary>Determines if the matrix is a 2 square matrix.</summary>
-  //  public bool Is2x2 { get { return Rows == 2 && Columns == 2; } }
-  //  /// <summary>Determines if the matrix is a 3 square matrix.</summary>
-  //  public bool Is3x3 { get { return Rows == 3 && Columns == 3; } }
-  //  /// <summary>Determines if the matrix is a 4 square matrix.</summary>
-  //  public bool Is4x4 { get { return Rows == 4 && Columns == 4; } }
+    /// <summary>Standard row-major matrix indexing.</summary>
+    /// <param name="row">The row index.</param>
+    /// <param name="column">The column index.</param>
+    /// <returns>The value at the given indeces.</returns>
+    public float this[int row, int column]
+    {
+      get
+      {
+        try { return _matrix[row, column]; }
+        catch { throw new MatrixException("index out of bounds."); }
+      }
+      set
+      {
+        try { _matrix[row, column] = value; }
+        catch { throw new MatrixException("index out of bounds."); }
+      }
+    }
 
-  //  /// <summary>Standard row-major matrix indexing.</summary>
-  //  /// <param name="row">The row index.</param>
-  //  /// <param name="column">The column index.</param>
-  //  /// <returns>The value at the given indeces.</returns>
-  //  public float this[int row, int column]
-  //  {
-  //    get
-  //    {
-  //      try { return _matrix[row, column]; }
-  //      catch { throw new MatrixException("index out of bounds."); }
-  //    }
-  //    set
-  //    {
-  //      try { _matrix[row, column] = value; }
-  //      catch { throw new MatrixException("index out of bounds."); }
-  //    }
-  //  }
+    /// <summary>Constructs a new zero-matrix of the given dimensions.</summary>
+    /// <param name="rows">The number of row dimensions.</param>
+    /// <param name="columns">The number of column dimensions.</param>
+    public Matrix_2dArray(int rows, int columns)
+    {
+      try { _matrix = new float[rows, columns]; }
+      catch { throw new MatrixException("invalid dimensions."); }
+    }
 
-  //  /// <summary>Constructs a new zero-matrix of the given dimensions.</summary>
-  //  /// <param name="rows">The number of row dimensions.</param>
-  //  /// <param name="columns">The number of column dimensions.</param>
-  //  public Matrix(int rows, int columns)
-  //  {
-  //    try { _matrix = new float[rows, columns]; }
-  //    catch { throw new MatrixException("invalid dimensions."); }
-  //  }
+    /// <summary>Constructs a new array given row/column dimensions and the values to fill the matrix with.</summary>
+    /// <param name="rows">The number of rows of the matrix.</param>
+    /// <param name="columns">The number of columns of the matrix.</param>
+    /// <param name="values">The values to fill the matrix with.</param>
+    public Matrix_2dArray(int rows, int columns, params float[] values)
+    {
+      if (values.Length != rows * columns)
+        throw new MatrixException("invalid construction (number of values does not match dimensions.)");
+      float[,] matrix;
+      try { matrix = new float[rows, columns]; }
+      catch { throw new MatrixException("invalid dimensions."); }
+      int k = 0;
+      for (int i = 0; i < rows; i++)
+        for (int j = 0; j < columns; j++)
+          matrix[i, j] = values[k++];
+      _matrix = matrix;
+    }
 
-  //  /// <summary>Constructs a new array given row/column dimensions and the values to fill the matrix with.</summary>
-  //  /// <param name="rows">The number of rows of the matrix.</param>
-  //  /// <param name="columns">The number of columns of the matrix.</param>
-  //  /// <param name="values">The values to fill the matrix with.</param>
-  //  public Matrix(int rows, int columns, params float[] values)
-  //  {
-  //    if (values.Length != rows * columns)
-  //      throw new MatrixException("invalid construction (number of values does not match dimensions.)");
-  //    float[,] matrix;
-  //    try { matrix = new float[rows, columns]; }
-  //    catch { throw new MatrixException("invalid dimensions."); }
-  //    int k = 0;
-  //    for (int i = 0; i < rows; i++)
-  //      for (int j = 0; j < columns; j++)
-  //        matrix[i, j] = values[k++];
-  //    _matrix = matrix;
-  //  }
+    /// <summary>Wraps a float[,] inside of a matrix class. WARNING: still references that float[,].</summary>
+    /// <param name="matrix">The float[,] to wrap in a matrix class.</param>
+    public Matrix_2dArray(float[,] matrix)
+    {
+      _matrix = matrix;
+    }
 
-  //  /// <summary>Wraps a float[,] inside of a matrix class. WARNING: still references that float[,].</summary>
-  //  /// <param name="matrix">The float[,] to wrap in a matrix class.</param>
-  //  public Matrix(float[,] matrix)
-  //  {
-  //    _matrix = matrix;
-  //  }
+    /// <summary>Constructs a new zero-matrix of the given dimensions.</summary>
+    /// <param name="rows">The number of rows of the matrix.</param>
+    /// <param name="columns">The number of columns of the matrix.</param>
+    /// <returns>The newly constructed zero-matrix.</returns>
+    public static Matrix_2dArray FactoryZero(int rows, int columns)
+    {
+      try { return new Matrix_2dArray(rows, columns); }
+      catch { throw new MatrixException("invalid dimensions."); }
+    }
 
-  //  /// <summary>Constructs a new zero-matrix of the given dimensions.</summary>
-  //  /// <param name="rows">The number of rows of the matrix.</param>
-  //  /// <param name="columns">The number of columns of the matrix.</param>
-  //  /// <returns>The newly constructed zero-matrix.</returns>
-  //  public static Matrix FactoryZero(int rows, int columns)
-  //  {
-  //    try { return new Matrix(rows, columns); }
-  //    catch { throw new MatrixException("invalid dimensions."); }
-  //  }
+    /// <summary>Constructs a new identity-matrix of the given dimensions.</summary>
+    /// <param name="rows">The number of rows of the matrix.</param>
+    /// <param name="columns">The number of columns of the matrix.</param>
+    /// <returns>The newly constructed identity-matrix.</returns>
+    public static Matrix_2dArray FactoryIdentity(int rows, int columns)
+    {
+      Matrix_2dArray matrix;
+      try { matrix = new Matrix_2dArray(rows, columns); }
+      catch { throw new MatrixException("invalid dimensions."); }
+      if (rows <= columns)
+        for (int i = 0; i < rows; i++)
+          matrix[i, i] = 1;
+      else
+        for (int i = 0; i < columns; i++)
+          matrix[i, i] = 1;
+      return matrix;
+    }
 
-  //  /// <summary>Constructs a new identity-matrix of the given dimensions.</summary>
-  //  /// <param name="rows">The number of rows of the matrix.</param>
-  //  /// <param name="columns">The number of columns of the matrix.</param>
-  //  /// <returns>The newly constructed identity-matrix.</returns>
-  //  public static Matrix FactoryIdentity(int rows, int columns)
-  //  {
-  //    Matrix matrix;
-  //    try { matrix = new Matrix(rows, columns); }
-  //    catch { throw new MatrixException("invalid dimensions."); }
-  //    if (rows <= columns)
-  //      for (int i = 0; i < rows; i++)
-  //        matrix[i, i] = 1;
-  //    else
-  //      for (int i = 0; i < columns; i++)
-  //        matrix[i, i] = 1;
-  //    return matrix;
-  //  }
+    /// <summary>Constructs a new matrix where every entry is 1.</summary>
+    /// <param name="rows">The number of rows of the matrix.</param>
+    /// <param name="columns">The number of columns of the matrix.</param>
+    /// <returns>The newly constructed matrix filled with 1's.</returns>
+    public static Matrix_2dArray FactoryOne(int rows, int columns)
+    {
+      Matrix_2dArray matrix;
+      try { matrix = new Matrix_2dArray(rows, columns); }
+      catch { throw new MatrixException("invalid dimensions."); }
+      for (int i = 0; i < rows; i++)
+        for (int j = 0; j < columns; j++)
+          matrix[i, j] = 1;
+      return matrix;
+    }
 
-  //  /// <summary>Constructs a new matrix where every entry is 1.</summary>
-  //  /// <param name="rows">The number of rows of the matrix.</param>
-  //  /// <param name="columns">The number of columns of the matrix.</param>
-  //  /// <returns>The newly constructed matrix filled with 1's.</returns>
-  //  public static Matrix FactoryOne(int rows, int columns)
-  //  {
-  //    Matrix matrix;
-  //    try { matrix = new Matrix(rows, columns); }
-  //    catch { throw new MatrixException("invalid dimensions."); }
-  //    for (int i = 0; i < rows; i++)
-  //      for (int j = 0; j < columns; j++)
-  //        matrix[i, j] = 1;
-  //    return matrix;
-  //  }
+    /// <summary>Constructs a new matrix where every entry is the same uniform value.</summary>
+    /// <param name="rows">The number of rows of the matrix.</param>
+    /// <param name="columns">The number of columns of the matrix.</param>
+    /// <param name="uniform">The value to assign every spot in the matrix.</param>
+    /// <returns>The newly constructed matrix filled with the uniform value.</returns>
+    public static Matrix_2dArray FactoryUniform(int rows, int columns, float uniform)
+    {
+      Matrix_2dArray matrix;
+      try { matrix = new Matrix_2dArray(rows, columns); }
+      catch { throw new MatrixException("invalid dimensions."); }
+      for (int i = 0; i < rows; i++)
+        for (int j = 0; j < columns; j++)
+          matrix[i, j] = uniform;
+      return matrix;
+    }
 
-  //  /// <summary>Constructs a new matrix where every entry is the same uniform value.</summary>
-  //  /// <param name="rows">The number of rows of the matrix.</param>
-  //  /// <param name="columns">The number of columns of the matrix.</param>
-  //  /// <param name="uniform">The value to assign every spot in the matrix.</param>
-  //  /// <returns>The newly constructed matrix filled with the uniform value.</returns>
-  //  public static Matrix FactoryUniform(int rows, int columns, float uniform)
-  //  {
-  //    Matrix matrix;
-  //    try { matrix = new Matrix(rows, columns); }
-  //    catch { throw new MatrixException("invalid dimensions."); }
-  //    for (int i = 0; i < rows; i++)
-  //      for (int j = 0; j < columns; j++)
-  //        matrix[i, j] = uniform;
-  //    return matrix;
-  //  }
+    /// <summary>Constructs a 2-component vector matrix with all values being 0.</summary>
+    /// <returns>The constructed 2-component vector matrix.</returns>
+    public static Matrix_2dArray Factory2x1() { return new Matrix_2dArray(2, 1); }
+    /// <summary>Constructs a 3-component vector matrix with all values being 0.</summary>
+    /// <returns>The constructed 3-component vector matrix.</returns>
+    public static Matrix_2dArray Factory3x1() { return new Matrix_2dArray(3, 1); }
+    /// <summary>Constructs a 4-component vector matrix with all values being 0.</summary>
+    /// <returns>The constructed 4-component vector matrix.</returns>
+    public static Matrix_2dArray Factory4x1() { return new Matrix_2dArray(4, 1); }
 
-  //  /// <summary>Constructs a 2-component vector matrix with all values being 0.</summary>
-  //  /// <returns>The constructed 2-component vector matrix.</returns>
-  //  public static Matrix Factory2x1() { return new Matrix(2, 1); }
-  //  /// <summary>Constructs a 3-component vector matrix with all values being 0.</summary>
-  //  /// <returns>The constructed 3-component vector matrix.</returns>
-  //  public static Matrix Factory3x1() { return new Matrix(3, 1); }
-  //  /// <summary>Constructs a 4-component vector matrix with all values being 0.</summary>
-  //  /// <returns>The constructed 4-component vector matrix.</returns>
-  //  public static Matrix Factory4x1() { return new Matrix(4, 1); }
+    /// <summary>Constructs a 2x2 matrix with all values being 0.</summary>
+    /// <returns>The constructed 2x2 matrix.</returns>
+    public static Matrix_2dArray Factory2x2() { return new Matrix_2dArray(2, 2); }
+    /// <summary>Constructs a 3x3 matrix with all values being 0.</summary>
+    /// <returns>The constructed 3x3 matrix.</returns>
+    public static Matrix_2dArray Factory3x3() { return new Matrix_2dArray(3, 3); }
+    /// <summary>Constructs a 4x4 matrix with all values being 0.</summary>
+    /// <returns>The constructed 4x4 matrix.</returns>
+    public static Matrix_2dArray Factory4x4() { return new Matrix_2dArray(4, 4); }
 
-  //  /// <summary>Constructs a 2x2 matrix with all values being 0.</summary>
-  //  /// <returns>The constructed 2x2 matrix.</returns>
-  //  public static Matrix Factory2x2() { return new Matrix(2, 2); }
-  //  /// <summary>Constructs a 3x3 matrix with all values being 0.</summary>
-  //  /// <returns>The constructed 3x3 matrix.</returns>
-  //  public static Matrix Factory3x3() { return new Matrix(3, 3); }
-  //  /// <summary>Constructs a 4x4 matrix with all values being 0.</summary>
-  //  /// <returns>The constructed 4x4 matrix.</returns>
-  //  public static Matrix Factory4x4() { return new Matrix(4, 4); }
+    /// <param name="angle">Angle of rotation in radians.</param>
+    public static Matrix_2dArray Factory3x3RotationX(float angle)
+    {
+      float cos = Calc.Cos(angle);
+      float sin = Calc.Sin(angle);
+      return new Matrix_2dArray(new float[,] {
+        { 1, 0, 0 },
+        { 0, cos, sin },
+        { 0, -sin, cos }});
+    }
 
-  //  /// <param name="angle">Angle of rotation in radians.</param>
-  //  public static Matrix Factory3x3RotationX(float angle)
-  //  {
-  //    float cos = Calc.Cos(angle);
-  //    float sin = Calc.Sin(angle);
-  //    return new Matrix(new float[,] {
-  //      { 1, 0, 0 },
-  //      { 0, cos, sin },
-  //      { 0, -sin, cos }});
-  //  }
+    /// <param name="angle">Angle of rotation in radians.</param>
+    public static Matrix_2dArray Factory3x3RotationY(float angle)
+    {
+      float cos = Calc.Cos(angle);
+      float sin = Calc.Sin(angle);
+      return new Matrix_2dArray(new float[,] {
+        { cos, 0, -sin },
+        { 0, 1, 0 },
+        { sin, 0, cos }});
+    }
 
-  //  /// <param name="angle">Angle of rotation in radians.</param>
-  //  public static Matrix Factory3x3RotationY(float angle)
-  //  {
-  //    float cos = Calc.Cos(angle);
-  //    float sin = Calc.Sin(angle);
-  //    return new Matrix(new float[,] {
-  //      { cos, 0, -sin },
-  //      { 0, 1, 0 },
-  //      { sin, 0, cos }});
-  //  }
+    /// <param name="angle">Angle of rotation in radians.</param>
+    public static Matrix_2dArray Factory3x3RotationZ(float angle)
+    {
+      float cos = Calc.Cos(angle);
+      float sin = Calc.Sin(angle);
+      return new Matrix_2dArray(new float[,] {
+        { cos, -sin, 0 },
+        { sin, cos, 0 },
+        { 0, 0, 1 }});
+    }
 
-  //  /// <param name="angle">Angle of rotation in radians.</param>
-  //  public static Matrix Factory3x3RotationZ(float angle)
-  //  {
-  //    float cos = Calc.Cos(angle);
-  //    float sin = Calc.Sin(angle);
-  //    return new Matrix(new float[,] {
-  //      { cos, -sin, 0 },
-  //      { sin, cos, 0 },
-  //      { 0, 0, 1 }});
-  //  }
+    /// <param name="angleX">Angle about the X-axis in radians.</param>
+    /// <param name="angleY">Angle about the Y-axis in radians.</param>
+    /// <param name="angleZ">Angle about the Z-axis in radians.</param>
+    public static Matrix_2dArray Factory3x3RotationXthenYthenZ(float angleX, float angleY, float angleZ)
+    {
+      float
+        xCos = Calc.Cos(angleX), xSin = Calc.Sin(angleX),
+        yCos = Calc.Cos(angleY), ySin = Calc.Sin(angleY),
+        zCos = Calc.Cos(angleZ), zSin = Calc.Sin(angleZ);
+      return new Matrix_2dArray(new float[,] {
+        { yCos * zCos, -yCos * zSin, ySin },
+        { xCos * zSin + xSin * ySin * zCos, xCos * zCos + xSin * ySin * zSin, -xSin * yCos },
+        { xSin * zSin - xCos * ySin * zCos, xSin * zCos + xCos * ySin * zSin, xCos * yCos }});
+    }
 
-  //  /// <param name="angleX">Angle about the X-axis in radians.</param>
-  //  /// <param name="angleY">Angle about the Y-axis in radians.</param>
-  //  /// <param name="angleZ">Angle about the Z-axis in radians.</param>
-  //  public static Matrix Factory3x3RotationXthenYthenZ(float angleX, float angleY, float angleZ)
-  //  {
-  //    float
-  //      xCos = Calc.Cos(angleX), xSin = Calc.Sin(angleX),
-  //      yCos = Calc.Cos(angleY), ySin = Calc.Sin(angleY),
-  //      zCos = Calc.Cos(angleZ), zSin = Calc.Sin(angleZ);
-  //    return new Matrix(new float[,] {
-  //      { yCos * zCos, -yCos * zSin, ySin },
-  //      { xCos * zSin + xSin * ySin * zCos, xCos * zCos + xSin * ySin * zSin, -xSin * yCos },
-  //      { xSin * zSin - xCos * ySin * zCos, xSin * zCos + xCos * ySin * zSin, xCos * yCos }});
-  //  }
+    /// <param name="angleX">Angle about the X-axis in radians.</param>
+    /// <param name="angleY">Angle about the Y-axis in radians.</param>
+    /// <param name="angleZ">Angle about the Z-axis in radians.</param>
+    public static Matrix_2dArray Factory3x3RotationZthenYthenX(float angleX, float angleY, float angleZ)
+    {
+      float
+        xCos = Calc.Cos(angleX), xSin = Calc.Sin(angleX),
+        yCos = Calc.Cos(angleY), ySin = Calc.Sin(angleY),
+        zCos = Calc.Cos(angleZ), zSin = Calc.Sin(angleZ);
+      return new Matrix_2dArray(new float[,] {
+        { yCos * zCos, zCos * xSin * ySin - xCos * zSin, xCos * zCos * ySin + xSin * zSin },
+        { yCos * zSin, xCos * zCos + xSin * ySin * zSin, -zCos * xSin + xCos * ySin * zSin },
+        { -ySin, yCos * xSin, xCos * yCos }});
+    }
 
-  //  /// <param name="angleX">Angle about the X-axis in radians.</param>
-  //  /// <param name="angleY">Angle about the Y-axis in radians.</param>
-  //  /// <param name="angleZ">Angle about the Z-axis in radians.</param>
-  //  public static Matrix Factory3x3RotationZthenYthenX(float angleX, float angleY, float angleZ)
-  //  {
-  //    float
-  //      xCos = Calc.Cos(angleX), xSin = Calc.Sin(angleX),
-  //      yCos = Calc.Cos(angleY), ySin = Calc.Sin(angleY),
-  //      zCos = Calc.Cos(angleZ), zSin = Calc.Sin(angleZ);
-  //    return new Matrix(new float[,] {
-  //      { yCos * zCos, zCos * xSin * ySin - xCos * zSin, xCos * zCos * ySin + xSin * zSin },
-  //      { yCos * zSin, xCos * zCos + xSin * ySin * zSin, -zCos * xSin + xCos * ySin * zSin },
-  //      { -ySin, yCos * xSin, xCos * yCos }});
-  //  }
+    /// <summary>Creates a 3x3 matrix initialized with a shearing transformation.</summary>
+    /// <param name="shearXbyY">The shear along the X-axis in the Y-direction.</param>
+    /// <param name="shearXbyZ">The shear along the X-axis in the Z-direction.</param>
+    /// <param name="shearYbyX">The shear along the Y-axis in the X-direction.</param>
+    /// <param name="shearYbyZ">The shear along the Y-axis in the Z-direction.</param>
+    /// <param name="shearZbyX">The shear along the Z-axis in the X-direction.</param>
+    /// <param name="shearZbyY">The shear along the Z-axis in the Y-direction.</param>
+    /// <returns>The constructed shearing matrix.</returns>
+    public static Matrix_2dArray Factory3x3Shear(
+      float shearXbyY, float shearXbyZ, float shearYbyX,
+      float shearYbyZ, float shearZbyX, float shearZbyY)
+    {
+      return new Matrix_2dArray(new float[,] {
+        { 1, shearYbyX, shearZbyX },
+        { shearXbyY, 1, shearYbyZ },
+        { shearXbyZ, shearYbyZ, 1 }});
+    }
 
-  //  /// <summary>Creates a 3x3 matrix initialized with a shearing transformation.</summary>
-  //  /// <param name="shearXbyY">The shear along the X-axis in the Y-direction.</param>
-  //  /// <param name="shearXbyZ">The shear along the X-axis in the Z-direction.</param>
-  //  /// <param name="shearYbyX">The shear along the Y-axis in the X-direction.</param>
-  //  /// <param name="shearYbyZ">The shear along the Y-axis in the Z-direction.</param>
-  //  /// <param name="shearZbyX">The shear along the Z-axis in the X-direction.</param>
-  //  /// <param name="shearZbyY">The shear along the Z-axis in the Y-direction.</param>
-  //  /// <returns>The constructed shearing matrix.</returns>
-  //  public static Matrix Factory3x3Shear(
-  //    float shearXbyY, float shearXbyZ, float shearYbyX,
-  //    float shearYbyZ, float shearZbyX, float shearZbyY)
-  //  {
-  //    return new Matrix(new float[,] {
-  //      { 1, shearYbyX, shearZbyX },
-  //      { shearXbyY, 1, shearYbyZ },
-  //      { shearXbyZ, shearYbyZ, 1 }});
-  //  }
+    /// <summary>Negates all the values in a matrix.</summary>
+    /// <param name="matrix">The matrix to have its values negated.</param>
+    /// <returns>The resulting matrix after the negations.</returns>
+    public static Matrix_2dArray operator -(Matrix_2dArray matrix) { return Matrix_2dArray.Negate(matrix); }
+    /// <summary>Does a standard matrix addition.</summary>
+    /// <param name="left">The left matrix of the addition.</param>
+    /// <param name="right">The right matrix of the addition.</param>
+    /// <returns>The resulting matrix after teh addition.</returns>
+    public static Matrix_2dArray operator +(Matrix_2dArray left, Matrix_2dArray right) { return Matrix_2dArray.Add(left, right); }
+    /// <summary>Does a standard matrix subtraction.</summary>
+    /// <param name="left">The left matrix of the subtraction.</param>
+    /// <param name="right">The right matrix of the subtraction.</param>
+    /// <returns>The result of the matrix subtraction.</returns>
+    public static Matrix_2dArray operator -(Matrix_2dArray left, Matrix_2dArray right) { return Matrix_2dArray.Subtract(left, right); }
+    /// <summary>Does a standard matrix multiplication.</summary>
+    /// <param name="left">The left matrix of the multiplication.</param>
+    /// <param name="right">The right matrix of the multiplication.</param>
+    /// <returns>The resulting matrix after the multiplication.</returns>
+    public static Matrix_2dArray operator *(Matrix_2dArray left, Matrix_2dArray right) { return Matrix_2dArray.Multiply(left, right); }
+    /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
+    /// <param name="left">The matrix to have its values multiplied.</param>
+    /// <param name="right">The scalar to multiply the values by.</param>
+    /// <returns>The resulting matrix after the multiplications.</returns>
+    public static Matrix_2dArray operator *(Matrix_2dArray left, float right) { return Matrix_2dArray.Multiply(left, right); }
+    /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
+    /// <param name="left">The scalar to multiply the values by.</param>
+    /// <param name="right">The matrix to have its values multiplied.</param>
+    /// <returns>The resulting matrix after the multiplications.</returns>
+    public static Matrix_2dArray operator *(float left, Matrix_2dArray right) { return Matrix_2dArray.Multiply(right, left); }
+    /// <summary>Divides all the values in a matrix by a scalar.</summary>
+    /// <param name="left">The matrix to have its values divided.</param>
+    /// <param name="right">The scalar to divide the values by.</param>
+    /// <returns>The resulting matrix after the divisions.</returns>
+    public static Matrix_2dArray operator /(Matrix_2dArray left, float right) { return Matrix_2dArray.Divide(left, right); }
+    /// <summary>Applies a power to a matrix.</summary>
+    /// <param name="left">The matrix to apply a power to.</param>
+    /// <param name="right">The power to apply to the matrix.</param>
+    /// <returns>The result of the power operation.</returns>
+    public static Matrix_2dArray operator ^(Matrix_2dArray left, int right) { return Matrix_2dArray.Power(left, right); }
+    /// <summary>Checks for equality by value.</summary>
+    /// <param name="left">The left matrix of the equality check.</param>
+    /// <param name="right">The right matrix of the equality check.</param>
+    /// <returns>True if the values of the matrices are equal, false if not.</returns>
+    public static bool operator ==(Matrix_2dArray left, Matrix_2dArray right) { return Matrix_2dArray.EqualsByValue(left, right); }
+    /// <summary>Checks for false-equality by value.</summary>
+    /// <param name="left">The left matrix of the false-equality check.</param>
+    /// <param name="right">The right matrix of the false-equality check.</param>
+    /// <returns>True if the values of the matrices are not equal, false if they are.</returns>
+    public static bool operator !=(Matrix_2dArray left, Matrix_2dArray right) { return !Matrix_2dArray.EqualsByValue(left, right); }
+    /// <summary>Automatically converts a matrix into a float[,] if necessary.</summary>
+    /// <param name="matrix">The matrix to convert to a float[,].</param>
+    /// <returns>The reference to the float[,] representing the matrix.</returns>
+    public static implicit operator float[,](Matrix_2dArray matrix) { return matrix.Floats; }
 
-  //  /// <summary>Negates all the values in a matrix.</summary>
-  //  /// <param name="matrix">The matrix to have its values negated.</param>
-  //  /// <returns>The resulting matrix after the negations.</returns>
-  //  public static Matrix operator -(Matrix matrix) { return Matrix.Negate(matrix); }
-  //  /// <summary>Does a standard matrix addition.</summary>
-  //  /// <param name="left">The left matrix of the addition.</param>
-  //  /// <param name="right">The right matrix of the addition.</param>
-  //  /// <returns>The resulting matrix after teh addition.</returns>
-  //  public static Matrix operator +(Matrix left, Matrix right) { return Matrix.Add(left, right); }
-  //  /// <summary>Does a standard matrix subtraction.</summary>
-  //  /// <param name="left">The left matrix of the subtraction.</param>
-  //  /// <param name="right">The right matrix of the subtraction.</param>
-  //  /// <returns>The result of the matrix subtraction.</returns>
-  //  public static Matrix operator -(Matrix left, Matrix right) { return Matrix.Subtract(left, right); }
-  //  /// <summary>Does a standard matrix multiplication.</summary>
-  //  /// <param name="left">The left matrix of the multiplication.</param>
-  //  /// <param name="right">The right matrix of the multiplication.</param>
-  //  /// <returns>The resulting matrix after the multiplication.</returns>
-  //  public static Matrix operator *(Matrix left, Matrix right) { return Matrix.Multiply(left, right); }
-  //  /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
-  //  /// <param name="left">The matrix to have its values multiplied.</param>
-  //  /// <param name="right">The scalar to multiply the values by.</param>
-  //  /// <returns>The resulting matrix after the multiplications.</returns>
-  //  public static Matrix operator *(Matrix left, float right) { return Matrix.Multiply(left, right); }
-  //  /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
-  //  /// <param name="left">The scalar to multiply the values by.</param>
-  //  /// <param name="right">The matrix to have its values multiplied.</param>
-  //  /// <returns>The resulting matrix after the multiplications.</returns>
-  //  public static Matrix operator *(float left, Matrix right) { return Matrix.Multiply(right, left); }
-  //  /// <summary>Divides all the values in a matrix by a scalar.</summary>
-  //  /// <param name="left">The matrix to have its values divided.</param>
-  //  /// <param name="right">The scalar to divide the values by.</param>
-  //  /// <returns>The resulting matrix after the divisions.</returns>
-  //  public static Matrix operator /(Matrix left, float right) { return Matrix.Divide(left, right); }
-  //  /// <summary>Applies a power to a matrix.</summary>
-  //  /// <param name="left">The matrix to apply a power to.</param>
-  //  /// <param name="right">The power to apply to the matrix.</param>
-  //  /// <returns>The result of the power operation.</returns>
-  //  public static Matrix operator ^(Matrix left, int right) { return Matrix.Power(left, right); }
-  //  /// <summary>Checks for equality by value.</summary>
-  //  /// <param name="left">The left matrix of the equality check.</param>
-  //  /// <param name="right">The right matrix of the equality check.</param>
-  //  /// <returns>True if the values of the matrices are equal, false if not.</returns>
-  //  public static bool operator ==(Matrix left, Matrix right) { return Matrix.EqualsByValue(left, right); }
-  //  /// <summary>Checks for false-equality by value.</summary>
-  //  /// <param name="left">The left matrix of the false-equality check.</param>
-  //  /// <param name="right">The right matrix of the false-equality check.</param>
-  //  /// <returns>True if the values of the matrices are not equal, false if they are.</returns>
-  //  public static bool operator !=(Matrix left, Matrix right) { return !Matrix.EqualsByValue(left, right); }
-  //  /// <summary>Automatically converts a matrix into a float[,] if necessary.</summary>
-  //  /// <param name="matrix">The matrix to convert to a float[,].</param>
-  //  /// <returns>The reference to the float[,] representing the matrix.</returns>
-  //  public static implicit operator float[,](Matrix matrix) { return matrix.Floats; }
+    /// <summary>Negates all the values in this matrix.</summary>
+    /// <returns>The resulting matrix after the negations.</returns>
+    private Matrix_2dArray Negate() { return Matrix_2dArray.Negate(this); }
+    /// <summary>Does a standard matrix addition.</summary>
+    /// <param name="right">The matrix to add to this matrix.</param>
+    /// <returns>The resulting matrix after the addition.</returns>
+    private Matrix_2dArray Add(Matrix_2dArray right) { return Matrix_2dArray.Add(this, right); }
+    /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+    /// <param name="right">The matrix to multiply this matrix by.</param>
+    /// <returns>The resulting matrix after the multiplication.</returns>
+    private Matrix_2dArray Multiply(Matrix_2dArray right) { return Matrix_2dArray.Multiply(this, right); }
+    /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+    /// <param name="right">The scalar to multiply all the matrix values by.</param>
+    /// <returns>The retulting matrix after the multiplications.</returns>
+    private Matrix_2dArray Multiply(float right) { return Matrix_2dArray.Multiply(this, right); }
+    /// <summary>Divides all the values in this matrix by a scalar.</summary>
+    /// <param name="right">The scalar to divide the matrix values by.</param>
+    /// <returns>The resulting matrix after teh divisions.</returns>
+    private Matrix_2dArray Divide(float right) { return Matrix_2dArray.Divide(this, right); }
+    /// <summary>Gets the minor of a matrix.</summary>
+    /// <param name="row">The restricted row of the minor.</param>
+    /// <param name="column">The restricted column of the minor.</param>
+    /// <returns>The minor from the row/column restrictions.</returns>
+    public Matrix_2dArray Minor(int row, int column) { return Matrix_2dArray.Minor(this, row, column); }
+    /// <summary>Combines two matrices from left to right 
+    /// (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+    /// <param name="right">The matrix to combine with on the right side.</param>
+    /// <returns>The resulting row-wise concatination.</returns>
+    public Matrix_2dArray ConcatenateRowWise(Matrix_2dArray right) { return Matrix_2dArray.ConcatenateRowWise(this, right); }
+    /// <summary>Computes the determinent if this matrix is square.</summary>
+    /// <returns>The computed determinent if this matrix is square.</returns>
+    public float Determinent() { return Matrix_2dArray.Determinent(this); }
+    /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+    /// <returns>The computed echelon form of this matrix (aka REF).</returns>
+    public Matrix_2dArray Echelon() { return Matrix_2dArray.Echelon(this); }
+    /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+    /// <returns>The computed reduced echelon form of this matrix (aka RREF).</returns>
+    public Matrix_2dArray ReducedEchelon() { return Matrix_2dArray.ReducedEchelon(this); }
+    /// <summary>Computes the inverse of this matrix.</summary>
+    /// <returns>The inverse of this matrix.</returns>
+    public Matrix_2dArray Inverse() { return Matrix_2dArray.Inverse(this); }
+    /// <summary>Gets the adjoint of this matrix.</summary>
+    /// <returns>The adjoint of this matrix.</returns>
+    public Matrix_2dArray Adjoint() { return Matrix_2dArray.Adjoint(this); }
+    /// <summary>Transposes this matrix.</summary>
+    /// <returns>The transpose of this matrix.</returns>
+    public Matrix_2dArray Transpose() { return Matrix_2dArray.Transpose(this); }
+    /// <summary>Copies this matrix.</summary>
+    /// <returns>The copy of this matrix.</returns>
+    public Matrix_2dArray Clone() { return Matrix_2dArray.Clone(this); }
 
-  //  /// <summary>Negates all the values in this matrix.</summary>
-  //  /// <returns>The resulting matrix after the negations.</returns>
-  //  private Matrix Negate() { return Matrix.Negate(this); }
-  //  /// <summary>Does a standard matrix addition.</summary>
-  //  /// <param name="right">The matrix to add to this matrix.</param>
-  //  /// <returns>The resulting matrix after the addition.</returns>
-  //  private Matrix Add(Matrix right) { return Matrix.Add(this, right); }
-  //  /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
-  //  /// <param name="right">The matrix to multiply this matrix by.</param>
-  //  /// <returns>The resulting matrix after the multiplication.</returns>
-  //  private Matrix Multiply(Matrix right) { return Matrix.Multiply(this, right); }
-  //  /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
-  //  /// <param name="right">The scalar to multiply all the matrix values by.</param>
-  //  /// <returns>The retulting matrix after the multiplications.</returns>
-  //  private Matrix Multiply(float right) { return Matrix.Multiply(this, right); }
-  //  /// <summary>Divides all the values in this matrix by a scalar.</summary>
-  //  /// <param name="right">The scalar to divide the matrix values by.</param>
-  //  /// <returns>The resulting matrix after teh divisions.</returns>
-  //  private Matrix Divide(float right) { return Matrix.Divide(this, right); }
-  //  /// <summary>Gets the minor of a matrix.</summary>
-  //  /// <param name="row">The restricted row of the minor.</param>
-  //  /// <param name="column">The restricted column of the minor.</param>
-  //  /// <returns>The minor from the row/column restrictions.</returns>
-  //  public Matrix Minor(int row, int column) { return Matrix.Minor(this, row, column); }
-  //  /// <summary>Combines two matrices from left to right 
-  //  /// (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-  //  /// <param name="right">The matrix to combine with on the right side.</param>
-  //  /// <returns>The resulting row-wise concatination.</returns>
-  //  public Matrix ConcatenateRowWise(Matrix right) { return Matrix.ConcatenateRowWise(this, right); }
-  //  /// <summary>Computes the determinent if this matrix is square.</summary>
-  //  /// <returns>The computed determinent if this matrix is square.</returns>
-  //  public float Determinent() { return Matrix.Determinent(this); }
-  //  /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
-  //  /// <returns>The computed echelon form of this matrix (aka REF).</returns>
-  //  public Matrix Echelon() { return Matrix.Echelon(this); }
-  //  /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
-  //  /// <returns>The computed reduced echelon form of this matrix (aka RREF).</returns>
-  //  public Matrix ReducedEchelon() { return Matrix.ReducedEchelon(this); }
-  //  /// <summary>Computes the inverse of this matrix.</summary>
-  //  /// <returns>The inverse of this matrix.</returns>
-  //  public Matrix Inverse() { return Matrix.Inverse(this); }
-  //  /// <summary>Gets the adjoint of this matrix.</summary>
-  //  /// <returns>The adjoint of this matrix.</returns>
-  //  public Matrix Adjoint() { return Matrix.Adjoint(this); }
-  //  /// <summary>Transposes this matrix.</summary>
-  //  /// <returns>The transpose of this matrix.</returns>
-  //  public Matrix Transpose() { return Matrix.Transpose(this); }
-  //  /// <summary>Copies this matrix.</summary>
-  //  /// <returns>The copy of this matrix.</returns>
-  //  public Matrix Clone() { return Matrix.Clone(this); }
+    /// <summary>Negates all the values in a matrix.</summary>
+    /// <param name="matrix">The matrix to have its values negated.</param>
+    /// <returns>The resulting matrix after the negations.</returns>
+    public static Matrix_2dArray Negate(float[,] matrix)
+    {
+      Matrix_2dArray result = new Matrix_2dArray(matrix.GetLength(0), matrix.GetLength(1));
+      for (int i = 0; i < matrix.GetLength(0); i++)
+        for (int j = 0; j < matrix.GetLength(1); j++)
+          result[i, j] = -matrix[i, j];
+      return result;
+    }
 
-  //  /// <summary>Negates all the values in a matrix.</summary>
-  //  /// <param name="matrix">The matrix to have its values negated.</param>
-  //  /// <returns>The resulting matrix after the negations.</returns>
-  //  public static Matrix Negate(float[,] matrix)
-  //  {
-  //    Matrix result = new Matrix(matrix.GetLength(0), matrix.GetLength(1));
-  //    for (int i = 0; i < matrix.GetLength(0); i++)
-  //      for (int j = 0; j < matrix.GetLength(1); j++)
-  //        result[i, j] = -matrix[i, j];
-  //    return result;
-  //  }
+    /// <summary>Does standard addition of two matrices.</summary>
+    /// <param name="left">The left matrix of the addition.</param>
+    /// <param name="right">The right matrix of the addition.</param>
+    /// <returns>The resulting matrix after the addition.</returns>
+    public static Matrix_2dArray Add(float[,] left, float[,] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        throw new MatrixException("invalid addition (size miss-match).");
+      Matrix_2dArray result = new Matrix_2dArray(left.GetLength(0), left.GetLength(1));
+      for (int i = 0; i < result.Rows; i++)
+        for (int j = 0; j < result.Columns; j++)
+          result[i, j] = left[i, j] + right[i, j];
+      return result;
+    }
 
-  //  /// <summary>Does standard addition of two matrices.</summary>
-  //  /// <param name="left">The left matrix of the addition.</param>
-  //  /// <param name="right">The right matrix of the addition.</param>
-  //  /// <returns>The resulting matrix after the addition.</returns>
-  //  public static Matrix Add(float[,] left, float[,] right)
-  //  {
-  //    if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-  //      throw new MatrixException("invalid addition (size miss-match).");
-  //    Matrix result = new Matrix(left.GetLength(0), left.GetLength(1));
-  //    for (int i = 0; i < result.Rows; i++)
-  //      for (int j = 0; j < result.Columns; j++)
-  //        result[i, j] = left[i, j] + right[i, j];
-  //    return result;
-  //  }
+    /// <summary>Subtracts a scalar from all the values in a matrix.</summary>
+    /// <param name="left">The matrix to have the values subtracted from.</param>
+    /// <param name="right">The scalar to subtract from all the matrix values.</param>
+    /// <returns>The resulting matrix after the subtractions.</returns>
+    public static Matrix_2dArray Subtract(float[,] left, float[,] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        throw new MatrixException("invalid subtraction (size miss-match).");
+      Matrix_2dArray result = new Matrix_2dArray(left.GetLength(0), left.GetLength(1));
+      for (int i = 0; i < result.Rows; i++)
+        for (int j = 0; j < result.Columns; j++)
+          result[i, j] = left[i, j] - right[i, j];
+      return result;
+    }
 
-  //  /// <summary>Subtracts a scalar from all the values in a matrix.</summary>
-  //  /// <param name="left">The matrix to have the values subtracted from.</param>
-  //  /// <param name="right">The scalar to subtract from all the matrix values.</param>
-  //  /// <returns>The resulting matrix after the subtractions.</returns>
-  //  public static Matrix Subtract(float[,] left, float[,] right)
-  //  {
-  //    if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-  //      throw new MatrixException("invalid subtraction (size miss-match).");
-  //    Matrix result = new Matrix(left.GetLength(0), left.GetLength(1));
-  //    for (int i = 0; i < result.Rows; i++)
-  //      for (int j = 0; j < result.Columns; j++)
-  //        result[i, j] = left[i, j] - right[i, j];
-  //    return result;
-  //  }
+    ///// <summary>Subtracts a scalar from all the values in a matrix.</summary>
+    ///// <param name="left">The matrix to have the values subtracted from.</param>
+    ///// <param name="right">The scalar to subtract from all the matrix values.</param>
+    ///// <returns>The resulting matrix after the subtractions.</returns>
+    //public static Vector Subtract(float[,] left, float[] right)
+    //{
+    //  if (!(left.GetLength(1) == 1 && left.GetLength(0) == right.Length))
+    //    throw new MatrixException("invalid subtraction (size miss-match).");
+    //  Vector result = new Vector(left.GetLength(0));
+    //  for (int i = 0; i < result.Dimensions; i++)
+    //    result[i] = left[i, 0] - right[i];
+    //  return result;
+    //}
 
-  //  ///// <summary>Subtracts a scalar from all the values in a matrix.</summary>
-  //  ///// <param name="left">The matrix to have the values subtracted from.</param>
-  //  ///// <param name="right">The scalar to subtract from all the matrix values.</param>
-  //  ///// <returns>The resulting matrix after the subtractions.</returns>
-  //  //public static Vector Subtract(float[,] left, float[] right)
-  //  //{
-  //  //  if (!(left.GetLength(1) == 1 && left.GetLength(0) == right.Length))
-  //  //    throw new MatrixException("invalid subtraction (size miss-match).");
-  //  //  Vector result = new Vector(left.GetLength(0));
-  //  //  for (int i = 0; i < result.Dimensions; i++)
-  //  //    result[i] = left[i, 0] - right[i];
-  //  //  return result;
-  //  //}
+    /// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
+    /// <param name="left">The left matrix of the multiplication.</param>
+    /// <param name="right">The right matrix of the multiplication.</param>
+    /// <returns>The resulting matrix of the multiplication.</returns>
+    public static Matrix_2dArray Multiply(float[,] left, float[,] right)
+    {
+      if (left.GetLength(1) != right.GetLength(0))
+        throw new MatrixException("invalid multiplication (size miss-match).");
+      Matrix_2dArray result = new Matrix_2dArray(left.GetLength(0), right.GetLength(1));
+      for (int i = 0; i < result.Rows; i++)
+        for (int j = 0; j < result.Columns; j++)
+          for (int k = 0; k < left.GetLength(1); k++)
+            result[i, j] += left[i, k] * right[k, j];
+      return result;
+    }
 
-  //  /// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
-  //  /// <param name="left">The left matrix of the multiplication.</param>
-  //  /// <param name="right">The right matrix of the multiplication.</param>
-  //  /// <returns>The resulting matrix of the multiplication.</returns>
-  //  public static Matrix Multiply(float[,] left, float[,] right)
-  //  {
-  //    if (left.GetLength(1) != right.GetLength(0))
-  //      throw new MatrixException("invalid multiplication (size miss-match).");
-  //    Matrix result = new Matrix(left.GetLength(0), right.GetLength(1));
-  //    for (int i = 0; i < result.Rows; i++)
-  //      for (int j = 0; j < result.Columns; j++)
-  //        for (int k = 0; k < left.GetLength(1); k++)
-  //          result[i, j] += left[i, k] * right[k, j];
-  //    return result;
-  //  }
+    ///// <summary>Does a standard multiplication between a matrix and a vector.</summary>
+    ///// <param name="left">The left matrix of the multiplication.</param>
+    ///// <param name="right">The right vector of the multiplication.</param>
+    ///// <returns>The resulting matrix/vector of the multiplication.</returns>
+    //public static Matrix Multiply(float[,] left, float[] right)
+    //{
+    //  if (left.GetLength(1) != right.GetLength(0))
+    //    throw new MatrixException("invalid multiplication (size miss-match).");
+    //  Matrix result = new Matrix(left.GetLength(0), right.GetLength(1));
+    //  for (int i = 0; i < result.Rows; i++)
+    //      for (int k = 0; k < left.GetLength(1); k++)
+    //        result[i, j] += left[i, k] * right[k];
+    //  return result;
+    //}
 
-  //  ///// <summary>Does a standard multiplication between a matrix and a vector.</summary>
-  //  ///// <param name="left">The left matrix of the multiplication.</param>
-  //  ///// <param name="right">The right vector of the multiplication.</param>
-  //  ///// <returns>The resulting matrix/vector of the multiplication.</returns>
-  //  //public static Matrix Multiply(float[,] left, float[] right)
-  //  //{
-  //  //  if (left.GetLength(1) != right.GetLength(0))
-  //  //    throw new MatrixException("invalid multiplication (size miss-match).");
-  //  //  Matrix result = new Matrix(left.GetLength(0), right.GetLength(1));
-  //  //  for (int i = 0; i < result.Rows; i++)
-  //  //      for (int k = 0; k < left.GetLength(1); k++)
-  //  //        result[i, j] += left[i, k] * right[k];
-  //  //  return result;
-  //  //}
+    /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
+    /// <param name="left">The matrix to have the values multiplied.</param>
+    /// <param name="right">The scalar to multiply the values by.</param>
+    /// <returns>The resulting matrix after the multiplications.</returns>
+    public static Matrix_2dArray Multiply(float[,] left, float right)
+    {
+      Matrix_2dArray result = new Matrix_2dArray(left.GetLength(0), left.GetLength(1));
+      for (int i = 0; i < left.GetLength(0); i++)
+        for (int j = 0; j < left.GetLength(1); j++)
+          result[i, j] = left[i, j] * right;
+      return result;
+    }
 
-  //  /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
-  //  /// <param name="left">The matrix to have the values multiplied.</param>
-  //  /// <param name="right">The scalar to multiply the values by.</param>
-  //  /// <returns>The resulting matrix after the multiplications.</returns>
-  //  public static Matrix Multiply(float[,] left, float right)
-  //  {
-  //    Matrix result = new Matrix(left.GetLength(0), left.GetLength(1));
-  //    for (int i = 0; i < left.GetLength(0); i++)
-  //      for (int j = 0; j < left.GetLength(1); j++)
-  //        result[i, j] = left[i, j] * right;
-  //    return result;
-  //  }
+    /// <summary>Applies a power to a square matrix.</summary>
+    /// <param name="matrix">The matrix to be powered by.</param>
+    /// <param name="power">The power to apply to the matrix.</param>
+    /// <returns>The resulting matrix of the power operation.</returns>
+    public static Matrix_2dArray Power(float[,] matrix, int power)
+    {
+      if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+        throw new MatrixException("invalid power (!matrix.IsSquare).");
+      if (!(power > -1))
+        throw new MatrixException("invalid power !(power > -1)");
+      if (power == 0)
+        return Matrix_2dArray.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
+      Matrix_2dArray result = Matrix_2dArray.Clone(matrix);
+      for (int i = 0; i < power; i++)
+        result *= result;
+      return result;
+    }
 
-  //  /// <summary>Applies a power to a square matrix.</summary>
-  //  /// <param name="matrix">The matrix to be powered by.</param>
-  //  /// <param name="power">The power to apply to the matrix.</param>
-  //  /// <returns>The resulting matrix of the power operation.</returns>
-  //  public static Matrix Power(float[,] matrix, int power)
-  //  {
-  //    if (!(matrix.GetLength(0) == matrix.GetLength(1)))
-  //      throw new MatrixException("invalid power (!matrix.IsSquare).");
-  //    if (!(power > -1))
-  //      throw new MatrixException("invalid power !(power > -1)");
-  //    if (power == 0)
-  //      return Matrix.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
-  //    Matrix result = Matrix.Clone(matrix);
-  //    for (int i = 0; i < power; i++)
-  //      result *= result;
-  //    return result;
-  //  }
+    /// <summary>Divides all the values in the matrix by a scalar.</summary>
+    /// <param name="matrix">The matrix to divide the values of.</param>
+    /// <param name="right">The scalar to divide all the matrix values by.</param>
+    /// <returns>The resulting matrix with the divided values.</returns>
+    public static Matrix_2dArray Divide(float[,] matrix, float right)
+    {
+      Matrix_2dArray result = new Matrix_2dArray(matrix.GetLength(0), matrix.GetLength(1));
+      for (int i = 0; i < matrix.GetLength(0); i++)
+        for (int j = 0; j < matrix.GetLength(1); j++)
+          result[i, j] = matrix[i, j] / right;
+      return result;
+    }
 
-  //  /// <summary>Divides all the values in the matrix by a scalar.</summary>
-  //  /// <param name="matrix">The matrix to divide the values of.</param>
-  //  /// <param name="right">The scalar to divide all the matrix values by.</param>
-  //  /// <returns>The resulting matrix with the divided values.</returns>
-  //  public static Matrix Divide(float[,] matrix, float right)
-  //  {
-  //    Matrix result = new Matrix(matrix.GetLength(0), matrix.GetLength(1));
-  //    for (int i = 0; i < matrix.GetLength(0); i++)
-  //      for (int j = 0; j < matrix.GetLength(1); j++)
-  //        result[i, j] = matrix[i, j] / right;
-  //    return result;
-  //  }
+    /// <summary>Gets the minor of a matrix.</summary>
+    /// <param name="matrix">The matrix to get the minor of.</param>
+    /// <param name="row">The restricted row to form the minor.</param>
+    /// <param name="column">The restricted column to form the minor.</param>
+    /// <returns>The minor of the matrix.</returns>
+    public static Matrix_2dArray Minor(float[,] matrix, int row, int column)
+    {
+      Matrix_2dArray minor = new Matrix_2dArray(matrix.GetLength(0) - 1, matrix.GetLength(1) - 1);
+      int m = 0, n = 0;
+      for (int i = 0; i < matrix.GetLength(0); i++)
+      {
+        if (i == row) continue;
+        n = 0;
+        for (int j = 0; j < matrix.GetLength(1); j++)
+        {
+          if (j == column) continue;
+          minor[m, n] = matrix[i, j];
+          n++;
+        }
+        m++;
+      }
+      return minor;
+    }
 
-  //  /// <summary>Gets the minor of a matrix.</summary>
-  //  /// <param name="matrix">The matrix to get the minor of.</param>
-  //  /// <param name="row">The restricted row to form the minor.</param>
-  //  /// <param name="column">The restricted column to form the minor.</param>
-  //  /// <returns>The minor of the matrix.</returns>
-  //  public static Matrix Minor(float[,] matrix, int row, int column)
-  //  {
-  //    Matrix minor = new Matrix(matrix.GetLength(0) - 1, matrix.GetLength(1) - 1);
-  //    int m = 0, n = 0;
-  //    for (int i = 0; i < matrix.GetLength(0); i++)
-  //    {
-  //      if (i == row) continue;
-  //      n = 0;
-  //      for (int j = 0; j < matrix.GetLength(1); j++)
-  //      {
-  //        if (j == column) continue;
-  //        minor[m, n] = matrix[i, j];
-  //        n++;
-  //      }
-  //      m++;
-  //    }
-  //    return minor;
-  //  }
+    private static void RowMultiplication(float[,] matrix, int row, float scalar)
+    {
+      for (int j = 0; j < matrix.GetLength(1); j++)
+        matrix[row, j] *= scalar;
+    }
 
-  //  private static void RowMultiplication(float[,] matrix, int row, float scalar)
-  //  {
-  //    for (int j = 0; j < matrix.GetLength(1); j++)
-  //      matrix[row, j] *= scalar;
-  //  }
+    private static void RowAddition(float[,] matrix, int target, int second, float scalar)
+    {
+      for (int j = 0; j < matrix.GetLength(1); j++)
+        matrix[target, j] += (matrix[second, j] * scalar);
+    }
 
-  //  private static void RowAddition(float[,] matrix, int target, int second, float scalar)
-  //  {
-  //    for (int j = 0; j < matrix.GetLength(1); j++)
-  //      matrix[target, j] += (matrix[second, j] * scalar);
-  //  }
+    private static void SwapRows(float[,] matrix, int row1, int row2)
+    {
+      for (int j = 0; j < matrix.GetLength(1); j++)
+      {
+        float temp = matrix[row1, j];
+        matrix[row1, j] = matrix[row2, j];
+        matrix[row2, j] = temp;
+      }
+    }
 
-  //  private static void SwapRows(float[,] matrix, int row1, int row2)
-  //  {
-  //    for (int j = 0; j < matrix.GetLength(1); j++)
-  //    {
-  //      float temp = matrix[row1, j];
-  //      matrix[row1, j] = matrix[row2, j];
-  //      matrix[row2, j] = temp;
-  //    }
-  //  }
+    /// <summary>Combines two matrices from left to right 
+    /// (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+    /// <param name="left">The left matrix of the concatenation.</param>
+    /// <param name="right">The right matrix of the concatenation.</param>
+    /// <returns>The resulting matrix of the concatenation.</returns>
+    public static Matrix_2dArray ConcatenateRowWise(float[,] left, float[,] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0))
+        throw new MatrixException("invalid row-wise concatenation !(left.Rows == right.Rows).");
+      Matrix_2dArray result = new Matrix_2dArray(left.GetLength(0), left.GetLength(1) + right.GetLength(1));
+      for (int i = 0; i < result.Rows; i++)
+        for (int j = 0; j < result.Columns; j++)
+        {
+          if (j < left.GetLength(1)) result[i, j] = left[i, j];
+          else result[i, j] = right[i, j - left.GetLength(1)];
+        }
+      return result;
+    }
 
-  //  /// <summary>Combines two matrices from left to right 
-  //  /// (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-  //  /// <param name="left">The left matrix of the concatenation.</param>
-  //  /// <param name="right">The right matrix of the concatenation.</param>
-  //  /// <returns>The resulting matrix of the concatenation.</returns>
-  //  public static Matrix ConcatenateRowWise(float[,] left, float[,] right)
-  //  {
-  //    if (left.GetLength(0) != right.GetLength(0))
-  //      throw new MatrixException("invalid row-wise concatenation !(left.Rows == right.Rows).");
-  //    Matrix result = new Matrix(left.GetLength(0), left.GetLength(1) + right.GetLength(1));
-  //    for (int i = 0; i < result.Rows; i++)
-  //      for (int j = 0; j < result.Columns; j++)
-  //      {
-  //        if (j < left.GetLength(1)) result[i, j] = left[i, j];
-  //        else result[i, j] = right[i, j - left.GetLength(1)];
-  //      }
-  //    return result;
-  //  }
+    /// <summary>Calculates the determinent of a square matrix.</summary>
+    /// <param name="matrix">The matrix to calculate the determinent of.</param>
+    /// <returns>The determinent of the matrix.</returns>
+    public static float Determinent(float[,] matrix)
+    {
+      if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+        throw new MatrixException("invalid determinent !(matrix.IsSquare).");
+      float det = 1.0f;
+      try
+      {
+        Matrix_2dArray rref = Matrix_2dArray.Clone(matrix);
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+          if (rref[i, i] == 0)
+            for (int j = i + 1; j < rref.Rows; j++)
+              if (rref[j, i] != 0)
+              {
+                Matrix_2dArray.SwapRows(rref, i, j);
+                det *= -1;
+              }
+          det *= rref[i, i];
+          Matrix_2dArray.RowMultiplication(rref, i, 1 / rref[i, i]);
+          for (int j = i + 1; j < rref.Rows; j++)
+            Matrix_2dArray.RowAddition(rref, j, i, -rref[j, i]);
+          for (int j = i - 1; j >= 0; j--)
+            Matrix_2dArray.RowAddition(rref, j, i, -rref[j, i]);
+        }
+        return det;
+      }
+      catch (Exception) { throw new MatrixException("determinent computation failed."); }
+    }
 
-  //  /// <summary>Calculates the determinent of a square matrix.</summary>
-  //  /// <param name="matrix">The matrix to calculate the determinent of.</param>
-  //  /// <returns>The determinent of the matrix.</returns>
-  //  public static float Determinent(float[,] matrix)
-  //  {
-  //    if (!(matrix.GetLength(0) == matrix.GetLength(1)))
-  //      throw new MatrixException("invalid determinent !(matrix.IsSquare).");
-  //    float det = 1.0f;
-  //    try
-  //    {
-  //      Matrix rref = Matrix.Clone(matrix);
-  //      for (int i = 0; i < matrix.GetLength(0); i++)
-  //      {
-  //        if (rref[i, i] == 0)
-  //          for (int j = i + 1; j < rref.Rows; j++)
-  //            if (rref[j, i] != 0)
-  //            {
-  //              Matrix.SwapRows(rref, i, j);
-  //              det *= -1;
-  //            }
-  //        det *= rref[i, i];
-  //        Matrix.RowMultiplication(rref, i, 1 / rref[i, i]);
-  //        for (int j = i + 1; j < rref.Rows; j++)
-  //          Matrix.RowAddition(rref, j, i, -rref[j, i]);
-  //        for (int j = i - 1; j >= 0; j--)
-  //          Matrix.RowAddition(rref, j, i, -rref[j, i]);
-  //      }
-  //      return det;
-  //    }
-  //    catch (Exception) { throw new MatrixException("determinent computation failed."); }
-  //  }
+    /// <summary>Calculates the echelon of a matrix (aka REF).</summary>
+    /// <param name="matrix">The matrix to calculate the echelon of (aka REF).</param>
+    /// <returns>The echelon of the matrix (aka REF).</returns>
+    public static Matrix_2dArray Echelon(float[,] matrix)
+    {
+      try
+      {
+        Matrix_2dArray result = Matrix_2dArray.Clone(matrix);
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+          if (result[i, i] == 0)
+            for (int j = i + 1; j < result.Rows; j++)
+              if (result[j, i] != 0)
+                Matrix_2dArray.SwapRows(result, i, j);
+          if (result[i, i] == 0)
+            continue;
+          if (result[i, i] != 1)
+            for (int j = i + 1; j < result.Rows; j++)
+              if (result[j, i] == 1)
+                Matrix_2dArray.SwapRows(result, i, j);
+          Matrix_2dArray.RowMultiplication(result, i, 1 / result[i, i]);
+          for (int j = i + 1; j < result.Rows; j++)
+            Matrix_2dArray.RowAddition(result, j, i, -result[j, i]);
+        }
+        return result;
+      }
+      catch { throw new MatrixException("echelon computation failed."); }
+    }
 
-  //  /// <summary>Calculates the echelon of a matrix (aka REF).</summary>
-  //  /// <param name="matrix">The matrix to calculate the echelon of (aka REF).</param>
-  //  /// <returns>The echelon of the matrix (aka REF).</returns>
-  //  public static Matrix Echelon(float[,] matrix)
-  //  {
-  //    try
-  //    {
-  //      Matrix result = Matrix.Clone(matrix);
-  //      for (int i = 0; i < matrix.GetLength(0); i++)
-  //      {
-  //        if (result[i, i] == 0)
-  //          for (int j = i + 1; j < result.Rows; j++)
-  //            if (result[j, i] != 0)
-  //              Matrix.SwapRows(result, i, j);
-  //        if (result[i, i] == 0)
-  //          continue;
-  //        if (result[i, i] != 1)
-  //          for (int j = i + 1; j < result.Rows; j++)
-  //            if (result[j, i] == 1)
-  //              Matrix.SwapRows(result, i, j);
-  //        Matrix.RowMultiplication(result, i, 1 / result[i, i]);
-  //        for (int j = i + 1; j < result.Rows; j++)
-  //          Matrix.RowAddition(result, j, i, -result[j, i]);
-  //      }
-  //      return result;
-  //    }
-  //    catch { throw new MatrixException("echelon computation failed."); }
-  //  }
+    /// <summary>Calculates the echelon of a matrix and reduces it (aka RREF).</summary>
+    /// <param name="matrix">The matrix matrix to calculate the reduced echelon of (aka RREF).</param>
+    /// <returns>The reduced echelon of the matrix (aka RREF).</returns>
+    public static Matrix_2dArray ReducedEchelon(float[,] matrix)
+    {
+      try
+      {
+        Matrix_2dArray result = Matrix_2dArray.Clone(matrix);
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+          if (result[i, i] == 0)
+            for (int j = i + 1; j < result.Rows; j++)
+              if (result[j, i] != 0)
+                Matrix_2dArray.SwapRows(result, i, j);
+          if (result[i, i] == 0) continue;
+          if (result[i, i] != 1)
+            for (int j = i + 1; j < result.Rows; j++)
+              if (result[j, i] == 1)
+                Matrix_2dArray.SwapRows(result, i, j);
+          Matrix_2dArray.RowMultiplication(result, i, 1 / result[i, i]);
+          for (int j = i + 1; j < result.Rows; j++)
+            Matrix_2dArray.RowAddition(result, j, i, -result[j, i]);
+          for (int j = i - 1; j >= 0; j--)
+            Matrix_2dArray.RowAddition(result, j, i, -result[j, i]);
+        }
+        return result;
+      }
+      catch { throw new MatrixException("reduced echelon calculation failed."); }
+    }
 
-  //  /// <summary>Calculates the echelon of a matrix and reduces it (aka RREF).</summary>
-  //  /// <param name="matrix">The matrix matrix to calculate the reduced echelon of (aka RREF).</param>
-  //  /// <returns>The reduced echelon of the matrix (aka RREF).</returns>
-  //  public static Matrix ReducedEchelon(float[,] matrix)
-  //  {
-  //    try
-  //    {
-  //      Matrix result = Matrix.Clone(matrix);
-  //      for (int i = 0; i < matrix.GetLength(0); i++)
-  //      {
-  //        if (result[i, i] == 0)
-  //          for (int j = i + 1; j < result.Rows; j++)
-  //            if (result[j, i] != 0)
-  //              Matrix.SwapRows(result, i, j);
-  //        if (result[i, i] == 0) continue;
-  //        if (result[i, i] != 1)
-  //          for (int j = i + 1; j < result.Rows; j++)
-  //            if (result[j, i] == 1)
-  //              Matrix.SwapRows(result, i, j);
-  //        Matrix.RowMultiplication(result, i, 1 / result[i, i]);
-  //        for (int j = i + 1; j < result.Rows; j++)
-  //          Matrix.RowAddition(result, j, i, -result[j, i]);
-  //        for (int j = i - 1; j >= 0; j--)
-  //          Matrix.RowAddition(result, j, i, -result[j, i]);
-  //      }
-  //      return result;
-  //    }
-  //    catch { throw new MatrixException("reduced echelon calculation failed."); }
-  //  }
+    /// <summary>Calculates the inverse of a matrix.</summary>
+    /// <param name="matrix">The matrix to calculate the inverse of.</param>
+    /// <returns>The inverse of the matrix.</returns>
+    public static Matrix_2dArray Inverse(float[,] matrix)
+    {
+      if (Matrix_2dArray.Determinent(matrix) == 0)
+        throw new MatrixException("inverse calculation failed.");
+      try
+      {
+        Matrix_2dArray identity = Matrix_2dArray.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
+        Matrix_2dArray rref = Matrix_2dArray.Clone(matrix);
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+          if (rref[i, i] == 0)
+            for (int j = i + 1; j < rref.Rows; j++)
+              if (rref[j, i] != 0)
+              {
+                Matrix_2dArray.SwapRows(rref, i, j);
+                Matrix_2dArray.SwapRows(identity, i, j);
+              }
+          Matrix_2dArray.RowMultiplication(identity, i, 1 / rref[i, i]);
+          Matrix_2dArray.RowMultiplication(rref, i, 1 / rref[i, i]);
+          for (int j = i + 1; j < rref.Rows; j++)
+          {
+            Matrix_2dArray.RowAddition(identity, j, i, -rref[j, i]);
+            Matrix_2dArray.RowAddition(rref, j, i, -rref[j, i]);
+          }
+          for (int j = i - 1; j >= 0; j--)
+          {
+            Matrix_2dArray.RowAddition(identity, j, i, -rref[j, i]);
+            Matrix_2dArray.RowAddition(rref, j, i, -rref[j, i]);
+          }
+        }
+        return identity;
+      }
+      catch { throw new MatrixException("inverse calculation failed."); }
+    }
 
-  //  /// <summary>Calculates the inverse of a matrix.</summary>
-  //  /// <param name="matrix">The matrix to calculate the inverse of.</param>
-  //  /// <returns>The inverse of the matrix.</returns>
-  //  public static Matrix Inverse(float[,] matrix)
-  //  {
-  //    if (Matrix.Determinent(matrix) == 0)
-  //      throw new MatrixException("inverse calculation failed.");
-  //    try
-  //    {
-  //      Matrix identity = Matrix.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
-  //      Matrix rref = Matrix.Clone(matrix);
-  //      for (int i = 0; i < matrix.GetLength(0); i++)
-  //      {
-  //        if (rref[i, i] == 0)
-  //          for (int j = i + 1; j < rref.Rows; j++)
-  //            if (rref[j, i] != 0)
-  //            {
-  //              Matrix.SwapRows(rref, i, j);
-  //              Matrix.SwapRows(identity, i, j);
-  //            }
-  //        Matrix.RowMultiplication(identity, i, 1 / rref[i, i]);
-  //        Matrix.RowMultiplication(rref, i, 1 / rref[i, i]);
-  //        for (int j = i + 1; j < rref.Rows; j++)
-  //        {
-  //          Matrix.RowAddition(identity, j, i, -rref[j, i]);
-  //          Matrix.RowAddition(rref, j, i, -rref[j, i]);
-  //        }
-  //        for (int j = i - 1; j >= 0; j--)
-  //        {
-  //          Matrix.RowAddition(identity, j, i, -rref[j, i]);
-  //          Matrix.RowAddition(rref, j, i, -rref[j, i]);
-  //        }
-  //      }
-  //      return identity;
-  //    }
-  //    catch { throw new MatrixException("inverse calculation failed."); }
-  //  }
+    /// <summary>Calculates the adjoint of a matrix.</summary>
+    /// <param name="matrix">The matrix to calculate the adjoint of.</param>
+    /// <returns>The adjoint of the matrix.</returns>
+    public static Matrix_2dArray Adjoint(float[,] matrix)
+    {
+      if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+        throw new MatrixException("Adjoint of a non-square matrix does not exists");
+      Matrix_2dArray AdjointMatrix = new Matrix_2dArray(matrix.GetLength(0), matrix.GetLength(1));
+      for (int i = 0; i < matrix.GetLength(0); i++)
+        for (int j = 0; j < matrix.GetLength(1); j++)
+          if ((i + j) % 2 == 0)
+            AdjointMatrix[i, j] = Matrix_2dArray.Determinent(Matrix_2dArray.Minor(matrix, i, j));
+          else
+            AdjointMatrix[i, j] = -Matrix_2dArray.Determinent(Matrix_2dArray.Minor(matrix, i, j));
+      return Matrix_2dArray.Transpose(AdjointMatrix);
+    }
 
-  //  /// <summary>Calculates the adjoint of a matrix.</summary>
-  //  /// <param name="matrix">The matrix to calculate the adjoint of.</param>
-  //  /// <returns>The adjoint of the matrix.</returns>
-  //  public static Matrix Adjoint(float[,] matrix)
-  //  {
-  //    if (!(matrix.GetLength(0) == matrix.GetLength(1)))
-  //      throw new MatrixException("Adjoint of a non-square matrix does not exists");
-  //    Matrix AdjointMatrix = new Matrix(matrix.GetLength(0), matrix.GetLength(1));
-  //    for (int i = 0; i < matrix.GetLength(0); i++)
-  //      for (int j = 0; j < matrix.GetLength(1); j++)
-  //        if ((i + j) % 2 == 0)
-  //          AdjointMatrix[i, j] = Matrix.Determinent(Matrix.Minor(matrix, i, j));
-  //        else
-  //          AdjointMatrix[i, j] = -Matrix.Determinent(Matrix.Minor(matrix, i, j));
-  //    return Matrix.Transpose(AdjointMatrix);
-  //  }
+    /// <summary>Returns the transpose of a matrix.</summary>
+    /// <param name="matrix">The matrix to transpose.</param>
+    /// <returns>The transpose of the matrix.</returns>
+    public static Matrix_2dArray Transpose(float[,] matrix)
+    {
+      Matrix_2dArray transpose = new Matrix_2dArray(matrix.GetLength(1), matrix.GetLength(0));
+      for (int i = 0; i < transpose.Rows; i++)
+        for (int j = 0; j < transpose.Columns; j++)
+          transpose[i, j] = matrix[j, i];
+      return transpose;
+    }
 
-  //  /// <summary>Returns the transpose of a matrix.</summary>
-  //  /// <param name="matrix">The matrix to transpose.</param>
-  //  /// <returns>The transpose of the matrix.</returns>
-  //  public static Matrix Transpose(float[,] matrix)
-  //  {
-  //    Matrix transpose = new Matrix(matrix.GetLength(1), matrix.GetLength(0));
-  //    for (int i = 0; i < transpose.Rows; i++)
-  //      for (int j = 0; j < transpose.Columns; j++)
-  //        transpose[i, j] = matrix[j, i];
-  //    return transpose;
-  //  }
+    /// <summary>Decomposes a matrix into lower-upper reptresentation.</summary>
+    /// <param name="matrix">The matrix to decompose.</param>
+    /// <param name="Lower">The computed lower triangular matrix.</param>
+    /// <param name="Upper">The computed upper triangular matrix.</param>
+    public static void DecomposeLU(float[,] matrix, out Matrix_2dArray Lower, out Matrix_2dArray Upper)
+    {
+      if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+        throw new MatrixException("The matrix is not square!");
+      Lower = Matrix_2dArray.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
+      Upper = Matrix_2dArray.Clone(matrix);
+      int[] permutation = new int[matrix.GetLength(0)];
+      for (int i = 0; i < matrix.GetLength(0); i++) permutation[i] = i;
+      float p = 0, pom2, detOfP = 1;
+      int k0 = 0, pom1 = 0;
+      for (int k = 0; k < matrix.GetLength(1) - 1; k++)
+      {
+        p = 0;
+        for (int i = k; i < matrix.GetLength(0); i++)
+          if (Calc.Abs(Upper[i, k]) > p)
+          {
+            p = Calc.Abs(Upper[i, k]);
+            k0 = i;
+          }
+        if (p == 0)
+          throw new MatrixException("The matrix is singular!");
+        pom1 = permutation[k];
+        permutation[k] = permutation[k0];
+        permutation[k0] = pom1;
+        for (int i = 0; i < k; i++)
+        {
+          pom2 = Lower[k, i];
+          Lower[k, i] = Lower[k0, i];
+          Lower[k0, i] = pom2;
+        }
+        if (k != k0)
+          detOfP *= -1;
+        for (int i = 0; i < matrix.GetLength(1); i++)
+        {
+          pom2 = Upper[k, i];
+          Upper[k, i] = Upper[k0, i];
+          Upper[k0, i] = pom2;
+        }
+        for (int i = k + 1; i < matrix.GetLength(0); i++)
+        {
+          Lower[i, k] = Upper[i, k] / Upper[k, k];
+          for (int j = k; j < matrix.GetLength(1); j++)
+            Upper[i, j] = Upper[i, j] - Lower[i, k] * Upper[k, j];
+        }
+      }
+    }
 
-  //  /// <summary>Decomposes a matrix into lower-upper reptresentation.</summary>
-  //  /// <param name="matrix">The matrix to decompose.</param>
-  //  /// <param name="Lower">The computed lower triangular matrix.</param>
-  //  /// <param name="Upper">The computed upper triangular matrix.</param>
-  //  public static void DecomposeLU(float[,] matrix, out Matrix Lower, out Matrix Upper)
-  //  {
-  //    if (!(matrix.GetLength(0) == matrix.GetLength(1)))
-  //      throw new MatrixException("The matrix is not square!");
-  //    Lower = Matrix.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
-  //    Upper = Matrix.Clone(matrix);
-  //    int[] permutation = new int[matrix.GetLength(0)];
-  //    for (int i = 0; i < matrix.GetLength(0); i++) permutation[i] = i;
-  //    float p = 0, pom2, detOfP = 1;
-  //    int k0 = 0, pom1 = 0;
-  //    for (int k = 0; k < matrix.GetLength(1) - 1; k++)
-  //    {
-  //      p = 0;
-  //      for (int i = k; i < matrix.GetLength(0); i++)
-  //        if (Calc.Abs(Upper[i, k]) > p)
-  //        {
-  //          p = Calc.Abs(Upper[i, k]);
-  //          k0 = i;
-  //        }
-  //      if (p == 0)
-  //        throw new MatrixException("The matrix is singular!");
-  //      pom1 = permutation[k];
-  //      permutation[k] = permutation[k0];
-  //      permutation[k0] = pom1;
-  //      for (int i = 0; i < k; i++)
-  //      {
-  //        pom2 = Lower[k, i];
-  //        Lower[k, i] = Lower[k0, i];
-  //        Lower[k0, i] = pom2;
-  //      }
-  //      if (k != k0)
-  //        detOfP *= -1;
-  //      for (int i = 0; i < matrix.GetLength(1); i++)
-  //      {
-  //        pom2 = Upper[k, i];
-  //        Upper[k, i] = Upper[k0, i];
-  //        Upper[k0, i] = pom2;
-  //      }
-  //      for (int i = k + 1; i < matrix.GetLength(0); i++)
-  //      {
-  //        Lower[i, k] = Upper[i, k] / Upper[k, k];
-  //        for (int j = k; j < matrix.GetLength(1); j++)
-  //          Upper[i, j] = Upper[i, j] - Lower[i, k] * Upper[k, j];
-  //      }
-  //    }
-  //  }
+    /// <summary>Creates a copy of a matrix.</summary>
+    /// <param name="matrix">The matrix to copy.</param>
+    /// <returns>A copy of the matrix.</returns>
+    public static Matrix_2dArray Clone(float[,] matrix)
+    {
+      Matrix_2dArray result = new Matrix_2dArray(matrix.GetLength(0), matrix.GetLength(1));
+      for (int i = 0; i < matrix.GetLength(0); i++)
+        for (int j = 0; j < matrix.GetLength(1); j++)
+          result[i, j] = matrix[i, j];
+      return result;
+    }
 
-  //  /// <summary>Creates a copy of a matrix.</summary>
-  //  /// <param name="matrix">The matrix to copy.</param>
-  //  /// <returns>A copy of the matrix.</returns>
-  //  public static Matrix Clone(float[,] matrix)
-  //  {
-  //    Matrix result = new Matrix(matrix.GetLength(0), matrix.GetLength(1));
-  //    for (int i = 0; i < matrix.GetLength(0); i++)
-  //      for (int j = 0; j < matrix.GetLength(1); j++)
-  //        result[i, j] = matrix[i, j];
-  //    return result;
-  //  }
+    /// <summary>Does a value equality check.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsByValue(float[,] left, float[,] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        for (int j = 0; j < left.GetLength(1); j++)
+          if (left[i, j] != right[i, j])
+            return false;
+      return true;
+    }
 
-  //  /// <summary>Does a value equality check.</summary>
-  //  /// <param name="left">The first matrix to check for equality.</param>
-  //  /// <param name="right">The second matrix to check for equality.</param>
-  //  /// <returns>True if values are equal, false if not.</returns>
-  //  public static bool EqualsByValue(float[,] left, float[,] right)
-  //  {
-  //    if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-  //      return false;
-  //    for (int i = 0; i < left.GetLength(0); i++)
-  //      for (int j = 0; j < left.GetLength(1); j++)
-  //        if (left[i, j] != right[i, j])
-  //          return false;
-  //    return true;
-  //  }
+    /// <summary>Does a value equality check with leniency.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsByValue(float[,] left, float[,] right, float leniency)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        for (int j = 0; j < left.GetLength(1); j++)
+          if (Calc.Abs(left[i, j] - right[i, j]) > leniency)
+            return false;
+      return true;
+    }
 
-  //  /// <summary>Does a value equality check with leniency.</summary>
-  //  /// <param name="left">The first matrix to check for equality.</param>
-  //  /// <param name="right">The second matrix to check for equality.</param>
-  //  /// <param name="leniency">How much the values can vary but still be considered equal.</param>
-  //  /// <returns>True if values are equal, false if not.</returns>
-  //  public static bool EqualsByValue(float[,] left, float[,] right, float leniency)
-  //  {
-  //    if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-  //      return false;
-  //    for (int i = 0; i < left.GetLength(0); i++)
-  //      for (int j = 0; j < left.GetLength(1); j++)
-  //        if (Calc.Abs(left[i, j] - right[i, j]) > leniency)
-  //          return false;
-  //    return true;
-  //  }
+    /// <summary>Checks if two matrices are equal by reverences.</summary>
+    /// <param name="left">The left matric of the equality check.</param>
+    /// <param name="right">The right matrix of the equality check.</param>
+    /// <returns>True if the references are equal, false if not.</returns>
+    public static bool EqualsByReference(float[,] left, float[,] right)
+    {
+      return left.Equals(right);
+    }
 
-  //  /// <summary>Checks if two matrices are equal by reverences.</summary>
-  //  /// <param name="left">The left matric of the equality check.</param>
-  //  /// <param name="right">The right matrix of the equality check.</param>
-  //  /// <returns>True if the references are equal, false if not.</returns>
-  //  public static bool EqualsByReference(float[,] left, float[,] right)
-  //  {
-  //    return left.Equals(right);
-  //  }
+    /// <summary>Prints out a string representation of this matrix.</summary>
+    /// <returns>A string representing this matrix.</returns>
+    public override string ToString()
+    {
+      return base.ToString();
+      //StringBuilder matrix = new StringBuilder();
+      //for (int i = 0; i < Rows; i++)
+      //{
+      //  for (int j = 0; j < Columns; j++)
+      //    matrix.Append(String.Format("{0:0.##}\t", _matrix[i, j]));
+      //  matrix.Append("\n");
+      //}
+      //return matrix.ToString();
+    }
 
-  //  /// <summary>Prints out a string representation of this matrix.</summary>
-  //  /// <returns>A string representing this matrix.</returns>
-  //  public override string ToString()
-  //  {
-  //    return base.ToString();
-  //    //StringBuilder matrix = new StringBuilder();
-  //    //for (int i = 0; i < Rows; i++)
-  //    //{
-  //    //  for (int j = 0; j < Columns; j++)
-  //    //    matrix.Append(String.Format("{0:0.##}\t", _matrix[i, j]));
-  //    //  matrix.Append("\n");
-  //    //}
-  //    //return matrix.ToString();
-  //  }
+    /// <summary>Computes a hash code from the values of this matrix.</summary>
+    /// <returns>A hash code for the matrix.</returns>
+    public override int GetHashCode()
+    {
+      // return base.GetHashCode();
+      int hash = _matrix[0, 0].GetHashCode();
+      for (int i = 0; i < Rows; i++)
+        for (int j = 0; j < Columns; j++)
+          hash = hash ^ _matrix[i, j].GetHashCode();
+      return hash;
+    }
 
-  //  /// <summary>Computes a hash code from the values of this matrix.</summary>
-  //  /// <returns>A hash code for the matrix.</returns>
-  //  public override int GetHashCode()
-  //  {
-  //    // return base.GetHashCode();
-  //    int hash = _matrix[0, 0].GetHashCode();
-  //    for (int i = 0; i < Rows; i++)
-  //      for (int j = 0; j < Columns; j++)
-  //        hash = hash ^ _matrix[i, j].GetHashCode();
-  //    return hash;
-  //  }
+    /// <summary>Does an equality check by reference.</summary>
+    /// <param name="obj">The object to compare to.</param>
+    /// <returns>True if the references are equal, false if not.</returns>
+    public override bool Equals(object obj)
+    {
+      return base.Equals(obj) || _matrix.Equals(obj);
+    }
 
-  //  /// <summary>Does an equality check by reference.</summary>
-  //  /// <param name="obj">The object to compare to.</param>
-  //  /// <returns>True if the references are equal, false if not.</returns>
-  //  public override bool Equals(object obj)
-  //  {
-  //    return base.Equals(obj) || _matrix.Equals(obj);
-  //  }
+    private class MatrixException : Exception
+    {
+      public MatrixException(string Message) : base(Message) { }
+    }
 
-  //  private class MatrixException : Exception
-  //  {
-  //    public MatrixException(string Message) : base(Message) { }
-  //  }
+    #region Alternate Compututation Methods
 
-  //  #region Alternate Compututation Methods
+    //public static float Determinent(Matrix matrix)
+    //{
+    //  if (!matrix.IsSquare)
+    //    throw new MatrixException("invalid determinent !(matrix.IsSquare).");
+    //  return DeterminentRecursive(matrix);
+    //}
+    //private static float DeterminentRecursive(Matrix matrix)
+    //{
+    //  if (matrix.Rows == 1)
+    //    return matrix[0, 0];
+    //  float det = 0.0f;
+    //  for (int j = 0; j < matrix.Columns; j++)
+    //    det += (matrix[0, j] * DeterminentRecursive(Matrix.Minor(matrix, 0, j)) * (int)System.Math.Pow(-1, 0 + j));
+    //  return det;
+    //}
 
-  //  //public static float Determinent(Matrix matrix)
-  //  //{
-  //  //  if (!matrix.IsSquare)
-  //  //    throw new MatrixException("invalid determinent !(matrix.IsSquare).");
-  //  //  return DeterminentRecursive(matrix);
-  //  //}
-  //  //private static float DeterminentRecursive(Matrix matrix)
-  //  //{
-  //  //  if (matrix.Rows == 1)
-  //  //    return matrix[0, 0];
-  //  //  float det = 0.0f;
-  //  //  for (int j = 0; j < matrix.Columns; j++)
-  //  //    det += (matrix[0, j] * DeterminentRecursive(Matrix.Minor(matrix, 0, j)) * (int)System.Math.Pow(-1, 0 + j));
-  //  //  return det;
-  //  //}
+    //public static Matrix Inverse(Matrix matrix)
+    //{
+    //  float determinent = Matrix.Determinent(matrix);
+    //  if (determinent == 0)
+    //    throw new MatrixException("inverse calculation failed.");
+    //  return Matrix.Adjoint(matrix) / determinent;
+    //}
 
-  //  //public static Matrix Inverse(Matrix matrix)
-  //  //{
-  //  //  float determinent = Matrix.Determinent(matrix);
-  //  //  if (determinent == 0)
-  //  //    throw new MatrixException("inverse calculation failed.");
-  //  //  return Matrix.Adjoint(matrix) / determinent;
-  //  //}
-
-  //  #endregion
-  //}
-
-  #endregion
+    #endregion
+  }
 
   // This is the original version of matrices that I used in my engine. It only supported
   // 3x3 matrices, which obviously needed improvement.

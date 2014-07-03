@@ -154,7 +154,7 @@ namespace Seven.Mathematics
     public bool EqualsReference(Quaternion right) { return Quaternion.EqualsReference(this, right); }
     /// <summary>Converts a quaternion into a matrix.</summary>
     /// <returns>The resulting matrix.</returns>
-    public Matrix ToMatrix() { return Quaternion.ToMatrix(this); }
+    public Matrix_Flattened ToMatrix() { return Quaternion.ToMatrix(this); }
 
     /// <summary>Computes the length of quaternion.</summary>
     /// <param name="quaternion">The quaternion to compute the length of.</param>
@@ -443,9 +443,9 @@ namespace Seven.Mathematics
     /// <summary>Converts a quaternion into a matrix.</summary>
     /// <param name="quaternion">The quaternion of the conversion.</param>
     /// <returns>The resulting matrix.</returns>
-    public static Matrix ToMatrix(Quaternion quaternion)
+    public static Matrix_Flattened ToMatrix(Quaternion quaternion)
     {
-      return new Matrix(3, 3,
+      return new Matrix_Flattened(3, 3,
         quaternion.W * quaternion.W + quaternion.X * quaternion.X - quaternion.Y * quaternion.Y - quaternion.Z * quaternion.Z,
         2 * quaternion.X * quaternion.Y - 2 * quaternion.W * quaternion.Z,
         2 *quaternion.X * quaternion.Z + 2 * quaternion.W * quaternion.Y,

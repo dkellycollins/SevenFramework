@@ -41,6 +41,7 @@
     <Compile Include="Equate.cs" />
     <Compile Include="Error.cs" />
     <Compile Include="Mathematics\Calc.cs" />
+    <Compile Include="Mathematics\Calculator.cs" />
     <Compile Include="Mathematics\Function.cs" />
     <Compile Include="Mathematics\Matrix.cs" />
     <Compile Include="Mathematics\Quaternion.cs" />

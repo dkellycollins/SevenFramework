@@ -133,7 +133,7 @@ namespace Seven.Mathematics
     /// <summary>Automatically converts a vector into a matrix.</summary>
     /// <param name="vector">The vector of the conversion.</param>
     /// <returns>The result of the conversion.</returns>
-    public static implicit operator Matrix(Vector vector) { return Matrix.UnsafeFactoryFromVector(vector); }
+    public static implicit operator Matrix_Flattened(Vector vector) { return Matrix_Flattened.UnsafeFactoryFromVector(vector); }
 
     /// <summary>Adds two vectors together.</summary>
     /// <param name="right">The vector to add to this one.</param>
@@ -521,9 +521,9 @@ namespace Seven.Mathematics
     /// <summary>Converts the vector into a matrix.</summary>
     /// <param name="vector">The vecotr to convert.</param>
     /// <returns>The matrix of the conversion.</returns>
-    public static Matrix ToMatrix(Vector vector)
+    public static Matrix_Flattened ToMatrix(Vector vector)
     {
-      return new Matrix(vector.Dimensions, 1, vector.Floats);
+      return new Matrix_Flattened(vector.Dimensions, 1, vector.Floats);
     }
 
     /// <summary>Prints out a string representation of this matrix.</summary>
