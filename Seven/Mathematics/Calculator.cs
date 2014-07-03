@@ -39,7 +39,12 @@ namespace Seven.Mathematics
 
   public static class Calculator
   {
-    public static Calculator<int> _int(this int integer)
+    public static Calculator<int> _int
+    {
+      get { return (Calculator<int>)Calculator_int.Get; }
+    }
+
+    public static Calculator<int> GetCalculator(this int integer)
     {
       return (Calculator<int>)Calculator_int.Get;
     }
