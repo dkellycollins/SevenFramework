@@ -6,7 +6,6 @@
 // THIS FILE CONTAINS ETERNAL CITATIONS
 
 using System;
-using Seven;
 using Seven.Parallels;
 
 namespace Seven.Structures

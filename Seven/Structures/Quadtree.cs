@@ -17,7 +17,7 @@ namespace Seven.Structures
   /// <summary>Axis-Aligned rectangular prism generic octree for storing items along three axis.</summary>
   /// <typeparam name="T">The generice type of items to be stored in this octree.</typeparam>
   [System.Serializable]
-  public class Quadtree_Linked<T, M> : Octree<T>
+  public class Quadtree_Linked<T, M> : Quadtree<T>
   {
     /// <summary>Represents a single node of the octree. Includes references both upwards and
     /// downwards the tree.</summary>
@@ -39,6 +39,8 @@ namespace Seven.Structures
       {
         _minX = minX;
         _minY = minY;
+        _maxX = maxX;
+        _maxY = maxY;
         _parent = parent;
       }
     }
@@ -106,8 +108,8 @@ namespace Seven.Structures
     public bool IsEmpty { get { return _count == 0; } }
 
     public Quadtree_Linked(
-      M minX, M minY, M minZ,
-      M maxX, M maxY, M maxZ,
+      M minX, M minY,
+      M maxX, M maxY,
       int loadFactor,
       Locate<T> locate,
       Compare<M> compare,
@@ -576,12 +578,17 @@ namespace Seven.Structures
 
     public T[] ToArray()
     {
-      int finalIndex;
-      T[] array = new T[_count];
-      ToArray(_top, array, 0, out finalIndex);
-      if (array.Length != finalIndex)
-        throw new Error("There is a glitch in my octree, sorry...");
+      int index = 0;
+      T[] array = new T[this._count];
+      this.Foreach((T entry) => { array[index++] = entry; });
       return array;
+
+      //int finalIndex;
+      //T[] array = new T[_count];
+      //ToArray(_top, array, 0, out finalIndex);
+      //if (array.Length != finalIndex)
+      //  throw new Error("There is a glitch in my octree, sorry...");
+      //return array;
     }
     private void ToArray(Node octreeNode, T[] array, int entryIndex, out int returnIndex)
     {

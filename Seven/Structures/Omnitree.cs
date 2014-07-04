@@ -20,7 +20,7 @@ namespace Seven.Structures
   /// <summary>The one data structure to rule them all. Made by Zachary Patten.</summary>
   /// <typeparam name="T">The generice type of items to be stored in this octree.</typeparam>
   [Serializable]
-  public class Omnitree_Linked<T, M> : Octree<T>
+  public class Omnitree_Linked<T, M> : Omnitree<T>
   {
     /// <summary>Represents a single node of the octree. Includes references both upwards and
     /// downwards the tree.</summary>
@@ -577,12 +577,17 @@ namespace Seven.Structures
 
     public T[] ToArray()
     {
-      int finalIndex;
-      T[] array = new T[_count];
-      ToArray(_top, array, 0, out finalIndex);
-      if (array.Length != finalIndex)
-        throw new Error("There is a glitch in my octree, sorry...");
+      int index = 0;
+      T[] array = new T[this._count];
+      this.Foreach((T entry) => { array[index++] = entry; });
       return array;
+
+      //int finalIndex;
+      //T[] array = new T[_count];
+      //ToArray(_top, array, 0, out finalIndex);
+      //if (array.Length != finalIndex)
+      //  throw new Error("There is a glitch in my octree, sorry...");
+      //return array;
     }
     private void ToArray(Node octreeNode, T[] array, int entryIndex, out int returnIndex)
     {

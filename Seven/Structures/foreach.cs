@@ -11,7 +11,9 @@ namespace Seven.Structures
     /// <summary>Iteration has/was not broken.</summary>
     Continue = 0,
     /// <summary>Iteration has/was broken.</summary>
-    Break = 1
+    Break = 1,
+
+    // Restart // I haven't decide whether to include this one or not
   };
 
   /// <summary>Delegate for data structure iteration.</summary>

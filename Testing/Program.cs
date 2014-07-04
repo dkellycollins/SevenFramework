@@ -22,22 +22,36 @@ namespace Testing
         return Comparison.Equal;
     }
 
+    public static Comparison Compare(double left, double right)
+    {
+      int comparison = left.CompareTo(right);
+      if (comparison < 0)
+        return Comparison.Less;
+      else if (comparison > 0)
+        return Comparison.Greater;
+      else
+        return Comparison.Equal;
+    }
+
     static void Main(string[] args)
     {
       int test = 10;
 
       string message =
-      @"HELLO! WELCOME TO THE SEVEN FRAMEWORK! The framework is a general framework to help with any form of programming. Currently, the most useful component of the framwork is the library of data structures. This library includes the folloing: Links (aka Tuples), Arrays, Lists, Queues, Stacks, Heaps, HashTables, AvlTrees, RedBlackTrees, Octrees, and SkipLists. The followoing data is testing for each structure:";
+      @"HELLO! WELCOME TO THE SEVEN FRAMEWORK! 
+
+The framework is a general framework to help with any form of programming. Currently, the most useful component of the framwork is the library of data structures. This library includes the folloing: Links (aka Tuples), Arrays, Lists, Queues, Stacks, Heaps, HashTables, AvlTrees, RedBlackTrees, Octrees, and SkipLists. The followoing data is testing for each structure:";
 
       Console.WriteLine(message);
       Console.WriteLine();
 
       Console.WriteLine("Functionality Testing=======================");
       Console.WriteLine();
-      Console.WriteLine("items to store (int): 0 - " + test);
+      Console.WriteLine("Storing " + (test) + " items in each structure (except link)");
       Console.WriteLine();
 
       Console.WriteLine(" Testing Link--------------------------------");
+      Console.WriteLine("  Size: 6");
       Link link = new Link<int, int, int, int, int, int>(0, 1, 2, 3, 4, 5);
       Console.Write("   Delegate: ");
       link.Foreach((dynamic current) => { Console.Write(current); });
@@ -48,7 +62,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing Array_Array<Type>-------------------");
+      Console.WriteLine(" Testing Array_Array<int>-------------------");
       Array<int> array = new Array_Array<int>(test);
       for (int i = 0; i < test; i++)
         array[i] = i;
@@ -61,7 +75,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing List_Array<Type>--------------------");
+      Console.WriteLine(" Testing List_Array<int>--------------------");
       List<int> list_array = new List_Array<int>(test);
       for (int i = 0; i < test; i++)
         list_array.Add(i);
@@ -74,7 +88,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing List_Linked<Type>-------------------");
+      Console.WriteLine(" Testing List_Linked<int>-------------------");
       List<int> list_linked = new List_Linked<int>();
       for (int i = 0; i < test; i++)
         list_linked.Add(i);
@@ -87,7 +101,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing Stack_Linked<Type>------------------");
+      Console.WriteLine(" Testing Stack_Linked<int>------------------");
       Stack<int> stack_linked = new Stack_Linked<int>();
       for (int i = 0; i < test; i++)
         stack_linked.Push(i);
@@ -100,7 +114,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing Queue_Linked<Type>------------------");
+      Console.WriteLine(" Testing Queue_Linked<int>------------------");
       Queue<int> queue_linked = new Queue_Linked<int>();
       for (int i = 0; i < test; i++)
         queue_linked.Enqueue(i);
@@ -113,7 +127,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing Heap_Array<Type>--------------------");
+      Console.WriteLine(" Testing Heap_Array<int>--------------------");
       Heap<int> heap_array = new Heap_Array<int>(Compare);
       for (int i = 0; i < test; i++)
         heap_array.Enqueue(i);
@@ -126,7 +140,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing AvlTree_Linked<Type>----------------");
+      Console.WriteLine(" Testing AvlTree_Linked<int>----------------");
       AvlTree<int> avlTree_linked = new AvlTree_Linked<int>(Compare);
       for (int i = 0; i < test; i++)
         avlTree_linked.Add(i);
@@ -139,7 +153,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing RedBlack_Linked<Type>---------------");
+      Console.WriteLine(" Testing RedBlack_Linked<int>---------------");
       RedBlackTree<int> redBlackTree_linked = new RedBlackTree_Linked<int>(Compare);
       for (int i = 0; i < test; i++)
         redBlackTree_linked.Add(i);
@@ -152,7 +166,7 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine(" Testing HashTable_Linked<Type>---------------");
+      Console.WriteLine(" Testing HashTable_Linked<int, int>---------");
       Map<int, int> hashTable_linked = new Map_Linked<int, int>(
         (int left, int right) => { return left == right; },
         (int integer) => { return integer; });
@@ -171,21 +185,65 @@ namespace Testing
       Console.WriteLine();
       Console.WriteLine();
 
-      // I just introduced a bug in my Octree... Ill fix soon -Seven 6-23-14
-      //Console.WriteLine(" Testing Octree_Linked<Type>----------------");
-      //Octree<int> octree_linked = new Octree_Linked<int>(11, 11, 11, test + 2, test,
-      //  (int i, out double x, out double y, out double z) => { x = i; y = i; z = i; });
-      //Octree<int> octree_linked = new Octree_Linked<int>(0, 0, 0, test + 1, 3,
-      //  (int i, out double x, out double y, out double z) => { x = i; y = i; z = i; });
-      //for (int i = 0; i < test; i++)
-      //  octree_linked.Add(i);
-      //Console.Write("   Delegate: ");
-      //octree_linked.Foreach((int current) => { Console.Write(current); });
-      //Console.WriteLine();
-      //Console.Write("   IEnumerator: ");
-      //foreach (int current in octree_linked)
-      //  Console.Write(current);
-      //Console.WriteLine();
+      // The quadtree has a minor bug. I'm already working on it.
+      Console.WriteLine(" Testing Quadtree_Linked<int, double>-------");
+      Quadtree<int> quadtree_linked = new Quadtree_Linked<int, double>(
+        -test - 1, -test - 1, // minimum dimensions of the quadtree
+        test + 1, test + 1, // maximum dimensions of the quadtree
+        test + 1, // load factor
+        (int i, out double x, out double y) => { x = i; y = i; },
+        Program.Compare,
+        (double left, double right) => { return (left + right) * 0.5d; });
+      for (int i = 0; i < test; i++)
+        quadtree_linked.Add(i);
+      Console.Write("   Delegate: ");
+      quadtree_linked.Foreach((int current) => { Console.Write(current); });
+      Console.WriteLine();
+      Console.Write("   IEnumerator: ");
+      foreach (int current in quadtree_linked)
+        Console.Write(current);
+      Console.WriteLine();
+      Console.WriteLine();
+
+      // The octree has a minor bug. I'm already working on it.
+      Console.WriteLine(" Testing Octree_Linked<int, double>---------");
+      Octree<int> octree_linked = new Octree_Linked<int, double>(
+        -test - 1, -test - 1, -test - 1, // minimum dimensions of the octree
+        test + 1, test + 1, test + 1, // maximum dimensions of the octree
+        test + 1, // load factor
+        (int i, out double x, out double y, out double z) => { x = i; y = i; z = i; },
+        Program.Compare,
+        (double left, double right) => { return (left + right) * 0.5d; });
+      for (int i = 0; i < test; i++)
+        octree_linked.Add(i);
+      Console.Write("   Delegate: ");
+      octree_linked.Foreach((int current) => { Console.Write(current); });
+      Console.WriteLine();
+      Console.Write("   IEnumerator: ");
+      foreach (int current in octree_linked)
+        Console.Write(current);
+      Console.WriteLine();
+      Console.WriteLine();
+
+      // The octree has a minor bug. I'm already working on it.
+      Console.WriteLine(" Testing Omnitree_Linked<int, double>-------");
+      Omnitree<int> omnitree_linked = new Omnitree_Linked<int, double>(
+        new double[] { -test - 1, -test - 1, -test - 1, -test - 1 }, // minimum dimensions of the omnitree
+        new double[] { test + 1, test + 1, test + 1, test + 1 }, // maximum dimensions of the omnitree
+        test + 1, // load factor
+        (int i, out double[] location) => { location = new double[]{ i, i, i, i }; },
+        Program.Compare, // comparison function
+        (double left, double right) => { return (left + right) * 0.5d; }, // average function
+        4); // number of dimensions
+      for (int i = 0; i < test; i++)
+        omnitree_linked.Add(i);
+      Console.Write("   Delegate: ");
+      omnitree_linked.Foreach((int current) => { Console.Write(current); });
+      Console.WriteLine();
+      Console.Write("   IEnumerator: ");
+      foreach (int current in omnitree_linked)
+        Console.Write(current);
+      Console.WriteLine();
       Console.WriteLine();
 
       //Console.WriteLine(" SPEED TEST");

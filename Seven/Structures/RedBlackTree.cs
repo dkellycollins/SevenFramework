@@ -434,90 +434,89 @@ namespace Seven.Structures
       _count = 0;
     }
 
-    /// <summary>Performs a functional paradigm in-order traversal of the AVL tree.</summary>
-    /// <param name="traversalFunction">The function to perform during iteration.</param>
-    /// <remarks>Runtime: O(n * traversalFunction).</remarks>
-    public bool TraverseBreakable(Func<T, bool> traversalFunction) { return TraversalInOrder(traversalFunction); }
+    ///// <summary>Performs a functional paradigm in-order traversal of the AVL tree.</summary>
+    ///// <param name="traversalFunction">The function to perform during iteration.</param>
+    ///// <remarks>Runtime: O(n * traversalFunction).</remarks>
+    //public bool TraverseBreakable(Func<T, bool> traversalFunction) { return TraversalInOrder(traversalFunction); }
 
-    /// <summary>Performs a functional paradigm in-order traversal of the AVL tree.</summary>
-    /// <param name="traversalAction">The action to perform during iteration.</param>
-    /// <remarks>Runtime: O(n * traversalFunction).</remarks>
-    public void Traverse(Action<T> traversalAction) { TraversalInOrder(traversalAction); }
+    ///// <summary>Performs a functional paradigm in-order traversal of the AVL tree.</summary>
+    ///// <param name="traversalAction">The action to perform during iteration.</param>
+    ///// <remarks>Runtime: O(n * traversalFunction).</remarks>
+    //public void Traverse(Action<T> traversalAction) { TraversalInOrder(traversalAction); }
 
-    /// <summary>Performs a functional paradigm in-order traversal of the AVL tree.</summary>
-    /// <param name="traversalFunction">The function to perform during iteration.</param>
-    /// <remarks>Runtime: O(n * traversalFunction).</remarks>
-    public bool TraversalInOrder(Func<T, bool> traversalFunction)
-    {
-      if (!TraversalInOrder(traversalFunction, _redBlackTree))
-        return false;
-      return true;
-    }
-    private bool TraversalInOrder(Func<T, bool> traversalFunction, Node avltreeNode)
-    {
-      if (avltreeNode != null)
-      {
-        if (!TraversalInOrder(traversalFunction, avltreeNode.LeftChild)) return false;
-        if (!traversalFunction(avltreeNode.Value)) return false;
-        if (!TraversalInOrder(traversalFunction, avltreeNode.RightChild)) return false;
-      }
-      return true;
-    }
+    ///// <summary>Performs a functional paradigm in-order traversal of the AVL tree.</summary>
+    ///// <param name="traversalFunction">The function to perform during iteration.</param>
+    ///// <remarks>Runtime: O(n * traversalFunction).</remarks>
+    //public bool TraversalInOrder(Func<T, bool> traversalFunction)
+    //{
+    //  if (!TraversalInOrder(traversalFunction, _redBlackTree))
+    //    return false;
+    //  return true;
+    //}
+    //private bool TraversalInOrder(Func<T, bool> traversalFunction, Node avltreeNode)
+    //{
+    //  if (avltreeNode != null)
+    //  {
+    //    if (!TraversalInOrder(traversalFunction, avltreeNode.LeftChild)) return false;
+    //    if (!traversalFunction(avltreeNode.Value)) return false;
+    //    if (!TraversalInOrder(traversalFunction, avltreeNode.RightChild)) return false;
+    //  }
+    //  return true;
+    //}
 
-    public void TraversalInOrder(Action<T> traversalFunction)
-    {
-      TraversalInOrder(traversalFunction, _redBlackTree);
-    }
-    protected void TraversalInOrder(Action<T> traversalFunction, Node avltreeNode)
-    {
-      if (avltreeNode != null)
-      {
-        TraversalInOrder(traversalFunction, avltreeNode.LeftChild);
-        traversalFunction(avltreeNode.Value);
-        TraversalInOrder(traversalFunction, avltreeNode.RightChild);
-      }
-    }
+    //public void TraversalInOrder(Action<T> traversalFunction)
+    //{
+    //  TraversalInOrder(traversalFunction, _redBlackTree);
+    //}
+    //protected void TraversalInOrder(Action<T> traversalFunction, Node avltreeNode)
+    //{
+    //  if (avltreeNode != null)
+    //  {
+    //    TraversalInOrder(traversalFunction, avltreeNode.LeftChild);
+    //    traversalFunction(avltreeNode.Value);
+    //    TraversalInOrder(traversalFunction, avltreeNode.RightChild);
+    //  }
+    //}
 
-    /// <summary>Performs a functional paradigm post-order traversal of the AVL tree.</summary>
-    /// <param name="traversalFunction">The function to perform during iteration.</param>
-    /// <remarks>Runtime: O(n * traversalFunction).</remarks>
-    public bool TraversalPostOrder(Func<T, bool> traversalFunction)
-    {
-      if (TraversalPostOrder(traversalFunction, _redBlackTree))
-        return false;
-      return true;
-    }
-    protected bool TraversalPostOrder(Func<T, bool> traversalFunction, Node avltreeNode)
-    {
-      if (avltreeNode != null)
-      {
-        if (!TraversalPostOrder(traversalFunction, avltreeNode.RightChild)) return false;
-        if (!traversalFunction(avltreeNode.Value)) return false;
-        if (!TraversalPostOrder(traversalFunction, avltreeNode.LeftChild)) return false;
-      }
-      return true;
-    }
+    ///// <summary>Performs a functional paradigm post-order traversal of the AVL tree.</summary>
+    ///// <param name="traversalFunction">The function to perform during iteration.</param>
+    ///// <remarks>Runtime: O(n * traversalFunction).</remarks>
+    //public bool TraversalPostOrder(Func<T, bool> traversalFunction)
+    //{
+    //  if (TraversalPostOrder(traversalFunction, _redBlackTree))
+    //    return false;
+    //  return true;
+    //}
+    //protected bool TraversalPostOrder(Func<T, bool> traversalFunction, Node avltreeNode)
+    //{
+    //  if (avltreeNode != null)
+    //  {
+    //    if (!TraversalPostOrder(traversalFunction, avltreeNode.RightChild)) return false;
+    //    if (!traversalFunction(avltreeNode.Value)) return false;
+    //    if (!TraversalPostOrder(traversalFunction, avltreeNode.LeftChild)) return false;
+    //  }
+    //  return true;
+    //}
 
-
-    /// <summary>Performs a functional paradigm pre-order traversal of the AVL tree.</summary>
-    /// <param name="traversalFunction">The function to perform during iteration.</param>
-    /// <remarks>Runtime: O(n * traversalFunction).</remarks>
-    public bool TraversalPreOrder(Func<T, bool> traversalFunction)
-    {
-      if (!TraversalPreOrder(traversalFunction, _redBlackTree))
-        return false;
-      return true;
-    }
-    protected bool TraversalPreOrder(Func<T, bool> traversalFunction, Node avltreeNode)
-    {
-      if (avltreeNode != null)
-      {
-        if (!traversalFunction(avltreeNode.Value)) return false;
-        if (!TraversalPreOrder(traversalFunction, avltreeNode.LeftChild)) return false;
-        if (!TraversalPreOrder(traversalFunction, avltreeNode.RightChild)) return false;
-      }
-      return true;
-    }
+    ///// <summary>Performs a functional paradigm pre-order traversal of the AVL tree.</summary>
+    ///// <param name="traversalFunction">The function to perform during iteration.</param>
+    ///// <remarks>Runtime: O(n * traversalFunction).</remarks>
+    //public bool TraversalPreOrder(Func<T, bool> traversalFunction)
+    //{
+    //  if (!TraversalPreOrder(traversalFunction, _redBlackTree))
+    //    return false;
+    //  return true;
+    //}
+    //protected bool TraversalPreOrder(Func<T, bool> traversalFunction, Node avltreeNode)
+    //{
+    //  if (avltreeNode != null)
+    //  {
+    //    if (!traversalFunction(avltreeNode.Value)) return false;
+    //    if (!TraversalPreOrder(traversalFunction, avltreeNode.LeftChild)) return false;
+    //    if (!TraversalPreOrder(traversalFunction, avltreeNode.RightChild)) return false;
+    //  }
+    //  return true;
+    //}
 
     /// <summary>Creates an array out of the values in this structure.</summary>
     /// <returns>An array containing the values in this structure.</returns>
@@ -612,22 +611,6 @@ namespace Seven.Structures
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
     public int SizeOf { get { throw new NotImplementedException(); } }
 
-    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
-    /// <typeparam name="Key">The type of the key to check for.</typeparam>
-    /// <param name="key">The key to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
-    //Type[] GetValues<Key>(Key key, Compare<Type, Key> compare);
-
-    /// <summary>Pulls out all the values in the structure that are equivalent to the key.</summary>
-    /// <typeparam name="Key">The type of the key to check for.</typeparam>
-    /// <param name="key">The key to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>An array containing all the values matching the key or null if non were found.</returns>
-    /// <param name="values">The values that matched the given key.</param>
-    /// <returns>true if 1 or more values were found; false if no values were found.</returns>
-    //bool TryGetValues<Key>(Key key, Compare<Type, Key> compare, out Type[] values);
-
     /// <summary>Checks to see if a given object is in this data structure.</summary>
     /// <param name="item">The item to check for.</param>
     /// <param name="compare">Delegate representing comparison technique.</param>
@@ -672,7 +655,18 @@ namespace Seven.Structures
     /// <param name="function">The delegate to invoke on each item in the structure.</param>
     public void Foreach(ForeachRef<T> function)
     {
-      throw new NotImplementedException();
+      ForeachInOrder(function, this._redBlackTree);
+    }
+    protected void ForeachInOrder(ForeachRef<T> function, Node node)
+    {
+      if (node != null && node.LeftChild != null && node.RightChild != null)
+      {
+        ForeachInOrder(function, node.LeftChild);
+        T temp = node.Value;
+        function(ref temp);
+        node.Value = temp;
+        ForeachInOrder(function, node.RightChild);
+      }
     }
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
@@ -680,7 +674,20 @@ namespace Seven.Structures
     /// <returns>The resulting status of the iteration.</returns>
     public ForeachStatus Foreach(ForeachBreak<T> function)
     {
-      throw new NotImplementedException();
+      return ForeachInOrder(function, this._redBlackTree);
+    }
+    protected ForeachStatus ForeachInOrder(ForeachBreak<T> function, Node node)
+    {
+      if (node != null && node.LeftChild != null && node.RightChild != null)
+      {
+        if (ForeachInOrder(function, node.LeftChild) == ForeachStatus.Break)
+          return ForeachStatus.Break;
+        if (function(node.Value) == ForeachStatus.Break)
+          return ForeachStatus.Break;
+        if (ForeachInOrder(function, node.RightChild) == ForeachStatus.Break)
+          return ForeachStatus.Break;
+      }
+      return ForeachStatus.Continue;
     }
 
     /// <summary>Invokes a delegate for each entry in the data structure.</summary>
@@ -688,7 +695,23 @@ namespace Seven.Structures
     /// <returns>The resulting status of the iteration.</returns>
     public ForeachStatus Foreach(ForeachRefBreak<T> function)
     {
-      throw new NotImplementedException();
+      return ForeachInOrder(function, this._redBlackTree);
+    }
+    protected ForeachStatus ForeachInOrder(ForeachRefBreak<T> function, Node node)
+    {
+      if (node != null && node.LeftChild != null && node.RightChild != null)
+      {
+        if (ForeachInOrder(function, node.LeftChild) == ForeachStatus.Break)
+          return ForeachStatus.Break;
+        T temp = node.Value;
+        ForeachStatus status = function(ref temp);
+        node.Value = temp;
+        if (status == ForeachStatus.Break)
+          return ForeachStatus.Break;
+        if (ForeachInOrder(function, node.RightChild) == ForeachStatus.Break)
+          return ForeachStatus.Break;
+      }
+      return ForeachStatus.Continue;
     }
 
     /// <summary>Creates a shallow clone of this data structure.</summary>
