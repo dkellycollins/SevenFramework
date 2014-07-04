@@ -46,6 +46,9 @@ namespace Seven.Structures
         _minX = minX;
         _minY = minY;
         _minZ = minZ;
+        _maxX = maxX;
+        _maxY = maxY;
+        _maxZ = maxZ;
         _parent = parent;
       }
     }
@@ -67,7 +70,7 @@ namespace Seven.Structures
 
       internal Leaf Add(T addition)
       {
-        Console.WriteLine("Placing " + addition + ", in " + this.MinX + ", " + this.MinY + ", " + this.MinZ);
+        //Console.WriteLine("Placing " + addition + ", in " + this.MinX + ", " + this.MinY + ", " + this.MinZ);
         if (_count == _contents.Length)
           throw new Error("There is a glitch in my octree, sorry...");
         _contents[_count++] = addition;
@@ -141,7 +144,7 @@ namespace Seven.Structures
     /// and adjusts the octree structure as needed.</summary>
     private Leaf Add(T addition, Node octreeNode)
     {
-      Console.WriteLine("Adding " + addition + " to " + octreeNode.MinX + ", " + octreeNode.MinY + ", " + octreeNode.MinZ);
+      //Console.WriteLine("Adding " + addition + " to " + octreeNode.MinX + ", " + octreeNode.MinY + ", " + octreeNode.MinZ);
 
       // If the node is a leaf we have reached the bottom of the tree
       if (octreeNode is Leaf)
