@@ -3,8 +3,6 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
-
 namespace Seven.Structures
 {
   public interface Octree<T> : Structure<T>
@@ -18,7 +16,7 @@ namespace Seven.Structures
 
   /// <summary>Axis-Aligned rectangular prism generic octree for storing items along three axis.</summary>
   /// <typeparam name="T">The generice type of items to be stored in this octree.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Octree_Linked<T, M> : Octree<T>
   {
     /// <summary>Represents a single node of the octree. Includes references both upwards and
@@ -136,13 +134,25 @@ namespace Seven.Structures
     /// <param name="addition">The addition.</param>
     public void Add(T addition)
     {
-      this.Add(addition, _top);
+      M x, y, z;
+      this._locate(addition, out x, out y, out z);
+
+      if (
+        _compare(x, _top.MinX) == Comparison.Less ||
+        _compare(y, _top.MinY) == Comparison.Less ||
+        _compare(z, _top.MinZ) == Comparison.Less ||
+        _compare(x, _top.MaxX) == Comparison.Greater ||
+        _compare(y, _top.MaxY) == Comparison.Greater ||
+        _compare(z, _top.MaxZ) == Comparison.Greater)
+        throw new Error("out of bounds during addition");
+
+      this.Add(addition, _top, x, y, z);
       this._count++;
     }
 
     /// <summary>Recursively adds an item to the octree and returns the node where the addition was placed
     /// and adjusts the octree structure as needed.</summary>
-    private Leaf Add(T addition, Node octreeNode)
+    private Leaf Add(T addition, Node octreeNode, M x, M y, M z)
     {
       //Console.WriteLine("Adding " + addition + " to " + octreeNode.MinX + ", " + octreeNode.MinY + ", " + octreeNode.MinZ);
 
@@ -164,25 +174,19 @@ namespace Seven.Structures
           if (parent == null)
             growth = (Branch)(_top = new Branch(_top.MinX, _top.MinY, _top.MinZ, _top.MaxX, _top.MaxY, _top.MaxZ, null));
           else
-          {
-            M x, y, z;
-            this._locate(addition, out x, out y, out z);
             growth = GrowBranch(parent, this.DetermineChild(parent, x, y, z));
-          }
-          return Add(addition, growth);
+          return Add(addition, growth, x, y, z);
         }
       }
       // We are still traversing the tree, determine the next move
       else
       {
         Branch branch = (Branch)octreeNode;
-        M x, y, z;
-        this._locate(addition, out x, out y, out z);
         int child = this.DetermineChild(branch, x, y, z);
         // If the leaf is null, we must grow one before attempting to add to it
         if (branch.Children[child] == null)
           return GrowLeaf(branch, child).Add(addition);
-        return Add(addition, branch.Children[child]);
+        return Add(addition, branch.Children[child], x, y, z);
       }
     }
 
@@ -380,7 +384,7 @@ namespace Seven.Structures
     /// <summary>Iterates through the entire tree and ensures each item is in the proper node.</summary>
     public void Update()
     {
-      throw new NotImplementedException("Sorry, I'm still working on the update function.");
+      throw new System.NotImplementedException("Sorry, I'm still working on the update function.");
     }
 
     public void Foreach(Foreach<T> function)
@@ -704,32 +708,13 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public int SizeOf { get { throw new NotImplementedException(); } }
-
-    /// <summary>Checks to see if a given object is in this data structure.</summary>
-    /// <param name="item">The item to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains(T item, Compare<T> compare)
-    {
-      throw new NotImplementedException();
-    }
-
-    /// <summary>Checks to see if a given object is in this data structure.</summary>
-    /// <typeparam name="Key">The type of the key to check for.</typeparam>
-    /// <param name="key">The key to check for.</param>
-    /// <param name="compare">Delegate representing comparison technique.</param>
-    /// <returns>true if the item is in this structure; false if not.</returns>
-    public bool Contains<Key>(Key key, Compare<T, Key> compare)
-    {
-      throw new NotImplementedException();
-    }
-
+    public int SizeOf { get { throw new System.NotImplementedException(); } }
+    
     /// <summary>Creates a shallow clone of this data structure.</summary>
     /// <returns>A shallow clone of this data structure.</returns>
     public Structure<T> Clone()
     {
-      throw new NotImplementedException();
+      throw new System.NotImplementedException();
     }
 
     #endregion
@@ -743,7 +728,7 @@ namespace Seven.Structures
 
   /// <summary>Stores objects efficiently in 3-Dimensional space by x, y, and z coordinates.</summary>
   /// <typeparam name="T">The generice type of items to be stored in this octree.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Octree_Linked_Center<T> : Octree<T>
   {
     /// <summary>Represents a single node of the octree. Includes references both upwards and
@@ -786,7 +771,7 @@ namespace Seven.Structures
 
       internal Leaf Add(T addition)
       {
-        Console.WriteLine("Placing " + addition + ", in " + this.X + ", " + this.Y + ", " + this.Z);
+        System.Console.WriteLine("Placing " + addition + ", in " + this.X + ", " + this.Y + ", " + this.Z);
         if (_count == _contents.Length)
           throw new Error("There is a glitch in my octree, sorry...");
         _contents[_count++] = addition;
@@ -856,7 +841,7 @@ namespace Seven.Structures
     /// and adjusts the octree structure as needed.</summary>
     private Leaf Add(T addition, Node octreeNode)
     {
-      Console.WriteLine("Adding " + addition + " to " + octreeNode.X + ", " + octreeNode.Y + ", " + octreeNode.Z);
+      System.Console.WriteLine("Adding " + addition + " to " + octreeNode.X + ", " + octreeNode.Y + ", " + octreeNode.Z);
 
       // If the node is a leaf we have reached the bottom of the tree
       if (octreeNode is Leaf)
@@ -905,7 +890,7 @@ namespace Seven.Structures
       float x, y, z, scale;
       this.DetermineChildBounds(branch, child, out x, out y, out z, out scale);
       branch.Children[child] = new Branch(x, y, z, scale, branch);
-      Console.WriteLine("Growing branch " + x + ", " + y + ", " + z);
+      System.Console.WriteLine("Growing branch " + x + ", " + y + ", " + z);
       return (Branch)branch.Children[child];
     }
 
@@ -918,7 +903,7 @@ namespace Seven.Structures
       float x, y, z, scale;
       this.DetermineChildBounds(branch, child, out x, out y, out z, out scale);
       branch.Children[child] = new Leaf(x, y, z, scale, branch, _loadFactor);
-      Console.WriteLine("Growing leaf " + x + ", " + y + ", " + z);
+      System.Console.WriteLine("Growing leaf " + x + ", " + y + ", " + z);
       return (Leaf)branch.Children[child];
     }
 
@@ -1056,7 +1041,7 @@ namespace Seven.Structures
     /// <summary>Iterates through the entire tree and ensures each item is in the proper node.</summary>
     public void Update()
     {
-      throw new NotImplementedException("Sorry, I'm still working on the update function.");
+      throw new System.NotImplementedException("Sorry, I'm still working on the update function.");
     }
     
     public void Foreach(Foreach<T> function)
@@ -1336,7 +1321,7 @@ namespace Seven.Structures
 
     /// <summary>Gets the current memory imprint of this structure in bytes.</summary>
     /// <remarks>Returns long.MaxValue on overflow.</remarks>
-    public int SizeOf { get { throw new NotImplementedException(); } }
+    public int SizeOf { get { throw new System.NotImplementedException(); } }
     
     /// <summary>Checks to see if a given object is in this data structure.</summary>
     /// <param name="item">The item to check for.</param>
@@ -1344,7 +1329,7 @@ namespace Seven.Structures
     /// <returns>true if the item is in this structure; false if not.</returns>
     public bool Contains(T item, Compare<T> compare)
     {
-      throw new NotImplementedException();
+      throw new System.NotImplementedException();
     }
 
     /// <summary>Checks to see if a given object is in this data structure.</summary>
@@ -1354,14 +1339,14 @@ namespace Seven.Structures
     /// <returns>true if the item is in this structure; false if not.</returns>
     public bool Contains<Key>(Key key, Compare<T, Key> compare)
     {
-      throw new NotImplementedException();
+      throw new System.NotImplementedException();
     }
 
     /// <summary>Creates a shallow clone of this data structure.</summary>
     /// <returns>A shallow clone of this data structure.</returns>
     public Structure<T> Clone()
     {
-      throw new NotImplementedException();
+      throw new System.NotImplementedException();
     }
 
     #endregion
