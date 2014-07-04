@@ -3,10 +3,7 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-// Citations:
-// This AVL tree imlpementation was originally developed by 
-// Rodney Howell of Kansas State University. However, it has 
-// been modified since its addition into the Seven framework.
+// THIS FILE CONTAINS ETERNAL CITATIONS
 
 using System;
 using Seven;

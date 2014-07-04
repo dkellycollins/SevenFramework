@@ -3,23 +3,25 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-// Citations:
-//   This fraction imlpementation was originally developed by 
-//   Syed Mehroz Alam and hosted as an open source project on 
-//   CodeProject.com. However, it has been modified since its
-//   addition into the Seven framework.
-//   http://www.codeproject.com/Articles/9078/Fraction-class-in-C
-// Original Author:
-//   Author: Syed Mehroz Alam
-//   Email: smehrozalam@yahoo.com
-//   URL: Programming Home http://www.geocities.com/smehrozalam/
-//   Date: 6/15/2004
-//   Time: 10:54 AM
-
-using System;
+// THIS FILE CONTAINS ETERNAL CITATIONS
 
 namespace Seven
 {
+  /// <summary>A fraction represented as two ints (numerator / denomnator).</summary>
+  /// <citation>
+  /// This fraction imlpementation was originally developed by 
+  /// Syed Mehroz Alam and posted as an open source project on 
+  /// CodeProject.com. However, it has been modified since its
+  /// addition into the Seven framework.
+  /// http://www.codeproject.com/Articles/9078/Fraction-class-in-C
+  /// 
+  /// Original Author:
+  /// Author: Syed Mehroz Alam
+  /// Email: smehrozalam@yahoo.com
+  /// URL: Programming Home http://www.geocities.com/smehrozalam/
+  /// Date: 6/15/2004
+  /// Time: 10:54 AM
+  /// </citation>
   public struct fraction64
   {
     private int m_iNumerator;
@@ -70,7 +72,7 @@ namespace Seven
         if (value != 0)
           m_iDenominator = value;
         else
-          throw new FractionException("Denominator cannot be assigned a ZERO Value");
+          throw new Error("Denominator cannot be assigned a ZERO Value");
       }
     }
 
@@ -120,12 +122,12 @@ namespace Seven
 
       if (i == strValue.Length)		// if string is not in the form of a fraction64
         // then it is double or integer
-        return (Convert.ToDouble(strValue));
+        return (System.Convert.ToDouble(strValue));
       //return ( ToFraction( Convert.ToDouble(strValue) ) );
 
       // else string is in the form of Numerator/Denominator
-      int iNumerator = Convert.ToInt32(strValue.Substring(0, i));
-      int iDenominator = Convert.ToInt32(strValue.Substring(i + 1));
+      int iNumerator = System.Convert.ToInt32(strValue.Substring(0, i));
+      int iDenominator = System.Convert.ToInt32(strValue.Substring(i + 1));
       return new fraction64(iNumerator, iDenominator);
     }
 
@@ -166,18 +168,18 @@ namespace Seven
               iMultiple *= 10;
               iDigitsAfterDecimal--;
             }
-            frac = new fraction64((int)Math.Round(dTemp), iMultiple);
+            frac = new fraction64((int)System.Math.Round(dTemp), iMultiple);
           }
           return frac;
         }
       }
-      catch (OverflowException)
+      catch (System.OverflowException)
       {
-        throw new FractionException("Conversion not possible due to overflow");
+        throw new Error("Conversion not possible due to overflow");
       }
-      catch (Exception)
+      catch (System.Exception)
       {
-        throw new FractionException("Conversion not possible");
+        throw new Error("Conversion not possible");
       }
     }
 
@@ -198,7 +200,7 @@ namespace Seven
     public static fraction64 Inverse(fraction64 frac1)
     {
       if (frac1.Numerator == 0)
-        throw new FractionException("Operation not possible (Denominator cannot be assigned a ZERO Value)");
+        throw new Error("Operation not possible (Denominator cannot be assigned a ZERO Value)");
 
       int iNumerator = frac1.Denominator;
       int iDenominator = frac1.Numerator;
@@ -334,7 +336,7 @@ namespace Seven
     /// </summary>
     public override int GetHashCode()
     {
-      return (Convert.ToInt32((Numerator ^ Denominator) & 0xFFFFFFFF));
+      return (System.Convert.ToInt32((Numerator ^ Denominator) & 0xFFFFFFFF));
     }
 
     /// <summary>
@@ -362,13 +364,13 @@ namespace Seven
           return (new fraction64(iNumerator, iDenominator));
         }
       }
-      catch (OverflowException)
+      catch (System.OverflowException)
       {
-        throw new FractionException("Overflow occurred while performing arithemetic operation");
+        throw new Error("Overflow occurred while performing arithemetic operation");
       }
-      catch (Exception)
+      catch (System.Exception)
       {
-        throw new FractionException("An error occurred while performing arithemetic operation");
+        throw new Error("An error occurred while performing arithemetic operation");
       }
     }
 
@@ -383,13 +385,13 @@ namespace Seven
           return (new fraction64(iNumerator, iDenominator));
         }
       }
-      catch (OverflowException)
+      catch (System.OverflowException)
       {
-        throw new FractionException("Overflow occurred while performing arithemetic operation");
+        throw new Error("Overflow occurred while performing arithemetic operation");
       }
-      catch (Exception)
+      catch (System.Exception)
       {
-        throw new FractionException("An error occurred while performing arithemetic operation");
+        throw new Error("An error occurred while performing arithemetic operation");
       }
     }
 
@@ -440,33 +442,35 @@ namespace Seven
           frac.Denominator *= -1;
         }
       } // end try
-      catch (Exception exp)
+      catch (System.Exception exp)
       {
-        throw new FractionException("Cannot reduce Fraction: " + exp.Message);
+        throw new Error("Cannot reduce Fraction: " + exp.Message);
       }
+    }
+
+    public class Error : Seven.Error
+    {
+      public Error(string Message) : base(Message) { }
     }
 
   }	//end class Fraction
 
 
-  /// <summary>
-  /// Exception class for Fraction, derived from System.Exception
-  /// </summary>
-  public class FractionException : Exception
-  {
-    public FractionException()
-      : base()
-    { }
-
-    public FractionException(string Message)
-      : base(Message)
-    { }
-
-    public FractionException(string Message, Exception InnerException)
-      : base(Message, InnerException)
-    { }
-  }	//end class FractionException
-
+  /// <summary>A fraction represented as two longs (numerator / denomnator).</summary>
+  /// <citation>
+  /// This fraction imlpementation was originally developed by 
+  /// Syed Mehroz Alam and hosted as an open source project on 
+  /// CodeProject.com. However, it has been modified since its
+  /// addition into the Seven framework.
+  /// http://www.codeproject.com/Articles/9078/Fraction-class-in-C
+  /// 
+  /// Original Author:
+  /// Author: Syed Mehroz Alam
+  /// Email: smehrozalam@yahoo.com
+  /// URL: Programming Home http://www.geocities.com/smehrozalam/
+  /// Date: 6/15/2004
+  /// Time: 10:54 AM
+  /// </citation>
   public struct fraction128
   {
     private long m_iNumerator;
@@ -517,7 +521,7 @@ namespace Seven
         if (value != 0)
           m_iDenominator = value;
         else
-          throw new FractionException("Denominator cannot be assigned a ZERO Value");
+          throw new Error("Denominator cannot be assigned a ZERO Value");
       }
     }
 
@@ -567,12 +571,12 @@ namespace Seven
 
       if (i == strValue.Length)		// if string is not in the form of a fraction
         // then it is double or integer
-        return (Convert.ToDouble(strValue));
+        return (System.Convert.ToDouble(strValue));
       //return ( ToFraction( Convert.ToDouble(strValue) ) );
 
       // else string is in the form of Numerator/Denominator
-      long iNumerator = Convert.ToInt64(strValue.Substring(0, i));
-      long iDenominator = Convert.ToInt64(strValue.Substring(i + 1));
+      long iNumerator = System.Convert.ToInt64(strValue.Substring(0, i));
+      long iDenominator = System.Convert.ToInt64(strValue.Substring(i + 1));
       return new fraction128(iNumerator, iDenominator);
     }
 
@@ -613,18 +617,18 @@ namespace Seven
               iMultiple *= 10;
               iDigitsAfterDecimal--;
             }
-            frac = new fraction128((int)Math.Round(dTemp), iMultiple);
+            frac = new fraction128((int)System.Math.Round(dTemp), iMultiple);
           }
           return frac;
         }
       }
-      catch (OverflowException)
+      catch (System.OverflowException)
       {
-        throw new FractionException("Conversion not possible due to overflow");
+        throw new Error("Conversion not possible due to overflow");
       }
-      catch (Exception)
+      catch (System.Exception)
       {
-        throw new FractionException("Conversion not possible");
+        throw new Error("Conversion not possible");
       }
     }
 
@@ -645,7 +649,7 @@ namespace Seven
     public static fraction128 Inverse(fraction128 frac1)
     {
       if (frac1.Numerator == 0)
-        throw new FractionException("Operation not possible (Denominator cannot be assigned a ZERO Value)");
+        throw new Error("Operation not possible (Denominator cannot be assigned a ZERO Value)");
 
       long iNumerator = frac1.Denominator;
       long iDenominator = frac1.Numerator;
@@ -781,7 +785,7 @@ namespace Seven
     /// </summary>
     public override int GetHashCode()
     {
-      return (Convert.ToInt32((Numerator ^ Denominator) & 0xFFFFFFFF));
+      return (System.Convert.ToInt32((Numerator ^ Denominator) & 0xFFFFFFFF));
     }
 
     /// <summary>
@@ -809,13 +813,13 @@ namespace Seven
           return (new fraction128(iNumerator, iDenominator));
         }
       }
-      catch (OverflowException)
+      catch (System.OverflowException)
       {
-        throw new FractionException("Overflow occurred while performing arithemetic operation");
+        throw new Error("Overflow occurred while performing arithemetic operation");
       }
-      catch (Exception)
+      catch (System.Exception)
       {
-        throw new FractionException("An error occurred while performing arithemetic operation");
+        throw new Error("An error occurred while performing arithemetic operation");
       }
     }
 
@@ -830,13 +834,13 @@ namespace Seven
           return (new fraction128(iNumerator, iDenominator));
         }
       }
-      catch (OverflowException)
+      catch (System.OverflowException)
       {
-        throw new FractionException("Overflow occurred while performing arithemetic operation");
+        throw new Error("Overflow occurred while performing arithemetic operation");
       }
-      catch (Exception)
+      catch (System.Exception)
       {
-        throw new FractionException("An error occurred while performing arithemetic operation");
+        throw new Error("An error occurred while performing arithemetic operation");
       }
     }
 
@@ -887,10 +891,15 @@ namespace Seven
           frac.Denominator *= -1;
         }
       } // end try
-      catch (Exception exp)
+      catch (System.Exception exp)
       {
-        throw new FractionException("Cannot reduce Fraction: " + exp.Message);
+        throw new Error("Cannot reduce Fraction: " + exp.Message);
       }
+    }
+
+    public class Error : Seven.Error
+    {
+      public Error(string Message) : base(Message) { }
     }
 
   }	//end class Fraction

@@ -3,12 +3,9 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
-using System.Threading;
-using Seven.Structures;
+// THIS FILE CONTAINS ETERNAL CITATIONS
 
-using System.Collections.Generic;
-using System.Collections;
+using System;
 
 namespace Seven.Structures
 {
@@ -566,7 +563,8 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       Stack<Node> forks = new Stack_Linked<Node>();
       Node current = _redBlackTree;
@@ -588,7 +586,8 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<T>
+      System.Collections.Generic.IEnumerable<T>.GetEnumerator()
     {
       Stack<Node> forks = new Stack_Linked<Node>();
       Node current = _redBlackTree;

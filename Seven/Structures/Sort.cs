@@ -3,6 +3,9 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
+// DEVELOPMENT NOTE
+// Test start/end functions and make full sorts call them
+
 using System;
 
 namespace Seven.Structures
@@ -31,6 +34,8 @@ namespace Seven.Structures
     /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The compare function (returns a positive value if left is greater than right).</param>
     /// <param name="array">the array to be sorted</param>
+    /// <param name="start">The starting index of the sort.</param>
+    /// <param name="end">The ending index of the sort.</param>
     /// <remarks>Runtime: Omega(n), average(n^2), O(n^2). Memory: in place. Stability: yes.</remarks>
     public static void Bubble<T>(Compare<T> compare, T[] array, int start, int end)
     {
@@ -65,6 +70,29 @@ namespace Seven.Structures
       }
     }
 
+    /// <summary>Sorts an entire array in non-decreasing order using the selection sort algoritm.</summary>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
+    /// <param name="compare">Returns negative if the left is less than the right.</param>
+    /// <param name="array">the array to be sorted</param>
+    /// <param name="start">The starting index of the sort.</param>
+    /// <param name="end">The ending index of the sort.</param>
+    /// <remarks>Runtime: Omega(n^2), average(n^2), O(n^2). Memory: in place. Stablity: no.</remarks>
+    public static void Selection<T>(Compare<T> compare, T[] array, int start, int end)
+    {
+      for (int i = start; i < end; i++)
+      {
+        int min = i;
+        for (int j = i + 1; j < end; j++)
+          if (compare(array[j], array[min]) == Comparison.Less)
+          {
+            min = j;
+            T temp = array[i];
+            array[i] = array[min];
+            array[min] = temp;
+          }
+      }
+    }
+
     /// <summary>Sorts an entire array in non-decreasing order using the insertion sort algorithm.</summary>
     /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">Returns positive if left greater than right.</param>
@@ -82,6 +110,25 @@ namespace Seven.Structures
       }
     }
 
+    /// <summary>Sorts an entire array in non-decreasing order using the insertion sort algorithm.</summary>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
+    /// <param name="compare">Returns positive if left greater than right.</param>
+    /// <param name="array">the array to be sorted</param>
+    /// <param name="start">The starting index of the sort.</param>
+    /// <param name="end">The ending index of the sort.</param>
+    /// <remarks>Runtime: Omega(n), average(n^2), O(n^2). Memory: in place. Stablity: yes.</remarks>
+    public static void Insertion<T>(Compare<T> compare, T[] array, int start, int end)
+    {
+      for (int i = start + 1; i < end; i++)
+      {
+        T temp = array[i];
+        int j;
+        for (j = i; j > start && compare(array[j - 1], temp) == Comparison.Greater; j--)
+          array[j] = array[j - 1];
+        array[j] = temp;
+      }
+    }
+
     /// <summary>Sorts an entire array in non-decreasing order using the quick sort algorithm.</summary>
     /// <typeparam name="T">The type of objects stored within the array.</typeparam>
     /// <param name="compare">The method of compare to be sorted by.</param>
@@ -89,10 +136,22 @@ namespace Seven.Structures
     /// <remarks>Runtime: Omega(n*ln(n)), average(n*ln(n)), O(n^2). Memory: ln(n). Stablity: no.</remarks>
     public static void Quick<T>(Compare<T> compare, T[] array)
     {
-      Sort.Quick(compare, array, 0, array.Length);
+      Sort.Quick_Recursive(compare, array, 0, array.Length);
     }
 
-    private static void Quick<T>(Compare<T> compare, T[] array, int start, int len)
+    /// <summary>Sorts an entire array in non-decreasing order using the quick sort algorithm.</summary>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
+    /// <param name="compare">The method of compare to be sorted by.</param>
+    /// <param name="array">The array to be sorted</param>
+    /// <param name="start">The starting index of the sort.</param>
+    /// <param name="end">The ending index of the sort.</param>
+    /// <remarks>Runtime: Omega(n*ln(n)), average(n*ln(n)), O(n^2). Memory: ln(n). Stablity: no.</remarks>
+    public static void Quick<T>(Compare<T> compare, T[] array, int start, int end)
+    {
+      Sort.Quick(compare, array, start, end - start);
+    }
+
+    private static void Quick_Recursive<T>(Compare<T> compare, T[] array, int start, int len)
     {
       if (len > 1)
       {
@@ -117,8 +176,8 @@ namespace Seven.Structures
             array[j--] = temp;
           }
         }
-        Sort.Quick(compare, array, start, i - start);
-        Sort.Quick(compare, array, k + 1, start + len - (k + 1));
+        Sort.Quick_Recursive(compare, array, start, i - start);
+        Sort.Quick_Recursive(compare, array, k + 1, start + len - (k + 1));
       }
     }
 
@@ -129,16 +188,28 @@ namespace Seven.Structures
     /// <remarks>Runtime: Omega(n*ln(n)), average(n*ln(n)), O(n*ln(n)). Memory: n. Stablity: yes.</remarks>
     public static void Merge<T>(Compare<T> compare, T[] array)
     {
-      Merge<T>(compare, array, 0, array.Length);
+      Sort.Merge_Recursive<T>(compare, array, 0, array.Length);
     }
 
-    private static void Merge<T>(Compare<T> compare, T[] array, int start, int len)
+    /// <summary>Sorts up to an array in non-decreasing order using the merge sort algorithm.</summary>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
+    /// <param name="compare">Returns zero or negative if the left is less than or equal to the right.</param>
+    /// <param name="array">The array to be sorted</param>
+    /// <param name="start">The starting index of the sort.</param>
+    /// <param name="end">The ending index of the sort.</param>
+    /// <remarks>Runtime: Omega(n*ln(n)), average(n*ln(n)), O(n*ln(n)). Memory: n. Stablity: yes.</remarks>
+    public static void Merge<T>(Compare<T> compare, T[] array, int start, int end)
+    {
+      Sort.Merge_Recursive<T>(compare, array, start, end - start);
+    }
+
+    private static void Merge_Recursive<T>(Compare<T> compare, T[] array, int start, int len)
     {
       if (len > 1)
       {
         int half = len / 2;
-        Sort.Merge<T>(compare, array, start, half);
-        Sort.Merge<T>(compare, array, start + half, len - half);
+        Sort.Merge_Recursive<T>(compare, array, start, half);
+        Sort.Merge_Recursive<T>(compare, array, start + half, len - half);
         T[] sorted = new T[len];
         int i = start;
         int j = start + half;
@@ -170,6 +241,28 @@ namespace Seven.Structures
       for (int i = (heapSize - 1) / 2; i >= 0; i--)
         Sort.MaxHeapify(compare, array, heapSize, i);
       for (int i = array.Length - 1; i > 0; i--)
+      {
+        T temp = array[0];
+        array[0] = array[i];
+        array[i] = temp;
+        heapSize--;
+        Sort.MaxHeapify(compare, array, heapSize, 0);
+      }
+    }
+
+    /// <summary>Sorts an entire array in non-decreasing order using the heap sort algorithm.</summary>
+    /// <typeparam name="T">The type of objects stored within the array.</typeparam>
+    /// <param name="compare">The method of compare for the sort.</param>
+    /// <param name="array">The array to be sorted</param>
+    /// <param name="start">The starting index of the sort.</param>
+    /// <param name="end">The ending index of the sort.</param>
+    /// <remarks>Runtime: Omega(n*ln(n)), average(n*ln(n)), O(n^2). Memory: in place. Stablity: no.</remarks>
+    public static void Heap<T>(Compare<T> compare, T[] array, int start, int end)
+    {
+      int heapSize = end - start;
+      for (int i = (heapSize - 1) / 2; i >= 0; i--)
+        Sort.MaxHeapify(compare, array, heapSize, i);
+      for (int i = end - 1; i > start; i--)
       {
         T temp = array[0];
         array[0] = array[i];
