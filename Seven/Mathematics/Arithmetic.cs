@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Seven.Mathematics
 {
-  /// <summary>Provides arithmetical operations for mathematical computation.</summary>
+  /// <summary>Teaches other classes how to do Arithmetic on a specific type.</summary>
   /// <typeparam name="T">The type this arithmetic library can perform on.</typeparam>
   public interface Arithmetic<T>
   {
@@ -22,6 +22,8 @@ namespace Seven.Mathematics
     Binary<T> Add { get; }
     /// <summary>Subtracts two operands.</summary>
     Binary<T> Subtract { get; }
+    /// <summary>Takes one operand to the power of the other.</summary>
+    Binary<T> Power { get; }
   }
 
   public static class Arithmetic
@@ -55,6 +57,12 @@ namespace Seven.Mathematics
     { get { return (Arithmetic<decimal>)Arithmetic_decimal.Get; } }
     public static Arithmetic<decimal> GetArithmetic(this decimal integer)
     { return (Arithmetic<decimal>)Arithmetic_decimal.Get; }
+
+    public static Arithmetic<byte> _byte
+    { get { return (Arithmetic<byte>)Arithmetic_byte.Get; } }
+    public static Arithmetic<byte> GetArithmetic(this byte byteeger)
+    { return (Arithmetic<byte>)Arithmetic_byte.Get; }
+
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Seven.Error
@@ -93,6 +101,8 @@ namespace Seven.Mathematics
     public Binary<int> Add { get { return (int left, int right) => { return left + right; }; } }
     /// <summary>Subtracts two operands.</summary>
     public Binary<int> Subtract { get { return (int left, int right) => { return left - right; }; } }
+    /// <summary>Takes one operand to the power of the other.</summary>
+    public Binary<int> Power { get { return (int left, int right) => { return (int)Math.Pow(left, right); }; } }
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Arithmetic.Error
@@ -131,6 +141,8 @@ namespace Seven.Mathematics
     public Binary<float> Add { get { return (float left, float right) => { return left + right; }; } }
     /// <summary>Subtracts two operands.</summary>
     public Binary<float> Subtract { get { return (float left, float right) => { return left - right; }; } }
+    /// <summary>Takes one operand to the power of the other.</summary>
+    public Binary<float> Power { get { return (float left, float right) => { return (float)Math.Pow(left, right); }; } }
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Arithmetic.Error
@@ -169,6 +181,8 @@ namespace Seven.Mathematics
     public Binary<double> Add { get { return (double left, double right) => { return left + right; }; } }
     /// <summary>Subtracts two operands.</summary>
     public Binary<double> Subtract { get { return (double left, double right) => { return left - right; }; } }
+    /// <summary>Takes one operand to the power of the other.</summary>
+    public Binary<double> Power { get { return (double left, double right) => { return Math.Pow(left, right); }; } }
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Arithmetic.Error
@@ -207,6 +221,8 @@ namespace Seven.Mathematics
     public Binary<decimal> Add { get { return (decimal left, decimal right) => { return left + right; }; } }
     /// <summary>Subtracts two operands.</summary>
     public Binary<decimal> Subtract { get { return (decimal left, decimal right) => { return left - right; }; } }
+    /// <summary>Takes one operand to the power of the other.</summary>
+    public Binary<decimal> Power { get { return (decimal left, decimal right) => { return (decimal)Math.Pow((double)left, (double)right); }; } }
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Arithmetic.Error
@@ -245,6 +261,8 @@ namespace Seven.Mathematics
     public Binary<long> Add { get { return (long left, long right) => { return left + right; }; } }
     /// <summary>Subtracts two operands.</summary>
     public Binary<long> Subtract { get { return (long left, long right) => { return left - right; }; } }
+    /// <summary>Takes one operand to the power of the other.</summary>
+    public Binary<long> Power { get { return (long left, long right) => { return (long)Math.Pow(left, right); }; } }
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Arithmetic.Error
@@ -283,6 +301,48 @@ namespace Seven.Mathematics
     public Binary<short> Add { get { return (short left, short right) => { return (short)(left + right); }; } }
     /// <summary>Subtracts two operands.</summary>
     public Binary<short> Subtract { get { return (short left, short right) => { return (short)(left - right); }; } }
+    /// <summary>Takes one operand to the power of the other.</summary>
+    public Binary<short> Power { get { return (short left, short right) => { return (short)Math.Pow(left, right); }; } }
+
+    /// <summary>Error type for all arithmetic computations.</summary>
+    public class Error : Arithmetic.Error
+    {
+      public Error(string message) : base(message) { }
+    }
+  }
+
+  public class Arithmetic_byte : Arithmetic<byte>
+  {
+    private Arithmetic_byte() { _instance = this; }
+    private static Arithmetic_byte _instance;
+    private static Arithmetic_byte Instance
+    {
+      get
+      {
+        if (_instance == null)
+          return _instance = new Arithmetic_byte();
+        else
+          return _instance;
+      }
+    }
+
+    /// <summary>Gets Arithmetic for "byte" types.</summary>
+    public static Arithmetic_byte Get { get { return Instance; } }
+
+    /// <summary>Negates a value.</summary>
+    public Unary<byte> Negate { get { throw new Error("attempting to negate a byte."); } }
+    /// <summary>Returns the value ignoring the sign.</summary>
+    public Unary<byte> Absolute { get { return (byte b) => { return b; }; } }
+    /// <summary>Divides two operands.</summary>
+    public Binary<byte> Divide { get { return (byte left, byte right) => { return (byte)(left / right); }; } }
+    /// <summary>Multiplies two operands.</summary>
+    public Binary<byte> Multiply { get { return (byte left, byte right) => { return (byte)(left * right); }; } }
+    /// <summary>Adds two operands.</summary>
+    public Binary<byte> Add { get { return (byte left, byte right) => { return (byte)(left + right); }; } }
+    /// <summary>Subtracts two operands.</summary>
+    public Binary<byte> Subtract { get { return (byte left, byte right) => { return (byte)(left - right); }; } }
+    /// <summary>Takes one operand to the power of the other.</summary>
+    public Binary<byte> Power { get { return (byte left, byte right) => { return (byte)Math.Pow(left, right); }; } }
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Arithmetic.Error
