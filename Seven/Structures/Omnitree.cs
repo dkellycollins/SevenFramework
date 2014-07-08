@@ -105,6 +105,8 @@ namespace Seven.Structures
     private Node _top;
     private int _dimensions;
     private int _children;
+    private int _loadPlusOne;
+    private bool _dynamicLoad;
 
     public int Count { get { return _count; } }
     public bool IsEmpty { get { return _count == 0; } }
@@ -117,7 +119,7 @@ namespace Seven.Structures
     {
       if (min.Length != max.Length)
         throw new Error("min/max values for omnitree mismatch dimensions");
-      this._loadFactor = 5;
+      this._loadFactor = 7;
       this._top = new Leaf(min, max, null, _loadFactor);
       this._count = 0;
       this._locate = locate;
@@ -125,6 +127,29 @@ namespace Seven.Structures
       this._compare = compare;
       this._dimensions = min.Length;
       this._children = (int)Math.Pow(2, this._dimensions);
+      this._loadPlusOne = this._loadFactor + 1;
+      this._dynamicLoad = true;
+    }
+
+    public Omnitree_Linked(
+      M[] min, M[] max,
+      Locate<T> locate,
+      Compare<M> compare,
+      Average<M> average,
+      int loadFactor)
+    {
+      if (min.Length != max.Length)
+        throw new Error("min/max values for omnitree mismatch dimensions");
+      this._loadFactor = loadFactor;
+      this._top = new Leaf(min, max, null, _loadFactor);
+      this._count = 0;
+      this._locate = locate;
+      this._average = average;
+      this._compare = compare;
+      this._dimensions = min.Length;
+      this._children = (int)Math.Pow(2, this._dimensions);
+      this._dynamicLoad = false;
+      //this._loadPlusOne = this._loadFactor + 1;
     }
 
     /// <summary>Adds an item to the Octree.</summary>
@@ -132,7 +157,14 @@ namespace Seven.Structures
     /// <param name="addition">The addition.</param>
     public void Add(T addition)
     {
-      //this._loadFactor = System.Math.Max(5, (int)System.Math.Log(this._count));
+      if (this._dynamicLoad)
+      {
+        if (this._loadPlusOne * this._loadPlusOne < _count)
+        {
+          this._loadFactor = (int)System.Math.Sqrt(this._count);
+          this._loadPlusOne = this._loadFactor + 1;
+        }
+      }
 
       M[] ms; ;
       this._locate(addition, out ms);
@@ -169,10 +201,10 @@ namespace Seven.Structures
           // We found a proper leaf, and the leaf has room, just add it
           leaf.Add(addition);
 
-          Console.Write("Adding " + addition + " to ");
-          foreach (M m in leaf.Min) Console.Write(m + " ");
-          foreach (M m in leaf.Max) Console.Write(m + " ");
-          Console.WriteLine();
+          //Console.Write("Adding " + addition + " to ");
+          //foreach (M m in leaf.Min) Console.Write(m + " ");
+          //foreach (M m in leaf.Max) Console.Write(m + " ");
+          //Console.WriteLine();
 
           return;
         }
@@ -199,10 +231,10 @@ namespace Seven.Structures
             this._locate(children[i], out child_ms);
             Add(children[i], growth, child_ms);
 
-            Console.Write("Adding " + addition + " to ");
-            foreach (M m in leaf.Min) Console.Write(m + " ");
-            foreach (M m in leaf.Max) Console.Write(m + " ");
-            Console.WriteLine();
+            //Console.Write("Adding " + addition + " to ");
+            //foreach (M m in leaf.Min) Console.Write(m + " ");
+            //foreach (M m in leaf.Max) Console.Write(m + " ");
+            //Console.WriteLine();
 
           }
 
@@ -221,10 +253,10 @@ namespace Seven.Structures
           Leaf leaf = GrowLeaf(branch, child);
           leaf.Add(addition);
 
-          Console.Write("Adding " + addition + " to ");
-          foreach (M m in leaf.Min) Console.Write(m + " ");
-          foreach (M m in leaf.Max) Console.Write(m + " ");
-          Console.WriteLine();
+          //Console.Write("Adding " + addition + " to ");
+          //foreach (M m in leaf.Min) Console.Write(m + " ");
+          //foreach (M m in leaf.Max) Console.Write(m + " ");
+          //Console.WriteLine();
 
           return;
         }
@@ -239,9 +271,9 @@ namespace Seven.Structures
       // values for the new node
       branch.Children[child] = new Branch(min, max, branch, this._children);
 
-      Console.Write("Growing branch ");
-      foreach (M t in min) Console.Write(t + " ");
-      foreach (M t in max) Console.Write(t + " ");
+      //Console.Write("Growing branch ");
+      //foreach (M t in min) Console.Write(t + " ");
+      //foreach (M t in max) Console.Write(t + " ");
 
       return (Branch)branch.Children[child];
     }
@@ -255,11 +287,6 @@ namespace Seven.Structures
       M[] min, max;
       this.DetermineChildBounds(branch, child, out min, out max);
       branch.Children[child] = new Leaf(min, max, branch, _loadFactor);
-
-      Console.Write("Growing leaf ");
-      foreach (M t in min) Console.Write(t + " ");
-      foreach (M t in max) Console.Write(t + " ");
-
       return (Leaf)branch.Children[child];
     }
 
@@ -470,102 +497,24 @@ namespace Seven.Structures
 
     /// <summary>Performs a functional paradigm traversal of the octree with data structure optimization.</summary>
     /// <param name="function">The function to perform per iteration.</param>
-    /// <param name="xMin">The minimum x of a rectangular prism to query the octree.</param>
-    /// <param name="yMin">The minimum y of a rectangular prism to query the octree.</param>
-    /// <param name="zMin">The minimum z of a rectangular prism to query the octree.</param>
-    /// <param name="xMax">The maximum x of a rectangular prism to query the octree.</param>
-    /// <param name="yMax">The maximum y of a rectangular prism to query the octree.</param>
-    /// <param name="zMax">The maximum z of a rectangular prism to query the octree.</param>
     public ForeachStatus Foreach(ForeachBreak<T> function, M[] min, M[] max)
     {
       throw new NotImplementedException();
-      //return Foreach(function, _top, min, max);
     }
     private ForeachStatus Foreach(ForeachBreak<T> function, Node node, M[] min, M[] max)
     {
       throw new NotImplementedException();
-      //if (node != null)
-      //{
-      //  if (node is Leaf)
-      //  {
-      //    int count = ((Leaf)node).Count;
-      //    T[] items = ((Leaf)node).Contents;
-
-      //    for (int i = 0; i < count; i++)
-      //    {
-      //      for (int j = 0; j < _dimensions; j++)
-      //        if (
-      //          _compare(max[j], node.Min[j]) != Comparison.Less ||
-      //          _compare(min[j], node.Max[j]) != Comparison.Greater)
-      //          goto Continue;
-
-      //      if (function(items[i]) == ForeachStatus.Break)
-      //        return ForeachStatus.Break;
-
-      //    Continue:
-
-      //      continue;
-      //    }
-      //  }
-      //  else
-      //  {
-      //    Branch branch = (Branch)node;
-      //    for (int i = 0; i < 8; i++)
-      //      if (Foreach(function, branch.Children[i], min, max) == ForeachStatus.Break)
-      //        return ForeachStatus.Break;
-      //    return ForeachStatus.Continue;
-      //  }
-      //}
-      //return ForeachStatus.Continue;
     }
 
     /// <summary>Performs a functional paradigm traversal of the octree with data structure optimization.</summary>
     /// <param name="function">The function to perform per iteration.</param>
-    /// <param name="xMin">The minimum x of a rectangular prism to query the octree.</param>
-    /// <param name="yMin">The minimum y of a rectangular prism to query the octree.</param>
-    /// <param name="zMin">The minimum z of a rectangular prism to query the octree.</param>
-    /// <param name="xMax">The maximum x of a rectangular prism to query the octree.</param>
-    /// <param name="yMax">The maximum y of a rectangular prism to query the octree.</param>
-    /// <param name="zMax">The maximum z of a rectangular prism to query the octree.</param>
-    public ForeachStatus Foreach(ForeachRefBreak<T> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    public ForeachStatus Foreach(ForeachRefBreak<T> function, M[] min, M[] max)
     {
       throw new NotImplementedException();
-      //return Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
     }
-    private ForeachStatus Foreach(ForeachRefBreak<T> function, Node node, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    private ForeachStatus Foreach(ForeachRefBreak<T> function, Node node, M[] min, M[] max)
     {
       throw new NotImplementedException();
-      //if (node != null)
-      //{
-      //  if (node is Leaf)
-      //  {
-      //    int count = ((Leaf)node).Count;
-      //    T[] items = ((Leaf)node).Contents;
-      //    for (int i = 0; i < count; i++)
-      //    {
-      //      M x, y, z;
-      //      this._locate(items[i], out x, out y, out z);
-      //      if (
-      //        _compare(x, node.MinX) == Comparison.Less &&
-      //        _compare(y, node.MinY) == Comparison.Less &&
-      //        _compare(z, node.MinZ) == Comparison.Less &&
-      //        _compare(x, node.MaxX) == Comparison.Greater &&
-      //        _compare(y, node.MaxY) == Comparison.Greater &&
-      //        _compare(z, node.MaxZ) == Comparison.Greater)
-      //        if (function(ref items[i]) == ForeachStatus.Break)
-      //          return ForeachStatus.Break;
-      //    }
-      //  }
-      //  else
-      //  {
-      //    Branch branch = (Branch)node;
-      //    for (int i = 0; i < 8; i++)
-      //      if (Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax) == ForeachStatus.Break)
-      //        return ForeachStatus.Break;
-      //    return ForeachStatus.Continue;
-      //  }
-      //}
-      //return ForeachStatus.Continue;
     }
 
     public void Foreach(Foreach<T> function, M[] min, M[] max)
@@ -576,10 +525,10 @@ namespace Seven.Structures
     {
       if (node != null)
       {
-        for (int j = 0; j < this._dimensions; j++)
-          if (this._compare(node.Max[j], min[j]) == Comparison.Less ||
-            this._compare(node.Min[j], max[j]) == Comparison.Greater)
-            return;
+        //for (int j = 0; j < this._dimensions; j++)
+        //  if (this._compare(node.Max[j], min[j]) == Comparison.Less ||
+        //    this._compare(node.Min[j], max[j]) == Comparison.Greater)
+        //    return;
 
         if (node is Leaf)
         {
@@ -606,16 +555,20 @@ namespace Seven.Structures
           Branch branch = (Branch)node;
           for (int i = 0; i < branch.Children.Length; i++)
           {
-            //for (int j = 0; j < this._dimensions; j++)
-            //  if (this._compare(branch.Children[i].Max[j], min[j]) == Comparison.Less ||
-            //    this._compare(branch.Children[i].Min[j], max[j]) == Comparison.Greater)
-            //    goto Continue;
+            if (branch.Children[i] == null)
+              goto Continue;
+            for (int j = 0; j < this._dimensions; j++)
+              if (this._compare(branch.Children[i].Max[j], min[j]) == Comparison.Less ||
+                this._compare(branch.Children[i].Min[j], max[j]) == Comparison.Greater)
+                goto Continue;
+
 
             Foreach(function, branch.Children[i], min, max);
+            continue;
 
-            //Continue:
+          Continue:
 
-            //  continue;
+            continue;
           }
         }
       }
