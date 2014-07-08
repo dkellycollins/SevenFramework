@@ -8,20 +8,20 @@ namespace Seven.Mathematics
   /// <summary>A mathematical function that takes 0 parameters.</summary>
   /// <typeparam name="T">The type this function operates on.</typeparam>
   /// <returns>The value of the function given the parameters.</returns>
-  public delegate T Function_0<T>();
+  public delegate T function_0<T>();
 
   /// <summary>A mathematical function that takes 1 parameters.</summary>
   /// <typeparam name="T">The type this function operates on.</typeparam>
   /// <param name="x">The first parameter of the function.</param>
   /// <returns>The value of the function given the parameters.</returns>
-  public delegate T Function_1<T>(T x);
+  public delegate T function_1<T>(T x);
 
   /// <summary>A mathematical function that takes 2 parameters.</summary>
   /// <typeparam name="T">The type this function operates on.</typeparam>
   /// <param name="x">The first parameter of the function.</param>
   /// <param name="y">The second parameter of the function.</param>
   /// <returns>The value of the function given the parameters.</returns>
-  public delegate T Function_2<T>(T x, T y);
+  public delegate T function_2<T>(T x, T y);
 
   /// <summary>A mathematical function that takes 3 parameters.</summary>
   /// <typeparam name="T">The type this function operates on.</typeparam>
@@ -29,7 +29,7 @@ namespace Seven.Mathematics
   /// <param name="y">The second parameter of the function.</param>
   /// <param name="z">The third parameter of the function.</param>
   /// <returns>The value of the function given the parameters.</returns>
-  public delegate T Function_3<T>(T x, T y, T z);
+  public delegate T function_3<T>(T x, T y, T z);
 
   /// <summary>A mathematical function that takes 4 parameters.</summary>
   /// <typeparam name="T">The type this function operates on.</typeparam>
@@ -38,12 +38,14 @@ namespace Seven.Mathematics
   /// <param name="c">The third parameter of the function.</param>
   /// <param name="c">The fourth parameter of the function.</param>
   /// <returns>The value of the function given the parameters.</returns>
-  public delegate T Function_4<T>(T a, T b, T c, T d);
+  public delegate T function_4<T>(T a, T b, T c, T d);
 
-  //public interface Function_xy
-  //{
-  //  double this[double x] { get; }
-  //}
+  public interface Function_0<T>
+  {
+    T this[T a] { get; }
+  }
+
+
   
   ////public interface Function_xyz
   ////{

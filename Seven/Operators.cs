@@ -58,4 +58,18 @@ namespace Seven
   /// <param name="right">The right operand of the operation.</param>
   /// <returns>The result of the operation.</returns>
   public delegate T Binary<T>(T left, T right);
+
+  /// <summary>A ternary computational operator.</summary>
+  /// <typeparam name="T">The type this operator can perform on.</typeparam>
+  /// <param name="a">The first operand of the operation.</param>
+  /// <param name="b">The second operand of the operation.</param>
+  /// <param name="c">The third operand of the operation.</param>
+  /// <returns>The result of the operation.</returns>
+  public delegate T Ternary<T>(T a, T b, T c);
+
+  /// <summary>A ternary computational operator.</summary>
+  /// <typeparam name="T">The type this operator can perform on.</typeparam>
+  /// <param name="a">The parameters of the operation.</param>
+  /// <returns>The result of the operation.</returns>
+  public delegate T Multinary<T>(params T[] a);
 }

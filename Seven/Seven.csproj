@@ -39,6 +39,9 @@
   <ItemGroup>
     <Compile Include="fraction.cs" />
     <Compile Include="Mathematics\Algebra.cs" />
+    <Compile Include="Mathematics\Calculus.cs" />
+    <Compile Include="Mathematics\Combinatorics.cs" />
+    <Compile Include="Mathematics\Equation.cs" />
     <Compile Include="Mathematics\Logic.cs" />
     <Compile Include="Operators.cs" />
     <Compile Include="Error.cs" />

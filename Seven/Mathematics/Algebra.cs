@@ -21,11 +21,29 @@ namespace Seven.Mathematics
     Unary<T> exp { get; }
     /// <summary>Gets the value of e.</summary>
     Unary<T> e { get; }
+
+    Unary<T> PrimeFactors { get; }
+
   }
 
   /// <summary>Provides extensions for the Algebra interface.</summary>
   public static class Algebra
   {
+    //public double Zeros(Function_1<double> function)
+    //{
+
+    //}
+    
+    //public void QuadraticFormula(double a, double b, double c, out double minus, out double plus)
+    //{
+    //  minus = (-b - System.Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
+    //  plus = (-b + System.Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
+    //}
+
+
+
+
+
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Seven.Error
     {

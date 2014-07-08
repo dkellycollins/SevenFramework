@@ -4,6 +4,7 @@
 // SUPPORT: See "README.txt" in the root project directory.
 
 using System;
+using Seven.Structures;
 
 namespace Seven.Mathematics
 {
@@ -57,6 +58,21 @@ namespace Seven.Mathematics
         if ((candidate % divisor) == 0)
           return false;
       return true;
+    }
+
+    public static List<int> PrimeFactors(int a)
+    {
+      List<int> factors = new List_Array<int>();
+      if (IsPrime(a))
+        factors.Add(a);
+      else
+        for (int b = 2; a > 1; b++)
+          while (a % b == 0)
+          {
+            a /= b;
+            factors.Add(b);
+          }
+      return factors;
     }
 
     public static float SquareRoot(float number)

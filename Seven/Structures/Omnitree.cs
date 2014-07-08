@@ -1,26 +1,27 @@
-﻿ // Seven
- // https://github.com/53V3N1X/SevenFramework
- // LISCENSE: See "LISCENSE.txt" in th root project directory.
- // SUPPORT: See "README.txt" in the root project directory.
+﻿// Seven
+// https://github.com/53V3N1X/SevenFramework
+// LISCENSE: See "LISCENSE.txt" in th root project directory.
+// SUPPORT: See "README.txt" in the root project directory.
 
 using System;
 
 namespace Seven.Structures
 {
   /// <summary>The one data structure to rule them all. Made by Zachary Patten.</summary>
-  public interface Omnitree<T> : Structure<T>
+  public interface Omnitree<T, M> : Structure<T>
   {
     int Count { get; }
     bool IsEmpty { get; }
     void Add(T addition);
     //void Move(KeyType moving);
     //void Update();
+    void Foreach(Foreach<T> function, M[] min, M[] max);
   }
 
   /// <summary>The one data structure to rule them all. Made by Zachary Patten.</summary>
   /// <typeparam name="T">The generice type of items to be stored in this octree.</typeparam>
   [Serializable]
-  public class Omnitree_Linked<T, M> : Omnitree<T>
+  public class Omnitree_Linked<T, M> : Omnitree<T, M>
   {
     /// <summary>Represents a single node of the octree. Includes references both upwards and
     /// downwards the tree.</summary>
@@ -94,8 +95,10 @@ namespace Seven.Structures
     }
 
     public delegate void Locate<Type>(Type item, out M[] ms);
+    public delegate Type Average<Type>(Type left, Type right);
+
     private Locate<T> _locate;
-    private Binary<M> _average;
+    private Average<M> _average;
     private Compare<M> _compare;
     private int _loadFactor;
     private int _count;
@@ -108,20 +111,20 @@ namespace Seven.Structures
 
     public Omnitree_Linked(
       M[] min, M[] max,
-      int loadFactor,
       Locate<T> locate,
       Compare<M> compare,
-      Binary<M> average,
-      int dimenions)
+      Average<M> average)
     {
-      this._loadFactor = loadFactor;
+      if (min.Length != max.Length)
+        throw new Error("min/max values for omnitree mismatch dimensions");
+      this._loadFactor = 5;
       this._top = new Leaf(min, max, null, _loadFactor);
       this._count = 0;
       this._locate = locate;
       this._average = average;
       this._compare = compare;
-      this._dimensions = dimenions;
-      this._children = (int)Math.Pow(2, dimenions);
+      this._dimensions = min.Length;
+      this._children = (int)Math.Pow(2, this._dimensions);
     }
 
     /// <summary>Adds an item to the Octree.</summary>
@@ -129,6 +132,8 @@ namespace Seven.Structures
     /// <param name="addition">The addition.</param>
     public void Add(T addition)
     {
+      //this._loadFactor = System.Math.Max(5, (int)System.Math.Log(this._count));
+
       M[] ms; ;
       this._locate(addition, out ms);
 
@@ -151,54 +156,93 @@ namespace Seven.Structures
 
     /// <summary>Recursively adds an item to the octree and returns the node where the addition was placed
     /// and adjusts the octree structure as needed.</summary>
-    private Leaf Add(T addition, Node octreeNode, M[] ms)
+    private void Add(T addition, Node node, M[] ms)
     {
       //Console.WriteLine("Adding " + addition + " to " + octreeNode.MinX + ", " + octreeNode.MinY + ", " + octreeNode.MinZ);
 
       // If the node is a leaf we have reached the bottom of the tree
-      if (octreeNode is Leaf)
+      if (node is Leaf)
       {
-        Leaf leaf = (Leaf)octreeNode;
+        Leaf leaf = (Leaf)node;
         if (!leaf.IsFull)
         {
           // We found a proper leaf, and the leaf has room, just add it
           leaf.Add(addition);
-          return leaf;
+
+          Console.Write("Adding " + addition + " to ");
+          foreach (M m in leaf.Min) Console.Write(m + " ");
+          foreach (M m in leaf.Max) Console.Write(m + " ");
+          Console.WriteLine();
+
+          return;
         }
         else
         {
           // The leaf is full so we need to grow out the tree
-          Branch parent = octreeNode.Parent;
+          Branch parent = node.Parent;
           Branch growth;
+          T[] children = ((Leaf)node).Contents;
           if (parent == null)
+          {
+            //T[] children = ((Leaf)node).Contents;
             growth = (Branch)(_top = new Branch(_top.Min, _top.Max, null, this._children));
+            //Add(addition, growth, ms);
+          }
           else
           {
-            growth = GrowBranch(parent, this.DetermineChild(parent, ms));
+            growth = GrowBranch(parent, leaf.Min, leaf.Max, this.DetermineChild(parent, ms));
           }
-          return Add(addition, growth, ms);
+
+          for (int i = 0; i < children.Length; i++)
+          {
+            M[] child_ms;
+            this._locate(children[i], out child_ms);
+            Add(children[i], growth, child_ms);
+
+            Console.Write("Adding " + addition + " to ");
+            foreach (M m in leaf.Min) Console.Write(m + " ");
+            foreach (M m in leaf.Max) Console.Write(m + " ");
+            Console.WriteLine();
+
+          }
+
+          Add(addition, growth, ms);
+          return;
         }
       }
       // We are still traversing the tree, determine the next move
       else
       {
-        Branch branch = (Branch)octreeNode;
+        Branch branch = (Branch)node;
         int child = this.DetermineChild(branch, ms);
         // If the leaf is null, we must grow one before attempting to add to it
         if (branch.Children[child] == null)
-          return GrowLeaf(branch, child).Add(addition);
-        return Add(addition, branch.Children[child], ms);
+        {
+          Leaf leaf = GrowLeaf(branch, child);
+          leaf.Add(addition);
+
+          Console.Write("Adding " + addition + " to ");
+          foreach (M m in leaf.Min) Console.Write(m + " ");
+          foreach (M m in leaf.Max) Console.Write(m + " ");
+          Console.WriteLine();
+
+          return;
+        }
+        Add(addition, branch.Children[child], ms);
+        return;
       }
     }
 
     // Grows a branch on the tree at the desired location
-    private Branch GrowBranch(Branch branch, int child)
+    private Branch GrowBranch(Branch branch, M[] min, M[] max, int child)
     {
       // values for the new node
-      M[] min, max;
-      this.DetermineChildBounds(branch, child, out min, out max);
       branch.Children[child] = new Branch(min, max, branch, this._children);
-      //Console.WriteLine("Growing branch " + x + ", " + y + ", " + z);
+
+      Console.Write("Growing branch ");
+      foreach (M t in min) Console.Write(t + " ");
+      foreach (M t in max) Console.Write(t + " ");
+
       return (Branch)branch.Children[child];
     }
 
@@ -211,7 +255,11 @@ namespace Seven.Structures
       M[] min, max;
       this.DetermineChildBounds(branch, child, out min, out max);
       branch.Children[child] = new Leaf(min, max, branch, _loadFactor);
-      //Console.WriteLine("Growing leaf " + x + ", " + y + ", " + z);
+
+      Console.Write("Growing leaf ");
+      foreach (M t in min) Console.Write(t + " ");
+      foreach (M t in max) Console.Write(t + " ");
+
       return (Leaf)branch.Children[child];
     }
 
@@ -221,17 +269,29 @@ namespace Seven.Structures
       for (int i = 0; i < this._dimensions; i++)
         if (!(_compare(ms[i], _average(node.Min[i], node.Max[i])) == Comparison.Less))
           child += (int)Math.Pow(2, i);
+
+      //Console.Write("Child Check: mins");
+      //foreach (M m in node.Min) Console.Write(m + " ");
+      //Console.Write("maxs ");
+      //foreach (M m in node.Max) Console.Write(m + " ");
+      //Console.Write("loc ");
+      //foreach (M m in ms) Console.Write(m + " ");
+      //Console.WriteLine("is " + child);
+
       return child;
     }
 
     private void DetermineChildBounds(Node node, int child, out M[] min, out M[] max)
     {
+      //int woah = child;
+
       min = new M[this._dimensions];
       max = new M[this._dimensions];
       for (int i = _dimensions - 1; i >= 0; i--)
       {
+        //int temp = (int)Math.Pow(2, i + 1);
         int temp = (int)Math.Pow(2, i);
-        if (child % temp == 0)
+        if (child >= temp)
         {
           min[i] = _average(node.Min[i], node.Max[i]);
           max[i] = node.Max[i];
@@ -243,6 +303,14 @@ namespace Seven.Structures
           max[i] = _average(node.Min[i], node.Max[i]);
         }
       }
+
+      //Console.WriteLine("Bounds: child " + woah);
+      //foreach (M m in node.Min) Console.Write(" " + m);
+      //foreach (M m in node.Max) Console.Write(" " + m);
+      //Console.WriteLine();
+      //foreach (M m in min) Console.Write(" " + m);
+      //foreach (M m in max) Console.Write(" " + m);
+      //Console.WriteLine();
     }
 
     private bool ContainsBounds(Node node, M[] min, M[] max)
@@ -298,21 +366,21 @@ namespace Seven.Structures
     {
       Foreach(function, _top);
     }
-    private void Foreach(Foreach<T> function, Node octreeNode)
+    private void Foreach(Foreach<T> function, Node node)
     {
-      if (octreeNode != null)
+      if (node != null)
       {
-        if (octreeNode is Leaf)
+        if (node is Leaf)
         {
-          int count = ((Leaf)octreeNode).Count;
-          T[] items = ((Leaf)octreeNode).Contents;
+          int count = ((Leaf)node).Count;
+          T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
             function(items[i]);
         }
         else
         {
-          Branch branch = (Branch)octreeNode;
-          for (int i = 0; i < 8; i++)
+          Branch branch = (Branch)node;
+          for (int i = 0; i < branch.Children.Length; i++)
             Foreach(function, branch.Children[i]);
         }
       }
@@ -322,21 +390,21 @@ namespace Seven.Structures
     {
       Foreach(function, _top);
     }
-    private void Foreach(ForeachRef<T> function, Node octreeNode)
+    private void Foreach(ForeachRef<T> function, Node node)
     {
-      if (octreeNode != null)
+      if (node != null)
       {
-        if (octreeNode is Leaf)
+        if (node is Leaf)
         {
-          int count = ((Leaf)octreeNode).Count;
-          T[] items = ((Leaf)octreeNode).Contents;
+          int count = ((Leaf)node).Count;
+          T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
             function(ref items[i]);
         }
         else
         {
-          Branch branch = (Branch)octreeNode;
-          for (int i = 0; i < 8; i++)
+          Branch branch = (Branch)node;
+          for (int i = 0; i < branch.Children.Length; i++)
             Foreach(function, branch.Children[i]);
         }
       }
@@ -346,14 +414,14 @@ namespace Seven.Structures
     {
       return Foreach(function, _top);
     }
-    private ForeachStatus Foreach(ForeachBreak<T> function, Node octreeNode)
+    private ForeachStatus Foreach(ForeachBreak<T> function, Node node)
     {
-      if (octreeNode != null)
+      if (node != null)
       {
-        if (octreeNode is Leaf)
+        if (node is Leaf)
         {
-          int count = ((Leaf)octreeNode).Count;
-          T[] items = ((Leaf)octreeNode).Contents;
+          int count = ((Leaf)node).Count;
+          T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
             if (function(items[i]) == ForeachStatus.Break)
               return ForeachStatus.Break;
@@ -361,8 +429,8 @@ namespace Seven.Structures
         }
         else
         {
-          Branch branch = (Branch)octreeNode;
-          for (int i = 0; i < 8; i++)
+          Branch branch = (Branch)node;
+          for (int i = 0; i < branch.Children.Length; i++)
             if (Foreach(function, branch.Children[i]) == ForeachStatus.Break)
               return ForeachStatus.Break;
           return ForeachStatus.Continue;
@@ -373,17 +441,16 @@ namespace Seven.Structures
 
     public ForeachStatus Foreach(ForeachRefBreak<T> function)
     {
-      throw new NotImplementedException();
-      //return Foreach(function, _top);
+      return Foreach(function, _top);
     }
-    private ForeachStatus Foreach(ForeachRefBreak<T> function, Node octreeNode)
+    private ForeachStatus Foreach(ForeachRefBreak<T> function, Node node)
     {
-      if (octreeNode != null)
+      if (node != null)
       {
-        if (octreeNode is Leaf)
+        if (node is Leaf)
         {
-          int count = ((Leaf)octreeNode).Count;
-          T[] items = ((Leaf)octreeNode).Contents;
+          int count = ((Leaf)node).Count;
+          T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
             if (function(ref items[i]) == ForeachStatus.Break)
               return ForeachStatus.Break;
@@ -391,8 +458,8 @@ namespace Seven.Structures
         }
         else
         {
-          Branch branch = (Branch)octreeNode;
-          for (int i = 0; i < 8; i++)
+          Branch branch = (Branch)node;
+          for (int i = 0; i < branch.Children.Length; i++)
             if (Foreach(function, branch.Children[i]) == ForeachStatus.Break)
               return ForeachStatus.Break;
           return ForeachStatus.Continue;
@@ -501,78 +568,110 @@ namespace Seven.Structures
       //return ForeachStatus.Continue;
     }
 
-    public void Foreach(Foreach<T> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    public void Foreach(Foreach<T> function, M[] min, M[] max)
     {
-      throw new NotImplementedException();
-      //Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
+      Foreach(function, _top, min, max);
     }
-    private void Foreach(Foreach<T> function, Node node, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    private void Foreach(Foreach<T> function, Node node, M[] min, M[] max)
     {
-      throw new NotImplementedException();
-      //if (node != null)
-      //{
-      //  if (node is Leaf)
-      //  {
-      //    int count = ((Leaf)node).Count;
-      //    T[] items = ((Leaf)node).Contents;
-      //    for (int i = 0; i < count; i++)
-      //    {
-      //      M x, y, z;
-      //      this._locate(items[i], out x, out y, out z);
-      //      if (
-      //        _compare(x, node.MinX) == Comparison.Less &&
-      //        _compare(y, node.MinY) == Comparison.Less &&
-      //        _compare(z, node.MinZ) == Comparison.Less &&
-      //        _compare(x, node.MaxX) == Comparison.Greater &&
-      //        _compare(y, node.MaxY) == Comparison.Greater &&
-      //        _compare(z, node.MaxZ) == Comparison.Greater)
-      //        function(items[i]);
-      //    }
-      //  }
-      //  else
-      //  {
-      //    Branch branch = (Branch)node;
-      //    for (int i = 0; i < 8; i++)
-      //      Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax);
-      //  }
-      //}
+      if (node != null)
+      {
+        for (int j = 0; j < this._dimensions; j++)
+          if (this._compare(node.Max[j], min[j]) == Comparison.Less ||
+            this._compare(node.Min[j], max[j]) == Comparison.Greater)
+            return;
+
+        if (node is Leaf)
+        {
+          int count = ((Leaf)node).Count;
+          T[] items = ((Leaf)node).Contents;
+          for (int i = 0; i < count; i++)
+          {
+            M[] ms;
+            this._locate(items[i], out ms);
+            for (int j = 0; j < this._dimensions; j++)
+              if (this._compare(ms[j], min[j]) == Comparison.Less ||
+                this._compare(ms[j], max[j]) == Comparison.Greater)
+                goto Continue;
+
+            function(items[i]);
+
+          Continue:
+
+            continue;
+          }
+        }
+        else
+        {
+          Branch branch = (Branch)node;
+          for (int i = 0; i < branch.Children.Length; i++)
+          {
+            //for (int j = 0; j < this._dimensions; j++)
+            //  if (this._compare(branch.Children[i].Max[j], min[j]) == Comparison.Less ||
+            //    this._compare(branch.Children[i].Min[j], max[j]) == Comparison.Greater)
+            //    goto Continue;
+
+            Foreach(function, branch.Children[i], min, max);
+
+            //Continue:
+
+            //  continue;
+          }
+        }
+      }
     }
 
-    public void Foreach(ForeachRef<T> function, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    public void Foreach(ForeachRef<T> function, M[] min, M[] max)
     {
-      throw new NotImplementedException();
-      //Foreach(function, _top, xMin, yMin, zMin, xMax, yMax, zMax);
+      Foreach(function, _top, min, max);
     }
-    private void Foreach(ForeachRef<T> function, Node node, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax)
+    private void Foreach(ForeachRef<T> function, Node node, M[] min, M[] max)
     {
-      throw new NotImplementedException();
-      //if (node != null)
-      //{
-      //  if (node is Leaf)
-      //  {
-      //    int count = ((Leaf)node).Count;
-      //    T[] items = ((Leaf)node).Contents;
-      //    for (int i = 0; i < count; i++)
-      //    {
-      //      M x, y, z;
-      //      this._locate(items[i], out x, out y, out z);
-      //      if (
-      //        _compare(x, node.MinX) == Comparison.Less &&
-      //        _compare(y, node.MinY) == Comparison.Less &&
-      //        _compare(z, node.MinZ) == Comparison.Less &&
-      //        _compare(x, node.MaxX) == Comparison.Greater &&
-      //        _compare(y, node.MaxY) == Comparison.Greater &&
-      //        _compare(z, node.MaxZ) == Comparison.Greater)
-      //        function(ref items[i]);
-      //    }
-      //  }
-      //  else
-      //  {
-      //    Branch branch = (Branch)node;
-      //    for (int i = 0; i < 8; i++)
-      //      Foreach(function, branch.Children[i], xMin, yMin, zMin, xMax, yMax, zMax);
-      //  }
-      //}
+      if (node != null)
+      {
+        for (int j = 0; j < this._dimensions; j++)
+          if (this._compare(node.Max[j], min[j]) == Comparison.Less ||
+            this._compare(node.Min[j], max[j]) == Comparison.Greater)
+            return;
+
+        if (node is Leaf)
+        {
+          int count = ((Leaf)node).Count;
+          T[] items = ((Leaf)node).Contents;
+          for (int i = 0; i < count; i++)
+          {
+            M[] ms;
+            this._locate(items[i], out ms);
+            for (int j = 0; j < this._dimensions; j++)
+              if (this._compare(ms[j], min[j]) == Comparison.Less ||
+                this._compare(ms[j], max[j]) == Comparison.Greater)
+                goto Continue;
+
+            function(ref items[i]);
+
+          Continue:
+
+            continue;
+          }
+        }
+        else
+        {
+          Branch branch = (Branch)node;
+          for (int i = 0; i < branch.Children.Length; i++)
+          {
+            //for (int j = 0; j < this._dimensions; j++)
+            //  if (this._compare(branch.Children[i].Max[j], min[j]) == Comparison.Less ||
+            //    this._compare(branch.Children[i].Min[j], max[j]) == Comparison.Greater)
+            //    goto Continue;
+
+            Foreach(function, branch.Children[i], min, max);
+
+            //Continue:
+
+            //  continue;
+          }
+        }
+      }
     }
 
     public T[] ToArray()
