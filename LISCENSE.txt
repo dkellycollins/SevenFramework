@@ -23,3 +23,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+----------------------------------------------------------------------------
+
+NOTE: Some parts of the Seven frameworks are derivatives of other projects.
+These are marked with "<citation>" xml tags in the source code. All works
+have been modified from their original versions to match the implementations
+in the Seven framework.
