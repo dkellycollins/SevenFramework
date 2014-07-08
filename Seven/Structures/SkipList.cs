@@ -19,6 +19,9 @@ namespace Seven.Structures
   /// CodeProject.com. However, it has been modified since its
   /// addition into the Seven framework.
   /// http://www.codeproject.com/Articles/4897/A-Skip-List-in-C
+  /// Original Author:
+  ///   Created by: Leslie Sanford (08/27/2003)
+  ///   Contact: jabberdabber@hotmail.com
   /// </citation>
   public class SkipList_Linked<T> : System.Collections.IEnumerable, System.Collections.IDictionary, SkipList<T>
   {
