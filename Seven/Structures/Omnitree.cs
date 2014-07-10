@@ -144,13 +144,13 @@ namespace Seven.Structures
     /// <typeparam name="G">The generic type of the type to locate.</typeparam>
     /// <param name="item">The item to be located.</param>
     /// <returns>The computed locations of the item.</returns>
-    public delegate M[] Locate<G>(G item);
+    public delegate M[] Locate_NonOut<G>(G item);
 
     /// <summary>Locates an item along the given dimensions.</summary>
     /// <typeparam name="T">The generic type of the type to locate.</typeparam>
     /// <param name="item">The item to be located.</param>
     /// <param name="ms">The computed locations of the item.</param>
-    public delegate void LocateOut<G>(T item, out M[] ms);
+    public delegate void Locate<G>(T item, out M[] ms);
 
     /// <summary>Computes the average between two items.</summary>
     /// <typeparam name="G">The generic type of the items to average.</typeparam>
@@ -231,7 +231,7 @@ namespace Seven.Structures
     /// <param name="average">A function for computing the average between two items of the axis types.</param>
     public Omnitree_Linked(
       M[] min, M[] max,
-      LocateOut<T> locate,
+      Locate_NonOut<T> locate,
       Compare<M> compare,
       Average<M> average)
     {
@@ -253,8 +253,8 @@ namespace Seven.Structures
       this._load = 7; // can you tell this is my fav # yet?
       this._top = new Leaf(min, max, null, _load);
       this._count = 0;
-      // This is just an adapter so my CodeProject article will still work...
-      this._locate = (T item) => { M[] ms; locate(item, out ms); return ms; };
+      // This is just an adapter, JIT will optimize it out paremeter (I think)
+      this._locate = (T item, out M[] ms) => { ms = locate(item); };
       this._average = average;
       this._compare = compare;
       this._dimensions = min.Length;
@@ -305,7 +305,7 @@ namespace Seven.Structures
     /// <param name="load">The initial load (slight optimization for large populations).</param>
     public Omnitree_Linked(
       M[] min, M[] max,
-      LocateOut<T> locate,
+      Locate_NonOut<T> locate,
       Compare<M> compare,
       Average<M> average,
       int load)
@@ -320,8 +320,8 @@ namespace Seven.Structures
       this._load = load;
       this._top = new Leaf(min, max, null, _load);
       this._count = 0;
-      // This is just an adapter so my CodeProject article will still work...
-      this._locate = (T item) => { M[] ms; locate(item, out ms); return ms; };
+      // This is just an adapter, JIT will optimize it out paremeter (I think)
+      this._locate = (T item, out M[] ms) => { ms = locate(item); };
       this._average = average;
       this._compare = compare;
       this._dimensions = min.Length;
@@ -344,7 +344,8 @@ namespace Seven.Structures
         this._loadSquared = this._load * this._load;
       }
 
-      M[] ms = this._locate(addition);
+      M[] ms;
+      this._locate(addition, out ms);
 
       if (ms.Length != this._dimensions)
         throw new Error("the location function for omnitree is invalid.");
@@ -382,7 +383,8 @@ namespace Seven.Structures
 
           foreach (T item in contents)
           {
-            M[] child_ms = this._locate(item);
+            M[] child_ms;
+            this._locate(item, out child_ms);
 
             if (child_ms.Length != this._dimensions)
               throw new Error("the location function for omnitree is invalid.");
@@ -720,7 +722,8 @@ namespace Seven.Structures
           T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
           {
-            M[] ms = this._locate(items[i]);
+            M[] ms;
+            this._locate(items[i], out ms);
 
             if (ms.Length != this._dimensions)
               throw new Error("the location function for omnitree is invalid.");
@@ -757,7 +760,8 @@ namespace Seven.Structures
           T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
           {
-            M[] ms = this._locate(items[i]);
+            M[] ms;
+            this._locate(items[i], out ms);
 
             if (ms.Length != this._dimensions)
               throw new Error("the location function for omnitree is invalid.");
@@ -794,7 +798,8 @@ namespace Seven.Structures
           T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
           {
-            M[] ms = this._locate(items[i]);
+            M[] ms;
+            this._locate(items[i], out ms);
 
             if (ms.Length != this._dimensions)
               throw new Error("the location function for omnitree is invalid.");
@@ -834,7 +839,8 @@ namespace Seven.Structures
           T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
           {
-            M[] ms = this._locate(items[i]);
+            M[] ms;
+            this._locate(items[i], out ms);
 
             if (ms.Length != this._dimensions)
               throw new Error("the location function for omnitree is invalid.");

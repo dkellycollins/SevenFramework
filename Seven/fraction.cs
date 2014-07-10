@@ -3,7 +3,7 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-// THIS FILE CONTAINS ETERNAL CITATIONS
+// THIS FILE CONTAINS EXTERNAL CITATIONS
 
 namespace Seven
 {
