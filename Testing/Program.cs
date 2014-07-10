@@ -250,6 +250,9 @@ The framework is a general framework to help with any form of programming. Curre
       //Console.WriteLine(" SPEED TEST");
       //SpeedTest();
 
+      //Test_LIST();
+      //Test_OMNITREE();
+
       Console.WriteLine(" Testing Complete...");
       Console.ReadLine();
     }
@@ -360,6 +363,149 @@ The framework is a general framework to help with any form of programming. Curre
       timer.Stop();
       Console.WriteLine("   Traversal: " + (float)timer.ElapsedMilliseconds / 1000.0f + " (Delegate)");
       Console.WriteLine();
+    }
+
+    public static void Test_OMNITREE()
+    {
+      Stopwatch timer = new Stopwatch();
+
+      int iterations = 10000000;
+
+      Console.WriteLine("OMNITREE-------------------");
+      Omnitree<int, double> omnitree_linked = new Omnitree_Linked<int, double>(
+        new double[] { -iterations - 1, -iterations - 1, -iterations - 1 },
+        new double[] { iterations + 1, iterations + 1, iterations + 1 },
+        (int i, out double[] location) => { location = new double[] { i, i, i }; },
+        Program.Compare, // just a comparison function...
+        (double left, double right) => { return (left + right) * 0.5d; },
+        10000);
+
+      timer.Restart();
+      for (int i = -iterations; i < iterations; i++)
+        omnitree_linked.Add(i);
+      timer.Stop();
+      Console.WriteLine("ADD TIME: " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      int count2 = 0;
+      omnitree_linked.Foreach(
+        (int current) => { count2++; },
+        new double[] { 0, 0, 0 },
+        new double[] { 25000000, 25000000, 25000000 });
+      timer.Stop();
+      Console.WriteLine("FOREACH (250000):");
+      Console.WriteLine("  Items Found: " + count2);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      count2 = 0;
+      omnitree_linked.Foreach(
+        (int current) => { count2++; },
+        new double[] { 0, 0, 0 },
+        new double[] { 250000, 250000, 250000 });
+      timer.Stop();
+      Console.WriteLine("FOREACH (250000):");
+      Console.WriteLine("  Items Found: " + count2);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      count2 = 0;
+      omnitree_linked.Foreach(
+        (int current) => { count2++; },
+        new double[] { 0, 0, 0 },
+        new double[] { 2500, 2500, 2500 });
+      timer.Stop();
+      Console.WriteLine("FOREACH (2500):");
+      Console.WriteLine("  Items Found: " + count2);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      count2 = 0;
+      omnitree_linked.Foreach(
+        (int current) => { count2++; },
+        new double[] { 0, 0, 0 },
+        new double[] { 25, 25, 25 });
+      timer.Stop();
+      Console.WriteLine("FOREACH (25):");
+      Console.WriteLine("  Items Found: " + count2);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+    }
+
+    public static void Test_LIST()
+    {
+      Stopwatch timer = new Stopwatch();
+
+      int iterations = 10000000;
+
+      Console.WriteLine("LIST------------------------");
+      System.Collections.Generic.List<Tuple<double, double, double>> list =
+        new System.Collections.Generic.List<Tuple<double, double, double>>();
+
+      timer.Restart();
+      for (int i = -iterations; i < iterations; i++)
+        list.Add(new Tuple<double, double, double>(i, i, i));
+      timer.Stop();
+      Console.WriteLine("ADD TIME: " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      int count = 0;
+      foreach (Tuple<double, double, double> i in list)
+      {
+        if (
+          i.Item1 >= 0 && i.Item1 <= 25000000 &&
+          i.Item2 >= 0 && i.Item2 <= 25000000 &&
+          i.Item3 >= 0 && i.Item3 <= 25000000)
+          count++;
+      }
+      timer.Stop();
+      Console.WriteLine("FOREACH (25000000):");
+      Console.WriteLine("  Items Found: " + count);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      count = 0;
+      foreach (Tuple<double, double, double> i in list)
+      {
+        if (
+          i.Item1 >= 0 && i.Item1 <= 250000 &&
+          i.Item2 >= 0 && i.Item2 <= 250000 &&
+          i.Item3 >= 0 && i.Item3 <= 250000)
+          count++;
+      }
+      timer.Stop();
+      Console.WriteLine("FOREACH (250000):");
+      Console.WriteLine("  Items Found: " + count);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      count = 0;
+      foreach (Tuple<double, double, double> i in list)
+      {
+        if (
+          i.Item1 >= 0 && i.Item1 <= 2500 &&
+          i.Item2 >= 0 && i.Item2 <= 2500 &&
+          i.Item3 >= 0 && i.Item3 <= 2500)
+          count++;
+      }
+      timer.Stop();
+      Console.WriteLine("FOREACH (2500):");
+      Console.WriteLine("  Items Found: " + count);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      count = 0;
+      foreach (Tuple<double, double, double> i in list)
+      {
+        if (
+          i.Item1 >= 0 && i.Item1 <= 25 &&
+          i.Item2 >= 0 && i.Item2 <= 25 &&
+          i.Item3 >= 0 && i.Item3 <= 25)
+          count++;
+      }
+      timer.Stop();
+      Console.WriteLine("FOREACH (25):");
+      Console.WriteLine("  Items Found: " + count);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
     }
   }
 }

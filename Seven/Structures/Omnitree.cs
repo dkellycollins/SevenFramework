@@ -6,7 +6,7 @@
 namespace Seven.Structures
 {
   /// <summary>The one data structure to rule them all. Made by Zachary Patten.</summary>
-  /// <typeparam name="T">The generice type of items to be stored in this octree.</typeparam>
+  /// <typeparam name="T">The generice type of items to be stored in this omnitree.</typeparam>
   /// <typeparam name="M">The type of the axis dimensions to sort the "T" values upon.</typeparam>
   public interface Omnitree<T, M> : Structure<T>
   {
@@ -20,9 +20,24 @@ namespace Seven.Structures
     /// <param name="addition">The item to be added.</param>
     void Add(T addition);
 
-    //void Update(KeyType moving);
-    //void Update();
-    //void Update(M[] min, M[] max)
+    /// <summary>Iterates through the entire tree and ensures each item is in the proper leaf.</summary>
+    void Update();
+
+    /// <summary>Iterates through the provided dimensions and ensures each item is in the proper leaf.</summary>
+    /// <param name="min">The minimum dimensions of the space to update.</param>
+    /// <param name="max">The maximum dimensions of the space to update.</param>
+    void Update(M[] min, M[] max);
+
+    /// <summary>Removes all the items in a given space.</summary>
+    /// <param name="min">The minimum values of the space.</param>
+    /// <param name="max">The maximum values of the space.</param>
+    void Remove(M[] min, M[] max);
+
+    /// <summary>Removes all the items in a given space where equality is met.</summary>
+    /// <param name="min">The minimum values of the space.</param>
+    /// <param name="max">The maximum values of the space.</param>
+    /// <param name="where">The equality constraint of the removal.</param>
+    void Remove(M[] min, M[] max, Equate<T> where);
 
     /// <summary>Performs and specialized traversal of the structure and performs a delegate on every node within the provided dimensions.</summary>
     /// <param name="function">The delegate to perform on all items in the tree within the given bounds.</param>
@@ -47,6 +62,9 @@ namespace Seven.Structures
     /// <param name="min">The minimum dimensions of the traversal.</param>
     /// <param name="max">The maximum dimensions of the traversal.</param>
     ForeachStatus Foreach(ForeachRefBreak<T> function, M[] min, M[] max);
+
+    /// <summary>Returns the tree to an empty state.</summary>
+    void Clear();
   }
 
   /// <summary>The one data structure to rule them all. Made by Zachary Patten.</summary>
@@ -123,30 +141,48 @@ namespace Seven.Structures
     }
 
     /// <summary>Locates an item along the given dimensions.</summary>
+    /// <typeparam name="G">The generic type of the type to locate.</typeparam>
+    /// <param name="item">The item to be located.</param>
+    /// <returns>The computed locations of the item.</returns>
+    public delegate M[] Locate<G>(G item);
+
+    /// <summary>Locates an item along the given dimensions.</summary>
     /// <typeparam name="T">The generic type of the type to locate.</typeparam>
     /// <param name="item">The item to be located.</param>
     /// <param name="ms">The computed locations of the item.</param>
-    public delegate void Locate<T>(T item, out M[] ms);
+    public delegate void LocateOut<G>(T item, out M[] ms);
 
     /// <summary>Computes the average between two items.</summary>
-    /// <typeparam name="T">The generic type of the items to average.</typeparam>
+    /// <typeparam name="G">The generic type of the items to average.</typeparam>
     /// <param name="left">The first item of the average.</param>
     /// <param name="right">The second item of the average.</param>
     /// <returns>The computed average between the two items.</returns>
-    public delegate T Average<T>(T left, T right);
+    public delegate G Average<G>(G left, G right);
 
+    private const int _maxDimensions = 20;
+
+    // Immutable Fields
     private Locate<T> _locate;
     private Average<M> _average;
     private Compare<M> _compare;
-    private int _loadFactor;
-    private int _count;
-    private Node _top;
     private int _dimensions;
     private int _children;
-    private int _loadPlusOneSquared;
 
+    // Mutable Fields
+    private Node _top;
+    private int _count;
+    private int _load;
+    private int _loadPlusOneSquared;
+    private int _loadSquared;
+
+    /// <summary>The current number of items in the tree.</summary>
     public int Count { get { return _count; } }
+
+    /// <summary>True if (Count == 0).</summary>
     public bool IsEmpty { get { return _count == 0; } }
+
+    /// <summary>Gets the current memory allocation size of this structure.</summary>
+    public int SizeOf { get { throw new System.NotImplementedException("Sorry, I'm working on it."); } }
 
     /// <summary>Constructor for an Omnitree_Linked.</summary>
     /// <param name="min">The minimum values of the tree.</param>
@@ -161,16 +197,30 @@ namespace Seven.Structures
       Average<M> average)
     {
       if (min.Length != max.Length)
-        throw new Error("min/max values for omnitree mismatch dimensions");
-      this._loadFactor = 7;
-      this._top = new Leaf(min, max, null, _loadFactor);
+        throw new Error("min/max values for omnitree mismatch dimensions.");
+
+      if (min.Length > _maxDimensions)
+        throw new Error("you are sorting on +" + _maxDimensions + 
+          " dimensions. if wish to do this, remove this exception at your own risk.");
+
+      for (int i = 0; i < min.Length; i++)
+        if (min[i] == null)
+          throw new Error("null reference during omni-tree construction.");
+
+      for (int i = 0; i < max.Length; i++)
+        if (max[i] == null)
+          throw new Error("null reference during omni-tree construction.");
+
+      this._load = 7; // can you tell this is my fav # yet?
+      this._top = new Leaf(min, max, null, _load);
       this._count = 0;
       this._locate = locate;
       this._average = average;
       this._compare = compare;
       this._dimensions = min.Length;
-      this._children = (int)System.Math.Pow(2, this._dimensions);
-      this._loadPlusOneSquared = (this._loadFactor + 1) * (this._loadFactor + 1);
+      this._children = Omnitree_Linked<T, M>.TwoPower(this._dimensions);
+      this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
+      this._loadSquared = this._load * this._load;
     }
 
     /// <summary>Constructor for an Omnitree_Linked.</summary>
@@ -179,52 +229,128 @@ namespace Seven.Structures
     /// <param name="locate">A function for locating an item along the provided dimensions.</param>
     /// <param name="compare">A function for comparing two items of the types of the axis.</param>
     /// <param name="average">A function for computing the average between two items of the axis types.</param>
-    /// <param name="loadFactor">The initial load factor (slight optimization for large populations).</param>
+    public Omnitree_Linked(
+      M[] min, M[] max,
+      LocateOut<T> locate,
+      Compare<M> compare,
+      Average<M> average)
+    {
+      if (min.Length != max.Length)
+        throw new Error("min/max values for omnitree mismatch dimensions");
+
+      if (min.Length > _maxDimensions)
+        throw new Error("you are sorting on +" + _maxDimensions +
+          " dimensions. if wish to do this, remove this exception at your own risk.");
+
+      for (int i = 0; i < min.Length; i++)
+        if (min[i] == null)
+          throw new Error("null reference during omni-tree construction.");
+
+      for (int i = 0; i < max.Length; i++)
+        if (max[i] == null)
+          throw new Error("null reference during omni-tree construction.");
+
+      this._load = 7; // can you tell this is my fav # yet?
+      this._top = new Leaf(min, max, null, _load);
+      this._count = 0;
+      // This is just an adapter so my CodeProject article will still work...
+      this._locate = (T item) => { M[] ms; locate(item, out ms); return ms; };
+      this._average = average;
+      this._compare = compare;
+      this._dimensions = min.Length;
+      this._children = Omnitree_Linked<T, M>.TwoPower(this._dimensions);
+      this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
+      this._loadSquared = this._load * this._load;
+    }
+
+    /// <summary>Constructor for an Omnitree_Linked.</summary>
+    /// <param name="min">The minimum values of the tree.</param>
+    /// <param name="max">The maximum values of the tree.</param>
+    /// <param name="locate">A function for locating an item along the provided dimensions.</param>
+    /// <param name="compare">A function for comparing two items of the types of the axis.</param>
+    /// <param name="average">A function for computing the average between two items of the axis types.</param>
+    /// <param name="load">The initial load (slight optimization for large populations).</param>
     public Omnitree_Linked(
       M[] min, M[] max,
       Locate<T> locate,
       Compare<M> compare,
       Average<M> average,
-      int loadFactor)
+      int load)
     {
       if (min.Length != max.Length)
         throw new Error("min/max values for omnitree mismatch dimensions");
-      this._loadFactor = loadFactor;
-      this._top = new Leaf(min, max, null, _loadFactor);
+
+      if (min.Length > _maxDimensions)
+        throw new Error("you are sorting on +" + _maxDimensions +
+          " dimensions. if wish to do this, remove this exception at your own risk.");
+      
+      this._load = load;
+      this._top = new Leaf(min, max, null, _load);
       this._count = 0;
       this._locate = locate;
       this._average = average;
       this._compare = compare;
       this._dimensions = min.Length;
-      this._children = (int)System.Math.Pow(2, this._dimensions);
-      this._loadPlusOneSquared = (this._loadFactor + 1) * (this._loadFactor + 1);
+      this._children = Omnitree_Linked<T, M>.TwoPower(this._dimensions);
+      this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
+      this._loadSquared = this._load * this._load;
+    }
+
+    /// <summary>Constructor for an Omnitree_Linked.</summary>
+    /// <param name="min">The minimum values of the tree.</param>
+    /// <param name="max">The maximum values of the tree.</param>
+    /// <param name="locate">A function for locating an item along the provided dimensions.</param>
+    /// <param name="compare">A function for comparing two items of the types of the axis.</param>
+    /// <param name="average">A function for computing the average between two items of the axis types.</param>
+    /// <param name="load">The initial load (slight optimization for large populations).</param>
+    public Omnitree_Linked(
+      M[] min, M[] max,
+      LocateOut<T> locate,
+      Compare<M> compare,
+      Average<M> average,
+      int load)
+    {
+      if (min.Length != max.Length)
+        throw new Error("min/max values for omnitree mismatch dimensions");
+
+      if (min.Length > _maxDimensions)
+        throw new Error("you are sorting on +" + _maxDimensions +
+          " dimensions. if wish to do this, remove this exception at your own risk.");
+
+      this._load = load;
+      this._top = new Leaf(min, max, null, _load);
+      this._count = 0;
+      // This is just an adapter so my CodeProject article will still work...
+      this._locate = (T item) => { M[] ms; locate(item, out ms); return ms; };
+      this._average = average;
+      this._compare = compare;
+      this._dimensions = min.Length;
+      this._children = Omnitree_Linked<T, M>.TwoPower(this._dimensions);
+      this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
+      this._loadSquared = this._load * this._load;
     }
 
     /// <summary>Adds an item to the tree.</summary>
     /// <param name="addition">The item to be added.</param>
     public void Add(T addition)
     {
+      if (this._count == int.MaxValue)
+        throw new Error("(Count == int.MaxValue) switch ints to longs in source code.");
+
       if (this._loadPlusOneSquared < _count)
       {
-        this._loadFactor = (int)System.Math.Sqrt(this._count);
-        this._loadPlusOneSquared = (this._loadFactor + 1) * (this._loadFactor + 1);
+        this._load++;
+        this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
+        this._loadSquared = this._load * this._load;
       }
 
-      M[] ms; ;
-      this._locate(addition, out ms);
+      M[] ms = this._locate(addition);
 
       if (ms.Length != this._dimensions)
         throw new Error("the location function for omnitree is invalid.");
 
-      for (int i = 0; i < ms.Length; i++)
-        if (ms[i] == null)
-          throw new Error("the location function for omnitree is invalid.");
-
-      for (int i = 0; i < this._dimensions; i++)
-        if (
-          _compare(ms[i], _top.Min[i]) == Comparison.Less ||
-          _compare(ms[i], _top.Max[i]) == Comparison.Greater)
-          throw new Error("out of bounds during addition");
+      if (!InclusionCheck(this._top, ms))
+        throw new Error("out of bounds during addition");
 
       this.Add(addition, _top, ms);
       this._count++;
@@ -248,17 +374,22 @@ namespace Seven.Structures
         {
           Branch parent = node.Parent;
           Branch growth;
-          T[] children = ((Leaf)node).Contents;
+          T[] contents = ((Leaf)node).Contents;
           if (parent == null)
             growth = (Branch)(_top = new Branch(_top.Min, _top.Max, null, this._children));
           else
             growth = GrowBranch(parent, leaf.Min, leaf.Max, this.DetermineChild(parent, ms));
 
-          for (int i = 0; i < children.Length; i++)
+          foreach (T item in contents)
           {
-            M[] child_ms;
-            this._locate(children[i], out child_ms);
-            Add(children[i], growth, child_ms);
+            M[] child_ms = this._locate(item);
+
+            if (child_ms.Length != this._dimensions)
+              throw new Error("the location function for omnitree is invalid.");
+
+            // NEED BOUNDS CHECKING HERE
+
+            Add(item, growth, child_ms);
           }
 
           Add(addition, growth, ms);
@@ -277,6 +408,38 @@ namespace Seven.Structures
         }
         Add(addition, branch.Children[child], ms);
         return;
+      }
+    }
+
+    /// <summary>Removes all the items in a given space.</summary>
+    /// <param name="min">The minimum values of the space.</param>
+    /// <param name="max">The maximum values of the space.</param>
+    public void Remove(M[] min, M[] max)
+    {
+      throw new System.NotImplementedException("In Development...");
+
+      // POSSIBLE MATH SLOWDOWN - SPEED TESTING REQUIRED FOR REMOVING LARGE QUANTITIES
+      while (this._loadSquared > _count)
+      {
+        this._load--;
+        this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
+        this._loadSquared = this._load * this._load;
+      }
+    }
+
+    /// <summary>Removes all the items in a given space where equality is met.</summary>
+    /// <param name="min">The minimum values of the space.</param>
+    /// <param name="max">The maximum values of the space.</param>
+    /// <param name="where">The equality constraint of the removal.</param>
+    public void Remove(M[] min, M[] max, Equate<T> where)
+    {
+      throw new System.NotImplementedException("In Development...");
+
+      while (this._loadSquared > _count)
+      {
+        this._load--;
+        this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
+        this._loadSquared = this._load * this._load;
       }
     }
 
@@ -302,8 +465,19 @@ namespace Seven.Structures
         throw new Error("My octree has a glitched, sorry.");
       M[] min, max;
       this.DetermineChildBounds(branch, child, out min, out max);
-      branch.Children[child] = new Leaf(min, max, branch, _loadFactor);
+      branch.Children[child] = new Leaf(min, max, branch, _load);
       return (Leaf)branch.Children[child];
+    }
+
+    /// <summary>Computes 2 ^ power.</summary>
+    /// <param name="power">The degree to power 2 to.</param>
+    /// <returns>2 ^ power.</returns>
+    public static int TwoPower(int power)
+    {
+      int result = 1;
+      while (power-- > 0)
+        result <<= 1;
+      return result;
     }
 
     /// <summary>Computes the child index that contains the desired dimensions.</summary>
@@ -315,7 +489,7 @@ namespace Seven.Structures
       int child = 0;
       for (int i = 0; i < this._dimensions; i++)
         if (!(_compare(ms[i], _average(node.Min[i], node.Max[i])) == Comparison.Less))
-          child += (int)System.Math.Pow(2, i);
+          child += Omnitree_Linked<T, M>.TwoPower(i);
       return child;
     }
 
@@ -330,7 +504,7 @@ namespace Seven.Structures
       max = new M[this._dimensions];
       for (int i = _dimensions - 1; i >= 0; i--)
       {
-        int temp = (int)System.Math.Pow(2, i);
+        int temp = Omnitree_Linked<T, M>.TwoPower(i);
         if (child >= temp)
         {
           min[i] = _average(node.Min[i], node.Max[i]);
@@ -345,31 +519,46 @@ namespace Seven.Structures
       }
     }
 
-    //// I ended up manually in-lining this function
-    //private bool ContainsBounds(Node node, M[] min, M[] max)
-    //{
-    //  if (node == null)
-    //    return false;
-    //  for (int i = 0; i < this._dimensions; i++)
-    //    if (
-    //      _compare(max[i], node.Min[i]) != Comparison.Less ||
-    //      _compare(min[i], node.Max[i]) != Comparison.Greater)
-    //      return true;
-    //  return false;
-    //}
+    /// <summary>Checks a node for inclusion of a specific space.</summary>
+    /// <param name="node">The node to check for inclusion with the space.</param>
+    /// <param name="min">The minimum values of the space.</param>
+    /// <param name="max">The maximum values of the space.</param>
+    /// <returns>True if the node includes the space; False if not.</returns>
+    private bool InclusionCheck(Node node, M[] min, M[] max)
+    {
+      for (int j = 0; j < this._dimensions; j++)
+        if (this._compare(node.Max[j], min[j]) == Comparison.Less ||
+          this._compare(node.Min[j], max[j]) == Comparison.Greater)
+          return false;
+      return true;
+    }
 
-    //// I ended up manually in-lining this function
-    //private bool ContainsCoordinate(Node node, M[] ms)
-    //{
-    //  if (node == null)
-    //    return false;
-    //  for (int i = 0; i < this._dimensions; i++)
-    //    if (
-    //      _compare(ms[i], node.Min[i]) != Comparison.Less ||
-    //      _compare(ms[i], node.Max[i]) != Comparison.Greater)
-    //      return true;
-    //  return false;
-    //}
+    /// <summary>Checks a node for inclusion of specific coordinates.</summary>
+    /// <param name="node">The node to check for inclusion with the coordinates.</param>
+    /// <param name="ms">The coordinates to check for inclusion with the node.</param>
+    /// <returns>True if the node includes the coordinates; False if not.</returns>
+    private bool InclusionCheck(Node node, M[] ms)
+    {
+      for (int j = 0; j < this._dimensions; j++)
+        if (this._compare(ms[j], node.Min[j]) == Comparison.Less ||
+          this._compare(ms[j], node.Max[j]) == Comparison.Greater)
+          return false;
+      return true;
+    }
+
+    /// <summary>Checks a space for inclusion of specific coordinates.</summary>
+    /// <param name="min">The minimum values of the space.</param>
+    /// <param name="max">The maximum values of the space.</param>
+    /// <param name="ms">The coordinates to check for inclusion with the node.</param>
+    /// <returns>True if the space includes the coordinates; False if not.</returns>
+    private bool InclusionCheck(M[] min, M[] max, M[] ms)
+    {
+      for (int j = 0; j < this._dimensions; j++)
+        if (this._compare(ms[j], min[j]) == Comparison.Less ||
+          this._compare(ms[j], max[j]) == Comparison.Greater)
+          return false;
+      return true;
+    }
 
     /// <summary>Plucks (removes) a leaf, and recursively chops empty branches.</summary>
     /// <param name="branch">The banch to pluck the leaf from.</param>
@@ -403,13 +592,9 @@ namespace Seven.Structures
     }
 
     /// <summary>Iterates through the provided dimensions and ensures each item is in the proper leaf.</summary>
+    /// <param name="min">The minimum dimensions of the space to update.</param>
+    /// <param name="max">The maximum dimensions of the space to update.</param>
     public void Update(M[] min, M[] max)
-    {
-      throw new System.NotImplementedException("Sorry, I'm still working on the update function.");
-    }
-
-    /// <summary>Ensures an item is in the proper leaf if the item has moved.</summary>
-    public void Update(T item)
     {
       throw new System.NotImplementedException("Sorry, I'm still working on the update function.");
     }
@@ -546,40 +731,21 @@ namespace Seven.Structures
           T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
           {
-            M[] ms;
-            this._locate(items[i], out ms);
-            for (int j = 0; j < this._dimensions; j++)
-              if (this._compare(ms[j], min[j]) == Comparison.Less ||
-                this._compare(ms[j], max[j]) == Comparison.Greater)
-                goto Continue;
+            M[] ms = this._locate(items[i]);
 
-            function(items[i]);
+            if (ms.Length != this._dimensions)
+              throw new Error("the location function for omnitree is invalid.");
 
-          Continue:
-
-            continue;
+            if (InclusionCheck(min, max, ms))
+              function(items[i]);
           }
         }
         else
         {
-          Branch branch = (Branch)node;
-          for (int i = 0; i < branch.Children.Length; i++)
-          {
-            if (branch.Children[i] == null)
-              goto Continue;
-            for (int j = 0; j < this._dimensions; j++)
-              if (this._compare(branch.Children[i].Max[j], min[j]) == Comparison.Less ||
-                this._compare(branch.Children[i].Min[j], max[j]) == Comparison.Greater)
-                goto Continue;
-
-
-            Foreach(function, branch.Children[i], min, max);
-            continue;
-
-          Continue:
-
-            continue;
-          }
+          Node[] children = ((Branch)node).Children;
+          for (int i = 0; i < children.Length; i++)
+            if (children[i] != null && InclusionCheck(children[i], min, max))
+              Foreach(function, children[i], min, max);
         }
       }
     }
@@ -602,40 +768,21 @@ namespace Seven.Structures
           T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
           {
-            M[] ms;
-            this._locate(items[i], out ms);
-            for (int j = 0; j < this._dimensions; j++)
-              if (this._compare(ms[j], min[j]) == Comparison.Less ||
-                this._compare(ms[j], max[j]) == Comparison.Greater)
-                goto Continue;
+            M[] ms = this._locate(items[i]);
 
-            function(ref items[i]);
+            if (ms.Length != this._dimensions)
+              throw new Error("the location function for omnitree is invalid.");
 
-          Continue:
-
-            continue;
+            if (InclusionCheck(min, max, ms))
+              function(ref items[i]);
           }
         }
         else
         {
-          Branch branch = (Branch)node;
-          for (int i = 0; i < branch.Children.Length; i++)
-          {
-            if (branch.Children[i] == null)
-              goto Continue;
-            for (int j = 0; j < this._dimensions; j++)
-              if (this._compare(branch.Children[i].Max[j], min[j]) == Comparison.Less ||
-                this._compare(branch.Children[i].Min[j], max[j]) == Comparison.Greater)
-                goto Continue;
-
-
-            Foreach(function, branch.Children[i], min, max);
-            continue;
-
-          Continue:
-
-            continue;
-          }
+          Node[] children = ((Branch)node).Children;
+          for (int i = 0; i < children.Length; i++)
+            if (children[i] != null && InclusionCheck(children[i], min, max))
+              Foreach(function, children[i], min, max);
         }
       }
     }
@@ -658,42 +805,23 @@ namespace Seven.Structures
           T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
           {
-            M[] ms;
-            this._locate(items[i], out ms);
-            for (int j = 0; j < this._dimensions; j++)
-              if (this._compare(ms[j], min[j]) == Comparison.Less ||
-                this._compare(ms[j], max[j]) == Comparison.Greater)
-                goto Continue;
+            M[] ms = this._locate(items[i]);
 
-            if (function(items[i]) == ForeachStatus.Break)
-              return ForeachStatus.Break;
+            if (ms.Length != this._dimensions)
+              throw new Error("the location function for omnitree is invalid.");
 
-          Continue:
-
-            continue;
+            if (InclusionCheck(min, max, ms))
+              if (function(items[i]) == ForeachStatus.Break)
+                return ForeachStatus.Break;
           }
         }
         else
         {
-          Branch branch = (Branch)node;
-          for (int i = 0; i < branch.Children.Length; i++)
-          {
-            if (branch.Children[i] == null)
-              goto Continue;
-            for (int j = 0; j < this._dimensions; j++)
-              if (this._compare(branch.Children[i].Max[j], min[j]) == Comparison.Less ||
-                this._compare(branch.Children[i].Min[j], max[j]) == Comparison.Greater)
-                goto Continue;
-
-
-            if (Foreach(function, branch.Children[i], min, max) == ForeachStatus.Break)
-              return ForeachStatus.Break;
-            continue;
-
-          Continue:
-
-            continue;
-          }
+          Node[] children = ((Branch)node).Children;
+          for (int i = 0; i < children.Length; i++)
+            if (children[i] != null && InclusionCheck(children[i], min, max))
+              if (Foreach(function, children[i], min, max) == ForeachStatus.Break)
+                return ForeachStatus.Break;
         }
       }
       return ForeachStatus.Continue;
@@ -717,55 +845,26 @@ namespace Seven.Structures
           T[] items = ((Leaf)node).Contents;
           for (int i = 0; i < count; i++)
           {
-            M[] ms;
-            this._locate(items[i], out ms);
-            for (int j = 0; j < this._dimensions; j++)
-              if (this._compare(ms[j], min[j]) == Comparison.Less ||
-                this._compare(ms[j], max[j]) == Comparison.Greater)
-                goto Continue;
+            M[] ms = this._locate(items[i]);
 
-            if (function(ref items[i]) == ForeachStatus.Break)
-              return ForeachStatus.Break;
+            if (ms.Length != this._dimensions)
+              throw new Error("the location function for omnitree is invalid.");
 
-          Continue:
-
-            continue;
+            if (InclusionCheck(min, max, ms))
+              if (function(ref items[i]) == ForeachStatus.Break)
+                return ForeachStatus.Break;
           }
         }
         else
         {
-          Branch branch = (Branch)node;
-          for (int i = 0; i < branch.Children.Length; i++)
-          {
-            if (branch.Children[i] == null)
-              goto Continue;
-            for (int j = 0; j < this._dimensions; j++)
-              if (this._compare(branch.Children[i].Max[j], min[j]) == Comparison.Less ||
-                this._compare(branch.Children[i].Min[j], max[j]) == Comparison.Greater)
-                goto Continue;
-
-
-            if (Foreach(function, branch.Children[i], min, max) == ForeachStatus.Break)
-              return ForeachStatus.Break;
-            continue;
-
-          Continue:
-
-            continue;
-          }
+          Node[] children = ((Branch)node).Children;
+          for (int i = 0; i < children.Length; i++)
+            if (children[i] != null && InclusionCheck(children[i], min, max))
+              if (Foreach(function, children[i], min, max) == ForeachStatus.Break)
+                return ForeachStatus.Break;
         }
       }
       return ForeachStatus.Continue;
-    }
-
-    /// <summary>Puts all the items on this tree into an array.</summary>
-    /// <returns>The array containing all the items within the tree.</returns>
-    public T[] ToArray()
-    {
-      int index = 0;
-      T[] array = new T[this._count];
-      this.Foreach((T entry) => { array[index++] = entry; });
-      return array;
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
@@ -784,15 +883,31 @@ namespace Seven.Structures
       return ((System.Collections.Generic.IEnumerable<T>)array).GetEnumerator();
     }
 
-    /// <summary>Gets the current memory allocation size of this structure.</summary>
-    /// <remarks>The number of allocations made by this structure.</remarks>
-    public int SizeOf { get { throw new System.NotImplementedException("Sorry, I'm working on it."); } }
+    /// <summary>Puts all the items on this tree into an array.</summary>
+    /// <returns>The array containing all the items within the tree.</returns>
+    public T[] ToArray()
+    {
+      int index = 0;
+      T[] array = new T[this._count];
+      this.Foreach((T entry) => { array[index++] = entry; });
+      return array;
+    }
 
     /// <summary>Creates a shallow clone of this data structure.</summary>
     /// <returns>A shallow clone of this data structure.</returns>
     public Structure<T> Clone()
     {
       throw new System.NotImplementedException("Sorry, I'm working on it.");
+    }
+
+    /// <summary>Returns the tree to an empty state.</summary>
+    public void Clear()
+    {
+      this._load = 7;
+      this._top = new Leaf(this._top.Min, this._top.Max, null, _load);
+      this._count = 0;
+      this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
+      this._loadSquared = this._load * this._load;
     }
 
     /// <summary>This is used for throwing OcTree exceptions only to make debugging faster.</summary>

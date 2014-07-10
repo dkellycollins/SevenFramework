@@ -9,7 +9,7 @@ namespace Seven.Mathematics
   /// <typeparam name="T">The type this algebra library can perform on.</typeparam>
   public interface Algebra<T>
   {
-    /// <summary>Computes the natural log of the operand.</summary>
+    /// <summary>Computes the reciprocal of the operand.</summary>
     T Reciprocal(T value);
     /// <summary>Roots one operand to the degree of the other.</summary>
     T Square(T value);
