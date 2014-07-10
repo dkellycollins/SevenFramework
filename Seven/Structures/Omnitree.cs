@@ -218,7 +218,7 @@ namespace Seven.Structures
       this._average = average;
       this._compare = compare;
       this._dimensions = min.Length;
-      this._children = Omnitree_Linked<T, M>.TwoPower(this._dimensions);
+      this._children = 1 << this._dimensions;
       this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
       this._loadSquared = this._load * this._load;
     }
@@ -258,7 +258,7 @@ namespace Seven.Structures
       this._average = average;
       this._compare = compare;
       this._dimensions = min.Length;
-      this._children = Omnitree_Linked<T, M>.TwoPower(this._dimensions);
+      this._children = 1 << this._dimensions;
       this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
       this._loadSquared = this._load * this._load;
     }
@@ -291,7 +291,7 @@ namespace Seven.Structures
       this._average = average;
       this._compare = compare;
       this._dimensions = min.Length;
-      this._children = Omnitree_Linked<T, M>.TwoPower(this._dimensions);
+      this._children = 1 << this._dimensions;
       this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
       this._loadSquared = this._load * this._load;
     }
@@ -325,7 +325,7 @@ namespace Seven.Structures
       this._average = average;
       this._compare = compare;
       this._dimensions = min.Length;
-      this._children = Omnitree_Linked<T, M>.TwoPower(this._dimensions);
+      this._children = 1 << this._dimensions;
       this._loadPlusOneSquared = (this._load + 1) * (this._load + 1);
       this._loadSquared = this._load * this._load;
     }
@@ -469,17 +469,6 @@ namespace Seven.Structures
       return (Leaf)branch.Children[child];
     }
 
-    /// <summary>Computes 2 ^ power.</summary>
-    /// <param name="power">The degree to power 2 to.</param>
-    /// <returns>2 ^ power.</returns>
-    public static int TwoPower(int power)
-    {
-      int result = 1;
-      while (power-- > 0)
-        result <<= 1;
-      return result;
-    }
-
     /// <summary>Computes the child index that contains the desired dimensions.</summary>
     /// <param name="node">The node to compute the child index of.</param>
     /// <param name="ms">The coordinates to find the child index of.</param>
@@ -489,7 +478,7 @@ namespace Seven.Structures
       int child = 0;
       for (int i = 0; i < this._dimensions; i++)
         if (!(_compare(ms[i], _average(node.Min[i], node.Max[i])) == Comparison.Less))
-          child += Omnitree_Linked<T, M>.TwoPower(i);
+          child += 1 << i;
       return child;
     }
 
@@ -504,7 +493,7 @@ namespace Seven.Structures
       max = new M[this._dimensions];
       for (int i = _dimensions - 1; i >= 0; i--)
       {
-        int temp = Omnitree_Linked<T, M>.TwoPower(i);
+        int temp = 1 << i;
         if (child >= temp)
         {
           min[i] = _average(node.Min[i], node.Max[i]);
