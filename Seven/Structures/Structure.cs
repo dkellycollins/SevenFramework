@@ -56,7 +56,7 @@ namespace Seven.Structures
 
     public static void Union<T>(this Structure<T> left, Structure<T> right, Equate<T> equate, Foreach<T> function, Selection selection)
     {
-
+      throw new System.NotImplementedException("In Development...");
       left.Foreach(
       (T l) =>
       {
@@ -72,6 +72,7 @@ namespace Seven.Structures
 
     public static void Union<L, R>(this Structure<L> left, Structure<R> right, Equate<L, R> equate, Foreach<L> function_left, Foreach<R> function_right, Selection selection)
     {
+      throw new System.NotImplementedException("In Development...");
       if (selection == Selection.Left)
       {
         left.Foreach(
@@ -102,6 +103,7 @@ namespace Seven.Structures
 
     public static void Union<T>(this Structure<T> left, Structure<T> right, Equate<T> equate, Foreach<T> function, Select<T> select)
     {
+      throw new System.NotImplementedException("In Development...");
       left.Foreach(
         (T l) =>
         {
@@ -119,6 +121,7 @@ namespace Seven.Structures
 
     public static void Union<L, R>(this Structure<L> left, Structure<R> right, Equate<L, R> equate, Foreach<L> function_left, Foreach<R> function_right, Select<L, R> select)
     {
+      throw new System.NotImplementedException("In Development...");
       left.Foreach(
         (L l) =>
         {
@@ -140,6 +143,7 @@ namespace Seven.Structures
 
     public static void Intersect<T>(this Structure<T> left, Structure<T> right, Equate<T> equate, Foreach<T> function, Selection selection)
     {
+      throw new System.NotImplementedException("In Development...");
       if (selection == Selection.Left)
       {
         left.Foreach(
@@ -170,6 +174,7 @@ namespace Seven.Structures
 
     public static void Intersect<L, R>(this Structure<L> left, Structure<R> right, Equate<L, R> equate, Foreach<L> function_left, Foreach<R> function_right, Selection selection)
     {
+      throw new System.NotImplementedException("In Development...");
       if (selection == Selection.Left)
       {
         left.Foreach(
@@ -200,6 +205,7 @@ namespace Seven.Structures
 
     public static void Intersect<T>(this Structure<T> left, Structure<T> right, Equate<T> equate, Foreach<T> function, Select<T> select)
     {
+      throw new System.NotImplementedException("In Development...");
       left.Foreach(
         (T l) =>
         {
@@ -217,6 +223,7 @@ namespace Seven.Structures
 
     public static void Intersect<L, R>(this Structure<L> left, Structure<R> right, Equate<L, R> equate, Foreach<L> function_left, Foreach<R> function_right, Select<L, R> select)
     {
+      throw new System.NotImplementedException("In Development...");
       left.Foreach(
         (L l) =>
         {

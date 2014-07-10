@@ -3,12 +3,6 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using Seven.Parallels;
-
-// using System; Serializable
-// using System.Collections; IEnumerable
-// using System.Collections.Generic; IEnumerable<Type>
-
 namespace Seven.Structures
 {
   /// <summary>A fixed sized data structure linear in memory.</summary>
@@ -268,7 +262,7 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Error : Seven.Error
+    private class Error : Structure.Error
     {
       public Error(string message) : base(message) { }
     }

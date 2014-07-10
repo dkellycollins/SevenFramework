@@ -3,9 +3,8 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-// THIS FILE CONTAINS ETERNAL CITATIONS
+// THIS FILE CONTAINS EXTERNAL CITATIONS
 
-using System;
 using Seven.Parallels;
 
 namespace Seven.Structures
@@ -65,7 +64,7 @@ namespace Seven.Structures
   /// Rodney Howell of Kansas State University. However, it has 
   /// been modified since its addition into the Seven framework.
   /// </citation>
-  [Serializable]
+  [System.Serializable]
   public class AvlTree_Linked<Type> : AvlTree<Type>
   {
     #region Node
@@ -507,7 +506,7 @@ namespace Seven.Structures
     protected void SetHeight(Node avlTree)
     {
       if (Height(avlTree.LeftChild) < Height(avlTree.RightChild))
-        avlTree.Height = Math.Max(Height(avlTree.LeftChild), Height(avlTree.RightChild)) + 1;
+        avlTree.Height = System.Math.Max(Height(avlTree.LeftChild), Height(avlTree.RightChild)) + 1;
     }
 
     /// <summary>Standard balancing algorithm for an AVL Tree.</summary>
@@ -1146,7 +1145,7 @@ namespace Seven.Structures
 
   /// <summary>Implements an AVL Tree where the items are sorted by string id values.</summary>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class AvlTreeLinkedThreadSafe<Type> : AvlTree_Linked<Type>
   {
     ReaderWriterLock _readerWriterLock;
@@ -1598,7 +1597,7 @@ namespace Seven.Structures
 
   /// <summary>Implements an AVL Tree where the items are sorted by string id values.</summary>
   /// <remarks>The runtimes of each public member are included in the "remarks" xml tags.</remarks>
-  [Serializable]
+  [System.Serializable]
   public class AvlTree_Array<Type>// : AvlTree<Type>
   {
     public struct Node

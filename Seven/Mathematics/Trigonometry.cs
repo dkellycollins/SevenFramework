@@ -7,22 +7,34 @@ using System;
 
 namespace Seven.Mathematics
 {
-  /// <summary>Provides trigonometric operations for mathematical computation.</summary>
+  /// <summary>Supplies trigonometry mathematics for generic types.</summary>
   /// <typeparam name="T">The type this trigonometry library can perform on.</typeparam>
   public interface Trigonometry<T>
   {
-    Unary<T> sin { get; }
-    Unary<T> cos { get; }
-    Unary<T> tan { get; }
-    Unary<T> sec { get; }
-    Unary<T> csc { get; }
-    Unary<T> cot { get; }
-    Unary<T> arcsin { get; }
-    Unary<T> arccos { get; }
-    Unary<T> arctan { get; }
-    Unary<T> arccsc { get; }
-    Unary<T> arcsec { get; }
-    Unary<T> arccot { get; }
+    /// <summary>Computes the sin of an angle.</summary>
+    T sin(T angle);
+    /// <summary>Computes the cos of an angle.</summary>
+    T cos(T angle);
+    /// <summary>Computes the tan of an angle.</summary>
+    T tan(T angle);
+    /// <summary>Computes the sec of an angle.</summary>
+    T sec(T angle);
+    /// <summary>Computes the csc of an angle.</summary>
+    T csc(T angle);
+    /// <summary>Computes the cot of an angle.</summary>
+    T cot(T angle);
+    /// <summary>Computes the arcsin of a ratio.</summary>
+    T arcsin(T ratio);
+    /// <summary>Computes the arccos of a ratio.</summary>
+    T arccos(T ratio);
+    /// <summary>Computes the arctan of a ratio.</summary>
+    T arctan(T ratio);
+    /// <summary>Computes the arccsc of a ratio.</summary>
+    T arccsc(T ratio);
+    /// <summary>Computes the arcsec of a ratio.</summary>
+    T arcsec(T ratio);
+    /// <summary>Computes the arccot of a ratio.</summary>
+    T arccot(T ratio);
   }
 
   public static class Trigonometry

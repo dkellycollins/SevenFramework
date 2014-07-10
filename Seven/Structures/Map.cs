@@ -360,7 +360,7 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing hash table exceptions only to make debugging faster.</summary>
-    private class Error : Seven.Error
+    private class Error : Structure.Error
     {
       public Error(string message) : base(message) { }
     }

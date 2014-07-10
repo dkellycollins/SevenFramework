@@ -3,38 +3,31 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using Seven;
-using Seven.Parallels;
-
-// using System; Serializable
-// using System.Collections; IEnumerable
-// using System.Collections.Generic; IEnumerable<Type>
-
 namespace Seven.Structures
 {
   /// <summary>A primitive dynamic sized data structure.</summary>
-  /// <typeparam name="Type"></typeparam>
-  public interface List<Type> : Structure<Type>
+  /// <typeparam name="T">The type of items to store in the list.</typeparam>
+  public interface List<T> : Structure<T>
   {
     /// <summary>Adds an item to the end of this list.</summary>
     /// <param name="addition">The item to add to the list.</param>
-    void Add(Type addition);
+    void Add(T addition);
 
     /// <summary>Removes the first occurence of an item in the list.</summary>
     /// <param name="removal">The item to remove.</param>
     /// <param name="compare">The function to determine equality.</param>
-    void RemoveFirst(Type removal, Compare<Type> compare);
+    void RemoveFirst(T removal, Compare<T> compare);
 
     /// <summary>Removes the first occurence of an item in the list or returns false.</summary>
     /// <param name="removal">The item to remove.</param>
     /// <param name="compare">The function to determine equality.</param>
     /// <returns>True if the item was found and removed; False if not.</returns>
-    bool TryRemoveFirst(Type removal, Compare<Type> compare);
+    bool TryRemoveFirst(T removal, Compare<T> compare);
 
     /// <summary>Removes all occurences of an item in the list.</summary>
     /// <param name="removal">The item to genocide (hell yeah that is a verb...).</param>
     /// <param name="compare">The function to determine equality.</param>
-    void RemoveAll(Type removal, Compare<Type> compare);
+    void RemoveAll(T removal, Compare<T> compare);
     
     /// <summary>Returns the number of items in the list.</summary>
     int Count { get; }
@@ -80,8 +73,6 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public bool IsEmpty { get { return _count == 0; } }
 
-    #region .NET Framework Compatibility
-
     ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     //public static explicit operator System.Collections.Generic.L<Type>(Type[] array)
     //{
@@ -109,8 +100,6 @@ namespace Seven.Structures
       for (Node looper = this._head; looper != null; looper = looper.Next)
         yield return looper.Value;
     }
-
-    #endregion
 
     /// <summary>Creates an instance of a stalistck.</summary>
     /// <remarks>Runtime: O(1).</remarks>
@@ -429,13 +418,13 @@ namespace Seven.Structures
   [System.Serializable]
   public class List_Linked_ThreadSafe<Type> : List_Linked<Type>
   {
-    ReaderWriterLock _readerWriterLock;
+    Seven.Parallels.ReaderWriterLock _readerWriterLock;
     
     /// <summary>Creates an instance of a stalistck.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public List_Linked_ThreadSafe() : base()
     {
-      this._readerWriterLock = new ReaderWriterLock();
+      this._readerWriterLock = new Seven.Parallels.ReaderWriterLock();
       throw new Error("the thread safe version wrappers are not yet finished. sorry.");
     }
 
@@ -799,7 +788,7 @@ namespace Seven.Structures
     }
     
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Error : Seven.Error
+    private class Error : Structure.Error
     {
       public Error(string message) : base(message) { }
     }
@@ -811,20 +800,23 @@ namespace Seven.Structures
   [System.Serializable]
   public class List_Array_ThreadSafe<Type> : List_Array<Type>
   {
-    ReaderWriterLock _readerWriterLock;
+    Seven.Parallels.ReaderWriterLock _readerWriterLock;
 
     /// <summary>Creates an instance of a stalistck.</summary>
     /// <remarks>Runtime: O(1).</remarks>
     public List_Array_ThreadSafe(int minimumCapacity)
       : base(minimumCapacity)
     {
-      this._readerWriterLock = new ReaderWriterLock();
+      this._readerWriterLock = new Seven.Parallels.ReaderWriterLock();
 
       throw new Error("thread safe wrappers are not yet complete. sorry.");
     }
 
     /// <summary>This is used for throwing AVL Tree exceptions only to make debugging faster.</summary>
-    private class Exception : Error { public Exception(string message) : base(message) { } }
+    private class Exception : Structure.Error
+    {
+      public Exception(string message) : base(message) { }
+    }
   }
 
   ///// <summary>WARNING: THIS IMPLEMENTATION IS INTENDED FOR EDUCATIONAL PURPOSES VS USAGE.</summary>

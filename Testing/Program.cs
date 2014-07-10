@@ -42,7 +42,11 @@ namespace Testing
       string message =
       @"HELLO! WELCOME TO THE SEVEN FRAMEWORK! 
 
-The framework is a general framework to help with any form of programming. Currently, the most useful component of the framwork is the library of data structures. This library includes the folloing: Links (aka Tuples), Arrays, Lists, Queues, Stacks, Heaps, HashTables, AvlTrees, RedBlackTrees, Octrees, and SkipLists. The followoing data is testing for each structure:";
+The framework is a general framework to help with any form of programming. Currently, the most useful component of the framwork is the library of data structures. This library includes the folloing: Links (aka Tuples), Arrays, Lists, Queues, Stacks, Heaps, HashTables, AvlTrees, RedBlackTrees, Octrees, SkipLists, Omni-Trees and more. The followoing data is testing for each structure:";
+
+      Console.Write(message);
+      Console.WriteLine();
+      Console.WriteLine();
 
       Console.WriteLine("Functionality Testing=======================");
       Console.WriteLine();

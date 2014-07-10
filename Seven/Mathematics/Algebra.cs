@@ -5,46 +5,34 @@
 
 namespace Seven.Mathematics
 {
-  /// <summary>A collection of all the necessary knowledge to perform algebra on a type.</summary>
+  /// <summary>Supplies algebra mathematics for generic types.</summary>
   /// <typeparam name="T">The type this algebra library can perform on.</typeparam>
   public interface Algebra<T>
   {
     /// <summary>Computes the natural log of the operand.</summary>
-    Unary<T> Reciprocal { get; }
+    T Reciprocal(T value);
     /// <summary>Roots one operand to the degree of the other.</summary>
-    Binary<T> Square { get; }
+    T Square(T value);
     /// <summary>Computes the natural log of the operand.</summary>
-    Unary<T> ln { get; }
+    T ln(T value);
     /// <summary>Computes the log of an operand using the base of the other operand.</summary>
-    Binary<T> log { get; }
+    T log(T value, T _base);
     /// <summary>Computes the exponential of the eperand.</summary>
-    Unary<T> exp { get; }
+    T exp(T value);
     /// <summary>Gets the value of e.</summary>
-    Unary<T> e { get; }
-
-    Unary<T> PrimeFactors { get; }
+    T e(T value);
+    /// <summary>Computes the prime factors of a given value.</summary>
+    T PrimeFactors(T value);
 
   }
 
   /// <summary>Provides extensions for the Algebra interface.</summary>
   public static class Algebra
   {
-    //public double Zeros(Function_1<double> function)
-    //{
-
-    //}
-    
-    //public void QuadraticFormula(double a, double b, double c, out double minus, out double plus)
-    //{
-    //  minus = (-b - System.Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
-    //  plus = (-b + System.Math.Sqrt(b * b - 4 * a * c)) / (2 * a);
-    //}
 
 
 
-
-
-    /// <summary>Error type for all arithmetic computations.</summary>
+    /// <summary>Error type for all algebra computations.</summary>
     public class Error : Seven.Error
     {
       public Error(string message) : base(message) { }
@@ -65,22 +53,6 @@ namespace Seven.Mathematics
           return _instance;
       }
     }
-
-    /// <summary>Gets Arithmetic for "int" types.</summary>
-    public static Algebra_int Get { get { return Instance; } }
-
-    ///// <summary>Computes the natural log of the operand.</summary>
-    //Unary<int> Reciprocal { get { return  } }
-    ///// <summary>Roots one operand to the degree of the other.</summary>
-    //Binary<int> Square { get; }
-    ///// <summary>Computes the natural log of the operand.</summary>
-    //Unary<int> ln { get; }
-    ///// <summary>Computes the log of an operand using the base of the other operand.</summary>
-    //Binary<int> log { get; }
-    ///// <summary>Computes the exponential of the eperand.</summary>
-    //Unary<int> exp { get; }
-    ///// <summary>Gets the value of e.</summary>
-    //Unary<int> e { get; }
   }
 
 }

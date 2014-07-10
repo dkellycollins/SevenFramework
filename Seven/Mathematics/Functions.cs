@@ -40,13 +40,6 @@ namespace Seven.Mathematics
   /// <returns>The value of the function given the parameters.</returns>
   public delegate T function_4<T>(T a, T b, T c, T d);
 
-  public interface Function_0<T>
-  {
-    T this[T a] { get; }
-  }
-
-
-  
   ////public interface Function_xyz
   ////{
   ////  double this[double x, double y] { get; }

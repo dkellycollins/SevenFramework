@@ -96,10 +96,19 @@ namespace Seven.Structures
       }
     }
 
-    public delegate void Locate<Type>(Type item, out M x, out M y);
+    /// <summary>Locates an item in dimensional space.</summary>
+    /// <typeparam name="T">The type of the item to locate.</typeparam>
+    /// <param name="item">The item to locate.</param>
+    /// <param name="x">The x axis location.</param>
+    /// <param name="y">The y axis location.</param>
+    public delegate void Locate<T>(T item, out M x, out M y);
+
+
+    public delegate T Average<T>(T first, T second);
+
     private Locate<T> _locate;
-    public Binary<M> _average;
-    public Compare<M> _compare;
+    private Average<M> _average;
+    private Compare<M> _compare;
     private int _loadFactor;
     private int _count;
     private Node _top;
@@ -113,7 +122,7 @@ namespace Seven.Structures
       int loadFactor,
       Locate<T> locate,
       Compare<M> compare,
-      Binary<M> average)
+      Average<M> average)
     {
       this._loadFactor = loadFactor;
       this._top = new Leaf(minX, minY, maxX, maxY, null, _loadFactor);
@@ -644,7 +653,7 @@ namespace Seven.Structures
     #endregion
 
     /// <summary>This is used for throwing OcTree exceptions only to make debugging faster.</summary>
-    private class Error : Seven.Error
+    private class Error : Structure.Error
     {
       public Error(string message) : base(message) { }
     }

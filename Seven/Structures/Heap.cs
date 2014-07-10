@@ -5,9 +5,6 @@
 
 using Seven;
 
-//using System.Collections;
-//using System.Collections.Generic;
-
 namespace Seven.Structures
 {
   /// <summary>Stores items based on priorities and allows access to the highest priority item.</summary>
@@ -393,7 +390,7 @@ namespace Seven.Structures
     }
 
     /// <summary>This is used for throwing imutable priority queue exceptions only to make debugging faster.</summary>
-    private class Error : Seven.Error
+    private class Error : Structure.Error
     {
       public Error(string message) : base(message) { }
     }

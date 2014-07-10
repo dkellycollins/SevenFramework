@@ -3,10 +3,6 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace Seven.Structures
 {
   /// <summary>Represents a link between objects.</summary>
@@ -14,7 +10,7 @@ namespace Seven.Structures
   {
     /// <summary>Gets an array with all the types contained in this link in respective order.</summary>
     /// <returns>An array of all the types in this link in respective order.</returns>
-    Type[] Types();
+    System.Type[] Types();
 
     /// <summary>The number of objects in the tuple.</summary>
     int Size { get; }
@@ -22,7 +18,7 @@ namespace Seven.Structures
 
   /// <summary>Represents a link between objects.</summary>
   /// <typeparam name="TypeOne">The type of the left item to be linked.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Link<TypeOne>
     : Link
   {
@@ -39,12 +35,10 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public TypeOne One { get { return (TypeOne)this._one; } set { this._one = value; } }
 
-    #region .NET Framework Compatibility
-
     /// <summary>explicitly casts a System.Tuple to a Seven.Structures.Link.</summary>
     /// <param name="tuple">The System.Tuple to be casted.</param>
     /// <returns>A Seven.Structures.Link casted from the System.Tuple.</returns>
-    public static explicit operator Link<TypeOne>(Tuple<TypeOne> tuple)
+    public static explicit operator Link<TypeOne>(System.Tuple<TypeOne> tuple)
     {
       return new Link<TypeOne>(tuple.Item1);
     }
@@ -52,24 +46,24 @@ namespace Seven.Structures
     /// <summary>explicitly casts a Seven.Structures.Link to a System.Tuple.</summary>
     /// <param name="tuple">The Seven.Structures.Link to be casted.</param>
     /// <returns>The System.Tuple casted Seven.Structures.Link.</returns>
-    public static explicit operator Tuple<TypeOne>(Link<TypeOne> link)
+    public static explicit operator System.Tuple<TypeOne>(Link<TypeOne> link)
     {
-      return new Tuple<TypeOne>((TypeOne)link._one);
+      return new System.Tuple<TypeOne>((TypeOne)link._one);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       yield return this._one;
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<object> IEnumerable<object>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<object>
+      System.Collections.Generic.IEnumerable<object>.GetEnumerator()
     {
       yield return this._one;
     }
-
-    #endregion
 
     /// <summary>Creates a link between objects.</summary>
     /// <param name="one">The first item to be linked.</param>
@@ -81,9 +75,9 @@ namespace Seven.Structures
 
     /// <summary>Gets an array with all the types contained in this link in respective order.</summary>
     /// <returns>An array of all the types in this link in respective order.</returns>
-    public Type[] Types()
+    public System.Type[] Types()
     {
-      return new Type[]
+      return new System.Type[]
       {
         typeof(TypeOne)
       };
@@ -162,7 +156,7 @@ namespace Seven.Structures
   /// <summary>Represents a link between objects.</summary>
   /// <typeparam name="TypeOne">The type of the left item to be linked.</typeparam>
   /// <typeparam name="TypeTwo">The type of the right item to be linked.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Link<TypeOne, TypeTwo> : Link
   {
     protected object _one;
@@ -182,35 +176,33 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public TypeTwo Two { get { return (TypeTwo)this._two; } set { this._two = value; } }
 
-    #region .NET Framework Compatibility
-
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    public static explicit operator Link<TypeOne, TypeTwo>(Tuple<TypeOne, TypeTwo> tuple)
+    public static explicit operator Link<TypeOne, TypeTwo>(System.Tuple<TypeOne, TypeTwo> tuple)
     {
       return new Link<TypeOne, TypeTwo>(tuple.Item1, tuple.Item2);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    public static explicit operator Tuple<TypeOne, TypeTwo>(Link<TypeOne, TypeTwo> link)
+    public static explicit operator System.Tuple<TypeOne, TypeTwo>(Link<TypeOne, TypeTwo> link)
     {
-      return new Tuple<TypeOne, TypeTwo>((TypeOne)link._one, (TypeTwo)link._two);
+      return new System.Tuple<TypeOne, TypeTwo>((TypeOne)link._one, (TypeTwo)link._two);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<object> IEnumerable<object>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<object>
+      System.Collections.Generic.IEnumerable<object>.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
     }
-
-    #endregion
 
     /// <summary>Creates a link between objects.</summary>
     /// <param name="one">The first item to be linked.</param>
@@ -224,9 +216,9 @@ namespace Seven.Structures
 
     /// <summary>Gets an array with all the types contained in this link in respective order.</summary>
     /// <returns>An array of all the types in this link in respective order.</returns>
-    public  Type[] Types()
+    public System.Type[] Types()
     {
-      return new Type[]
+      return new System.Type[]
       {
         typeof(TypeOne),
         typeof(TypeTwo)
@@ -320,7 +312,7 @@ namespace Seven.Structures
   /// <typeparam name="TypeOne">The type of the first item to be linked.</typeparam>
   /// <typeparam name="TypeTwo">The type of the second item to be linked.</typeparam>
   /// <typeparam name="TypeThree">The type of the third item to be linked.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Link<TypeOne, TypeTwo, TypeThree> : Link
   {
     protected object _one;
@@ -344,12 +336,10 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public TypeThree Three { get { return (TypeThree)this._three; } set { this._three = value; } }
 
-    #region .NET Framework Compatibility
-
     /// <summary>explicitly casts a System.Tuple to a Seven.Structures.Link.</summary>
     /// <param name="tuple">The System.Tuple to be casted.</param>
     /// <returns>A Seven.Structures.Link casted from the System.Tuple.</returns>
-    public static explicit operator Link<TypeOne, TypeTwo, TypeThree>(Tuple<TypeOne, TypeTwo, TypeThree> tuple)
+    public static explicit operator Link<TypeOne, TypeTwo, TypeThree>(System.Tuple<TypeOne, TypeTwo, TypeThree> tuple)
     {
       return new Link<TypeOne, TypeTwo, TypeThree>(tuple.Item1, tuple.Item2, tuple.Item3);
     }
@@ -357,13 +347,14 @@ namespace Seven.Structures
     /// <summary>explicitly casts a Seven.Structures.Link to a System.Tuple.</summary>
     /// <param name="tuple">The Seven.Structures.Link to be casted.</param>
     /// <returns>The System.Tuple casted Seven.Structures.Link.</returns>
-    public static explicit operator Tuple<TypeOne, TypeTwo, TypeThree>(Link<TypeOne, TypeTwo, TypeThree> link)
+    public static explicit operator System.Tuple<TypeOne, TypeTwo, TypeThree>(Link<TypeOne, TypeTwo, TypeThree> link)
     {
-      return new Tuple<TypeOne, TypeTwo, TypeThree>((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three);
+      return new System.Tuple<TypeOne, TypeTwo, TypeThree>((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
@@ -371,14 +362,13 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<object> IEnumerable<object>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<object>
+      System.Collections.Generic.IEnumerable<object>.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
       yield return this._three;
     }
-
-    #endregion
 
     /// <summary>Creates a link between objects.</summary>
     /// <param name="one">The first item to be linked.</param>
@@ -394,9 +384,9 @@ namespace Seven.Structures
 
     /// <summary>Gets an array with all the types contained in this link in respective order.</summary>
     /// <returns>An array of all the types in this link in respective order.</returns>
-    public  Type[] Types()
+    public System.Type[] Types()
     {
-      return new Type[]
+      return new System.Type[]
       {
         typeof(TypeOne),
         typeof(TypeTwo),
@@ -504,7 +494,7 @@ namespace Seven.Structures
   /// <typeparam name="TypeTwo">The type of the second item to be linked.</typeparam>
   /// <typeparam name="TypeThree">The type of the third item to be linked.</typeparam>
   /// <typeparam name="TypeFour">The type of the fourth item to be linked.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Link<TypeOne, TypeTwo, TypeThree, TypeFour>
     : Link
   {
@@ -533,13 +523,11 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public TypeFour Four { get { return (TypeFour)this._four; } set { this._four = value; } }
 
-    #region .NET Framework Compatibility
-
     /// <summary>explicitly casts a System.Tuple to a Seven.Structures.Link.</summary>
     /// <param name="tuple">The System.Tuple to be casted.</param>
     /// <returns>A Seven.Structures.Link casted from the System.Tuple.</returns>
     public static explicit operator Link<TypeOne, TypeTwo, TypeThree, TypeFour>
-      (Tuple<TypeOne, TypeTwo, TypeThree, TypeFour> tuple)
+      (System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour> tuple)
     {
       return new Link<TypeOne, TypeTwo, TypeThree, TypeFour>
         (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
@@ -548,15 +536,16 @@ namespace Seven.Structures
     /// <summary>explicitly casts a Seven.Structures.Link to a System.Tuple.</summary>
     /// <param name="tuple">The Seven.Structures.Link to be casted.</param>
     /// <returns>The System.Tuple casted Seven.Structures.Link.</returns>
-    public static explicit operator Tuple<TypeOne, TypeTwo, TypeThree, TypeFour>
+    public static explicit operator System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour>
       (Link<TypeOne, TypeTwo, TypeThree, TypeFour> link)
     {
-      return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour>
+      return new System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour>
         ((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three, (TypeFour)link._four);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
@@ -565,15 +554,14 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<object> IEnumerable<object>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<object>
+      System.Collections.Generic.IEnumerable<object>.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
       yield return this._three;
       yield return this._four;
     }
-
-    #endregion
 
     /// <summary>Creates a link between objects.</summary>
     /// <param name="one">The left item to be linked.</param>
@@ -591,9 +579,9 @@ namespace Seven.Structures
 
     /// <summary>Gets an array with all the types contained in this link in respective order.</summary>
     /// <returns>An array of all the types in this link in respective order.</returns>
-    public  Type[] Types()
+    public System.Type[] Types()
     {
-      return new Type[]
+      return new System.Type[]
       {
         typeof(TypeOne),
         typeof(TypeTwo),
@@ -716,7 +704,7 @@ namespace Seven.Structures
   /// <typeparam name="TypeThree">The type of the third item to be linked.</typeparam>
   /// <typeparam name="TypeFour">The type of the fourth item to be linked.</typeparam>
   /// <typeparam name="TypeFive">The type of the fifth item to be linked.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
     : Link
   {
@@ -749,13 +737,11 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public TypeFive Five { get { return (TypeFive)this._five; } set { this._five = value; } }
 
-    #region .NET Framework Compatibility
-
     /// <summary>explicitly casts a System.Tuple to a Seven.Structures.Link.</summary>
     /// <param name="tuple">The System.Tuple to be casted.</param>
     /// <returns>A Seven.Structures.Link casted from the System.Tuple.</returns>
     public static explicit operator Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
-      (Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive> tuple)
+      (System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive> tuple)
     {
       return new Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
         (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5);
@@ -764,15 +750,16 @@ namespace Seven.Structures
     /// <summary>explicitly casts a Seven.Structures.Link to a System.Tuple.</summary>
     /// <param name="tuple">The Seven.Structures.Link to be casted.</param>
     /// <returns>The System.Tuple casted Seven.Structures.Link.</returns>
-    public static explicit operator Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
+    public static explicit operator System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
       (Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive> link)
     {
-      return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
+      return new System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive>
         ((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three, (TypeFour)link._four, (TypeFive)link._five);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
@@ -782,7 +769,8 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<object> IEnumerable<object>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<object>
+      System.Collections.Generic.IEnumerable<object>.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
@@ -790,8 +778,6 @@ namespace Seven.Structures
       yield return this._four;
       yield return this._five;
     }
-
-    #endregion
 
     /// <summary>Creates a link between objects.</summary>
     /// <param name="one">The first item to be linked.</param>
@@ -811,9 +797,9 @@ namespace Seven.Structures
 
     /// <summary>Gets an array with all the types contained in this link in respective order.</summary>
     /// <returns>An array of all the types in this link in respective order.</returns>
-    public  Type[] Types()
+    public System.Type[] Types()
     {
-      return new Type[]
+      return new System.Type[]
       {
         typeof(TypeOne),
         typeof(TypeTwo),
@@ -949,7 +935,7 @@ namespace Seven.Structures
   /// <typeparam name="TypeFour">The type of the fourth item to be linked.</typeparam>
   /// <typeparam name="TypeFive">The type of the fifth item to be linked.</typeparam>
   /// <typeparam name="TypeSix">The type of the sixth item to be linked.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
     : Link
   {
@@ -986,14 +972,12 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public TypeSix Six { get { return (TypeSix)this._six; } set { this._six = value; } }
 
-    #region .NET Framework Compatibility
-
     /// <summary>explicitly casts a System.Tuple to a Seven.Structures.Link.</summary>
     /// <param name="tuple">The System.Tuple to be casted.</param>
     /// <returns>A Seven.Structures.Link casted from the System.Tuple.</returns>
     public static explicit operator
       Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
-      (Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix> tuple)
+      (System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix> tuple)
     {
       return new Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
         (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5, tuple.Item6);
@@ -1003,15 +987,16 @@ namespace Seven.Structures
     /// <param name="tuple">The Seven.Structures.Link to be casted.</param>
     /// <returns>The System.Tuple casted Seven.Structures.Link.</returns>
     public static explicit operator
-      Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
+      System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
       (Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix> link)
     {
-      return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
+      return new System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix>
         ((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three, (TypeFour)link._four, (TypeFive)link._five, (TypeSix)link._six);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
@@ -1022,7 +1007,8 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<object> IEnumerable<object>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<object>
+      System.Collections.Generic.IEnumerable<object>.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
@@ -1031,8 +1017,6 @@ namespace Seven.Structures
       yield return this._five;
       yield return this._six;
     }
-
-    #endregion
 
     /// <summary>Creates a link between objects.</summary>
     /// <param name="one">The first item to be linked.</param>
@@ -1054,9 +1038,9 @@ namespace Seven.Structures
 
     /// <summary>Gets an array with all the types contained in this link in respective order.</summary>
     /// <returns>An array of all the types in this link in respective order.</returns>
-    public  Type[] Types()
+    public System.Type[] Types()
     {
-      return new Type[]
+      return new System.Type[]
       {
         typeof(TypeOne),
         typeof(TypeTwo),
@@ -1204,7 +1188,7 @@ namespace Seven.Structures
   /// <typeparam name="TypeFour">The type of the fourth item to be linked.</typeparam>
   /// <typeparam name="TypeFive">The type of the fifth item to be linked.</typeparam>
   /// <typeparam name="TypeSix">The type of the sixth item to be linked.</typeparam>
-  [Serializable]
+  [System.Serializable]
   public class Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
     : Link
   {
@@ -1245,14 +1229,12 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public TypeSeven Seven { get { return (TypeSeven)this._seven; } set { this._seven = value; } }
 
-    #region .NET Framework Compatibility
-
     /// <summary>explicitly casts a System.Tuple to a Seven.Structures.Link.</summary>
     /// <param name="tuple">The System.Tuple to be casted.</param>
     /// <returns>A Seven.Structures.Link casted from the System.Tuple.</returns>
     public static explicit operator
       Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
-      (Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven> tuple)
+      (System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven> tuple)
     {
       return new Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
         (tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4, tuple.Item5, tuple.Item6, tuple.Item7);
@@ -1262,15 +1244,16 @@ namespace Seven.Structures
     /// <param name="tuple">The Seven.Structures.Link to be casted.</param>
     /// <returns>The System.Tuple casted Seven.Structures.Link.</returns>
     public static explicit operator
-      Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
+      System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
       (Link<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven> link)
     {
-      return new Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
+      return new System.Tuple<TypeOne, TypeTwo, TypeThree, TypeFour, TypeFive, TypeSix, TypeSeven>
         ((TypeOne)link._one, (TypeTwo)link._two, (TypeThree)link._three, (TypeFour)link._four, (TypeFive)link._five, (TypeSix)link._six, (TypeSeven)link._seven);
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator
+      System.Collections.IEnumerable.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
@@ -1282,7 +1265,8 @@ namespace Seven.Structures
     }
 
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    IEnumerator<object> IEnumerable<object>.GetEnumerator()
+    System.Collections.Generic.IEnumerator<object>
+      System.Collections.Generic.IEnumerable<object>.GetEnumerator()
     {
       yield return this._one;
       yield return this._two;
@@ -1292,8 +1276,6 @@ namespace Seven.Structures
       yield return this._six;
       yield return this._seven;
     }
-
-    #endregion
 
     /// <summary>Creates a link between objects.</summary>
     /// <param name="one">The first item to be linked.</param>
@@ -1316,9 +1298,9 @@ namespace Seven.Structures
 
     /// <summary>Gets an array with all the types contained in this link in respective order.</summary>
     /// <returns>An array of all the types in this link in respective order.</returns>
-    public  Type[] Types()
+    public System.Type[] Types()
     {
-      return new Type[]
+      return new System.Type[]
       {
         typeof(TypeOne),
         typeof(TypeTwo),
