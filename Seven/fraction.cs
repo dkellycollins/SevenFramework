@@ -22,34 +22,27 @@ namespace Seven
   /// Date: 6/15/2004
   /// Time: 10:54 AM
   /// </citation>
-  public struct fraction64
+  public struct Fraction64
   {
     private int m_iNumerator;
     private int m_iDenominator;
 
-    //public fraction64()
-    //{
-    //  m_iNumerator = 0;
-    //  m_iDenominator = 1;
-    //  ReduceFraction(this);
-    //}
-
-    public fraction64(int iWholeNumber)
+    public Fraction64(int iWholeNumber)
     {
       m_iNumerator = iWholeNumber;
       m_iDenominator = 1;
       ReduceFraction(this);
     }
 
-    public fraction64(double dDecimalValue)
+    public Fraction64(double dDecimalValue)
     {
-      fraction64 temp = ToFraction(dDecimalValue);
+      Fraction64 temp = ToFraction(dDecimalValue);
       m_iNumerator = temp.m_iNumerator;
       m_iDenominator = temp.m_iDenominator;
       ReduceFraction(this);
     }
 
-    public fraction64(int numerator, int deniminator)
+    public Fraction64(int numerator, int deniminator)
     {
       m_iNumerator = numerator;
       m_iDenominator = deniminator;
@@ -113,7 +106,7 @@ namespace Seven
     /// the string can be an in the form of and integer, double or fraction64.
     /// e.g it can be like "123" or "123.321" or "123/456"
     /// </summary>
-    public static fraction64 Parse(string strValue)
+    public static Fraction64 Parse(string strValue)
     {
       int i;
       for (i = 0; i < strValue.Length; i++)
@@ -128,7 +121,7 @@ namespace Seven
       // else string is in the form of Numerator/Denominator
       int iNumerator = System.Convert.ToInt32(strValue.Substring(0, i));
       int iDenominator = System.Convert.ToInt32(strValue.Substring(i + 1));
-      return new fraction64(iNumerator, iDenominator);
+      return new Fraction64(iNumerator, iDenominator);
     }
 
 
@@ -136,16 +129,16 @@ namespace Seven
     /// The function takes a floating point number as an argument 
     /// and returns its corresponding reduced fraction64
     /// </summary>
-    public static fraction64 ToFraction(double dValue)
+    public static Fraction64 ToFraction(double dValue)
     {
       try
       {
         checked
         {
-          fraction64 frac;
+          Fraction64 frac;
           if (dValue % 1 == 0)	// if whole number
           {
-            frac = new fraction64((int)dValue);
+            frac = new Fraction64((int)dValue);
           }
           else
           {
@@ -168,7 +161,7 @@ namespace Seven
               iMultiple *= 10;
               iDigitsAfterDecimal--;
             }
-            frac = new fraction64((int)System.Math.Round(dTemp), iMultiple);
+            frac = new Fraction64((int)System.Math.Round(dTemp), iMultiple);
           }
           return frac;
         }
@@ -186,9 +179,9 @@ namespace Seven
     /// <summary>
     /// The function replicates current Fraction object
     /// </summary>
-    public fraction64 Duplicate()
+    public Fraction64 Duplicate()
     {
-      fraction64 frac = new fraction64();
+      Fraction64 frac = new Fraction64();
       frac.Numerator = Numerator;
       frac.Denominator = Denominator;
       return frac;
@@ -197,14 +190,14 @@ namespace Seven
     /// <summary>
     /// The function returns the inverse of a Fraction object
     /// </summary>
-    public static fraction64 Inverse(fraction64 frac1)
+    public static Fraction64 Inverse(Fraction64 frac1)
     {
       if (frac1.Numerator == 0)
         throw new Error("Operation not possible (Denominator cannot be assigned a ZERO Value)");
 
       int iNumerator = frac1.Denominator;
       int iDenominator = frac1.Numerator;
-      return (new fraction64(iNumerator, iDenominator));
+      return (new Fraction64(iNumerator, iDenominator));
     }
 
 
@@ -213,112 +206,112 @@ namespace Seven
     /// includes -(unary), and binary opertors such as +,-,*,/
     /// also includes relational and logical operators such as ==,!=,<,>,<=,>=
     /// </summary>
-    public static fraction64 operator -(fraction64 frac1)
+    public static Fraction64 operator -(Fraction64 frac1)
     { return (Negate(frac1)); }
 
-    public static fraction64 operator +(fraction64 frac1, fraction64 frac2)
+    public static Fraction64 operator +(Fraction64 frac1, Fraction64 frac2)
     { return (Add(frac1, frac2)); }
 
-    public static fraction64 operator +(int iNo, fraction64 frac1)
-    { return (Add(frac1, new fraction64(iNo))); }
+    public static Fraction64 operator +(int iNo, Fraction64 frac1)
+    { return (Add(frac1, new Fraction64(iNo))); }
 
-    public static fraction64 operator +(fraction64 frac1, int iNo)
-    { return (Add(frac1, new fraction64(iNo))); }
+    public static Fraction64 operator +(Fraction64 frac1, int iNo)
+    { return (Add(frac1, new Fraction64(iNo))); }
 
-    public static fraction64 operator +(double dbl, fraction64 frac1)
-    { return (Add(frac1, fraction64.ToFraction(dbl))); }
+    public static Fraction64 operator +(double dbl, Fraction64 frac1)
+    { return (Add(frac1, Fraction64.ToFraction(dbl))); }
 
-    public static fraction64 operator +(fraction64 frac1, double dbl)
-    { return (Add(frac1, fraction64.ToFraction(dbl))); }
+    public static Fraction64 operator +(Fraction64 frac1, double dbl)
+    { return (Add(frac1, Fraction64.ToFraction(dbl))); }
 
-    public static fraction64 operator -(fraction64 frac1, fraction64 frac2)
+    public static Fraction64 operator -(Fraction64 frac1, Fraction64 frac2)
     { return (Add(frac1, -frac2)); }
 
-    public static fraction64 operator -(int iNo, fraction64 frac1)
-    { return (Add(-frac1, new fraction64(iNo))); }
+    public static Fraction64 operator -(int iNo, Fraction64 frac1)
+    { return (Add(-frac1, new Fraction64(iNo))); }
 
-    public static fraction64 operator -(fraction64 frac1, int iNo)
-    { return (Add(frac1, -(new fraction64(iNo)))); }
+    public static Fraction64 operator -(Fraction64 frac1, int iNo)
+    { return (Add(frac1, -(new Fraction64(iNo)))); }
 
-    public static fraction64 operator -(double dbl, fraction64 frac1)
-    { return (Add(-frac1, fraction64.ToFraction(dbl))); }
+    public static Fraction64 operator -(double dbl, Fraction64 frac1)
+    { return (Add(-frac1, Fraction64.ToFraction(dbl))); }
 
-    public static fraction64 operator -(fraction64 frac1, double dbl)
-    { return (Add(frac1, -fraction64.ToFraction(dbl))); }
+    public static Fraction64 operator -(Fraction64 frac1, double dbl)
+    { return (Add(frac1, -Fraction64.ToFraction(dbl))); }
 
-    public static fraction64 operator *(fraction64 frac1, fraction64 frac2)
+    public static Fraction64 operator *(Fraction64 frac1, Fraction64 frac2)
     { return (Multiply(frac1, frac2)); }
 
-    public static fraction64 operator *(int iNo, fraction64 frac1)
-    { return (Multiply(frac1, new fraction64(iNo))); }
+    public static Fraction64 operator *(int iNo, Fraction64 frac1)
+    { return (Multiply(frac1, new Fraction64(iNo))); }
 
-    public static fraction64 operator *(fraction64 frac1, int iNo)
-    { return (Multiply(frac1, new fraction64(iNo))); }
+    public static Fraction64 operator *(Fraction64 frac1, int iNo)
+    { return (Multiply(frac1, new Fraction64(iNo))); }
 
-    public static fraction64 operator *(double dbl, fraction64 frac1)
-    { return (Multiply(frac1, fraction64.ToFraction(dbl))); }
+    public static Fraction64 operator *(double dbl, Fraction64 frac1)
+    { return (Multiply(frac1, Fraction64.ToFraction(dbl))); }
 
-    public static fraction64 operator *(fraction64 frac1, double dbl)
-    { return (Multiply(frac1, fraction64.ToFraction(dbl))); }
+    public static Fraction64 operator *(Fraction64 frac1, double dbl)
+    { return (Multiply(frac1, Fraction64.ToFraction(dbl))); }
 
-    public static fraction64 operator /(fraction64 frac1, fraction64 frac2)
+    public static Fraction64 operator /(Fraction64 frac1, Fraction64 frac2)
     { return (Multiply(frac1, Inverse(frac2))); }
 
-    public static fraction64 operator /(int iNo, fraction64 frac1)
-    { return (Multiply(Inverse(frac1), new fraction64(iNo))); }
+    public static Fraction64 operator /(int iNo, Fraction64 frac1)
+    { return (Multiply(Inverse(frac1), new Fraction64(iNo))); }
 
-    public static fraction64 operator /(fraction64 frac1, int iNo)
-    { return (Multiply(frac1, Inverse(new fraction64(iNo)))); }
+    public static Fraction64 operator /(Fraction64 frac1, int iNo)
+    { return (Multiply(frac1, Inverse(new Fraction64(iNo)))); }
 
-    public static fraction64 operator /(double dbl, fraction64 frac1)
-    { return (Multiply(Inverse(frac1), fraction64.ToFraction(dbl))); }
+    public static Fraction64 operator /(double dbl, Fraction64 frac1)
+    { return (Multiply(Inverse(frac1), Fraction64.ToFraction(dbl))); }
 
-    public static fraction64 operator /(fraction64 frac1, double dbl)
-    { return (Multiply(frac1, fraction64.Inverse(fraction64.ToFraction(dbl)))); }
+    public static Fraction64 operator /(Fraction64 frac1, double dbl)
+    { return (Multiply(frac1, Fraction64.Inverse(Fraction64.ToFraction(dbl)))); }
 
-    public static bool operator ==(fraction64 frac1, fraction64 frac2)
+    public static bool operator ==(Fraction64 frac1, Fraction64 frac2)
     { return frac1.Equals(frac2); }
 
-    public static bool operator !=(fraction64 frac1, fraction64 frac2)
+    public static bool operator !=(Fraction64 frac1, Fraction64 frac2)
     { return (!frac1.Equals(frac2)); }
 
-    public static bool operator ==(fraction64 frac1, int iNo)
-    { return frac1.Equals(new fraction64(iNo)); }
+    public static bool operator ==(Fraction64 frac1, int iNo)
+    { return frac1.Equals(new Fraction64(iNo)); }
 
-    public static bool operator !=(fraction64 frac1, int iNo)
-    { return (!frac1.Equals(new fraction64(iNo))); }
+    public static bool operator !=(Fraction64 frac1, int iNo)
+    { return (!frac1.Equals(new Fraction64(iNo))); }
 
-    public static bool operator ==(fraction64 frac1, double dbl)
-    { return frac1.Equals(new fraction64(dbl)); }
+    public static bool operator ==(Fraction64 frac1, double dbl)
+    { return frac1.Equals(new Fraction64(dbl)); }
 
-    public static bool operator !=(fraction64 frac1, double dbl)
-    { return (!frac1.Equals(new fraction64(dbl))); }
+    public static bool operator !=(Fraction64 frac1, double dbl)
+    { return (!frac1.Equals(new Fraction64(dbl))); }
 
-    public static bool operator <(fraction64 frac1, fraction64 frac2)
+    public static bool operator <(Fraction64 frac1, Fraction64 frac2)
     { return frac1.Numerator * frac2.Denominator < frac2.Numerator * frac1.Denominator; }
 
-    public static bool operator >(fraction64 frac1, fraction64 frac2)
+    public static bool operator >(Fraction64 frac1, Fraction64 frac2)
     { return frac1.Numerator * frac2.Denominator > frac2.Numerator * frac1.Denominator; }
 
-    public static bool operator <=(fraction64 frac1, fraction64 frac2)
+    public static bool operator <=(Fraction64 frac1, Fraction64 frac2)
     { return frac1.Numerator * frac2.Denominator <= frac2.Numerator * frac1.Denominator; }
 
-    public static bool operator >=(fraction64 frac1, fraction64 frac2)
+    public static bool operator >=(Fraction64 frac1, Fraction64 frac2)
     { return frac1.Numerator * frac2.Denominator >= frac2.Numerator * frac1.Denominator; }
 
 
     /// <summary>Casts a int to a fraction64 (implicit).</summary>
     /// <param name="l">The int to be casted.</param>
     /// <returns></returns>
-    public static implicit operator fraction64(int l)
-    { return new fraction64(l); }
-    public static implicit operator fraction64(double dNo)
-    { return new fraction64(dNo); }
+    public static implicit operator Fraction64(int l)
+    { return new Fraction64(l); }
+    public static implicit operator Fraction64(double dNo)
+    { return new Fraction64(dNo); }
 
     /// <summary>
     /// overloaed user defined conversions: from fraction64s to double and string
     /// </summary>
-    public static explicit operator double(fraction64 frac)
+    public static explicit operator double(Fraction64 frac)
     { return frac.ToDouble(); }
 
 
@@ -327,7 +320,7 @@ namespace Seven
     /// </summary>
     public override bool Equals(object obj)
     {
-      fraction64 frac = (fraction64)obj;
+      Fraction64 frac = (Fraction64)obj;
       return (Numerator == frac.Numerator && Denominator == frac.Denominator);
     }
 
@@ -342,18 +335,18 @@ namespace Seven
     /// <summary>
     /// internal function for negation
     /// </summary>
-    private static fraction64 Negate(fraction64 frac1)
+    private static Fraction64 Negate(Fraction64 frac1)
     {
       int iNumerator = -frac1.Numerator;
       int iDenominator = frac1.Denominator;
-      return (new fraction64(iNumerator, iDenominator));
+      return (new Fraction64(iNumerator, iDenominator));
 
     }
 
     /// <summary>
     /// internal functions for binary operations
     /// </summary>
-    private static fraction64 Add(fraction64 frac1, fraction64 frac2)
+    private static Fraction64 Add(Fraction64 frac1, Fraction64 frac2)
     {
       try
       {
@@ -361,7 +354,7 @@ namespace Seven
         {
           int iNumerator = frac1.Numerator * frac2.Denominator + frac2.Numerator * frac1.Denominator;
           int iDenominator = frac1.Denominator * frac2.Denominator;
-          return (new fraction64(iNumerator, iDenominator));
+          return (new Fraction64(iNumerator, iDenominator));
         }
       }
       catch (System.OverflowException)
@@ -374,7 +367,7 @@ namespace Seven
       }
     }
 
-    private static fraction64 Multiply(fraction64 frac1, fraction64 frac2)
+    private static Fraction64 Multiply(Fraction64 frac1, Fraction64 frac2)
     {
       try
       {
@@ -382,7 +375,7 @@ namespace Seven
         {
           int iNumerator = frac1.Numerator * frac2.Numerator;
           int iDenominator = frac1.Denominator * frac2.Denominator;
-          return (new fraction64(iNumerator, iDenominator));
+          return (new Fraction64(iNumerator, iDenominator));
         }
       }
       catch (System.OverflowException)
@@ -421,7 +414,7 @@ namespace Seven
     /// The function reduces(simplifies) a Fraction object by dividing both its numerator 
     /// and denominator by their GCD
     /// </summary>
-    public static void ReduceFraction(fraction64 frac)
+    public static void ReduceFraction(Fraction64 frac)
     {
       try
       {
@@ -471,34 +464,27 @@ namespace Seven
   /// Date: 6/15/2004
   /// Time: 10:54 AM
   /// </citation>
-  public struct fraction128
+  public struct Fraction128
   {
     private long m_iNumerator;
     private long m_iDenominator;
 
-    //public fraction128()
-    //{
-    //  m_iNumerator = 0;
-    //  m_iDenominator = 1;
-    //  ReduceFraction(this);
-    //}
-
-    public fraction128(long iWholeNumber)
+    public Fraction128(long iWholeNumber)
     {
       m_iNumerator = iWholeNumber;
       m_iDenominator = 1;
       ReduceFraction(this);
     }
 
-    public fraction128(double dDecimalValue)
+    public Fraction128(double dDecimalValue)
     {
-      fraction128 temp = ToFraction(dDecimalValue);
+      Fraction128 temp = ToFraction(dDecimalValue);
       m_iNumerator = temp.m_iNumerator;
       m_iDenominator = temp.m_iDenominator;
       ReduceFraction(this);
     }
 
-    public fraction128(long numerator, long deniminator)
+    public Fraction128(long numerator, long deniminator)
     {
       m_iNumerator = numerator;
       m_iDenominator = deniminator;
@@ -562,7 +548,7 @@ namespace Seven
     /// the string can be an in the form of and integer, double or fraction.
     /// e.g it can be like "123" or "123.321" or "123/456"
     /// </summary>
-    public static fraction128 Parse(string strValue)
+    public static Fraction128 Parse(string strValue)
     {
       int i;
       for (i = 0; i < strValue.Length; i++)
@@ -577,7 +563,7 @@ namespace Seven
       // else string is in the form of Numerator/Denominator
       long iNumerator = System.Convert.ToInt64(strValue.Substring(0, i));
       long iDenominator = System.Convert.ToInt64(strValue.Substring(i + 1));
-      return new fraction128(iNumerator, iDenominator);
+      return new Fraction128(iNumerator, iDenominator);
     }
 
 
@@ -585,16 +571,16 @@ namespace Seven
     /// The function takes a floating point number as an argument 
     /// and returns its corresponding reduced fraction
     /// </summary>
-    public static fraction128 ToFraction(double dValue)
+    public static Fraction128 ToFraction(double dValue)
     {
       try
       {
         checked
         {
-          fraction128 frac;
+          Fraction128 frac;
           if (dValue % 1 == 0)	// if whole number
           {
-            frac = new fraction128((long)dValue);
+            frac = new Fraction128((long)dValue);
           }
           else
           {
@@ -617,7 +603,7 @@ namespace Seven
               iMultiple *= 10;
               iDigitsAfterDecimal--;
             }
-            frac = new fraction128((int)System.Math.Round(dTemp), iMultiple);
+            frac = new Fraction128((int)System.Math.Round(dTemp), iMultiple);
           }
           return frac;
         }
@@ -635,9 +621,9 @@ namespace Seven
     /// <summary>
     /// The function replicates current Fraction object
     /// </summary>
-    public fraction128 Duplicate()
+    public Fraction128 Duplicate()
     {
-      fraction128 frac = new fraction128();
+      Fraction128 frac = new Fraction128();
       frac.Numerator = Numerator;
       frac.Denominator = Denominator;
       return frac;
@@ -646,14 +632,14 @@ namespace Seven
     /// <summary>
     /// The function returns the inverse of a Fraction object
     /// </summary>
-    public static fraction128 Inverse(fraction128 frac1)
+    public static Fraction128 Inverse(Fraction128 frac1)
     {
       if (frac1.Numerator == 0)
         throw new Error("Operation not possible (Denominator cannot be assigned a ZERO Value)");
 
       long iNumerator = frac1.Denominator;
       long iDenominator = frac1.Numerator;
-      return (new fraction128(iNumerator, iDenominator));
+      return (new Fraction128(iNumerator, iDenominator));
     }
 
 
@@ -662,112 +648,112 @@ namespace Seven
     /// includes -(unary), and binary opertors such as +,-,*,/
     /// also includes relational and logical operators such as ==,!=,<,>,<=,>=
     /// </summary>
-    public static fraction128 operator -(fraction128 frac1)
+    public static Fraction128 operator -(Fraction128 frac1)
     { return (Negate(frac1)); }
 
-    public static fraction128 operator +(fraction128 frac1, fraction128 frac2)
+    public static Fraction128 operator +(Fraction128 frac1, Fraction128 frac2)
     { return (Add(frac1, frac2)); }
 
-    public static fraction128 operator +(int iNo, fraction128 frac1)
-    { return (Add(frac1, new fraction128(iNo))); }
+    public static Fraction128 operator +(int iNo, Fraction128 frac1)
+    { return (Add(frac1, new Fraction128(iNo))); }
 
-    public static fraction128 operator +(fraction128 frac1, int iNo)
-    { return (Add(frac1, new fraction128(iNo))); }
+    public static Fraction128 operator +(Fraction128 frac1, int iNo)
+    { return (Add(frac1, new Fraction128(iNo))); }
 
-    public static fraction128 operator +(double dbl, fraction128 frac1)
-    { return (Add(frac1, fraction128.ToFraction(dbl))); }
+    public static Fraction128 operator +(double dbl, Fraction128 frac1)
+    { return (Add(frac1, Fraction128.ToFraction(dbl))); }
 
-    public static fraction128 operator +(fraction128 frac1, double dbl)
-    { return (Add(frac1, fraction128.ToFraction(dbl))); }
+    public static Fraction128 operator +(Fraction128 frac1, double dbl)
+    { return (Add(frac1, Fraction128.ToFraction(dbl))); }
 
-    public static fraction128 operator -(fraction128 frac1, fraction128 frac2)
+    public static Fraction128 operator -(Fraction128 frac1, Fraction128 frac2)
     { return (Add(frac1, -frac2)); }
 
-    public static fraction128 operator -(int iNo, fraction128 frac1)
-    { return (Add(-frac1, new fraction128(iNo))); }
+    public static Fraction128 operator -(int iNo, Fraction128 frac1)
+    { return (Add(-frac1, new Fraction128(iNo))); }
 
-    public static fraction128 operator -(fraction128 frac1, int iNo)
-    { return (Add(frac1, -(new fraction128(iNo)))); }
+    public static Fraction128 operator -(Fraction128 frac1, int iNo)
+    { return (Add(frac1, -(new Fraction128(iNo)))); }
 
-    public static fraction128 operator -(double dbl, fraction128 frac1)
-    { return (Add(-frac1, fraction128.ToFraction(dbl))); }
+    public static Fraction128 operator -(double dbl, Fraction128 frac1)
+    { return (Add(-frac1, Fraction128.ToFraction(dbl))); }
 
-    public static fraction128 operator -(fraction128 frac1, double dbl)
-    { return (Add(frac1, -fraction128.ToFraction(dbl))); }
+    public static Fraction128 operator -(Fraction128 frac1, double dbl)
+    { return (Add(frac1, -Fraction128.ToFraction(dbl))); }
 
-    public static fraction128 operator *(fraction128 frac1, fraction128 frac2)
+    public static Fraction128 operator *(Fraction128 frac1, Fraction128 frac2)
     { return (Multiply(frac1, frac2)); }
 
-    public static fraction128 operator *(int iNo, fraction128 frac1)
-    { return (Multiply(frac1, new fraction128(iNo))); }
+    public static Fraction128 operator *(int iNo, Fraction128 frac1)
+    { return (Multiply(frac1, new Fraction128(iNo))); }
 
-    public static fraction128 operator *(fraction128 frac1, int iNo)
-    { return (Multiply(frac1, new fraction128(iNo))); }
+    public static Fraction128 operator *(Fraction128 frac1, int iNo)
+    { return (Multiply(frac1, new Fraction128(iNo))); }
 
-    public static fraction128 operator *(double dbl, fraction128 frac1)
-    { return (Multiply(frac1, fraction128.ToFraction(dbl))); }
+    public static Fraction128 operator *(double dbl, Fraction128 frac1)
+    { return (Multiply(frac1, Fraction128.ToFraction(dbl))); }
 
-    public static fraction128 operator *(fraction128 frac1, double dbl)
-    { return (Multiply(frac1, fraction128.ToFraction(dbl))); }
+    public static Fraction128 operator *(Fraction128 frac1, double dbl)
+    { return (Multiply(frac1, Fraction128.ToFraction(dbl))); }
 
-    public static fraction128 operator /(fraction128 frac1, fraction128 frac2)
+    public static Fraction128 operator /(Fraction128 frac1, Fraction128 frac2)
     { return (Multiply(frac1, Inverse(frac2))); }
 
-    public static fraction128 operator /(int iNo, fraction128 frac1)
-    { return (Multiply(Inverse(frac1), new fraction128(iNo))); }
+    public static Fraction128 operator /(int iNo, Fraction128 frac1)
+    { return (Multiply(Inverse(frac1), new Fraction128(iNo))); }
 
-    public static fraction128 operator /(fraction128 frac1, int iNo)
-    { return (Multiply(frac1, Inverse(new fraction128(iNo)))); }
+    public static Fraction128 operator /(Fraction128 frac1, int iNo)
+    { return (Multiply(frac1, Inverse(new Fraction128(iNo)))); }
 
-    public static fraction128 operator /(double dbl, fraction128 frac1)
-    { return (Multiply(Inverse(frac1), fraction128.ToFraction(dbl))); }
+    public static Fraction128 operator /(double dbl, Fraction128 frac1)
+    { return (Multiply(Inverse(frac1), Fraction128.ToFraction(dbl))); }
 
-    public static fraction128 operator /(fraction128 frac1, double dbl)
-    { return (Multiply(frac1, fraction128.Inverse(fraction128.ToFraction(dbl)))); }
+    public static Fraction128 operator /(Fraction128 frac1, double dbl)
+    { return (Multiply(frac1, Fraction128.Inverse(Fraction128.ToFraction(dbl)))); }
 
-    public static bool operator ==(fraction128 frac1, fraction128 frac2)
+    public static bool operator ==(Fraction128 frac1, Fraction128 frac2)
     { return frac1.Equals(frac2); }
 
-    public static bool operator !=(fraction128 frac1, fraction128 frac2)
+    public static bool operator !=(Fraction128 frac1, Fraction128 frac2)
     { return (!frac1.Equals(frac2)); }
 
-    public static bool operator ==(fraction128 frac1, int iNo)
-    { return frac1.Equals(new fraction128(iNo)); }
+    public static bool operator ==(Fraction128 frac1, int iNo)
+    { return frac1.Equals(new Fraction128(iNo)); }
 
-    public static bool operator !=(fraction128 frac1, int iNo)
-    { return (!frac1.Equals(new fraction128(iNo))); }
+    public static bool operator !=(Fraction128 frac1, int iNo)
+    { return (!frac1.Equals(new Fraction128(iNo))); }
 
-    public static bool operator ==(fraction128 frac1, double dbl)
-    { return frac1.Equals(new fraction128(dbl)); }
+    public static bool operator ==(Fraction128 frac1, double dbl)
+    { return frac1.Equals(new Fraction128(dbl)); }
 
-    public static bool operator !=(fraction128 frac1, double dbl)
-    { return (!frac1.Equals(new fraction128(dbl))); }
+    public static bool operator !=(Fraction128 frac1, double dbl)
+    { return (!frac1.Equals(new Fraction128(dbl))); }
 
-    public static bool operator <(fraction128 frac1, fraction128 frac2)
+    public static bool operator <(Fraction128 frac1, Fraction128 frac2)
     { return frac1.Numerator * frac2.Denominator < frac2.Numerator * frac1.Denominator; }
 
-    public static bool operator >(fraction128 frac1, fraction128 frac2)
+    public static bool operator >(Fraction128 frac1, Fraction128 frac2)
     { return frac1.Numerator * frac2.Denominator > frac2.Numerator * frac1.Denominator; }
 
-    public static bool operator <=(fraction128 frac1, fraction128 frac2)
+    public static bool operator <=(Fraction128 frac1, Fraction128 frac2)
     { return frac1.Numerator * frac2.Denominator <= frac2.Numerator * frac1.Denominator; }
 
-    public static bool operator >=(fraction128 frac1, fraction128 frac2)
+    public static bool operator >=(Fraction128 frac1, Fraction128 frac2)
     { return frac1.Numerator * frac2.Denominator >= frac2.Numerator * frac1.Denominator; }
 
 
     /// <summary>Casts a long to a fraction128 (implicit).</summary>
     /// <param name="l">The long to be casted.</param>
     /// <returns></returns>
-    public static implicit operator fraction128(long l)
-    { return new fraction128(l); }
-    public static implicit operator fraction128(double dNo)
-    { return new fraction128(dNo); }
+    public static implicit operator Fraction128(long l)
+    { return new Fraction128(l); }
+    public static implicit operator Fraction128(double dNo)
+    { return new Fraction128(dNo); }
 
     /// <summary>
     /// overloaed user defined conversions: from fractions to double and string
     /// </summary>
-    public static explicit operator double(fraction128 frac)
+    public static explicit operator double(Fraction128 frac)
     { return frac.ToDouble(); }
 
 
@@ -776,7 +762,7 @@ namespace Seven
     /// </summary>
     public override bool Equals(object obj)
     {
-      fraction128 frac = (fraction128)obj;
+      Fraction128 frac = (Fraction128)obj;
       return (Numerator == frac.Numerator && Denominator == frac.Denominator);
     }
 
@@ -791,18 +777,18 @@ namespace Seven
     /// <summary>
     /// internal function for negation
     /// </summary>
-    private static fraction128 Negate(fraction128 frac1)
+    private static Fraction128 Negate(Fraction128 frac1)
     {
       long iNumerator = -frac1.Numerator;
       long iDenominator = frac1.Denominator;
-      return (new fraction128(iNumerator, iDenominator));
+      return (new Fraction128(iNumerator, iDenominator));
 
     }
 
     /// <summary>
     /// internal functions for binary operations
     /// </summary>
-    private static fraction128 Add(fraction128 frac1, fraction128 frac2)
+    private static Fraction128 Add(Fraction128 frac1, Fraction128 frac2)
     {
       try
       {
@@ -810,7 +796,7 @@ namespace Seven
         {
           long iNumerator = frac1.Numerator * frac2.Denominator + frac2.Numerator * frac1.Denominator;
           long iDenominator = frac1.Denominator * frac2.Denominator;
-          return (new fraction128(iNumerator, iDenominator));
+          return (new Fraction128(iNumerator, iDenominator));
         }
       }
       catch (System.OverflowException)
@@ -823,7 +809,7 @@ namespace Seven
       }
     }
 
-    private static fraction128 Multiply(fraction128 frac1, fraction128 frac2)
+    private static Fraction128 Multiply(Fraction128 frac1, Fraction128 frac2)
     {
       try
       {
@@ -831,7 +817,7 @@ namespace Seven
         {
           long iNumerator = frac1.Numerator * frac2.Numerator;
           long iDenominator = frac1.Denominator * frac2.Denominator;
-          return (new fraction128(iNumerator, iDenominator));
+          return (new Fraction128(iNumerator, iDenominator));
         }
       }
       catch (System.OverflowException)
@@ -870,7 +856,7 @@ namespace Seven
     /// The function reduces(simplifies) a Fraction object by dividing both its numerator 
     /// and denominator by their GCD
     /// </summary>
-    public static void ReduceFraction(fraction128 frac)
+    public static void ReduceFraction(Fraction128 frac)
     {
       try
       {

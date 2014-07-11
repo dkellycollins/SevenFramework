@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Equate.cs" />
-    <Compile Include="fraction.cs" />
+    <Compile Include="Fraction.cs" />
     <Compile Include="Mathematics\Algebra.cs" />
     <Compile Include="Mathematics\Calculus.cs" />
     <Compile Include="Mathematics\Combinatorics.cs" />
@@ -56,6 +56,7 @@
     <Compile Include="Mathematics\Vector.cs" />
     <Compile Include="Parallels\BackgroundThread.cs" />
     <Compile Include="Parallels\ReaderWriterLock.cs" />
+    <Compile Include="Predicate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structures\Array.cs" />
     <Compile Include="Structures\AvlTree.cs" />
