@@ -115,15 +115,12 @@ namespace Seven.Structures
 
       private Node _head;
       private int _count;
-      private int _load;
 
       public Node Head { get { return this._head; } }
       public int Count { get { return this._count; } set { this._count = value; } }
-      public bool IsFull { get { return this._count == this._load; } }
 
       public Leaf(M[] min, M[] max, Branch parent, int load)
-        : base(min, max, parent)
-      { this._load = load; }
+        : base(min, max, parent) { }
 
       public void Add(T addition)
       {
@@ -370,7 +367,7 @@ namespace Seven.Structures
       if (!InclusionCheck(this._top, ms))
         throw new Error("out of bounds during addition");
 
-      if (this._top is Leaf && (this._top as Leaf).IsFull)
+      if (this._top is Leaf && (this._top as Leaf).Count >= this._load)
       {
         Leaf.Node list = (this._top as Leaf).Head;
         _top = new Branch(_top.Min, _top.Max, null);
@@ -404,7 +401,7 @@ namespace Seven.Structures
       if (node is Leaf)
       {
         Leaf leaf = node as Leaf;
-        if (depth >= this._load || !leaf.IsFull)
+        if (depth >= this._load || !(leaf.Count >= this._load))
         {
           leaf.Add(addition);
           return;
@@ -1325,7 +1322,7 @@ namespace Seven.Structures
           Branch parent = node.Parent;
           T[] contents = (node as Leaf).Contents;
           Branch growth = GrowBranch(parent, leaf.Min, leaf.Max, this.DetermineChild(parent, ms));
-          
+
           foreach (T item in contents)
           {
             M[] child_ms;
