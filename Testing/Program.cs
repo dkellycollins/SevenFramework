@@ -247,6 +247,11 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine();
       Console.WriteLine();
 
+      omnitree_linked.Foreach(
+        (int current) => { Console.Write(current); }, 
+        new double[] { 5, 5, 5 }, 
+        new double[] { 10, 10, 10});
+
       Console.WriteLine("Speed Testing===========================================");
       Console.WriteLine();
       Console.WriteLine("RUN EXE OUTSIDE VISUAL STUDIO FOR FAIR COMPARISON.");
