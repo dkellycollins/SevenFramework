@@ -1066,10 +1066,6 @@ namespace Seven.Structures
         }
       }
 
-      //public Omnitree_Array<T, M>.Node[] _children;
-
-      //public Omnitree_Array<T, M>.Node[] Children { get { return this._children; } }
-
       private Branch.Node[] _children;
       private int _count;
       private int _fullSize;

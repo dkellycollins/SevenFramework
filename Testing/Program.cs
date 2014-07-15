@@ -401,6 +401,15 @@ The framework is a general framework to help with any form of programming. Curre
       timer.Restart();
       int count2 = 0;
       omnitree_linked.Foreach(
+        (Tuple<double, double, double> current) => { count2++; });
+      timer.Stop();
+      Console.WriteLine("FOREACH (FULL):");
+      Console.WriteLine("  Items Found: " + count2);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      count2 = 0;
+      omnitree_linked.Foreach(
         (Tuple<double, double, double> current) => { count2++; },
         new double[] { 0, 0, 0 },
         new double[] { 25000000, 25000000, 25000000 });
@@ -468,6 +477,15 @@ The framework is a general framework to help with any form of programming. Curre
       timer.Restart();
       int count2 = 0;
       omnitree_linked.Foreach(
+        (Tuple<double, double, double> current) => { count2++; });
+      timer.Stop();
+      Console.WriteLine("FOREACH (FULL):");
+      Console.WriteLine("  Items Found: " + count2);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+      timer.Restart();
+      count2 = 0;
+      omnitree_linked.Foreach(
         (Tuple<double, double, double> current) => { count2++; },
         new double[] { 0, 0, 0 },
         new double[] { 25000000, 25000000, 25000000 });
@@ -530,6 +548,15 @@ The framework is a general framework to help with any form of programming. Curre
       timer.Restart();
       int count = 0;
       System.Collections.Generic.IEnumerable<Tuple<double, double, double>> enumerable = list;
+
+      foreach (Tuple<double, double, double> i in enumerable)
+      {
+          count++;
+      }
+      timer.Stop();
+      Console.WriteLine("FOREACH (FULL):");
+      Console.WriteLine("  Items Found: " + count);
+      Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       foreach (Tuple<double, double, double> i in enumerable)
       {
