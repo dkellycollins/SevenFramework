@@ -570,10 +570,8 @@ namespace Seven.Structures
     private int DetermineChild(Node node, M[] ms)
     {
       int child = 0;
-      M[] min = node.Min;
-      M[] max = node.Max;
       for (int i = 0; i < this._dimensions; i++)
-        if (!(_compare(ms[i], _average(min[i], max[i])) == Comparison.Less))
+        if (!(this._compare(ms[i], this._average(node.Min[i], node.Max[i])) == Comparison.Less))
           child += 1 << i;
       return child;
     }
@@ -587,19 +585,19 @@ namespace Seven.Structures
     {
       min = new M[this._dimensions];
       max = new M[this._dimensions];
-      for (int i = _dimensions - 1; i >= 0; i--)
+      for (int i = this._dimensions - 1; i >= 0; i--)
       {
         int temp = 1 << i;
         if (child >= temp)
         {
-          min[i] = _average(node.Min[i], node.Max[i]);
+          min[i] = this._average(node.Min[i], node.Max[i]);
           max[i] = node.Max[i];
           child -= temp;
         }
         else
         {
           min[i] = node.Min[i];
-          max[i] = _average(node.Min[i], node.Max[i]);
+          max[i] = this._average(node.Min[i], node.Max[i]);
         }
       }
     }
@@ -611,11 +609,9 @@ namespace Seven.Structures
     /// <returns>True if the node includes the space; False if not.</returns>
     private bool InclusionCheck(Node node, M[] min, M[] max)
     {
-      M[] node_min = node.Min;
-      M[] node_max = node.Max;
-      for (int j = 0; j < this._dimensions; j++)
-        if (this._compare(node_max[j], min[j]) == Comparison.Less ||
-          this._compare(node_min[j], max[j]) == Comparison.Greater)
+      for (int i = 0; i < this._dimensions; i++)
+        if (this._compare(node.Max[i], min[i]) == Comparison.Less ||
+          this._compare(node.Min[i], max[i]) == Comparison.Greater)
           return false;
       return true;
     }
@@ -626,11 +622,9 @@ namespace Seven.Structures
     /// <returns>True if the node includes the coordinates; False if not.</returns>
     private bool InclusionCheck(Node node, M[] ms)
     {
-      M[] node_min = node.Min;
-      M[] node_max = node.Max;
-      for (int j = 0; j < this._dimensions; j++)
-        if (this._compare(ms[j], node_min[j]) == Comparison.Less ||
-          this._compare(ms[j], node_max[j]) == Comparison.Greater)
+      for (int i = 0; i < this._dimensions; i++)
+        if (this._compare(ms[i], node.Min[i]) == Comparison.Less ||
+          this._compare(ms[i], node.Max[i]) == Comparison.Greater)
           return false;
       return true;
     }
@@ -642,9 +636,9 @@ namespace Seven.Structures
     /// <returns>True if the space includes the coordinates; False if not.</returns>
     private bool InclusionCheck(M[] min, M[] max, M[] ms)
     {
-      for (int j = 0; j < this._dimensions; j++)
-        if (this._compare(ms[j], min[j]) == Comparison.Less ||
-          this._compare(ms[j], max[j]) == Comparison.Greater)
+      for (int i = 0; i < this._dimensions; i++)
+        if (this._compare(ms[i], min[i]) == Comparison.Less ||
+          this._compare(ms[i], max[i]) == Comparison.Greater)
           return false;
       return true;
     }
