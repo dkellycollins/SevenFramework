@@ -46,7 +46,7 @@ namespace Seven.Structures
   }
 
   /// <summary>Contains the implementations of the methods in the Structure interface.</summary>
-  internal static class Structure
+  public static class Structure
   {
     public enum Selection { Left, Right };
     public delegate Selection Select<T>(T left, T right);

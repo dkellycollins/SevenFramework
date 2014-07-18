@@ -42,7 +42,7 @@ namespace Testing
       string message =
       @"HELLO! WELCOME TO THE SEVEN FRAMEWORK! 
 
-The framework is a general framework to help with any form of programming. Currently, the most useful component of the framwork is the library of data structures. This library includes the folloing: Links (aka Tuples), Arrays, Lists, Queues, Stacks, Heaps, HashTables, AvlTrees, RedBlackTrees, Octrees, SkipLists, Omni-Trees and more. The followoing data is testing for each structure:";
+The framework is a general framework to help with any form of programming. Currently, the most useful component of the framework is the library of data structures. This library includes the folloing: Links (aka Tuples), Arrays, Lists, Queues, Stacks, Heaps, HashTables, AvlTrees, RedBlackTrees, Octrees, SkipLists, Omni-Trees and more. The followoing data is testing for each structure:";
 
       Console.Write(message);
       Console.WriteLine();
@@ -247,23 +247,70 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine();
       Console.WriteLine();
 
-      //omnitree_linked.Foreach(
-      //  (int current) => { Console.Write(current); }, 
-      //  new double[] { 5, 5, 5 }, 
-      //  new double[] { 10, 10, 10});
+			#region Omnitree_Array
 
-      Console.WriteLine("Speed Testing===========================================");
-      Console.WriteLine();
-      Console.WriteLine("RUN EXE OUTSIDE VISUAL STUDIO FOR FAIR COMPARISON.");
-      Console.WriteLine("May take upt to a minute or two...");
-      Console.WriteLine("Units: ticks");
-      Console.WriteLine();
+			Console.WriteLine(" Testing Omnitree_Array<int, double>---------------");
+			Omnitree<int, double> omnitree_array = new Omnitree_Array<int, double>(
+				new double[] { -test - 1, -test - 1, -test - 1 }, // minimum dimensions of the omnitree
+				new double[] { test + 1, test + 1, test + 1 }, // maximum dimensions of the omnitree
+				(int i, out double[] location) => { location = new double[] { i, i, i }; },
+				Program.Compare, // comparison function
+				(double left, double right) => { return (left + right) * 0.5d; }); // average function
+			Console.WriteLine("     Origin: [" + omnitree_array.Origin[0] + ", " + omnitree_array.Origin[1] + ", " + omnitree_array.Origin[2] + "]");
+			Console.WriteLine("     Minimum: [" + omnitree_array.Min[0] + ", " + omnitree_array.Min[1] + ", " + omnitree_array.Min[2] + "]");
+			Console.WriteLine("     Maximum: [" + omnitree_array.Max[0] + ", " + omnitree_array.Max[1] + ", " + omnitree_array.Max[2] + "]");
+			Console.WriteLine("     Dimensions: " + omnitree_array.Dimensions);
+			Console.WriteLine("     Count: " + omnitree_array.Count);
+			Console.Write("   Adding 0-" + test + ": ");
+			for (int i = 0; i < test; i++)
+				omnitree_array.Add(i);
+			omnitree_array.Foreach((int current) => { Console.Write(current); });
+			Console.WriteLine();
+			Console.WriteLine("     Count: " + omnitree_array.Count);
+			Console.Write("   Foreach (delegate) [ALL]: ");
+			omnitree_array.Foreach((int current) => { Console.Write(current); });
+			Console.WriteLine();
+			Console.Write("   Foreach (delegate) [" + (test / 2) + "-" + test + "]: ");
+			omnitree_array.Foreach((int current) => { Console.Write(current); },
+				new double[] { test / 2, test / 2, test / 2 },
+				new double[] { test, test, test });
+			Console.WriteLine();
+			Console.Write("   Remove 0-" + test / 3 + ": ");
+			omnitree_array.Remove(
+				new double[] { 0, 0, 0 },
+				new double[] { test / 3, test / 3, test / 3 });
+			omnitree_array.Foreach((int current) => { Console.Write(current); });
+			Console.WriteLine();
+			Console.WriteLine("     Count: " + omnitree_array.Count);
+			Console.Write("   Clear: ");
+			omnitree_array.Clear();
+			omnitree_array.Foreach((int current) => { Console.Write(current); });
+			Console.WriteLine();
+			Console.WriteLine("     Count: " + omnitree_array.Count);
+			Console.WriteLine();
 
-      //SpeedTest();
+			#endregion
 
-      Test_LIST();
-      Test_OMNITREE_ARRAY();
-      Test_OMNITREE_LINKED();
+			//omnitree_array.Remove(
+			//	new double[] { 5, 5, 5 },
+			//	new double[] { 10, 10, 10 });
+
+			//omnitree_array.Foreach(
+			//	(int current) => { Console.Write(current); });
+			//Console.WriteLine();
+			//Console.WriteLine();
+
+			Console.WriteLine("Speed Testing===========================================");
+			Console.WriteLine();
+			Console.WriteLine("RUN EXE OUTSIDE VISUAL STUDIO FOR FAIR COMPARISON.");
+			Console.WriteLine("May take upt to a minute or two...");
+			Console.WriteLine("Units: ticks");
+			int iterations = 10000000;
+			Console.WriteLine("Test Size: " + iterations * 2);
+			Console.WriteLine();
+			Test_LIST(iterations);
+			Test_OMNITREE_ARRAY(iterations);
+			Test_OMNITREE_LINKED(iterations);
 
       Console.WriteLine(" Testing Complete...");
       Console.ReadLine();
@@ -377,14 +424,12 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine();
     }
 
-    public static void Test_OMNITREE_ARRAY()
+		public static void Test_OMNITREE_ARRAY(int iterations)
     {
       Stopwatch timer = new Stopwatch();
 
-      int iterations = 10000000;
-
       Console.WriteLine("OMNITREE (ARRAY)-------------------");
-      Omnitree<Tuple<double, double, double>, double> omnitree_linked =
+      Omnitree<Tuple<double, double, double>, double> omnitree_array =
         new Omnitree_Array<Tuple<double, double, double>, double>(
         new double[] { -iterations - 1, -iterations - 1, -iterations - 1 },
         new double[] { iterations + 1, iterations + 1, iterations + 1 },
@@ -394,22 +439,25 @@ The framework is a general framework to help with any form of programming. Curre
 
       timer.Restart();
       for (int i = -iterations; i < iterations; i++)
-        omnitree_linked.Add(new Tuple<double, double, double>(i, i, i));
+				(omnitree_array as Omnitree_Array<Tuple<double, double, double>, double>).Add(new Tuple<double, double, double>(i, i, i));
       timer.Stop();
-      Console.WriteLine("ADD TIME: " + timer.ElapsedTicks);
+			Console.WriteLine("ADD TIME:");
+			Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       int count2 = 0;
-      omnitree_linked.Foreach(
+      omnitree_array.Foreach(
         (Tuple<double, double, double> current) => { count2++; });
       timer.Stop();
       Console.WriteLine("FOREACH (FULL):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count2 = 0;
-      omnitree_linked.Foreach(
+      omnitree_array.Foreach(
         (Tuple<double, double, double> current) => { count2++; },
         new double[] { 0, 0, 0 },
         new double[] { 25000000, 25000000, 25000000 });
@@ -417,10 +465,11 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (250000):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count2 = 0;
-      omnitree_linked.Foreach(
+      omnitree_array.Foreach(
         (Tuple<double, double, double> current) => { count2++; },
         new double[] { 0, 0, 0 },
         new double[] { 250000, 250000, 250000 });
@@ -428,10 +477,11 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (250000):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count2 = 0;
-      omnitree_linked.Foreach(
+      omnitree_array.Foreach(
         (Tuple<double, double, double> current) => { count2++; },
         new double[] { 0, 0, 0 },
         new double[] { 2500, 2500, 2500 });
@@ -439,10 +489,11 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (2500):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count2 = 0;
-      omnitree_linked.Foreach(
+      omnitree_array.Foreach(
         (Tuple<double, double, double> current) => { count2++; },
         new double[] { 0, 0, 0 },
         new double[] { 25, 25, 25 });
@@ -450,13 +501,31 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (25):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+			timer.Restart();
+			omnitree_array.Remove(
+				new double[] { 0, 0, 0 },
+				new double[] { 2500, 2500, 2500 });
+			timer.Stop();
+			Console.WriteLine("REMOVE (2500):");
+			Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+			timer.Restart();
+			count2 = 0;
+			omnitree_array.Foreach(
+				(Tuple<double, double, double> current) => { count2++; });
+			timer.Stop();
+			Console.WriteLine("FOREACH (FULL):");
+			Console.WriteLine("  Items Found: " + count2);
+			Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
     }
 
-    public static void Test_OMNITREE_LINKED()
+    public static void Test_OMNITREE_LINKED(int iterations)
     {
       Stopwatch timer = new Stopwatch();
-
-      int iterations = 10000000;
 
       Console.WriteLine("OMNITREE (LINKED)-------------------");
       Omnitree<Tuple<double, double, double>, double> omnitree_linked =
@@ -471,7 +540,9 @@ The framework is a general framework to help with any form of programming. Curre
       for (int i = -iterations; i < iterations; i++)
         omnitree_linked.Add(new Tuple<double, double, double>(i, i, i));
       timer.Stop();
-      Console.WriteLine("ADD TIME: " + timer.ElapsedTicks);
+			Console.WriteLine("ADD TIME:");
+			Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       int count2 = 0;
@@ -481,6 +552,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (FULL):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count2 = 0;
@@ -492,6 +564,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (250000):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count2 = 0;
@@ -503,6 +576,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (250000):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count2 = 0;
@@ -514,6 +588,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (2500):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count2 = 0;
@@ -525,13 +600,12 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (25):");
       Console.WriteLine("  Items Found: " + count2);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
     }
 
-    public static void Test_LIST()
+		public static void Test_LIST(int iterations)
     {
       Stopwatch timer = new Stopwatch();
-
-      int iterations = 10000000;
 
       Console.WriteLine("LIST----------------------------");
       System.Collections.Generic.List<Tuple<double, double, double>> list =
@@ -541,7 +615,9 @@ The framework is a general framework to help with any form of programming. Curre
       for (int i = -iterations; i < iterations; i++)
         list.Add(new Tuple<double, double, double>(i, i, i));
       timer.Stop();
-      Console.WriteLine("ADD TIME: " + timer.ElapsedTicks);
+      Console.WriteLine("ADD TIME:");
+			Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       int count = 0;
@@ -553,6 +629,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (FULL):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count = 0;
@@ -568,6 +645,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (25000000):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count = 0;
@@ -583,6 +661,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (250000):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count = 0;
@@ -598,6 +677,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (2500):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count = 0;
@@ -613,6 +693,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (25):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
 
       Console.WriteLine("LIST (IEnumerable)------------------------");
@@ -628,6 +709,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (FULL):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count = 0;
@@ -643,6 +725,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (25000000):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count = 0;
@@ -658,6 +741,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (250000):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count = 0;
@@ -673,6 +757,7 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (2500):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
 
       timer.Restart();
       count = 0;
@@ -688,6 +773,36 @@ The framework is a general framework to help with any form of programming. Curre
       Console.WriteLine("FOREACH (25):");
       Console.WriteLine("  Items Found: " + count);
       Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+			timer.Restart();
+			count = 0;
+
+			System.Collections.Generic.List<Tuple<double, double, double>> list2 =
+				new System.Collections.Generic.List<Tuple<double, double, double>>();
+
+			for (int i = 0; i < list.Count; i++)
+				if (
+						!(list[i].Item1 >= 0 && list[i].Item1 <= 2500 &&
+						list[i].Item2 >= 0 && list[i].Item2 <= 2500 &&
+						list[i].Item3 >= 0 && list[i].Item3 <= 2500))
+					list2.Add(list[i]);
+			timer.Stop();
+			Console.WriteLine("REMOVE (2500):");
+			Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
+
+			timer.Restart();
+			count = 0;
+			foreach (Tuple<double, double, double> i in list)
+			{
+				count++;
+			}
+			timer.Stop();
+			Console.WriteLine("FOREACH (FULL):");
+			Console.WriteLine("  Items Found: " + count);
+			Console.WriteLine("  Time Elapsed (ticks): " + timer.ElapsedTicks);
+			Console.WriteLine("  Time Elapsed (sec): " + timer.ElapsedMilliseconds / 1000.0d);
     }
   }
 }
