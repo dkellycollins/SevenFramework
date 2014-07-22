@@ -7,6 +7,566 @@ using System;
 
 namespace Seven.Mathematics
 {
+	///// <summary>Represents a vector with an arbitrary number of components.</summary>
+	//public class Vector<T>
+	//{
+	//	private static Arithmetic.Negate<T> _negate = Arithmetic.Get<T>().Negate;
+	//	private static Arithmetic.Add<T> _add = Arithmetic.Get<T>().Add;
+	//	private static Arithmetic.Subtract<T> _subtract = Arithmetic.Get<T>().Subtract;
+	//	private static Arithmetic.Multiply<T> _multiply = Arithmetic.Get<T>().Multiply;
+	//	private static Arithmetic.Divide<T> _divide = Arithmetic.Get<T>().Divide;
+	//	private static Arithmetic.Power<T> _power = Arithmetic.Get<T>().Power;
+
+	//	private T[] _vector;
+
+	//	/// <summary>Sane as accessing index 0.</summary>
+	//	public T X
+	//	{
+	//		get { return _vector[0]; }
+	//		set { _vector[0] = value; }
+	//	}
+
+	//	/// <summary>Same as accessing index 1.</summary>
+	//	public T Y
+	//	{
+	//		get { try { return _vector[1]; } catch { throw new Exception("vector does not contains a y component."); } }
+	//		set { try { _vector[1] = value; } catch { throw new Exception("vector does not contains a y component."); } }
+	//	}
+
+	//	/// <summary>Same as accessing index 2.</summary>
+	//	public T Z
+	//	{
+	//		get { try { return _vector[2]; } catch { throw new Exception("vector does not contains a z component."); } }
+	//		set { try { _vector[2] = value; } catch { throw new Exception("vector does not contains a z component."); } }
+	//	}
+
+	//	/// <summary>Same as accessing index 3.</summary>
+	//	public T W
+	//	{
+	//		get { try { return _vector[3]; } catch { throw new Exception("vector does not contains a w component."); } }
+	//		set { try { _vector[3] = value; } catch { throw new Exception("vector does not contains a w component."); } }
+	//	}
+
+	//	/// <summary>Gives you direct access to the values in this vector.</summary>
+	//	public T[] Ts { get { return _vector; } }
+
+	//	/// <summary>The number of components in this vector.</summary>
+	//	public int Dimensions { get { return _vector.Length; } }
+
+	//	/// <summary>Allows indexed access to this vector.</summary>
+	//	/// <param name="index">The index to access.</param>
+	//	/// <returns>The value of the given index.</returns>
+	//	public T this[int index]
+	//	{
+	//		get { try { return _vector[index]; } catch { throw new Exception("index out of bounds."); } }
+	//		set { try { _vector[index] = value; } catch { throw new Exception("index out of bounds."); } }
+	//	}
+
+	//	/// <summary>Creates a new vector with the given number of components.</summary>
+	//	/// <param name="dimensions">The number of dimensions this vector will have.</param>
+	//	public Vector(int dimensions) { try { _vector = new T[dimensions]; } catch { throw new Exception("invalid dimensions on vector contruction."); } }
+
+	//	/// <summary>Creates a vector out of the given values.</summary>
+	//	/// <param name="vector">The values to initialize the vector to.</param>
+	//	public Vector(params T[] vector)
+	//	{
+	//		T[] Ts = new T[vector.Length];
+	//		Array.Copy(vector, Ts, vector.Length);
+	//		_vector = Ts;
+	//	}
+
+	//	/// <summary>Creates a vector with the given number of components with the values initialized to zeroes.</summary>
+	//	/// <param name="dimensions">The number of components in the vector.</param>
+	//	/// <returns>The newly constructed vector.</returns>
+	//	public static Vector<T> FactoryZero(int dimensions) { return new Vector<T>(dimensions); }
+
+	//	/// <summary>Creates a vector with the given number of components with the values initialized to ones.</summary>
+	//	/// <param name="dimensions">The number of components in the vector.</param>
+	//	/// <returns>The newly constructed vector.</returns>
+	//	public static Vector<T> FactoryOne(int dimensions) { throw new Error("I made a dumb mistake; bug me till i fix it..."); }
+
+	//	/// <summary>Returns a 3-component vector representing the x-axis.</summary>
+	//	public static readonly Vector<T> FactoryXAxis = new Vector<T>(1, 0, 0);
+	//	/// <summary>Returns a 3-component vector representing the y-axis.</summary>
+	//	public static readonly Vector<T> FactoryYAxis = new Vector<T>(0, 1, 0);
+	//	/// <summary>Returns a 3-component vector representing the z-axis.</summary>
+	//	public static readonly Vector<T> FactoryZAxis = new Vector<T>(0, 0, 1);
+	//	/// <summary>Returns a 3-component vector representing the negative x-axis.</summary>
+	//	public static readonly Vector<T> FactoryNegXAxis = new Vector<T>(1, 0, 0);
+	//	/// <summary>Returns a 3-component vector representing the negative y-axis.</summary>
+	//	public static readonly Vector<T> FactoryNegYAxis = new Vector<T>(0, 1, 0);
+	//	/// <summary>Returns a 3-component vector representing the negative z-axis.</summary>
+	//	public static readonly Vector<T> FactoryNegZAxis = new Vector<T>(0, 0, 1);
+
+	//	/// <summary>Adds two vectors together.</summary>
+	//	/// <param name="left">The first vector of the addition.</param>
+	//	/// <param name="right">The second vector of the addition.</param>
+	//	/// <returns>The result of the addition.</returns>
+	//	public static Vector<T> operator +(Vector<T> left, Vector<T> right) { return Vector<T>.Add(left, right); }
+	//	/// <summary>Subtracts two vectors.</summary>
+	//	/// <param name="left">The left operand of the subtraction.</param>
+	//	/// <param name="right">The right operand of the subtraction.</param>
+	//	/// <returns>The result of the subtraction.</returns>
+	//	public static Vector<T> operator -(Vector<T> left, Vector<T> right) { return Vector<T>.Subtract(left, right); }
+	//	/// <summary>Negates a vector.</summary>
+	//	/// <param name="vector">The vector to negate.</param>
+	//	/// <returns>The result of the negation.</returns>
+	//	public static Vector<T> operator -(Vector<T> vector) { return Vector<T>.Negate(vector); }
+	//	/// <summary>Multiplies all the values in a vector by a scalar.</summary>
+	//	/// <param name="left">The vector to have all its values multiplied.</param>
+	//	/// <param name="right">The scalar to multiply all the vector values by.</param>
+	//	/// <returns>The result of the multiplication.</returns>
+	//	public static Vector<T> operator *(Vector<T> left, T right) { return Vector<T>.Multiply(left, right); }
+	//	/// <summary>Multiplies all the values in a vector by a scalar.</summary>
+	//	/// <param name="left">The scalar to multiply all the vector values by.</param>
+	//	/// <param name="right">The vector to have all its values multiplied.</param>
+	//	/// <returns>The result of the multiplication.</returns>
+	//	public static Vector<T> operator *(T left, Vector<T> right) { return Vector<T>.Multiply(right, left); }
+	//	/// <summary>Divides all the values in the vector by a scalar.</summary>
+	//	/// <param name="left">The vector to have its values divided.</param>
+	//	/// <param name="right">The scalar to divide all the vectors values by.</param>
+	//	/// <returns>The vector after the divisions.</returns>
+	//	public static Vector<T> operator /(Vector<T> left, T right) { return Vector<T>.Divide(left, right); }
+	//	/// <summary>Does an equality check by value. (warning for T errors)</summary>
+	//	/// <param name="left">The first vector of the equality check.</param>
+	//	/// <param name="right">The second vector of the equality check.</param>
+	//	/// <returns>true if the values are equal, false if not.</returns>
+	//	public static bool operator ==(Vector<T> left, Vector<T> right) { return Vector<T>.EqualsValue(left, right); }
+	//	/// <summary>Does an anti-equality check by value. (warning for T errors)</summary>
+	//	/// <param name="left">The first vector of the anit-equality check.</param>
+	//	/// <param name="right">The second vector of the anti-equality check.</param>
+	//	/// <returns>true if the values are not equal, false if they are.</returns>
+	//	public static bool operator !=(Vector<T> left, Vector<T> right) { return !Vector<T>.EqualsValue(left, right); }
+	//	/// <summary>Automatically converts a vector into a matrix.</summary>
+	//	/// <param name="vector">The vector of the conversion.</param>
+	//	/// <returns>The result of the conversion.</returns>
+	//	//public static implicit operator Matrix_Flattened(Vector vector) { return Matrix_Flattened.UnsafeFactoryFromVector(vector); }
+
+	//	/// <summary>Adds two vectors together.</summary>
+	//	/// <param name="right">The vector to add to this one.</param>
+	//	/// <returns>The result of the vector.</returns>
+	//	public Vector<T> Add(Vector<T> right) { return Vector<T>.Add(this, right); }
+	//	/// <summary>Negates this vector.</summary>
+	//	/// <returns>The result of the negation.</returns>
+	//	public Vector<T> Negate() { return Vector<T>.Negate(this); }
+	//	/// <summary>Subtracts another vector from this one.</summary>
+	//	/// <param name="right">The vector to subtract from this one.</param>
+	//	/// <returns>The result of the subtraction.</returns>
+	//	public Vector<T> Subtract(Vector<T> right) { return Vector<T>.Subtract(this, right); }
+	//	/// <summary>Multiplies the values in this vector by a scalar.</summary>
+	//	/// <param name="right">The scalar to multiply these values by.</param>
+	//	/// <returns>The result of the multiplications</returns>
+	//	public Vector<T> Multiply(T right) { return Vector<T>.Multiply(this, right); }
+	//	/// <summary>Divides all the values in this vector by a scalar.</summary>
+	//	/// <param name="right">The scalar to divide the values of the vector by.</param>
+	//	/// <returns>The resulting vector after teh divisions.</returns>
+	//	public Vector<T> Divide(T right) { return Vector<T>.Divide(this, right); }
+	//	/// <summary>Computes the dot product between this vector and another.</summary>
+	//	/// <param name="right">The second vector of the dot product operation.</param>
+	//	/// <returns>The result of the dot product.</returns>
+	//	public T DotProduct(Vector<T> right) { return Vector<T>.DotProduct(this, right); }
+	//	/// <summary>Computes the cross product between this vector and another.</summary>
+	//	/// <param name="right">The second vector of the dot product operation.</param>
+	//	/// <returns>The result of the dot product operation.</returns>
+	//	public Vector<T> CrossProduct(Vector<T> right) { return Vector<T>.CrossProduct(this, right); }
+	//	/// <summary>Normalizes this vector.</summary>
+	//	/// <returns>The result of the normalization.</returns>
+	//	public Vector<T> Normalize() { return Vector<T>.Normalize(this); }
+	//	/// <summary>Computes the length of this vector.</summary>
+	//	/// <returns>The length of this vector.</returns>
+	//	public T Length() { return Vector<T>.Length(this); }
+	//	/// <summary>Computes the length of this vector, but doesn't square root it for 
+	//	/// possible optimization purposes.</summary>
+	//	/// <returns>The squared length of the vector.</returns>
+	//	public T LengthSquared() { return Vector<T>.LengthSquared(this); }
+	//	/// <summary>Check for equality by value.</summary>
+	//	/// <param name="right">The other vector of the equality check.</param>
+	//	/// <returns>true if the values were equal, false if not.</returns>
+	//	public bool EqualsValue(Vector<T> right) { return Vector<T>.EqualsValue(this, right); }
+	//	/// <summary>Checks for equality by value with some leniency.</summary>
+	//	/// <param name="right">The other vector of the equality check.</param>
+	//	/// <param name="leniency">The ammount the values can differ but still be considered equal.</param>
+	//	/// <returns>true if the values were cinsidered equal, false if not.</returns>
+	//	public bool EqualsValue(Vector<T> right, T leniency) { return Vector<T>.EqualsValue(this, right, leniency); }
+	//	/// <summary>Checks for equality by reference.</summary>
+	//	/// <param name="right">The other vector of the equality check.</param>
+	//	/// <returns>true if the references are equal, false if not.</returns>
+	//	public bool EqualsReference(Vector<T> right) { return Vector<T>.EqualsReference(this, right); }
+	//	/// <summary>Rotates this vector by quaternon values.</summary>
+	//	/// <param name="angle">The amount of rotation about the axis.</param>
+	//	/// <param name="x">The x component deterniming the axis of rotation.</param>
+	//	/// <param name="y">The y component determining the axis of rotation.</param>
+	//	/// <param name="z">The z component determining the axis of rotation.</param>
+	//	/// <returns>The resulting vector after the rotation.</returns>
+	//	public Vector<T> RotateBy(T angle, T x, T y, T z) { return Vector<T>.RotateBy(this, angle, x, y, z); }
+	//	/// <summary>Computes the linear interpolation between two vectors.</summary>
+	//	/// <param name="right">The ending vector of the interpolation.</param>
+	//	/// <param name="blend">The ratio 0.0 to 1.0 of the interpolation between the start and end.</param>
+	//	/// <returns>The result of the interpolation.</returns>
+	//	public Vector<T> Lerp(Vector<T> right, T blend) { return Vector<T>.Lerp(this, right, blend); }
+	//	/// <summary>Sphereically interpolates between two vectors.</summary>
+	//	/// <param name="right">The ending vector of the interpolation.</param>
+	//	/// <param name="blend">The ratio 0.0 to 1.0 defining the interpolation distance between the two vectors.</param>
+	//	/// <returns>The result of the slerp operation.</returns>
+	//	public Vector<T> Slerp(Vector<T> right, T blend) { return Vector<T>.Slerp(this, right, blend); }
+	//	/// <summary>Rotates a vector by a quaternion.</summary>
+	//	/// <param name="rotation">The quaternion to rotate the 3-component vector by.</param>
+	//	/// <returns>The result of the rotation.</returns>
+	//	public Vector<T> RotateBy(Quaternion rotation) { return Vector<T>.RotateBy(this, rotation); }
+
+	//	/// <summary>Adds two vectors together.</summary>
+	//	/// <param name="leftTs">The first vector of the addition.</param>
+	//	/// <param name="rightTs">The second vector of the addiiton.</param>
+	//	/// <returns>The result of the addiion.</returns>
+	//	public static Vector<T> Add(Vector<T> left, Vector<T> right)
+	//	{
+	//		T[] leftTs = left.Ts;
+	//		T[] rightTs = right.Ts;
+	//		if (leftTs.Length != rightTs.Length)
+	//			throw new Exception("invalid dimensions on vector addition.");
+	//		Vector result = new Vector(leftTs.Length);
+	//		T[] resultTs = result.Ts;
+	//		for (int i = 0; i < leftTs.Length; i++)
+	//			resultTs[i] = leftTs[i] + rightTs[i];
+	//		return result;
+	//	}
+
+	//	/// <summary>Negates all the values in a vector.</summary>
+	//	/// <param name="vector">The vector to have its values negated.</param>
+	//	/// <returns>The result of the negations.</returns>
+	//	public static Vector<T> Negate(Vector<T> vector)
+	//	{
+	//		T[] Ts = vector.Ts;
+	//		Vector<T> result = new Vector<T>(Ts.Length);
+	//		T[] resultTs = result.Ts;
+	//		for (int i = 0; i < Ts.Length; i++)
+	//			resultTs[i] = -Ts[i];
+	//		return result;
+	//	}
+
+	//	/// <summary>Subtracts two vectors.</summary>
+	//	/// <param name="left">The left vector of the subtraction.</param>
+	//	/// <param name="right">The right vector of the subtraction.</param>
+	//	/// <returns>The result of the vector subtracton.</returns>
+	//	public static Vector<T> Subtract(Vector<T> left, Vector<T> right)
+	//	{
+	//		T[] leftTs = left.Ts;
+	//		T[] rightTs = right.Ts;
+	//		Vector<T> result = new Vector<T>(leftTs.Length);
+	//		T[] resultTs = result.Ts;
+	//		if (leftTs.Length != rightTs.Length)
+	//			throw new Exception("invalid dimensions on vector subtraction.");
+	//		for (int i = 0; i < leftTs.Length; i++)
+	//			resultTs[i] = leftTs[i] - rightTs[i];
+	//		return result;
+	//	}
+
+	//	/// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+	//	/// <param name="left">The vector to have the components multiplied by.</param>
+	//	/// <param name="right">The scalars to multiply the vector components by.</param>
+	//	/// <returns>The result of the multiplications.</returns>
+	//	public static Vector<T> Multiply(Vector<T> left, T right)
+	//	{
+	//		T[] leftTs = left.Ts;
+	//		Vector<T> result = new Vector<T>(leftTs.Length);
+	//		T[] resultTs = result.Ts;
+	//		for (int i = 0; i < leftTs.Length; i++)
+	//			resultTs[i] = leftTs[i] * right;
+	//		return result;
+	//	}
+
+	//	/// <summary>Divides all the components of a vector by a scalar.</summary>
+	//	/// <param name="left">The vector to have the components divided by.</param>
+	//	/// <param name="right">The scalar to divide the vector components by.</param>
+	//	/// <returns>The resulting vector after teh divisions.</returns>
+	//	public static Vector<T> Divide(Vector<T> left, T right)
+	//	{
+	//		T[] Ts = left.Ts;
+	//		Vector<T> result = new Vector<T>(Ts.Length);
+	//		T[] resultTs = result.Ts;
+	//		int arrayLength = Ts.Length;
+	//		for (int i = 0; i < arrayLength; i++)
+	//			resultTs[i] = Ts[i] / right;
+	//		return result;
+	//	}
+
+	//	/// <summary>Computes the dot product between two vectors.</summary>
+	//	/// <param name="left">The first vector of the dot product operation.</param>
+	//	/// <param name="right">The second vector of the dot product operation.</param>
+	//	/// <returns>The result of the dot product operation.</returns>
+	//	public static T DotProduct(Vector<T> left, Vector<T> right)
+	//	{
+	//		T[] leftTs = left.Ts;
+	//		T[] rightTs = right.Ts;
+	//		if (leftTs.Length != rightTs.Length)
+	//			throw new Exception("invalid dimensions on vector dot product.");
+	//		T result = 0;
+	//		for (int i = 0; i < leftTs.Length; i++)
+	//			result += (leftTs[i] * rightTs[i]);
+	//		return result;
+	//	}
+
+	//	/// <summary>Computes teh cross product of two vectors.</summary>
+	//	/// <param name="left">The first vector of the cross product operation.</param>
+	//	/// <param name="right">The second vector of the cross product operation.</param>
+	//	/// <returns>The result of the cross product operation.</returns>
+	//	public static Vector<T> CrossProduct(Vector<T> left, Vector<T> right)
+	//	{
+	//		if (left.Dimensions != right.Dimensions)
+	//			throw new Exception("invalid cross product !(left.Dimensions == right.Dimensions)");
+	//		if (left.Dimensions == 3 || left.Dimensions == 4)
+	//		{
+	//			return new Vector<T>(
+	//				left[1] * right[2] - left[2] * right[1],
+	//				left[2] * right[0] - left[0] * right[2],
+	//				left[0] * right[1] - left[1] * right[0]);
+	//		}
+	//		throw new Exception("my cross product function is only defined for 3-component vectors.");
+	//	}
+
+	//	/// <summary>Normalizes a vector.</summary>
+	//	/// <param name="vector">The vector to normalize.</param>
+	//	/// <returns>The result of the normalization.</returns>
+	//	public static Vector<T> Normalize(Vector<T> vector)
+	//	{
+	//		T length = Vector<T>.Length(vector);
+	//		if (length != 0.0)
+	//		{
+	//			T[] Ts = vector.Ts;
+	//			Vector<T> result = new Vector<T>(Ts.Length);
+	//			T[] resultTs = result.Ts;
+	//			int arrayLength = Ts.Length;
+	//			for (int i = 0; i < arrayLength; i++)
+	//				resultTs[i] = Ts[i] / length;
+	//			return result;
+	//		}
+	//		else
+	//			return new Vector<T>(vector.Dimensions);
+	//	}
+
+	//	/// <summary>Computes the length of a vector.</summary>
+	//	/// <param name="vector">The vector to calculate the length of.</param>
+	//	/// <returns>The computed length of the vector.</returns>
+	//	public static T Length(Vector<T> vector)
+	//	{
+	//		T[] Ts = vector.Ts;
+	//		if (Ts.Length == 3)
+	//		{
+	//			return Calc.SquareRoot(
+	//				Ts[0] * Ts[0] +
+	//				Ts[1] * Ts[1] +
+	//				Ts[2] * Ts[2]);
+	//		}
+	//		T result = 0;
+	//		int arrayLength = Ts.Length;
+	//		for (int i = 0; i < arrayLength; i++)
+	//			result += (Ts[i] * Ts[i]);
+	//		return Calc.SquareRoot(result);
+	//	}
+
+	//	/// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+	//	/// <param name="vector">The vector to compute the length squared of.</param>
+	//	/// <returns>The computed length squared of the vector.</returns>
+	//	public static T LengthSquared(Vector<T> vector)
+	//	{
+	//		T[] Ts = vector.Ts;
+	//		if (Ts.Length == 3)
+	//		{
+	//			return
+	//				Ts[0] * Ts[0] +
+	//				Ts[1] * Ts[1] +
+	//				Ts[2] * Ts[2];
+	//		}
+	//		T result = 0;
+	//		int arrayLength = Ts.Length;
+	//		for (int i = 0; i < arrayLength; i++)
+	//			result += (Ts[i] * Ts[i]);
+	//		return result;
+	//	}
+
+	//	/// <summary>Computes the angle between two vectors.</summary>
+	//	/// <param name="first">The first vector to determine the angle between.</param>
+	//	/// <param name="second">The second vector to determine the angle between.</param>
+	//	/// <returns>The angle between the two vectors in radians.</returns>
+	//	public static T Angle(Vector<T> first, Vector<T> second)
+	//	{
+	//		return Calc.ArcCos(Vector<T>.DotProduct(first, second) / (Vector<T>.Length(first) * Vector<T>.Length(second)));
+	//	}
+
+	//	/// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+	//	/// <param name="vector">The vector to rotate.</param>
+	//	/// <param name="angle">The angle of the rotation.</param>
+	//	/// <param name="x">The x component of the axis vector to rotate about.</param>
+	//	/// <param name="y">The y component of the axis vector to rotate about.</param>
+	//	/// <param name="z">The z component of the axis vector to rotate about.</param>
+	//	/// <returns>The result of the rotation.</returns>
+	//	public static Vector<T> RotateBy(Vector<T> vector, T angle, T x, T y, T z)
+	//	{
+	//		if (vector.Dimensions == 3)
+	//		{
+	//			T[] Ts = vector.Ts;
+	//			// Note: the angle is in radians
+	//			T sinHalfAngle = Calc.Sin(angle / 2);
+	//			T cosHalfAngle = Calc.Cos(angle / 2);
+	//			x *= sinHalfAngle;
+	//			y *= sinHalfAngle;
+	//			z *= sinHalfAngle;
+	//			T x2 = cosHalfAngle * Ts[0] + y * Ts[2] - z * Ts[1];
+	//			T y2 = cosHalfAngle * Ts[1] + z * Ts[0] - x * Ts[2];
+	//			T z2 = cosHalfAngle * Ts[2] + x * Ts[1] - y * Ts[0];
+	//			T w2 = -x * Ts[0] - y * Ts[1] - z * Ts[2];
+	//			return new Vector<T>(
+	//				x * w2 + cosHalfAngle * x2 + y * z2 - z * y2,
+	//				y * w2 + cosHalfAngle * y2 + z * x2 - x * z2,
+	//				z * w2 + cosHalfAngle * z2 + x * y2 - y * x2);
+	//		}
+	//		throw new Exception("my RotateBy() function is only defined for 3-component vectors.");
+	//	}
+
+	//	/// <summary>Rotates a vector by a quaternion.</summary>
+	//	/// <param name="vector">The vector to rotate.</param>
+	//	/// <param name="rotation">The quaternion to rotate the 3-component vector by.</param>
+	//	/// <returns>The result of the rotation.</returns>
+	//	public static Vector<T> RotateBy(Vector<T> vector, Quaternion rotation)
+	//	{
+	//		if (vector.Dimensions == 3)
+	//			return Quaternion.Rotate(rotation, vector);
+	//		else
+	//			throw new Exception("my quaternion rotations are only defined for 3-component vectors.");
+	//	}
+
+	//	/// <summary>Computes the linear interpolation between two vectors.</summary>
+	//	/// <param name="left">The starting vector of the interpolation.</param>
+	//	/// <param name="right">The ending vector of the interpolation.</param>
+	//	/// <param name="blend">The ratio 0.0 to 1.0 of the interpolation between the start and end.</param>
+	//	/// <returns>The result of the interpolation.</returns>
+	//	public static Vector<T> Lerp(Vector<T> left, Vector<T> right, T blend)
+	//	{
+	//		T[] leftTs = left.Ts;
+	//		T[] rightTs = right.Ts;
+	//		if (blend < 0 || blend > 1.0f)
+	//			throw new Exception("invalid lerp blend value: (blend < 0.0f || blend > 1.0f).");
+	//		if (leftTs.Length != rightTs.Length)
+	//			throw new Exception("invalid lerp matrix length: (left.Dimensions != right.Dimensions)");
+	//		Vector<T> result = new Vector<T>(leftTs.Length);
+	//		T[] resultTs = result.Ts;
+	//		for (int i = 0; i < leftTs.Length; i++)
+	//			resultTs[i] = leftTs[i] + blend * (rightTs[i] - leftTs[i]);
+	//		return result;
+	//	}
+
+	//	/// <summary>Sphereically interpolates between two vectors.</summary>
+	//	/// <param name="left">The starting vector of the interpolation.</param>
+	//	/// <param name="right">The ending vector of the interpolation.</param>
+	//	/// <param name="blend">The ratio 0.0 to 1.0 defining the interpolation distance between the two vectors.</param>
+	//	/// <returns>The result of the slerp operation.</returns>
+	//	public static Vector<T> Slerp(Vector<T> left, Vector<T> right, T blend)
+	//	{
+	//		if (blend < 0 || blend > 1.0f)
+	//			throw new Exception("invalid slerp blend value: (blend < 0.0f || blend > 1.0f).");
+	//		T dot = Calc.Clamp(Vector<T>.DotProduct(left, right), -1.0f, 1.0f);
+	//		T theta = Calc.ArcCos(dot) * blend;
+	//		return left * Calc.Cos(theta) + (right - left * dot).Normalize() * Calc.Sin(theta);
+	//	}
+
+	//	/// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+	//	/// <param name="a">The first vector of the interpolation.</param>
+	//	/// <param name="b">The second vector of the interpolation.</param>
+	//	/// <param name="c">The thrid vector of the interpolation.</param>
+	//	/// <param name="u">The "U" value of the barycentric interpolation equation.</param>
+	//	/// <param name="v">The "V" value of the barycentric interpolation equation.</param>
+	//	/// <returns>The resulting vector of the barycentric interpolation.</returns>
+	//	public static Vector<T> Blerp(Vector<T> a, Vector<T> b, Vector<T> c, T u, T v)
+	//	{
+	//		return Vector<T>.Add(Vector<T>.Add(Vector<T>.Multiply(Vector<T>.Subtract(b, a), u), Vector<T>.Multiply(Vector<T>.Subtract(c, a), v)), a);
+	//	}
+
+	//	/// <summary>Does a value equality check.</summary>
+	//	/// <param name="left">The first vector to check for equality.</param>
+	//	/// <param name="right">The second vector  to check for equality.</param>
+	//	/// <returns>True if values are equal, false if not.</returns>
+	//	public static bool EqualsValue(Vector<T> left, Vector<T> right)
+	//	{
+	//		T[] leftTs = left.Ts;
+	//		T[] rightTs = right.Ts;
+	//		if (leftTs.GetLength(0) != rightTs.GetLength(0))
+	//			return false;
+	//		for (int i = 0; i < leftTs.GetLength(0); i++)
+	//			if (leftTs[i] != rightTs[i])
+	//				return false;
+	//		return true;
+	//	}
+
+	//	/// <summary>Does a value equality check with leniency.</summary>
+	//	/// <param name="left">The first vector to check for equality.</param>
+	//	/// <param name="right">The second vector to check for equality.</param>
+	//	/// <param name="leniency">How much the values can vary but still be considered equal.</param>
+	//	/// <returns>True if values are equal, false if not.</returns>
+	//	public static bool EqualsValue(Vector<T> left, Vector<T> right, T leniency)
+	//	{
+	//		T[] leftTs = left.Ts;
+	//		T[] rightTs = right.Ts;
+	//		if (leftTs.GetLength(0) != rightTs.GetLength(0))
+	//			return false;
+	//		for (int i = 0; i < leftTs.GetLength(0); i++)
+	//			if (Calc.Abs(leftTs[i] - rightTs[i]) > leniency)
+	//				return false;
+	//		return true;
+	//	}
+
+	//	/// <summary>Checks if two matrices are equal by reverences.</summary>
+	//	/// <param name="left">The left vector of the equality check.</param>
+	//	/// <param name="right">The right vector of the equality check.</param>
+	//	/// <returns>True if the references are equal, false if not.</returns>
+	//	public static bool EqualsReference(Vector<T> left, Vector<T> right)
+	//	{
+	//		return object.ReferenceEquals(left, right) ||
+	//			// also, if they point to the same T array
+	//			object.ReferenceEquals(left.Ts, right.Ts);
+	//	}
+
+	//	///// <summary>Converts the vector into a matrix.</summary>
+	//	///// <param name="vector">The vecotr to convert.</param>
+	//	///// <returns>The matrix of the conversion.</returns>
+	//	//public static Matrix_Flattened ToMatrix(Vector<T> vector)
+	//	//{
+	//	//	return new Matrix_Flattened(vector.Dimensions, 1, vector.Ts);
+	//	//}
+
+	//	/// <summary>Prints out a string representation of this matrix.</summary>
+	//	/// <returns>A string representing this matrix.</returns>
+	//	public override string ToString()
+	//	{
+	//		// Change this method to what ever you want.
+	//		return base.ToString();
+	//	}
+
+	//	/// <summary>Computes a hash code from the values of this matrix.</summary>
+	//	/// <returns>A hash code for the matrix.</returns>
+	//	public override int GetHashCode()
+	//	{
+	//		// return base.GetHashCode();
+	//		int hash = _vector[0].GetHashCode();
+	//		for (int i = 1; i < _vector.Length; i++)
+	//			hash ^= _vector[i].GetHashCode();
+	//		return hash;
+	//	}
+
+	//	/// <summary>Does an equality check by reference.</summary>
+	//	/// <param name="right">The object to compare to.</param>
+	//	/// <returns>True if the references are equal, false if not.</returns>
+	//	public override bool Equals(object right)
+	//	{
+	//		if (!(right is Vector<T>)) return false;
+	//		return Vector<T>.EqualsReference(this, (Vector<T>)right);
+	//	}
+
+	//	private class Exception : Error
+	//	{
+	//		public Exception(string message) : base(message) { }
+	//	}
+	//}
+
   /// <summary>Represents a vector with an arbitrary number of components.</summary>
   public class Vector
   {

@@ -73,18 +73,6 @@ namespace Seven.Structures
     /// <remarks>Runtime: O(1).</remarks>
     public bool IsEmpty { get { return _count == 0; } }
 
-    ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    //public static explicit operator System.Collections.Generic.L<Type>(Type[] array)
-    //{
-    //  return new Array_Array<Type>(array);
-    //}
-
-    ///// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
-    //public static explicit operator Type[](Array_Array<Type> array)
-    //{
-    //  return array._array;
-    //}
-
     /// <summary>FOR COMPATIBILITY ONLY. AVOID IF POSSIBLE.</summary>
     System.Collections.IEnumerator
       System.Collections.IEnumerable.GetEnumerator()

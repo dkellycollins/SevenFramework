@@ -22,12 +22,27 @@ namespace Seven.Mathematics
     /// <summary>Subtracts two operands.</summary>
     T Subtract(T left, T right);
     /// <summary>Takes one operand to the power of the other.</summary>
-    T Power(T left, T right);
+    T Power(T _base, T power);
   }
 
   public static class Arithmetic
   {
-    public static Arithmetic<int> _int
+		public delegate T _Negate<T>(T value);
+		public delegate T _Add<T>(T left, T right);
+		public delegate T _Subtract<T>(T left, T right);
+		public delegate T _Multiply<T>(T left, T right);
+		public delegate T _Divide<T>(T left, T right);
+		public delegate T _Power<T>(T left, T right);
+
+		// COPY THESE DEFINITIONS INTO CLASSES NEEDING ARITHMETIC
+		//private static Arithmetic.Negate<T> _negate = Arithmetic.Get<T>().Negate;
+		//private static Arithmetic.Add<T> _add = Arithmetic.Get<T>().Add;
+		//private static Arithmetic.Subtract<T> _subtract = Arithmetic.Get<T>().Subtract;
+		//private static Arithmetic.Multiply<T> _multiply = Arithmetic.Get<T>().Multiply;
+		//private static Arithmetic.Divide<T> _divide = Arithmetic.Get<T>().Divide;
+		//private static Arithmetic.Power<T> _power = Arithmetic.Get<T>().Power;
+
+		public static Arithmetic<int> _int
     { get { return (Arithmetic<int>)Arithmetic_int.Get; } }
     public static Arithmetic<int> GetArithmetic(this int integer)
     { return (Arithmetic<int>)Arithmetic_int.Get; }
@@ -61,6 +76,26 @@ namespace Seven.Mathematics
     { get { return (Arithmetic<byte>)Arithmetic_byte.Get; } }
     public static Arithmetic<byte> GetArithmetic(this byte byteeger)
     { return (Arithmetic<byte>)Arithmetic_byte.Get; }
+
+		public static Seven.Structures.Map<object, System.Type> _arithmetics =
+			new Seven.Structures.Map_Linked<object, System.Type>(
+				(System.Type left, System.Type right) => { return left == right; },
+				(System.Type type) => { return type.GetHashCode(); })
+				{
+					{ typeof(int), Arithmetic_int.Get },
+					{ typeof(double), Arithmetic_double.Get },
+					{ typeof(float), Arithmetic_float.Get },
+					{ typeof(decimal), Arithmetic_decimal.Get },
+					{ typeof(long), Arithmetic_long.Get },
+					{ typeof(short), Arithmetic_short.Get },
+					{ typeof(byte), Arithmetic_byte.Get }
+				};
+
+		public static Arithmetic<T> Get<T>()
+		{
+			try { return (Arithmetic<T>)_arithmetics[typeof(T)]; }
+			catch { throw new Error("Algebra does not yet exist for " + typeof(T).ToString()); }
+		}
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Seven.Error
@@ -100,7 +135,7 @@ namespace Seven.Mathematics
     /// <summary>Subtracts two operands.</summary>
     public int Subtract(int left, int right) { return left - right; }
     /// <summary>Takes one operand to the power of the other.</summary>
-    public int Power(int left, int right) { return (int)System.Math.Pow(left, right); }
+		public int Power(int _base, int power) { return (int)System.Math.Pow(_base, power); }
 
     /// <summary>Error type for all arithmetic computations.</summary>
     public class Error : Arithmetic.Error
