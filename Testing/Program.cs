@@ -305,6 +305,10 @@ namespace Testing
       Console.WriteLine("______________________________________________________");
       Console.WriteLine();
 
+      Console.WriteLine("  Linear Algebra------------------");
+      Console.WriteLine();
+      Console.WriteLine();
+
       Random random = new Random();
 
       double[,] A = new double[4,4];
@@ -313,19 +317,21 @@ namespace Testing
         for (int j = 0; j < A.GetLength(1); j++)
           A[i, j] = random.NextDouble();
       // float casting... poor mans double formatter :)
-      Console.WriteLine("Matrix A (randomized 4x4): ");
+      Console.WriteLine("    Matrix A (randomized 4x4): ");
       for (int i = 0; i < A.GetLength(0); i++)
       {
+        Console.Write("      ");
         for (int j = 0; j < A.GetLength(1); j++)
           Console.Write(string.Format("{0:0.00}", A[i, j]) + " ");
         Console.WriteLine();
       }
       Console.WriteLine();
 
-      double[,] AplusA = A.Multiply(A);
-      Console.WriteLine("A + A (aka 2A): ");
+      double[,] AplusA = A.Add(A);
+      Console.WriteLine("    A + A (aka 2A): ");
       for (int i = 0; i < AplusA.GetLength(0); i++)
       {
+        Console.Write("      ");
         for (int j = 0; j < AplusA.GetLength(1); j++)
           Console.Write(string.Format("{0:0.00}", AplusA[i, j]) + " ");
         Console.WriteLine();
@@ -333,9 +339,10 @@ namespace Testing
       Console.WriteLine();
 
       double[,] AxA = A.Multiply(A);
-      Console.WriteLine("A * A (aka A ^ 2): ");
+      Console.WriteLine("    A * A (aka A ^ 2): ");
       for (int i = 0; i < AxA.GetLength(0); i++)
       {
+        Console.Write("      ");
         for (int j = 0; j < AxA.GetLength(1); j++)
           Console.Write(string.Format("{0:0.00}", AxA[i, j]) + " ");
         Console.WriteLine();
@@ -343,9 +350,10 @@ namespace Testing
       Console.WriteLine();
 
       double[,] rref_A = A.ReducedEchelon();
-      Console.WriteLine("rref(A): ");
+      Console.WriteLine("    rref(A): ");
       for (int i = 0; i < rref_A.GetLength(0); i++)
       {
+        Console.Write("      ");
         for (int j = 0; j < rref_A.GetLength(1); j++)
           Console.Write(string.Format("{0:0.00}", rref_A[i, j]) + " ");
         Console.WriteLine();
@@ -353,8 +361,8 @@ namespace Testing
       Console.WriteLine();
 
       double determinent = A.Determinent();
-      Console.WriteLine("determinent(A): ");
-      Console.Write(string.Format("{0:0.00}", determinent));
+      Console.WriteLine("    determinent(A): ");
+      Console.Write("      " + string.Format("{0:0.00}", determinent));
 
       Console.WriteLine();
       Console.WriteLine();
