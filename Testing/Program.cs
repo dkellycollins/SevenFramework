@@ -1,11 +1,10 @@
 ﻿using System;
 
 using Seven;
+using Seven.Mathematics;
 using Seven.Structures;
-using System.Diagnostics;
 
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Testing
 {
@@ -39,16 +38,15 @@ namespace Testing
     {
       int test = 10;
 
-      string message =
-      @"HELLO! WELCOME TO THE SEVEN FRAMEWORK! 
 
-The framework is a general framework to help with any form of programming. Currently, the most useful component of the framework is the library of data structures. This library includes the folloing: Links (aka Tuples), Arrays, Lists, Queues, Stacks, Heaps, HashTables, AvlTrees, RedBlackTrees, Octrees, SkipLists, Omni-Trees and more. The followoing data is testing for each structure:";
-
-      Console.Write(message);
+      Console.WriteLine("Welcome To SevenFramework!!!!");
+      Console.WriteLine();
+      Console.WriteLine(@"The 'Testing' project is simply a little testing environment for the code in the 'Seven' project (the entire SevenFramework is within the 'Seven' project at this time).");
       Console.WriteLine();
       Console.WriteLine();
 
-      Console.WriteLine("Functionality Testing==============================");
+      Console.WriteLine("Data Structures=======================================");
+      Console.WriteLine("______________________________________________________");
       Console.WriteLine();
       Console.WriteLine("Storing " + (test) + " items in each structure (except link)");
       Console.WriteLine();
@@ -291,27 +289,78 @@ The framework is a general framework to help with any form of programming. Curre
 
 			#endregion
 
-			//omnitree_array.Remove(
-			//	new double[] { 5, 5, 5 },
-			//	new double[] { 10, 10, 10 });
+      //Console.WriteLine("Speed Testing===========================================");
+      //Console.WriteLine();
+      //Console.WriteLine("RUN EXE OUTSIDE VISUAL STUDIO FOR FAIR COMPARISON.");
+      //Console.WriteLine("May take upt to a minute or two...");
+      //Console.WriteLine("Units: ticks");
+      //int iterations = 10000000;
+      //Console.WriteLine("Test Size: " + iterations * 2);
+      //Console.WriteLine();
+      //Test_LIST(iterations);
+      //Test_OMNITREE_ARRAY(iterations);
+      //Test_OMNITREE_LINKED(iterations);
 
-			//omnitree_array.Foreach(
-			//	(int current) => { Console.Write(current); });
-			//Console.WriteLine();
-			//Console.WriteLine();
+      Console.WriteLine("Mathematics===========================================");
+      Console.WriteLine("______________________________________________________");
+      Console.WriteLine();
 
-			Console.WriteLine("Speed Testing===========================================");
-			Console.WriteLine();
-			Console.WriteLine("RUN EXE OUTSIDE VISUAL STUDIO FOR FAIR COMPARISON.");
-			Console.WriteLine("May take upt to a minute or two...");
-			Console.WriteLine("Units: ticks");
-			int iterations = 10000000;
-			Console.WriteLine("Test Size: " + iterations * 2);
-			Console.WriteLine();
-			Test_LIST(iterations);
-			Test_OMNITREE_ARRAY(iterations);
-			Test_OMNITREE_LINKED(iterations);
+      Random random = new Random();
 
+      double[,] A = new double[4,4];
+
+      for (int i = 0; i < A.GetLength(0); i++)
+        for (int j = 0; j < A.GetLength(1); j++)
+          A[i, j] = random.NextDouble();
+      // float casting... poor mans double formatter :)
+      Console.WriteLine("Matrix A (randomized 4x4): ");
+      for (int i = 0; i < A.GetLength(0); i++)
+      {
+        for (int j = 0; j < A.GetLength(1); j++)
+          Console.Write(string.Format("{0:0.00}", A[i, j]) + " ");
+        Console.WriteLine();
+      }
+      Console.WriteLine();
+
+      double[,] AplusA = A.Multiply(A);
+      Console.WriteLine("A + A (aka 2A): ");
+      for (int i = 0; i < AplusA.GetLength(0); i++)
+      {
+        for (int j = 0; j < AplusA.GetLength(1); j++)
+          Console.Write(string.Format("{0:0.00}", AplusA[i, j]) + " ");
+        Console.WriteLine();
+      }
+      Console.WriteLine();
+
+      double[,] AxA = A.Multiply(A);
+      Console.WriteLine("A * A (aka A ^ 2): ");
+      for (int i = 0; i < AxA.GetLength(0); i++)
+      {
+        for (int j = 0; j < AxA.GetLength(1); j++)
+          Console.Write(string.Format("{0:0.00}", AxA[i, j]) + " ");
+        Console.WriteLine();
+      }
+      Console.WriteLine();
+
+      double[,] rref_A = A.ReducedEchelon();
+      Console.WriteLine("rref(A): ");
+      for (int i = 0; i < rref_A.GetLength(0); i++)
+      {
+        for (int j = 0; j < rref_A.GetLength(1); j++)
+          Console.Write(string.Format("{0:0.00}", rref_A[i, j]) + " ");
+        Console.WriteLine();
+      }
+      Console.WriteLine();
+
+      double determinent = A.Determinent();
+      Console.WriteLine("determinent(A): ");
+      Console.Write(string.Format("{0:0.00}", determinent));
+
+      Console.WriteLine();
+      Console.WriteLine();
+      Console.WriteLine("--------------------------------------------");
+      Console.WriteLine("============================================");
+      Console.WriteLine("____________________________________________");
       Console.WriteLine(" Testing Complete...");
       Console.ReadLine();
     }

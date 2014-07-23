@@ -9,14 +9,17 @@ namespace Seven.Mathematics
   /// <typeparam name="T">The type this calculus library can perform on.</typeparam>
   public interface Calculus<T>
   {
+    // still in development
   }
 
   /// <summary>Extendions for the Calculus interface.</summary>
   public static class Calculus
   {
+    // still in development
   }
 
   public class Calculus_int : Calculus<int>
   {
+    // still in development
   }
 }

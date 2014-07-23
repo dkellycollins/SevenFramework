@@ -9,14 +9,17 @@ namespace Seven.Mathematics
   /// <typeparam name="T">The type this combinatoric library can perform on.</typeparam>
   public interface Combinatorics<T>
   {
+    // still in development
   }
 
   /// <summary>Extendions for the Calculus interface.</summary>
   public static class Combinatorics
   {
+    // still in development
   }
 
   public class Combinatorics_int : Combinatorics<int>
   {
+    // still in development
   }
 }

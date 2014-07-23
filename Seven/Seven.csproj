@@ -43,7 +43,6 @@
     <Compile Include="Mathematics\Calculus.cs" />
     <Compile Include="Mathematics\Combinatorics.cs" />
     <Compile Include="Mathematics\Constants.cs" />
-    <Compile Include="Mathematics\Equation.cs" />
     <Compile Include="Mathematics\LinearAlgebra.cs" />
     <Compile Include="Mathematics\Logic.cs" />
     <Compile Include="Compare.cs" />
@@ -51,10 +50,8 @@
     <Compile Include="Mathematics\Calc.cs" />
     <Compile Include="Mathematics\Arithmetic.cs" />
     <Compile Include="Mathematics\Functions.cs" />
-    <Compile Include="Mathematics\Quaternion.cs" />
     <Compile Include="Mathematics\Trigonometry.cs" />
     <Compile Include="Mathematics\Tween.cs" />
-    <Compile Include="Mathematics\Vector.cs" />
     <Compile Include="Parallels\BackgroundThread.cs" />
     <Compile Include="Parallels\ReaderWriterLock.cs" />
     <Compile Include="Predicate.cs" />

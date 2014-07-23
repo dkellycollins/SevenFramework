@@ -13,19 +13,19 @@ namespace Seven.Mathematics
 		T Abs(T value);
     /// <summary>Determines the largest value of the operands.</summary>
     T Max(params T[] values);
-    ///// <summary>Determines and returns the larger operand.</summary>
+    /// <summary>Determines and returns the larger operand.</summary>
     T Max(T left, T right);
-    ///// <summary>Determines the smallest value of the operands.</summary>
+    /// <summary>Determines the smallest value of the operands.</summary>
     T Min(params T[] values);
-    ///// <summary>Determines and returns the smaller operand.</summary>
+    /// <summary>Determines and returns the smaller operand.</summary>
     T Min(T left, T right);
-    ///// <summary>Determines equality between two operands.</summary>
+    /// <summary>Determines equality between two operands.</summary>
     bool Equate(T left, T right);
-    ///// <summary>Determines equality between two operands with a leniency.</summary>
+    /// <summary>Determines equality between two operands with a leniency.</summary>
     bool Equate(T left, T right, T leniency);
-    ///// <summary>Determines equality between multiple operands.</summary>
+    /// <summary>Determines equality between multiple operands.</summary>
     bool Equate(params T[] values);
-    ///// <summary>Compares two operands.</summary>
+    /// <summary>Compares two operands.</summary>
     Comparison Compare(T left, T right);
 		/// <summary>Clamps a value by a minimum and maximum.</summary>
 		T Clamp(T value, T minimum, T maximum);
