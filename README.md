@@ -13,7 +13,7 @@
 
 ##### Wiki
 
->https://github.com/53V3N1X/SevenFramework/Wiki
+>https://github.com/53V3N1X/SevenFramework/wiki
 >
 >The purpose of the wiki is to not to provide detailed documentation
 >for the Seven project, but rather to introduce theory and general
