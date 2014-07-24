@@ -47,7 +47,6 @@
     <Compile Include="Mathematics\Logic.cs" />
     <Compile Include="Compare.cs" />
     <Compile Include="Error.cs" />
-    <Compile Include="Mathematics\Calc.cs" />
     <Compile Include="Mathematics\Arithmetic.cs" />
     <Compile Include="Mathematics\Functions.cs" />
     <Compile Include="Mathematics\Trigonometry.cs" />

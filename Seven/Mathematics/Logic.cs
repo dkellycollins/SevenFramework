@@ -40,40 +40,25 @@ namespace Seven.Mathematics
 		public delegate T _Min<T>(T left, T right);
 		public delegate T _Clamp<T>(T value, T minimum, T maximum);
 
-    public static Logic<int> _int
-    { get { return (Logic<int>)Logic_int.Get; } }
-    public static Logic<int> GetLogic(this int integer)
-    { return (Logic<int>)Logic_int.Get; }
+		public static Seven.Structures.Map<object, System.Type> _logics =
+			new Seven.Structures.Map_Linked<object, System.Type>(
+				(System.Type left, System.Type right) => { return left == right; },
+				(System.Type type) => { return type.GetHashCode(); })
+				{
+					{ typeof(int), Logic_int.Get },
+					{ typeof(double), Logic_double.Get },
+					{ typeof(float), Logic_float.Get },
+					{ typeof(decimal), Logic_decimal.Get },
+					{ typeof(long), Logic_long.Get },
+					{ typeof(short), Logic_short.Get },
+					{ typeof(byte), Logic_byte.Get }
+				};
 
-    public static Logic<double> _double
-    { get { return (Logic<double>)Logic_double.Get; } }
-    public static Logic<double> GetLogic(this double integer)
-    { return (Logic<double>)Logic_double.Get; }
-
-    public static Logic<float> _float
-    { get { return (Logic<float>)Logic_float.Get; } }
-    public static Logic<float> GetLogic(this float integer)
-    { return (Logic<float>)Logic_float.Get; }
-
-    public static Logic<short> _short
-    { get { return (Logic<short>)Logic_short.Get; } }
-    public static Logic<short> GetLogic(this short integer)
-    { return (Logic<short>)Logic_short.Get; }
-
-    public static Logic<long> _long
-    { get { return (Logic<long>)Logic_long.Get; } }
-    public static Logic<long> GetLogic(this long integer)
-    { return (Logic<long>)Logic_long.Get; }
-
-    public static Logic<decimal> _decimal
-    { get { return (Logic<decimal>)Logic_decimal.Get; } }
-    public static Logic<decimal> GetLogic(this decimal integer)
-    { return (Logic<decimal>)Logic_decimal.Get; }
-
-    public static Logic<byte> _byte
-    { get { return (Logic<byte>)Logic_byte.Get; } }
-    public static Logic<byte> GetLogic(this byte byteeger)
-    { return (Logic<byte>)Logic_byte.Get; }
+		public static Logic<T> Get<T>()
+		{
+			try { return _logics[typeof(T)] as Logic<T>; }
+			catch { throw new Error("Logic does not yet exist for " + typeof(T).ToString()); }
+		}
 
 		#region Implementations
 

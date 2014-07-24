@@ -317,7 +317,7 @@ namespace Testing
         for (int j = 0; j < A.GetLength(1); j++)
           A[i, j] = random.NextDouble();
       // float casting... poor mans double formatter :)
-      Console.WriteLine("    Matrix A (randomized 4x4): ");
+      Console.WriteLine("    Matrix A (double[4, 4]): ");
       for (int i = 0; i < A.GetLength(0); i++)
       {
         Console.Write("      ");
@@ -363,10 +363,22 @@ namespace Testing
       double determinent = A.Determinent();
       Console.WriteLine("    determinent(A): ");
       Console.Write("      " + string.Format("{0:0.00}", determinent));
+			Console.WriteLine();
+			Console.WriteLine();
+
+      Quaternion<double> Q = new Quaternion<double>(random.NextDouble(), random.NextDouble(), random.NextDouble(), 1.0d);
+      Console.WriteLine("    Quaternion<double> Q:\n      [x " + string.Format("{0:0.00}", Q.X) + ", y " + string.Format("{0:0.00}", Q.Y) + ", z " + string.Format("{0:0.00}", Q.Z) + ", w " + string.Format("{0:0.00}", Q.W) + "]");
+      Console.WriteLine();
+      Quaternion<double> Q_2 = Q + Q;
+      Console.WriteLine("    Q + 2 (aka 2Q):\n      [x " + string.Format("{0:0.00}", Q_2.X) + ", y " + string.Format("{0:0.00}", Q_2.Y) + ", z " + string.Format("{0:0.00}", Q_2.Z) + ", w " + string.Format("{0:0.00}", Q_2.W) + "]");
+      Console.WriteLine();
+      Quaternion<float> Q_float = new Quaternion<float>((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), 1.0f);
+      Console.WriteLine("    Quaternion<float> q:\n      [x " + string.Format("{0:0.00}", Q_float.X) + ", y " + string.Format("{0:0.00}", Q_float.Y) + ", z " + string.Format("{0:0.00}", Q_float.Z) + ", w " + string.Format("{0:0.00}", Q_float.W) + "]");
+      Console.WriteLine();
+      Quaternion<float> Q_float2 = Q_float + Q_float;
+      Console.WriteLine("    q + 2 (aka 2q):\n      [x " + string.Format("{0:0.00}", Q_float2.X) + ", y " + string.Format("{0:0.00}", Q_float2.Y) + ", z " + string.Format("{0:0.00}", Q_float2.Z) + ", w " + string.Format("{0:0.00}", Q_float2.W) + "]");
 
       Console.WriteLine();
-      Console.WriteLine();
-      Console.WriteLine("--------------------------------------------");
       Console.WriteLine("============================================");
       Console.WriteLine("____________________________________________");
       Console.WriteLine(" Testing Complete...");

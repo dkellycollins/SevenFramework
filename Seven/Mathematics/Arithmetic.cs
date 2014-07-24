@@ -93,8 +93,8 @@ namespace Seven.Mathematics
 
 		public static Arithmetic<T> Get<T>()
 		{
-			try { return (Arithmetic<T>)_arithmetics[typeof(T)]; }
-			catch { throw new Error("Algebra does not yet exist for " + typeof(T).ToString()); }
+			try { return _arithmetics[typeof(T)] as Arithmetic<T>; }
+			catch { throw new Error("Arithmetic does not yet exist for " + typeof(T).ToString()); }
 		}
 
     /// <summary>Error type for all arithmetic computations.</summary>
