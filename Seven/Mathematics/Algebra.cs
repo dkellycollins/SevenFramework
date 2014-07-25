@@ -22,9 +22,9 @@ namespace Seven.Mathematics
     /// <summary>Computes the prime factors of a given value.</summary>
     T[] factorPrimes(T value);
 		/// <summary>Computes the reciprocal of the operand.</summary>
-		T Invert_Multiplicative(T value);
-		/// <summary>Computes the reciprocal of the operand.</summary>
-		T Invert_Additive(T value);
+		T invert_mult(T value);
+		/// <summary>Computes the additive inverse of the operand.</summary>
+		T invert_add(T value);
   }
 
   /// <summary>Provides extensions for the Algebra interface.</summary>
@@ -35,9 +35,9 @@ namespace Seven.Mathematics
 		public delegate T _sqrt<T>(T value);
 		public delegate T _root<T>(T _base, T root);
 		public delegate T _exp<T>(T value);
-		public delegate T[] _PrimeFactors<T>(T value);
-		public delegate T _Invert_Multiplicative<T>(T value);
-		public delegate T _Invert_Additive<T>(T value);
+		public delegate T[] _factorPrimes<T>(T value);
+		public delegate T _invert_mult<T>(T value);
+		public delegate T _invert_add<T>(T value);
 
 		private static Seven.Structures.Map<object, System.Type> _algebras =
 			new Seven.Structures.Map_Linked<object, System.Type>(
@@ -163,8 +163,8 @@ namespace Seven.Mathematics
 		public double root(double _base, double root) { throw new System.NotImplementedException(); }
 		public double exp(double value) { throw new System.NotImplementedException(); }
 		public double[] factorPrimes(double value) { throw new System.NotImplementedException(); }
-		public double Invert_Multiplicative(double value) { return 1.0d / value; }
-		public double Invert_Additive(double value) { return -value; }
+		public double invert_mult(double value) { return 1.0d / value; }
+		public double invert_add(double value) { return -value; }
   }
 
   public class Algebra_float : Algebra<float>
@@ -190,8 +190,8 @@ namespace Seven.Mathematics
     public float root(float _base, float root) { throw new System.NotImplementedException(); }
     public float exp(float value) { throw new System.NotImplementedException(); }
     public float[] factorPrimes(float value) { throw new System.NotImplementedException(); }
-    public float Invert_Multiplicative(float value) { return 1.0f / value; }
-    public float Invert_Additive(float value) { return -value; }
+    public float invert_mult(float value) { return 1.0f / value; }
+    public float invert_add(float value) { return -value; }
   }
 
   public class Algebra_int //: Algebra<int>

@@ -10,7 +10,10 @@ namespace Seven.Structures
   /// <typeparam name="M">The type of the axis dimensions to sort the "T" values upon.</typeparam>
   public interface Omnitree<T, M> : Structure<T>
   {
-		/// <summary>Event for handling items that go outside the bounds of the Omnitree.</summary>
+		/// <summary>
+    /// Event for handling items that go outside the bounds of the Omnitree. Asigning this event
+    /// will trigger the delegate instead of throwing an exception.
+    /// </summary>
 		event Foreach<T> HandleOutOfBounds;
 
 		/// <summary>Gets the dimensions of the center point of the Omnitree.</summary>
@@ -1139,7 +1142,7 @@ namespace Seven.Structures
     //  private Branch.Node _head;
 
     //  public Branch.Node Head { get { return this._head; } set { this._head = value; } }
-			
+
     //  public Branch(M[] min, M[] max, Branch parent, int index)
     //    : base(min, max, parent, index) { }
     //}
@@ -1237,7 +1240,7 @@ namespace Seven.Structures
     //  for (int i = 0; i < min.Length; i++)
     //    if (compare(min[i], origin[i]) != Comparison.Less || compare(origin[i], max[i]) != Comparison.Less)
     //      throw new Error("invalid average function. not all average values were computed to be between the min/max values.");
-			
+
     //  this._locate = locate;
     //  this._average = average;
     //  this._compare = compare;
@@ -1267,7 +1270,7 @@ namespace Seven.Structures
     ///// <param name="average">A function for computing the average between two items of the axis types.</param>
     //public Omnitree_Linked(M[] min, M[] max, Omnitree.Locate_NonOut<T, M> locate, Compare<M> compare, Omnitree.Average<M> average)
     //  : this(min, max,
-    //  // this is just an adapter - JIT should optimize
+    //    // this is just an adapter - JIT should optimize
     //  (T item, out M[] ms) => { ms = locate(item); },
     //  compare, average)
     //{
@@ -1665,22 +1668,23 @@ namespace Seven.Structures
     //    this._top = new Leaf(oldChild.Min, oldChild.Max, parent, oldChild.Index);
     //    this.Foreach((T i) => { this.Add(i); }, oldChild);
     //  }
-    //  else if (parent.Children.Length == this._children)
-    //  {
-    //    Node oldChild = parent.Children[child];
-    //    parent.Children[child] = new Leaf(oldChild.Min, oldChild.Max, parent, oldChild.Index);
-    //    this.Foreach((T i) => { this.Add(i); }, oldChild);
-    //  }
     //  else
     //  {
-    //    for (int i = 0; i < parent.ChildCount; i++)
+    //    Branch.Node list = parent.Head;
+    //    if (list.Value.Index == child)
+    //      parent.Head = parent.Head.Next;
+    //    else
     //    {
-    //      if (parent.Children[i].Index == child)
+    //      while (list != null)
     //      {
-    //        Node oldChild = parent.Children[i];
-    //        parent.Children[i] = new Leaf(oldChild.Min, oldChild.Max, parent, oldChild.Index);
-    //        this.Foreach((T j) => { this.Add(j); }, oldChild);
-    //        break;
+    //        if (list.Next.Value.Index == child)
+    //        {
+    //          Branch.Node shrinking = list.Next;
+    //          list.Next = new Branch.Node(new Leaf(shrinking.Value.Min, shrinking.Value.Max, parent, shrinking.Value.Index), list.Next.Next);
+    //          this.Foreach((T j) => { this.Add(j); }, shrinking.Value);
+    //          break;
+    //        }
+    //        list = list.Next;
     //      }
     //    }
     //  }
@@ -1719,19 +1723,38 @@ namespace Seven.Structures
     //  if (node is Leaf)
     //  {
     //    Leaf leaf = node as Leaf;
-    //    for (int i = 0; i < leaf.Count; i++)
+    //    while (leaf.Head != null)
     //    {
     //      M[] ms;
-    //      this._locate(leaf.Contents[i], out ms);
+    //      this._locate(leaf.Head.Value, out ms);
 
     //      if (ms == null || ms.Length != this._dimensions)
-    //        throw new Error("the location function for omnitree is invalid.");
+    //          throw new Error("the location function for omnitree is invalid.");
 
-    //      if (this.EncapsulationCheck(min, max, ms) && where(leaf.Contents[i]))
+    //      if (this.EncapsulationCheck(min, max, ms) && where(leaf.Head.Value))
+    //      {
+    //        leaf.Head = leaf.Head.Next;
     //        removals++;
+    //      }
     //      else
-    //        leaf.Contents[i - removals] = leaf.Contents[i];
+    //        break;
     //    }
+    //    if (leaf != null)
+    //    {
+    //      Leaf.Node list = (node as Leaf).Head;
+    //      while (list.Next != null)
+    //      {
+    //        M[] ms;
+    //        this._locate(list.Next.Value, out ms);
+
+    //        if (this.EncapsulationCheck(min, max, ms) && where(list.Next.Value))
+    //        {
+    //          list.Next = list.Next.Next;
+    //          removals++;
+    //        }
+    //      }
+    //    }
+
     //    leaf.Count -= removals;
     //    this._count -= removals;
 
@@ -1739,30 +1762,18 @@ namespace Seven.Structures
     //  }
     //  else
     //  {
-    //    Branch branch = node as Branch;
-    //    if (branch.Children.Length == this._children)
+    //    Branch.Node list = (node as Branch).Head;
+    //    while (list != null)
     //    {
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //        if (branch.Children[i] != null)
-    //        {
-    //          removals += this.Remove(branch.Children[i], min, max, where);
-    //          if (branch.Children[i].Count == 0)
-    //            ChopChild(branch, branch.Children[i--].Index);
-    //        }
+    //      this.Remove(list.Value, min, max, where);
+    //      if (list.Value.Count == 0)
+    //        this.ChopChild(list.Value.Parent, list.Value.Index);
     //    }
-    //    else
-    //    {
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //      {
-    //        removals += this.Remove(branch.Children[i], min, max, where);
-    //        if (branch.Children[i].Count == 0)
-    //          this.ChopChild(branch, branch.Children[i--].Index);
-    //      }
-    //    }
-    //    branch.Count -= removals;
 
-    //    if (branch.Count < this._load && branch.Count != 0)
-    //      ShrinkChild(branch.Parent, branch.Index);
+    //    node.Count -= removals;
+
+    //    if (node.Count < this._load && node.Count != 0)
+    //      ShrinkChild(node.Parent, node.Index);
 
     //    return removals;
     //  }
@@ -1776,7 +1787,7 @@ namespace Seven.Structures
     ///// <returns>The newly constructed branch.</returns>
     //private Branch GrowBranch(Branch branch, M[] min, M[] max, int child)
     //{
-    //  return this.Branch_SetChild(branch, child, 
+    //  return this.Branch_SetChild(branch, child,
     //    new Branch(min, max, branch, child)) as Branch;
     //}
 
@@ -1788,7 +1799,7 @@ namespace Seven.Structures
     //{
     //  M[] min, max;
     //  this.DetermineChildBounds(branch, child, out min, out max);
-    //  return this.Branch_SetChild(branch, child, 
+    //  return this.Branch_SetChild(branch, child,
     //    new Leaf(min, max, branch, child)) as Leaf;
     //}
 
@@ -2067,22 +2078,21 @@ namespace Seven.Structures
     //{
     //  if (node is Leaf)
     //  {
-    //    Leaf leaf = node as Leaf;
-    //    for (int i = 0; i < leaf.Count; i++)
-    //      function(leaf.Contents[i]);
+    //    Leaf.Node list = (node as Leaf).Head;
+    //    while (list != null)
+    //    {
+    //      function(list.Value);
+    //      list = list.Next;
+    //    }
     //  }
     //  else
     //  {
-    //    Branch branch = node as Branch;
-    //    if (branch.Children.Length == this._children)
+    //    Branch.Node list = (node as Branch).Head;
+    //    while (list != null)
     //    {
-    //      foreach (Node child in branch.Children)
-    //        if (child != null)
-    //          this.Foreach(function, child);
+    //      this.Foreach(function, list.Value);
+    //      list = list.Next;
     //    }
-    //    else
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //        this.Foreach(function, branch.Children[i]);
     //  }
     //}
 
@@ -2096,22 +2106,23 @@ namespace Seven.Structures
     //{
     //  if (node is Leaf)
     //  {
-    //    Leaf leaf = node as Leaf;
-    //    for (int i = 0; i < leaf.Count; i++)
-    //      function(ref leaf.Contents[i]);
+    //    Leaf.Node list = (node as Leaf).Head;
+    //    while (list != null)
+    //    {
+    //      T temp = list.Value;
+    //      function(ref temp);
+    //      list.Value = temp;
+    //      list = list.Next;
+    //    }
     //  }
     //  else
     //  {
-    //    Branch branch = node as Branch;
-    //    if (branch.Children.Length == this._children)
+    //    Branch.Node list = (node as Branch).Head;
+    //    while (list != null)
     //    {
-    //      foreach (Node child in branch.Children)
-    //        if (child != null)
-    //          this.Foreach(function, child);
+    //      this.Foreach(function, list.Value);
+    //      list = list.Next;
     //    }
-    //    else
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //        this.Foreach(function, branch.Children[i]);
     //  }
     //}
 
@@ -2125,25 +2136,21 @@ namespace Seven.Structures
     //{
     //  if (node is Leaf)
     //  {
-    //    Leaf leaf = node as Leaf;
-    //    for (int i = 0; i < leaf.Count; i++)
-    //      if (function(leaf.Contents[i]) == ForeachStatus.Break)
+    //    Leaf.Node list = (node as Leaf).Head;
+    //    while (list != null)
+    //      if (function(list.Value) == ForeachStatus.Break)
     //        return ForeachStatus.Break;
+    //    list = list.Next;
     //  }
     //  else
     //  {
-    //    Branch branch = node as Branch;
-    //    if (branch.ChildCount == this._children)
+    //    Branch.Node list = (node as Branch).Head;
+    //    while (list != null)
     //    {
-    //      foreach (Node child in branch.Children)
-    //        if (child != null)
-    //          if (this.Foreach(function, child) == ForeachStatus.Break)
-    //            return ForeachStatus.Break;
+    //      if (this.Foreach(function, list.Value) == ForeachStatus.Break)
+    //        return ForeachStatus.Break;
+    //      list = list.Next;
     //    }
-    //    else
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //        if (this.Foreach(function, branch.Children[i]) == ForeachStatus.Break)
-    //          return ForeachStatus.Break;
     //  }
     //  return ForeachStatus.Continue;
     //}
@@ -2158,25 +2165,26 @@ namespace Seven.Structures
     //{
     //  if (node is Leaf)
     //  {
-    //    Leaf leaf = node as Leaf;
-    //    for (int i = 0; i < leaf.Count; i++)
-    //      if (function(ref leaf.Contents[i]) == ForeachStatus.Break)
+    //    Leaf.Node list = (node as Leaf).Head;
+    //    while (list != null)
+    //    {
+    //      T temp = list.Value;
+    //      ForeachStatus status = function(ref temp);
+    //      list.Value = temp;
+    //      if (status == ForeachStatus.Break)
     //        return ForeachStatus.Break;
+    //      list = list.Next;
+    //    }
     //  }
     //  else
     //  {
-    //    Branch branch = node as Branch;
-    //    if (branch.Children.Length == this._children)
+    //    Branch.Node list = (node as Branch).Head;
+    //    while (list != null)
     //    {
-    //      foreach (Node child in branch.Children)
-    //        if (child != null)
-    //          if (this.Foreach(function, child) == ForeachStatus.Break)
-    //            return ForeachStatus.Break;
+    //      if (this.Foreach(function, list.Value) == ForeachStatus.Break)
+    //        return ForeachStatus.Break;
+    //      list = list.Next;
     //    }
-    //    else
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //        if (this.Foreach(function, branch.Children[i]) == ForeachStatus.Break)
-    //          return ForeachStatus.Break;
     //  }
     //  return ForeachStatus.Continue;
     //}
@@ -2193,33 +2201,31 @@ namespace Seven.Structures
     //{
     //  if (node is Leaf)
     //  {
-    //    Leaf leaf = node as Leaf;
-    //    for (int i = 0; i < leaf.Count; i++)
+    //    Leaf.Node list = (node as Leaf).Head;
+    //    while (list != null)
+    //    //for (int i = 0; i < leaf.Count; i++)
     //    {
     //      M[] ms;
-    //      this._locate(leaf.Contents[i], out ms);
+    //      this._locate(list.Value, out ms);
 
     //      if (ms == null || ms.Length != this._dimensions)
     //        throw new Error("the location function for omnitree is invalid.");
 
     //      if (EncapsulationCheck(min, max, ms))
-    //        function(leaf.Contents[i]);
+    //        function(list.Value);
+
+    //      list = list.Next;
     //    }
     //  }
     //  else
     //  {
-    //    Branch branch = node as Branch;
-    //    if (branch.Children.Length == this._children)
+    //    Branch.Node list = (node as Branch).Head;
+    //    while (list != null)
     //    {
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //        if (branch.Children[i] != null && InclusionCheck(branch.Children[i].Min, branch.Children[i].Max, min, max))
-    //          this.Foreach(function, branch.Children[i], min, max);
-    //    }
-    //    else
-    //    {
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //        if (InclusionCheck(branch.Children[i].Min, branch.Children[i].Max, min, max))
-    //          this.Foreach(function, branch.Children[i], min, max);
+    //      if (InclusionCheck(list.Value.Min, list.Value.Max, min, max))
+    //        this.Foreach(function, list.Value, min, max);
+
+    //      list = list.Next;
     //    }
     //  }
     //}
@@ -2236,33 +2242,33 @@ namespace Seven.Structures
     //{
     //  if (node is Leaf)
     //  {
-    //    Leaf leaf = node as Leaf;
-    //    for (int i = 0; i < leaf.Count; i++)
+    //    Leaf.Node list = (node as Leaf).Head;
+    //    while (list != null)
+    //    //for (int i = 0; i < leaf.Count; i++)
     //    {
     //      M[] ms;
-    //      this._locate(leaf.Contents[i], out ms);
+    //      this._locate(list.Value, out ms);
 
     //      if (ms == null || ms.Length != this._dimensions)
     //        throw new Error("the location function for omnitree is invalid.");
 
+
+
     //      if (EncapsulationCheck(min, max, ms))
-    //        function(ref leaf.Contents[i]);
+    //        function(list.Value);
+
+    //      list = list.Next;
     //    }
     //  }
     //  else
     //  {
-    //    Branch branch = node as Branch;
-    //    if (branch.Children.Length == this._children)
+    //    Branch.Node list = (node as Branch).Head;
+    //    while (list != null)
     //    {
-    //      for (int i = 0; i < this._children; i++)
-    //        if (branch.Children[i] != null && InclusionCheck(branch.Children[i].Min, branch.Children[i].Max, min, max))
-    //          this.Foreach(function, branch.Children[i], min, max);
-    //    }
-    //    else
-    //    {
-    //      for (int i = 0; i < branch.ChildCount; i++)
-    //        if (InclusionCheck(branch.Children[i].Min, branch.Children[i].Max, min, max))
-    //          this.Foreach(function, branch.Children[i], min, max);
+    //      if (InclusionCheck(list.Value.Min, list.Value.Max, min, max))
+    //        this.Foreach(function, list.Value, min, max);
+
+    //      list = list.Next;
     //    }
     //  }
     //}

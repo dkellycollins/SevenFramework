@@ -311,6 +311,61 @@ namespace Testing
 
       Random random = new Random();
 
+      Matrix<double> M = new Matrix<double>(4, 4);
+
+      for (int i = 0; i < M.Rows; i++)
+        for (int j = 0; j < M.Columns; j++)
+          M[i, j] = random.NextDouble();
+      // float casting... poor mans double formatter :)
+      Console.WriteLine("    Matrix<double> M: ");
+      for (int i = 0; i < M.Rows; i++)
+      {
+        Console.Write("      ");
+        for (int j = 0; j < M.Columns; j++)
+          Console.Write(string.Format("{0:0.00}", M[i, j]) + " ");
+        Console.WriteLine();
+      }
+      Console.WriteLine();
+
+      Matrix<double> MplusM = M + M;
+      Console.WriteLine("    M + M (aka 2M): ");
+      for (int i = 0; i < MplusM.Rows; i++)
+      {
+        Console.Write("      ");
+        for (int j = 0; j < MplusM.Columns; j++)
+          Console.Write(string.Format("{0:0.00}", MplusM[i, j]) + " ");
+        Console.WriteLine();
+      }
+      Console.WriteLine();
+
+      Matrix<double> MxM = M * M;
+      Console.WriteLine("    M * M (aka M ^ 2): ");
+      for (int i = 0; i < MxM.Rows; i++)
+      {
+        Console.Write("      ");
+        for (int j = 0; j < MxM.Columns; j++)
+          Console.Write(string.Format("{0:0.00}", MxM[i, j]) + " ");
+        Console.WriteLine();
+      }
+      Console.WriteLine();
+
+      Matrix<double> rref_M = M.ReducedEchelon();
+      Console.WriteLine("    rref(M): ");
+      for (int i = 0; i < rref_M.Rows; i++)
+      {
+        Console.Write("      ");
+        for (int j = 0; j < rref_M.Columns; j++)
+          Console.Write(string.Format("{0:0.00}", rref_M[i, j]) + " ");
+        Console.WriteLine();
+      }
+      Console.WriteLine();
+
+      double M_determinent = M.Determinent();
+      Console.WriteLine("    determinent(M): ");
+      Console.Write("      " + string.Format("{0:0.00}", M_determinent));
+      Console.WriteLine();
+      Console.WriteLine();
+
       double[,] A = new double[4,4];
 
       for (int i = 0; i < A.GetLength(0); i++)

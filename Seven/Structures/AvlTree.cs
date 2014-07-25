@@ -67,10 +67,8 @@ namespace Seven.Structures
   [System.Serializable]
   public class AvlTree_Linked<Type> : AvlTree<Type>
   {
-    #region Node
-
     /// <summary>This class just holds the data for each individual node of the tree.</summary>
-    public class Node
+    protected class Node
     {
       private Type _value;
       private Node _leftChild;
@@ -91,9 +89,7 @@ namespace Seven.Structures
       }
     }
 
-    #endregion
-
-    internal Node _avlTree;
+    protected Node _avlTree;
     protected int _count;
 
     protected Compare<Type> _compare;
