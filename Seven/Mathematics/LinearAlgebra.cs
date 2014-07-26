@@ -10,69 +10,77 @@ namespace Seven.Mathematics
 	public interface LinearAlgebra<T>
 	{
     /// <summary>Adds two vectors together.</summary>
-    T[] Add(T[] left, T[] right);
+    LinearAlgebra._Vector_Add<T> Vector_Add { get; }
     /// <summary>Negates all the values in a vector.</summary>
-    T[] Negate(T[] vector);
+    LinearAlgebra._Vector_Negate<T> Vector_Negate { get; }
     /// <summary>Subtracts two vectors.</summary>
-    T[] Subtract(T[] left, T[] right);
+    LinearAlgebra._Vector_Subtract<T> Vector_Subtract { get; }
     /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
-    T[] Multiply(T[] left, T right);
+    LinearAlgebra._Vector_Multiply<T> Vector_Multiply { get; }
     /// <summary>Divides all the components of a vector by a scalar.</summary>
-    T[] Divide(T[] vector, T right);
+    LinearAlgebra._Vector_Divide<T> Vector_Divide { get; }
     /// <summary>Computes the dot product between two vectors.</summary>
-    T DotProduct(T[] left, T[] right);
+    LinearAlgebra._Vector_DotProduct<T> Vector_DotProduct { get; }
     /// <summary>Computes teh cross product of two vectors.</summary>
-    T[] CrossProduct(T[] left, T[] right);
+    LinearAlgebra._Vector_CrossProduct<T> Vector_CrossProduct { get; }
     /// <summary>Normalizes a vector.</summary>
-    T[] Normalize(T[] vector);
+    LinearAlgebra._Vector_Normalize<T> Vector_Normalize { get; }
     /// <summary>Computes the length of a vector.</summary>
-    T Magnitude(T[] vector);
+    LinearAlgebra._Vector_Magnitude<T> Vector_Magnitude { get; }
     /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
-    T MagnitudeSquared(T[] vector);
+    LinearAlgebra._Vector_MagnitudeSquared<T> Vector_MagnitudeSquared { get; }
     /// <summary>Computes the angle between two vectors.</summary>
-    T Angle(T[] first, T[] second);
+    LinearAlgebra._Vector_Angle<T> Vector_Angle { get; }
     /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
-    T[] RotateBy(T[] vector, T angle, T x, T y, T z);
+    LinearAlgebra._Vector_RotateBy<T> Vector_RotateBy { get; }
     /// <summary>Computes the linear interpolation between two vectors.</summary>
-    T[] Lerp(T[] left, T[] right, T blend);
+    LinearAlgebra._Vector_Lerp<T> Vector_Lerp { get; }
     /// <summary>Sphereically interpolates between two vectors.</summary>
-    T[] Slerp(T[] left, T[] right, T blend);
+    LinearAlgebra._Vector_Slerp<T> Vector_Slerp { get; }
     /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
-    T[] Blerp(T[] a, T[] b, T[] c, T u, T v);
-
+    LinearAlgebra._Vector_Blerp<T> Vector_Blerp { get; }
+    /// <summary>Checks for equality between two vectors.</summary>
+    //LinearAlgebra._Vector_EqualsValue<T> Vector_EqualsValue { get; }
+    /// <summary>Checks for equality between two vectors with a leniency.</summary>
+    //LinearAlgebra._Vector_EqualsValue_leniency<T> Vector_EqualsValue_leniency { get; }
+    /// <summary>Rotates a vector by a quaternion.</summary>
+    //LinearAlgebra._Vector_RotateBy_quaternion<T> Vector_RotateBy_quaternion { get; }
+    
 		/// <summary>Negates all the values in this matrix.</summary>
-		T[,] Negate(T[,] matrix);
+    LinearAlgebra._Matrix_Negate<T> Matrix_Negate { get; }
 		/// <summary>Does a standard matrix addition.</summary>
-		T[,] Add(T[,] left, T[,] right);
+    LinearAlgebra._Matrix_Add<T> Matrix_Add { get; }
 		/// <summary>Does a standard matrix multiplication (triple for loop).</summary>
-		T[,] Multiply(T[,] left, T[,] right);
+    LinearAlgebra._Matrix_Multiply<T> Matrix_Multiply { get; }
 		/// <summary>Multiplies all the values in this matrix by a scalar.</summary>
-		T[,] Multiply(T[,] matrix, T right);
+    LinearAlgebra._Matrix_Multiply_scalar<T> Matrix_Multiply_scalar { get; }
 		/// <summary>Divides all the values in this matrix by a scalar.</summary>
-		T[,] Divide(T[,] left, T right);
+    LinearAlgebra._Matrix_Divide<T> Matrix_Divide { get; }
 		/// <summary>Gets the minor of a matrix.</summary>
-		T[,] Minor(T[,] matrix, int row, int column);
+    LinearAlgebra._Matrix_Minor<T> Matrix_Minor { get; }
 		/// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-		T[,] ConcatenateRowWise(T[,] left, T[,] right);
+    LinearAlgebra._Matrix_ConcatenateRowWise<T> Matrix_ConcatenateRowWise { get; }
 		/// <summary>Computes the determinent if this matrix is square.</summary>
-		T Determinent(T[,] matrix);
+    LinearAlgebra._Matrix_Determinent<T> Matrix_Determinent { get; }
 		/// <summary>Computes the echelon form of this matrix (aka REF).</summary>
-		T[,] Echelon(T[,] matrix);
+    LinearAlgebra._Matrix_Echelon<T> Matrix_Echelon { get; }
 		/// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
-		T[,] ReducedEchelon(T[,] matrix);
+    LinearAlgebra._Matrix_ReducedEchelon<T> Matrix_ReducedEchelon { get; }
 		/// <summary>Computes the inverse of this matrix.</summary>
-		T[,] Inverse(T[,] matrix);
+    LinearAlgebra._Matrix_Inverse<T> Matrix_Inverse { get; }
 		/// <summary>Gets the adjoint of this matrix.</summary>
-		T[,] Adjoint(T[,] matrix);
+    LinearAlgebra._Matrix_Adjoint<T> Matrix_Adjoint { get; }
 		/// <summary>Transposes this matrix.</summary>
-		T[,] Transpose(T[,] matrix);
-		/// <summary>Copies this matrix.</summary>
-		T[,] Clone(T[,] matrix);
+    LinearAlgebra._Matrix_Transpose<T> Matrix_Transpose { get; }
+    /// <summary>Decomposes a matrix to lower/upper components.</summary>
+    LinearAlgebra._Matrix_DecomposeLU<T> Matrix_DecomposeLU { get; }
 	}
 
+  /// <summary>Makes and stores implementations of linear algebra.</summary>
 	public static class LinearAlgebra
-	{
-    // Vector operations
+  {
+    #region delegates
+
     public delegate T[] _Vector_Add<T>(T[] left, T[] right);
     public delegate T[] _Vector_Negate<T>(T[] vector);
     public delegate T[] _Vector_Subtract<T>(T[] left, T[] right);
@@ -88,12 +96,14 @@ namespace Seven.Mathematics
     public delegate T[] _Vector_Lerp<T>(T[] left, T[] right, T blend);
     public delegate T[] _Vector_Slerp<T>(T[] left, T[] right, T blend);
     public delegate T[] _Vector_Blerp<T>(T[] a, T[] b, T[] c, T u, T v);
+    public delegate bool _Vector_EqualsValue<T>(T[] left, T[] right);
+    public delegate bool _Vector_EqualsValue_leniency<T>(T[] left, T[] right, T leniency);
+    public delegate T[] _Vector_RotateBy_quaternion<T>(T[] vector, Quaternion<T> rotation);
 
-    // Matrix operations
 		public delegate T[,] _Matrix_Negate<T>(T[,] matrix);
 		public delegate T[,] _Matrix_Add<T>(T[,] left, T[,] right);
 		public delegate T[,] _Matrix_Multiply<T>(T[,] left, T[,] right);
-		public delegate T[,] _Matrix_Multiply_Matrix_scalar<T>(T[,] matrix, T right);
+		public delegate T[,] _Matrix_Multiply_scalar<T>(T[,] matrix, T right);
 		public delegate T[,] _Matrix_Divide<T>(T[,] left, T right);
 		public delegate T[,] _Matrix_Minor<T>(T[,] matrix, int row, int column);
 		public delegate T[,] _Matrix_ConcatenateRowWise<T>(T[,] left, T[,] right);
@@ -103,28 +113,2008 @@ namespace Seven.Mathematics
 		public delegate T[,] _Matrix_Inverse<T>(T[,] matrix);
 		public delegate T[,] _Matrix_Adjoint<T>(T[,] matrix);
 		public delegate T[,] _Matrix_Transpose<T>(T[,] matrix);
-		public delegate T[,] _Matrix_Clone<T>(T[,] matrix);
-    
-		public static Seven.Structures.Map<object, System.Type> _linearAlgebras =
+    public delegate void _Matrix_DecomposeLU<T>(T[,] matrix, out T[,] lower, out T[,] upper);
+
+    #endregion
+
+    #region libraries
+
+    private static Seven.Structures.Map<object, System.Type> _linearAlgebras =
 			new Seven.Structures.Map_Linked<object, System.Type>(
 				(System.Type left, System.Type right) => { return left == right; },
 				(System.Type type) => { return type.GetHashCode(); })
 				{
-					//{ typeof(int), LinearAlgebra_int.Get },
-					{ typeof(double), LinearAlgebra_double.Get },
-					{ typeof(float), LinearAlgebra_float.Get },
-					{ typeof(decimal), LinearAlgebra_decimal.Get },
-					//{ typeof(long), LinearAlgebra_long.Get }
+					{ typeof(int), LinearAlgebra.LinearAlgebra_int.Get },
+					{ typeof(double), LinearAlgebra.LinearAlgebra_double.Get },
+					{ typeof(float), LinearAlgebra.LinearAlgebra_float.Get },
+					{ typeof(decimal), LinearAlgebra.LinearAlgebra_decimal.Get },
+					{ typeof(long), LinearAlgebra.LinearAlgebra_long.Get }
 				};
 
+    /// <summary>Adds an implementation of linear algebra for a given type.</summary>
+    /// <typeparam name="T">The type the linear algebra library operates on.</typeparam>
+    /// <param name="linearAlgebra">The linear algebra library.</param>
+    public static void Add<T>(LinearAlgebra<T> linearAlgebra)
+    {
+      if (_linearAlgebras.Contains(typeof(T)))
+        throw new Error("a linear algebra implementation for " + typeof(T) + " already exists");
+      else
+        _linearAlgebras.Add(typeof(T), linearAlgebra);
+    }
+
+    /// <summary>Gets a linear algebra library for the given type.</summary>
+    /// <typeparam name="T">The type to get a linear algebra library for.</typeparam>
+    /// <returns>A linear algebra library for the given type.</returns>
 		public static LinearAlgebra<T> Get<T>()
 		{
-			try { return (LinearAlgebra<T>)_linearAlgebras[typeof(T)]; }
-			catch { throw new Error("LinearAlgebra does not yet exist for " + typeof(T).ToString()); }
+      if (_linearAlgebras.Contains(typeof(T)))
+        return (LinearAlgebra<T>)_linearAlgebras[typeof(T)];
+      else
+        return LinearAlgebra_unsupported<T>.Get;
 		}
-    
-		#region Implementations
-    
+
+    #region Built-In Libraries
+
+    private class LinearAlgebra_decimal : LinearAlgebra<decimal>
+    {
+      private LinearAlgebra_decimal() { _instance = this; }
+      private static LinearAlgebra_decimal _instance;
+      private static LinearAlgebra_decimal Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new LinearAlgebra_decimal();
+          else
+            return _instance;
+        }
+      }
+
+      /// <summary>Gets Arithmetic for "byte" types.</summary>
+      public static LinearAlgebra_decimal Get { get { return Instance; } }
+
+      /// <summary>Adds two vectors together.</summary>
+      public LinearAlgebra._Vector_Add<decimal> Vector_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Negates all the values in a vector.</summary>
+      public LinearAlgebra._Vector_Negate<decimal> Vector_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Subtracts two vectors.</summary>
+      public LinearAlgebra._Vector_Subtract<decimal> Vector_Subtract { get { return LinearAlgebra.Subtract; } }
+      /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+      public LinearAlgebra._Vector_Multiply<decimal> Vector_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the components of a vector by a scalar.</summary>
+      public LinearAlgebra._Vector_Divide<decimal> Vector_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Computes the dot product between two vectors.</summary>
+      public LinearAlgebra._Vector_DotProduct<decimal> Vector_DotProduct { get { return LinearAlgebra.DotProduct; } }
+      /// <summary>Computes teh cross product of two vectors.</summary>
+      public LinearAlgebra._Vector_CrossProduct<decimal> Vector_CrossProduct { get { return LinearAlgebra.CrossProduct; } }
+      /// <summary>Normalizes a vector.</summary>
+      public LinearAlgebra._Vector_Normalize<decimal> Vector_Normalize { get { return LinearAlgebra.Normalize; } }
+      /// <summary>Computes the length of a vector.</summary>
+      public LinearAlgebra._Vector_Magnitude<decimal> Vector_Magnitude { get { return LinearAlgebra.Magnitude; } }
+      /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+      public LinearAlgebra._Vector_MagnitudeSquared<decimal> Vector_MagnitudeSquared { get { return LinearAlgebra.MagnitudeSquared; } }
+      /// <summary>Computes the angle between two vectors.</summary>
+      public LinearAlgebra._Vector_Angle<decimal> Vector_Angle { get { return LinearAlgebra.Angle; } }
+      /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+      public LinearAlgebra._Vector_RotateBy<decimal> Vector_RotateBy { get { return LinearAlgebra.RotateBy; } }
+      /// <summary>Computes the linear interpolation between two vectors.</summary>
+      public LinearAlgebra._Vector_Lerp<decimal> Vector_Lerp { get { return LinearAlgebra.Lerp; } }
+      /// <summary>Sphereically interpolates between two vectors.</summary>
+      public LinearAlgebra._Vector_Slerp<decimal> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_Blerp<decimal> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+
+      /// <summary>Negates all the values in this matrix.</summary>
+      public LinearAlgebra._Matrix_Negate<decimal> Matrix_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Does a standard matrix addition.</summary>
+      public LinearAlgebra._Matrix_Add<decimal> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+      public LinearAlgebra._Matrix_Multiply<decimal> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_scalar<decimal> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Divide<decimal> Matrix_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Gets the minor of a matrix.</summary>
+      public LinearAlgebra._Matrix_Minor<decimal> Matrix_Minor { get { return LinearAlgebra.Minor; } }
+      /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+      public LinearAlgebra._Matrix_ConcatenateRowWise<decimal> Matrix_ConcatenateRowWise { get { return LinearAlgebra.ConcatenateRowWise; } }
+      /// <summary>Computes the determinent if this matrix is square.</summary>
+      public LinearAlgebra._Matrix_Determinent<decimal> Matrix_Determinent { get { return LinearAlgebra.Determinent; } }
+      /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+      public LinearAlgebra._Matrix_Echelon<decimal> Matrix_Echelon { get { return LinearAlgebra.Echelon; } }
+      /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+      public LinearAlgebra._Matrix_ReducedEchelon<decimal> Matrix_ReducedEchelon { get { return LinearAlgebra.ReducedEchelon; } }
+      /// <summary>Computes the inverse of this matrix.</summary>
+      public LinearAlgebra._Matrix_Inverse<decimal> Matrix_Inverse { get { return LinearAlgebra.Inverse; } }
+      /// <summary>Gets the adjoint of this matrix.</summary>
+      public LinearAlgebra._Matrix_Adjoint<decimal> Matrix_Adjoint { get { return LinearAlgebra.Adjoint; } }
+      /// <summary>Transposes this matrix.</summary>
+      public LinearAlgebra._Matrix_Transpose<decimal> Matrix_Transpose { get { return LinearAlgebra.Transpose; } }
+      /// <summary>Decomposes a matrix to lower/upper components.</summary>
+      public LinearAlgebra._Matrix_DecomposeLU<decimal> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
+    }
+
+    private class LinearAlgebra_double : LinearAlgebra<double>
+    {
+      private LinearAlgebra_double() { _instance = this; }
+      private static LinearAlgebra_double _instance;
+      private static LinearAlgebra_double Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new LinearAlgebra_double();
+          else
+            return _instance;
+        }
+      }
+
+      /// <summary>Gets Arithmetic for "byte" types.</summary>
+      public static LinearAlgebra_double Get { get { return Instance; } }
+
+      /// <summary>Adds two vectors together.</summary>
+      public LinearAlgebra._Vector_Add<double> Vector_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Negates all the values in a vector.</summary>
+      public LinearAlgebra._Vector_Negate<double> Vector_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Subtracts two vectors.</summary>
+      public LinearAlgebra._Vector_Subtract<double> Vector_Subtract { get { return LinearAlgebra.Subtract; } }
+      /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+      public LinearAlgebra._Vector_Multiply<double> Vector_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the components of a vector by a scalar.</summary>
+      public LinearAlgebra._Vector_Divide<double> Vector_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Computes the dot product between two vectors.</summary>
+      public LinearAlgebra._Vector_DotProduct<double> Vector_DotProduct { get { return LinearAlgebra.DotProduct; } }
+      /// <summary>Computes teh cross product of two vectors.</summary>
+      public LinearAlgebra._Vector_CrossProduct<double> Vector_CrossProduct { get { return LinearAlgebra.CrossProduct; } }
+      /// <summary>Normalizes a vector.</summary>
+      public LinearAlgebra._Vector_Normalize<double> Vector_Normalize { get { return LinearAlgebra.Normalize; } }
+      /// <summary>Computes the length of a vector.</summary>
+      public LinearAlgebra._Vector_Magnitude<double> Vector_Magnitude { get { return LinearAlgebra.Magnitude; } }
+      /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+      public LinearAlgebra._Vector_MagnitudeSquared<double> Vector_MagnitudeSquared { get { return LinearAlgebra.MagnitudeSquared; } }
+      /// <summary>Computes the angle between two vectors.</summary>
+      public LinearAlgebra._Vector_Angle<double> Vector_Angle { get { return LinearAlgebra.Angle; } }
+      /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+      public LinearAlgebra._Vector_RotateBy<double> Vector_RotateBy { get { return LinearAlgebra.RotateBy; } }
+      /// <summary>Computes the linear interpolation between two vectors.</summary>
+      public LinearAlgebra._Vector_Lerp<double> Vector_Lerp { get { return LinearAlgebra.Lerp; } }
+      /// <summary>Sphereically interpolates between two vectors.</summary>
+      public LinearAlgebra._Vector_Slerp<double> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_Blerp<double> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+
+      /// <summary>Negates all the values in this matrix.</summary>
+      public LinearAlgebra._Matrix_Negate<double> Matrix_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Does a standard matrix addition.</summary>
+      public LinearAlgebra._Matrix_Add<double> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+      public LinearAlgebra._Matrix_Multiply<double> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_scalar<double> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Divide<double> Matrix_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Gets the minor of a matrix.</summary>
+      public LinearAlgebra._Matrix_Minor<double> Matrix_Minor { get { return LinearAlgebra.Minor; } }
+      /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+      public LinearAlgebra._Matrix_ConcatenateRowWise<double> Matrix_ConcatenateRowWise { get { return LinearAlgebra.ConcatenateRowWise; } }
+      /// <summary>Computes the determinent if this matrix is square.</summary>
+      public LinearAlgebra._Matrix_Determinent<double> Matrix_Determinent { get { return LinearAlgebra.Determinent; } }
+      /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+      public LinearAlgebra._Matrix_Echelon<double> Matrix_Echelon { get { return LinearAlgebra.Echelon; } }
+      /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+      public LinearAlgebra._Matrix_ReducedEchelon<double> Matrix_ReducedEchelon { get { return LinearAlgebra.ReducedEchelon; } }
+      /// <summary>Computes the inverse of this matrix.</summary>
+      public LinearAlgebra._Matrix_Inverse<double> Matrix_Inverse { get { return LinearAlgebra.Inverse; } }
+      /// <summary>Gets the adjoint of this matrix.</summary>
+      public LinearAlgebra._Matrix_Adjoint<double> Matrix_Adjoint { get { return LinearAlgebra.Adjoint; } }
+      /// <summary>Transposes this matrix.</summary>
+      public LinearAlgebra._Matrix_Transpose<double> Matrix_Transpose { get { return LinearAlgebra.Transpose; } }
+      /// <summary>Decomposes a matrix to lower/upper components.</summary>
+      public LinearAlgebra._Matrix_DecomposeLU<double> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
+    }
+
+    private class LinearAlgebra_float : LinearAlgebra<float>
+    {
+      private LinearAlgebra_float() { _instance = this; }
+      private static LinearAlgebra_float _instance;
+      private static LinearAlgebra_float Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new LinearAlgebra_float();
+          else
+            return _instance;
+        }
+      }
+
+      /// <summary>Gets Arithmetic for "byte" types.</summary>
+      public static LinearAlgebra_float Get { get { return Instance; } }
+
+      /// <summary>Adds two vectors together.</summary>
+      public LinearAlgebra._Vector_Add<float> Vector_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Negates all the values in a vector.</summary>
+      public LinearAlgebra._Vector_Negate<float> Vector_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Subtracts two vectors.</summary>
+      public LinearAlgebra._Vector_Subtract<float> Vector_Subtract { get { return LinearAlgebra.Subtract; } }
+      /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+      public LinearAlgebra._Vector_Multiply<float> Vector_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the components of a vector by a scalar.</summary>
+      public LinearAlgebra._Vector_Divide<float> Vector_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Computes the dot product between two vectors.</summary>
+      public LinearAlgebra._Vector_DotProduct<float> Vector_DotProduct { get { return LinearAlgebra.DotProduct; } }
+      /// <summary>Computes teh cross product of two vectors.</summary>
+      public LinearAlgebra._Vector_CrossProduct<float> Vector_CrossProduct { get { return LinearAlgebra.CrossProduct; } }
+      /// <summary>Normalizes a vector.</summary>
+      public LinearAlgebra._Vector_Normalize<float> Vector_Normalize { get { return LinearAlgebra.Normalize; } }
+      /// <summary>Computes the length of a vector.</summary>
+      public LinearAlgebra._Vector_Magnitude<float> Vector_Magnitude { get { return LinearAlgebra.Magnitude; } }
+      /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+      public LinearAlgebra._Vector_MagnitudeSquared<float> Vector_MagnitudeSquared { get { return LinearAlgebra.MagnitudeSquared; } }
+      /// <summary>Computes the angle between two vectors.</summary>
+      public LinearAlgebra._Vector_Angle<float> Vector_Angle { get { return LinearAlgebra.Angle; } }
+      /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+      public LinearAlgebra._Vector_RotateBy<float> Vector_RotateBy { get { return LinearAlgebra.RotateBy; } }
+      /// <summary>Computes the linear interpolation between two vectors.</summary>
+      public LinearAlgebra._Vector_Lerp<float> Vector_Lerp { get { return LinearAlgebra.Lerp; } }
+      /// <summary>Sphereically interpolates between two vectors.</summary>
+      public LinearAlgebra._Vector_Slerp<float> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_Blerp<float> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+
+      /// <summary>Negates all the values in this matrix.</summary>
+      public LinearAlgebra._Matrix_Negate<float> Matrix_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Does a standard matrix addition.</summary>
+      public LinearAlgebra._Matrix_Add<float> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+      public LinearAlgebra._Matrix_Multiply<float> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_scalar<float> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Divide<float> Matrix_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Gets the minor of a matrix.</summary>
+      public LinearAlgebra._Matrix_Minor<float> Matrix_Minor { get { return LinearAlgebra.Minor; } }
+      /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+      public LinearAlgebra._Matrix_ConcatenateRowWise<float> Matrix_ConcatenateRowWise { get { return LinearAlgebra.ConcatenateRowWise; } }
+      /// <summary>Computes the determinent if this matrix is square.</summary>
+      public LinearAlgebra._Matrix_Determinent<float> Matrix_Determinent { get { return LinearAlgebra.Determinent; } }
+      /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+      public LinearAlgebra._Matrix_Echelon<float> Matrix_Echelon { get { return LinearAlgebra.Echelon; } }
+      /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+      public LinearAlgebra._Matrix_ReducedEchelon<float> Matrix_ReducedEchelon { get { return LinearAlgebra.ReducedEchelon; } }
+      /// <summary>Computes the inverse of this matrix.</summary>
+      public LinearAlgebra._Matrix_Inverse<float> Matrix_Inverse { get { return LinearAlgebra.Inverse; } }
+      /// <summary>Gets the adjoint of this matrix.</summary>
+      public LinearAlgebra._Matrix_Adjoint<float> Matrix_Adjoint { get { return LinearAlgebra.Adjoint; } }
+      /// <summary>Transposes this matrix.</summary>
+      public LinearAlgebra._Matrix_Transpose<float> Matrix_Transpose { get { return LinearAlgebra.Transpose; } }
+      /// <summary>Decomposes a matrix to lower/upper components.</summary>
+      public LinearAlgebra._Matrix_DecomposeLU<float> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
+    }
+
+    private class LinearAlgebra_long : LinearAlgebra<long>
+    {
+      private LinearAlgebra_long() { _instance = this; }
+      private static LinearAlgebra_long _instance;
+      private static LinearAlgebra_long Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new LinearAlgebra_long();
+          else
+            return _instance;
+        }
+      }
+
+      /// <summary>Gets Arithmetic for "byte" types.</summary>
+      public static LinearAlgebra_long Get { get { return Instance; } }
+
+      /// <summary>Adds two vectors together.</summary>
+      public LinearAlgebra._Vector_Add<long> Vector_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Negates all the values in a vector.</summary>
+      public LinearAlgebra._Vector_Negate<long> Vector_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Subtracts two vectors.</summary>
+      public LinearAlgebra._Vector_Subtract<long> Vector_Subtract { get { return LinearAlgebra.Subtract; } }
+      /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+      public LinearAlgebra._Vector_Multiply<long> Vector_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the components of a vector by a scalar.</summary>
+      public LinearAlgebra._Vector_Divide<long> Vector_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Computes the dot product between two vectors.</summary>
+      public LinearAlgebra._Vector_DotProduct<long> Vector_DotProduct { get { return LinearAlgebra.DotProduct; } }
+      /// <summary>Computes teh cross product of two vectors.</summary>
+      public LinearAlgebra._Vector_CrossProduct<long> Vector_CrossProduct { get { return LinearAlgebra.CrossProduct; } }
+      /// <summary>Normalizes a vector.</summary>
+      public LinearAlgebra._Vector_Normalize<long> Vector_Normalize { get { return LinearAlgebra.Normalize; } }
+      /// <summary>Computes the length of a vector.</summary>
+      public LinearAlgebra._Vector_Magnitude<long> Vector_Magnitude { get { return LinearAlgebra.Magnitude; } }
+      /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+      public LinearAlgebra._Vector_MagnitudeSquared<long> Vector_MagnitudeSquared { get { return LinearAlgebra.MagnitudeSquared; } }
+      /// <summary>Computes the angle between two vectors.</summary>
+      public LinearAlgebra._Vector_Angle<long> Vector_Angle { get { return LinearAlgebra.Angle; } }
+      /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+      public LinearAlgebra._Vector_RotateBy<long> Vector_RotateBy { get { return LinearAlgebra.RotateBy; } }
+      /// <summary>Computes the linear interpolation between two vectors.</summary>
+      public LinearAlgebra._Vector_Lerp<long> Vector_Lerp { get { return LinearAlgebra.Lerp; } }
+      /// <summary>Sphereically interpolates between two vectors.</summary>
+      public LinearAlgebra._Vector_Slerp<long> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_Blerp<long> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+
+      /// <summary>Negates all the values in this matrix.</summary>
+      public LinearAlgebra._Matrix_Negate<long> Matrix_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Does a standard matrix addition.</summary>
+      public LinearAlgebra._Matrix_Add<long> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+      public LinearAlgebra._Matrix_Multiply<long> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_scalar<long> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Divide<long> Matrix_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Gets the minor of a matrix.</summary>
+      public LinearAlgebra._Matrix_Minor<long> Matrix_Minor { get { return LinearAlgebra.Minor; } }
+      /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+      public LinearAlgebra._Matrix_ConcatenateRowWise<long> Matrix_ConcatenateRowWise { get { return LinearAlgebra.ConcatenateRowWise; } }
+      /// <summary>Computes the determinent if this matrix is square.</summary>
+      public LinearAlgebra._Matrix_Determinent<long> Matrix_Determinent { get { return LinearAlgebra.Determinent; } }
+      /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+      public LinearAlgebra._Matrix_Echelon<long> Matrix_Echelon { get { return LinearAlgebra.Echelon; } }
+      /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+      public LinearAlgebra._Matrix_ReducedEchelon<long> Matrix_ReducedEchelon { get { return LinearAlgebra.ReducedEchelon; } }
+      /// <summary>Computes the inverse of this matrix.</summary>
+      public LinearAlgebra._Matrix_Inverse<long> Matrix_Inverse { get { return LinearAlgebra.Inverse; } }
+      /// <summary>Gets the adjoint of this matrix.</summary>
+      public LinearAlgebra._Matrix_Adjoint<long> Matrix_Adjoint { get { return LinearAlgebra.Adjoint; } }
+      /// <summary>Transposes this matrix.</summary>
+      public LinearAlgebra._Matrix_Transpose<long> Matrix_Transpose { get { return LinearAlgebra.Transpose; } }
+      /// <summary>Decomposes a matrix to lower/upper components.</summary>
+      public LinearAlgebra._Matrix_DecomposeLU<long> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
+    }
+
+    private class LinearAlgebra_int : LinearAlgebra<int>
+    {
+      private LinearAlgebra_int() { _instance = this; }
+      private static LinearAlgebra_int _instance;
+      private static LinearAlgebra_int Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new LinearAlgebra_int();
+          else
+            return _instance;
+        }
+      }
+
+      /// <summary>Gets Arithmetic for "byte" types.</summary>
+      public static LinearAlgebra_int Get { get { return Instance; } }
+
+      /// <summary>Adds two vectors together.</summary>
+      public LinearAlgebra._Vector_Add<int> Vector_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Negates all the values in a vector.</summary>
+      public LinearAlgebra._Vector_Negate<int> Vector_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Subtracts two vectors.</summary>
+      public LinearAlgebra._Vector_Subtract<int> Vector_Subtract { get { return LinearAlgebra.Subtract; } }
+      /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+      public LinearAlgebra._Vector_Multiply<int> Vector_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the components of a vector by a scalar.</summary>
+      public LinearAlgebra._Vector_Divide<int> Vector_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Computes the dot product between two vectors.</summary>
+      public LinearAlgebra._Vector_DotProduct<int> Vector_DotProduct { get { return LinearAlgebra.DotProduct; } }
+      /// <summary>Computes teh cross product of two vectors.</summary>
+      public LinearAlgebra._Vector_CrossProduct<int> Vector_CrossProduct { get { return LinearAlgebra.CrossProduct; } }
+      /// <summary>Normalizes a vector.</summary>
+      public LinearAlgebra._Vector_Normalize<int> Vector_Normalize { get { return LinearAlgebra.Normalize; } }
+      /// <summary>Computes the length of a vector.</summary>
+      public LinearAlgebra._Vector_Magnitude<int> Vector_Magnitude { get { return LinearAlgebra.Magnitude; } }
+      /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+      public LinearAlgebra._Vector_MagnitudeSquared<int> Vector_MagnitudeSquared { get { return LinearAlgebra.MagnitudeSquared; } }
+      /// <summary>Computes the angle between two vectors.</summary>
+      public LinearAlgebra._Vector_Angle<int> Vector_Angle { get { return LinearAlgebra.Angle; } }
+      /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+      public LinearAlgebra._Vector_RotateBy<int> Vector_RotateBy { get { return LinearAlgebra.RotateBy; } }
+      /// <summary>Computes the linear interpolation between two vectors.</summary>
+      public LinearAlgebra._Vector_Lerp<int> Vector_Lerp { get { return LinearAlgebra.Lerp; } }
+      /// <summary>Sphereically interpolates between two vectors.</summary>
+      public LinearAlgebra._Vector_Slerp<int> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_Blerp<int> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+
+      /// <summary>Negates all the values in this matrix.</summary>
+      public LinearAlgebra._Matrix_Negate<int> Matrix_Negate { get { return LinearAlgebra.Negate; } }
+      /// <summary>Does a standard matrix addition.</summary>
+      public LinearAlgebra._Matrix_Add<int> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+      public LinearAlgebra._Matrix_Multiply<int> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_scalar<int> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Divides all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Divide<int> Matrix_Divide { get { return LinearAlgebra.Divide; } }
+      /// <summary>Gets the minor of a matrix.</summary>
+      public LinearAlgebra._Matrix_Minor<int> Matrix_Minor { get { return LinearAlgebra.Minor; } }
+      /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+      public LinearAlgebra._Matrix_ConcatenateRowWise<int> Matrix_ConcatenateRowWise { get { return LinearAlgebra.ConcatenateRowWise; } }
+      /// <summary>Computes the determinent if this matrix is square.</summary>
+      public LinearAlgebra._Matrix_Determinent<int> Matrix_Determinent { get { return LinearAlgebra.Determinent; } }
+      /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+      public LinearAlgebra._Matrix_Echelon<int> Matrix_Echelon { get { return LinearAlgebra.Echelon; } }
+      /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+      public LinearAlgebra._Matrix_ReducedEchelon<int> Matrix_ReducedEchelon { get { return LinearAlgebra.ReducedEchelon; } }
+      /// <summary>Computes the inverse of this matrix.</summary>
+      public LinearAlgebra._Matrix_Inverse<int> Matrix_Inverse { get { return LinearAlgebra.Inverse; } }
+      /// <summary>Gets the adjoint of this matrix.</summary>
+      public LinearAlgebra._Matrix_Adjoint<int> Matrix_Adjoint { get { return LinearAlgebra.Adjoint; } }
+      /// <summary>Transposes this matrix.</summary>
+      public LinearAlgebra._Matrix_Transpose<int> Matrix_Transpose { get { return LinearAlgebra.Transpose; } }
+      /// <summary>Decomposes a matrix to lower/upper components.</summary>
+      public LinearAlgebra._Matrix_DecomposeLU<int> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
+    }
+
+    private class LinearAlgebra_generic<T> : LinearAlgebra<T>
+    {
+      private LinearAlgebra_generic() { _instance = this; }
+      private static LinearAlgebra_generic<T> _instance;
+      private static LinearAlgebra_generic<T> Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new LinearAlgebra_generic<T>();
+          else
+            return _instance;
+        }
+      }
+
+      /// <summary>Gets Arithmetic for "byte" types.</summary>
+      public static LinearAlgebra_generic<T> Get { get { return Instance; } }
+
+      // Constants
+      private static T _zero;
+      private static T _one;
+      private static T _two;
+
+      // Logic
+      private static Logic._Abs<T> _abs;
+      private static Equate<T> _equate;
+      private static Compare<T> _compare;
+
+      // Arithmetic
+      private static Arithmetic._Negate<T> _negate;
+      private static Arithmetic._Add<T> _add;
+      private static Arithmetic._Subtract<T> _subtract;
+      private static Arithmetic._Multiply<T> _multiply;
+      private static Arithmetic._Divide<T> _divide;
+
+      // Algebra
+      private static Algebra._sqrt<T> _sqrt;
+      private static Algebra._invert_mult<T> _Invert_Multiplicative;
+
+      // Trigonometry
+      private static Trigonometry._sin<T> _sin;
+      private static Trigonometry._cos<T> _cos;
+      private static Trigonometry._arccos<T> _acos;
+
+      static LinearAlgebra_generic()
+      {
+        // Constants
+        _zero = Constants.Get<T>().factory(0);
+        _one = Constants.Get<T>().factory(1);
+        _two = Constants.Get<T>().factory(2);
+
+        // Logic
+        _abs = Logic.Get<T>().Abs;
+        _equate = Logic.Get<T>().Equate;
+        _compare = Logic.Get<T>().Compare;
+
+        // Arithmetic
+        _negate = Arithmetic.Get<T>().Negate;
+        _add = Arithmetic.Get<T>().Add;
+        _subtract = Arithmetic.Get<T>().Subtract;
+        _multiply = Arithmetic.Get<T>().Multiply;
+        _divide = Arithmetic.Get<T>().Divide;
+
+        // Algebra
+        _sqrt = Algebra.Get<T>().sqrt;
+        _Invert_Multiplicative = Algebra.Get<T>().invert_mult;
+
+        // Trigonometry
+        _sin = Trigonometry.Get<T>().sin;
+        _cos = Trigonometry.Get<T>().cos;
+        _acos = Trigonometry.Get<T>().arccos;
+      }
+
+      /// <summary>Adds two vectors together.</summary>
+      public LinearAlgebra._Vector_Add<T> Vector_Add
+      {
+        get
+        {
+          return
+            (T[] left, T[] right) =>
+            {
+              if (left.Length != right.Length)
+                throw new Error("invalid dimensions on vector addition.");
+              T[] result = new T[left.Length];
+              for (int i = 0; i < left.Length; i++)
+                result[i] = _add(left[i], right[i]);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Negates all the values in a vector.</summary>
+      public LinearAlgebra._Vector_Negate<T> Vector_Negate
+      {
+        get
+        {
+          return
+            (T[] vector) =>
+            {
+              T[] result = new T[vector.Length];
+              for (int i = 0; i < vector.Length; i++)
+                result[i] = _negate(vector[i]);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Subtracts two vectors.</summary>
+      public LinearAlgebra._Vector_Subtract<T> Vector_Subtract
+      {
+        get
+        {
+          return
+            (T[] left, T[] right) =>
+            {
+              T[] result = new T[left.Length];
+              if (left.Length != right.Length)
+                throw new Error("invalid dimensions on vector subtraction.");
+              for (int i = 0; i < left.Length; i++)
+                result[i] = _subtract(left[i], right[i]);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+      public LinearAlgebra._Vector_Multiply<T> Vector_Multiply
+      {
+        get
+        {
+          return
+            (T[] left, T right) =>
+            {
+              T[] result = new T[left.Length];
+              for (int i = 0; i < left.Length; i++)
+                result[i] = _multiply(left[i], right);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Divides all the components of a vector by a scalar.</summary>
+      public LinearAlgebra._Vector_Divide<T> Vector_Divide
+      {
+        get
+        {
+          return
+            (T[] left, T right) =>
+            {
+              T[] result = new T[left.Length];
+              for (int i = 0; i < left.Length; i++)
+                result[i] = _divide(left[i], right);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Computes the dot product between two vectors.</summary>
+      public LinearAlgebra._Vector_DotProduct<T> Vector_DotProduct
+      {
+        get
+        {
+          return
+            (T[] left, T[] right) =>
+            {
+              if (left.Length != right.Length)
+                throw new Error("invalid dimensions on vector dot product.");
+              T result = _zero;
+              for (int i = 0; i < left.Length; i++)
+                result = _add(result, _multiply(left[i], right[i]));
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Computes teh cross product of two vectors.</summary>
+      public LinearAlgebra._Vector_CrossProduct<T> Vector_CrossProduct
+      {
+        get
+        {
+          return
+            (T[] left, T[] right) =>
+            {
+              if (left.Length != right.Length)
+                throw new Error("invalid cross product !(left.Dimensions == right.Dimensions)");
+              if (left.Length == 3 || left.Length == 4)
+              {
+                return new T[] {
+                _subtract(_multiply(left[1], right[2]), _multiply(left[2], right[1])),
+                _subtract(_multiply(left[2], right[0]), _multiply(left[0], right[2])),
+                _subtract(_multiply(left[0], right[1]), _multiply(left[1], right[0])) };
+              }
+              throw new Error("my cross product function is only defined for 3-component vectors.");
+            };
+        }
+      }
+
+      /// <summary>Normalizes a vector.</summary>
+      public LinearAlgebra._Vector_Normalize<T> Vector_Normalize
+      {
+        get
+        {
+          return
+            (T[] vector) =>
+            {
+              T length = Vector<T>.Magnitude(vector);
+              if (!_equate(length, _zero))
+              {
+                T[] result = new T[vector.Length];
+                for (int i = 0; i < vector.Length; i++)
+                  result[i] = _divide(vector[i], length);
+                return result;
+              }
+              else
+                return new T[vector.Length];
+            };
+        }
+      }
+
+      /// <summary>Computes the length of a vector.</summary>
+      public LinearAlgebra._Vector_Magnitude<T> Vector_Magnitude
+      {
+        get
+        {
+          return
+            (T[] vector) =>
+            {
+              T result = _zero;
+              for (int i = 0; i < vector.Length; i++)
+                result = _add(result, _multiply(vector[i], vector[i]));
+              return _sqrt(result);
+            };
+        }
+      }
+
+      /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+      public LinearAlgebra._Vector_MagnitudeSquared<T> Vector_MagnitudeSquared
+      {
+        get
+        {
+          return
+            (T[] vector) =>
+            {
+              T result = _zero;
+              for (int i = 0; i < vector.Length; i++)
+                result = _add(result, _multiply(vector[i], vector[i]));
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Computes the angle between two vectors.</summary>
+      public LinearAlgebra._Vector_Angle<T> Vector_Angle
+      {
+        get
+        {
+          return
+            (T[] first, T[] second) =>
+            {
+              return _acos(_divide(Vector<T>.DotProduct(first, second), (_multiply(Vector<T>.Magnitude(first), Vector<T>.Magnitude(second)))));
+            };
+        }
+      }
+
+      /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+      public LinearAlgebra._Vector_RotateBy<T> Vector_RotateBy
+      {
+        get
+        {
+          return
+            (T[] vector, T angle, T x, T y, T z) =>
+            {
+              if (vector.Length == 3)
+              {
+                // Note: the angle is in radians
+                T sinHalfAngle = _sin(_divide(angle, _two));
+                T cosHalfAngle = _cos(_divide(angle, _two));
+                x = _multiply(x, sinHalfAngle);
+                y = _multiply(y, sinHalfAngle);
+                z = _multiply(z, sinHalfAngle);
+                T x2 = _subtract(_add(_multiply(cosHalfAngle, vector[0]), _multiply(y, vector[2])), _multiply(z, vector[1]));
+                T y2 = _subtract(_add(_multiply(cosHalfAngle, vector[1]), _multiply(z, vector[0])), _multiply(x, vector[2]));
+                T z2 = _subtract(_add(_multiply(cosHalfAngle, vector[2]), _multiply(x, vector[1])), _multiply(y, vector[0]));
+                T w2 = _add(_add(_multiply(_negate(x), vector[0]), _multiply(_negate(y), vector[1])), _multiply(_negate(z), vector[2]));
+                return new T[] {
+					_subtract(_add(_add(_multiply(x, w2), _multiply(cosHalfAngle, x2)), _multiply(y, z2)), _multiply(z, y2)),
+					_subtract(_add(_add(_multiply(y, w2), _multiply(cosHalfAngle, y2)), _multiply(z, x2)), _multiply(x, z2)),
+					_subtract(_add(_add(_multiply(z, w2), _multiply(cosHalfAngle, z2)), _multiply(x, y2)), _multiply(y, x2)) };
+              }
+              throw new Error("my RotateBy() function is only defined for 3-component vectors.");
+            };
+        }
+      }
+
+      /// <summary>Computes the linear Terpolation between two vectors.</summary>
+      public LinearAlgebra._Vector_Lerp<T> Vector_Lerp
+      {
+        get
+        {
+          return
+            (T[] left, T[] right, T blend) =>
+            {
+              throw new System.NotImplementedException();
+              //float[] leftFloats = left.Floats;
+              //float[] rightFloats = right.Floats;
+              //if (blend < 0 || blend > 1.0f)
+              //	throw new Error("invalid lerp blend value: (blend < 0.0f || blend > 1.0f).");
+              //if (leftFloats.Length != rightFloats.Length)
+              //	throw new Error("invalid lerp matrix length: (left.Dimensions != right.Dimensions)");
+              //Vector<T> result = new Vector<T>(leftFloats.Length);
+              //float[] resultFloats = result.Floats;
+              //for (int i = 0; i < leftFloats.Length; i++)
+              //	resultFloats[i] = leftFloats[i] + blend * (rightFloats[i] - leftFloats[i]);
+              //return result;
+            };
+        }
+      }
+
+      /// <summary>Sphereically Terpolates between two vectors.</summary>
+      public LinearAlgebra._Vector_Slerp<T> Vector_Slerp
+      {
+        get
+        {
+          return
+            (T[] left, T[] right, T blend) =>
+            {
+              throw new System.NotImplementedException();
+              //if (blend < 0 || blend > 1.0f)
+              //	throw new Error("invalid slerp blend value: (blend < 0.0f || blend > 1.0f).");
+              //float dot = Calc.Clamp(Vector<T>.DotProduct(left, right), -1.0f, 1.0f);
+              //float theta = Calc.ArcCos(dot) * blend;
+              //return left * Calc.Cos(theta) + (right - left * dot).Normalize() * Calc.Sin(theta);
+            };
+        }
+      }
+
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_Blerp<T> Vector_Blerp
+      {
+        get
+        {
+          return
+            (T[] a, T[] b, T[] c, T u, T v) =>
+            {
+              throw new System.NotImplementedException();
+              //return Vector<T>.Add(Vector<T>.Add(Vector<T>.Multiply(Vector<T>.Subtract(b, a), u), Vector<T>.Multiply(Vector<T>.Subtract(c, a), v)), a);
+            };
+        }
+      }
+
+      /// <summary>Negates all the values in this matrix.</summary>
+      public LinearAlgebra._Matrix_Negate<T> Matrix_Negate
+      {
+        get
+        {
+          return
+            (T[,] matrix) =>
+            {
+              T[,] result = new T[matrix.GetLength(0), matrix.GetLength(1)];
+              for (int i = 0; i < matrix.GetLength(0); i++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                  result[i, j] = _negate(matrix[i, j]);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Does a standard matrix addition.</summary>
+      public LinearAlgebra._Matrix_Add<T> Matrix_Add
+      {
+        get
+        {
+          return
+            (T[,] left, T[,] right) =>
+            {
+              if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+                throw new Error("invalid addition (size miss-match).");
+              T[,] result = new T[left.GetLength(0), left.GetLength(1)];
+              for (int i = 0; i < left.GetLength(0); i++)
+                for (int j = 0; j < left.GetLength(1); j++)
+                  result[i, j] = _add(left[i, j], right[i, j]);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+      public LinearAlgebra._Matrix_Multiply<T> Matrix_Multiply
+      {
+        get
+        {
+          return
+            (T[,] left, T[,] right) =>
+            {
+              if (left.GetLength(1) != right.GetLength(0))
+                throw new Error("invalid multiplication (size miss-match).");
+              T[,] result = new T[left.GetLength(0), right.GetLength(1)];
+              for (int i = 0; i < left.GetLength(0); i++)
+                for (int j = 0; j < right.GetLength(1); j++)
+                  for (int k = 0; k < left.GetLength(1); k++)
+                    result[i, j] = _add(result[i, j], _multiply(left[i, k], right[k, j]));
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_scalar<T> Matrix_Multiply_scalar
+      {
+        get
+        {
+          return
+            (T[,] left, T right) =>
+            {
+              T[,] result = new T[left.GetLength(0), left.GetLength(1)];
+              for (int i = 0; i < left.GetLength(0); i++)
+                for (int j = 0; j < left.GetLength(1); j++)
+                  result[i, j] = _multiply(left[i, j], right);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Divides all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Divide<T> Matrix_Divide
+      {
+        get
+        {
+          return
+            (T[,] matrix, T right) =>
+            {
+              T[,] result = new T[matrix.GetLength(0), matrix.GetLength(1)];
+              for (int i = 0; i < matrix.GetLength(0); i++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                  result[i, j] = _divide(matrix[i, j], right);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Gets the minor of a matrix.</summary>
+      public LinearAlgebra._Matrix_Minor<T> Matrix_Minor
+      {
+        get
+        {
+          return
+            (T[,] matrix, int row, int column) =>
+            {
+              T[,] minor = new T[matrix.GetLength(0) - 1, matrix.GetLength(1) - 1];
+              int m = 0, n = 0;
+              for (int i = 0; i < matrix.GetLength(0); i++)
+              {
+                if (i == row) continue;
+                n = 0;
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                  if (j == column) continue;
+                  minor[m, n] = matrix[i, j];
+                  n++;
+                }
+                m++;
+              }
+              return minor;
+            };
+        }
+      }
+
+      /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+      public LinearAlgebra._Matrix_ConcatenateRowWise<T> Matrix_ConcatenateRowWise
+      {
+        get
+        {
+          return
+            (T[,] left, T[,] right) =>
+            {
+              if (left.GetLength(0) != right.GetLength(0))
+                throw new Error("invalid row-wise concatenation !(left.Rows == right.Rows).");
+              T[,] result = new T[left.GetLength(0), left.GetLength(1) + right.GetLength(1)];
+              for (int i = 0; i < left.GetLength(0); i++)
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                  if (j < left.GetLength(1)) result[i, j] = left[i, j];
+                  else result[i, j] = right[i, j - left.GetLength(1)];
+                }
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Computes the determinent if this matrix is square.</summary>
+      public LinearAlgebra._Matrix_Determinent<T> Matrix_Determinent
+      {
+        get
+        {
+          return
+            (T[,] matrix) =>
+            {
+              if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+                throw new Error("invalid determinent !(matrix.IsSquare).");
+              T det = _one;
+              try
+              {
+                T[,] rref = matrix.Clone() as T[,];
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                  if (_equate(rref[i, i], _zero))
+                    for (int j = i + 1; j < rref.GetLength(0); j++)
+                      if (!_equate(rref[j, i], _zero))
+                      {
+                        LinearAlgebra_generic<T>.SwapRows(rref, i, j);
+                        det = _negate(det);
+                      }
+                  det = _multiply(det, rref[i, i]);
+                  LinearAlgebra_generic<T>.RowMultiplication(rref, i, _Invert_Multiplicative(rref[i, i]));
+                  for (int j = i + 1; j < rref.GetLength(0); j++)
+                    LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
+                  for (int j = i - 1; j >= 0; j--)
+                    LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
+                }
+                return det;
+              }
+              catch { throw new Error("determinent computation failed."); }
+            };
+        }
+      }
+
+      /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+      public LinearAlgebra._Matrix_Echelon<T> Matrix_Echelon
+      {
+        get
+        {
+          return
+            (T[,] matrix) =>
+            {
+              try
+              {
+                T[,] result = matrix.Clone() as T[,];
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                  if (_equate(result[i, i], _zero))
+                    for (int j = i + 1; j < result.GetLength(0); j++)
+                      if (!_equate(result[j, i], _zero))
+                        LinearAlgebra_generic<T>.SwapRows(result, i, j);
+                  if (_equate(result[i, i], _zero))
+                    continue;
+                  if (!_equate(result[i, i], _one))
+                    for (int j = i + 1; j < result.GetLength(0); j++)
+                      if (_equate(result[j, i], _one))
+                        LinearAlgebra_generic<T>.SwapRows(result, i, j);
+                  LinearAlgebra_generic<T>.RowMultiplication(result, i, _Invert_Multiplicative(result[i, i]));
+                  for (int j = i + 1; j < result.GetLength(0); j++)
+                    LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
+                }
+                return result;
+              }
+              catch { throw new Error("echelon computation failed."); }
+            };
+        }
+      }
+
+      /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+      public LinearAlgebra._Matrix_ReducedEchelon<T> Matrix_ReducedEchelon
+      {
+        get
+        {
+          return
+            (T[,] matrix) =>
+            {
+              try
+              {
+                T[,] result = matrix.Clone() as T[,];
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                  if (_equate(result[i, i], _one))
+                    for (int j = i + 1; j < result.GetLength(0); j++)
+                      if (!_equate(result[j, i], _zero))
+                        LinearAlgebra_generic<T>.SwapRows(result, i, j);
+                  if (_equate(result[i, i], _zero)) continue;
+                  if (!_equate(result[i, i], _one))
+                    for (int j = i + 1; j < result.GetLength(0); j++)
+                      if (_equate(result[j, i], _one))
+                        LinearAlgebra_generic<T>.SwapRows(result, i, j);
+                  LinearAlgebra_generic<T>.RowMultiplication(result, i, _Invert_Multiplicative(result[i, i]));
+                  for (int j = i + 1; j < result.GetLength(0); j++)
+                    LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
+                  for (int j = i - 1; j >= 0; j--)
+                    LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
+                }
+                return result;
+              }
+              catch { throw new Error("reduced echelon calculation failed."); }
+            };
+        }
+      }
+
+      /// <summary>Computes the inverse of this matrix.</summary>
+      public LinearAlgebra._Matrix_Inverse<T> Matrix_Inverse
+      {
+        get
+        {
+          return
+            (T[,] matrix) =>
+            {
+              if (_equate(Matrix<T>.Determinent(matrix), _zero))
+                throw new Error("inverse calculation failed.");
+              try
+              {
+                T[,] identity = Matrix<T>.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
+                T[,] rref = matrix.Clone() as T[,];
+                for (int i = 0; i < matrix.GetLength(0); i++)
+                {
+                  if (_equate(rref[i, i], _zero))
+                    for (int j = i + 1; j < rref.GetLength(0); j++)
+                      if (!_equate(rref[j, i], _zero))
+                      {
+                        LinearAlgebra_generic<T>.SwapRows(rref, i, j);
+                        LinearAlgebra_generic<T>.SwapRows(identity, i, j);
+                      }
+                  LinearAlgebra_generic<T>.RowMultiplication(identity, i, _Invert_Multiplicative(rref[i, i]));
+                  LinearAlgebra_generic<T>.RowMultiplication(rref, i, _Invert_Multiplicative(rref[i, i]));
+                  for (int j = i + 1; j < rref.GetLength(0); j++)
+                  {
+                    LinearAlgebra_generic<T>.RowAddition(identity, j, i, _negate(rref[j, i]));
+                    LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
+                  }
+                  for (int j = i - 1; j >= 0; j--)
+                  {
+                    LinearAlgebra_generic<T>.RowAddition(identity, j, i, _negate(rref[j, i]));
+                    LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
+                  }
+                }
+                return identity;
+              }
+              catch { throw new Error("inverse calculation failed."); }
+            };
+        }
+      }
+
+      /// <summary>Gets the adjoT of this matrix.</summary>
+      public LinearAlgebra._Matrix_Adjoint<T> Matrix_Adjoint
+      {
+        get
+        {
+          return
+            (T[,] matrix) =>
+            {
+              if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+                throw new Error("Adjoint of a non-square matrix does not exists");
+              T[,] AdjointMatrix = new T[matrix.GetLength(0), matrix.GetLength(1)];
+              for (int i = 0; i < matrix.GetLength(0); i++)
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                  if ((i + j) % 2 == 0)
+                    AdjointMatrix[i, j] = Matrix<T>.Determinent(Matrix<T>.Minor(matrix, i, j));
+                  else
+                    AdjointMatrix[i, j] = _negate(Matrix<T>.Determinent(Matrix<T>.Minor(matrix, i, j)));
+              return Matrix<T>.Transpose(AdjointMatrix);
+            };
+        }
+      }
+
+      /// <summary>Transposes this matrix.</summary>
+      public LinearAlgebra._Matrix_Transpose<T> Matrix_Transpose
+      {
+        get
+        {
+          return
+            (T[,] matrix) =>
+            {
+              T[,] transpose = new T[matrix.GetLength(1), matrix.GetLength(0)];
+              for (int i = 0; i < transpose.GetLength(0); i++)
+                for (int j = 0; j < transpose.GetLength(1); j++)
+                  transpose[i, j] = matrix[j, i];
+              return transpose;
+            };
+        }
+      }
+
+      /// <summary>Decomposes a matrix to lower/upper components.</summary>
+      public LinearAlgebra._Matrix_DecomposeLU<T> Matrix_DecomposeLU
+      {
+        get
+        {
+          return
+            (T[,] matrix, out T[,] lower, out T[,] upper) =>
+            {
+              if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+                throw new Error("The matrix is not square!");
+              lower = Matrix<T>.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
+              upper = matrix.Clone() as T[,];
+              int[] permutation = new int[matrix.GetLength(0)];
+              for (int i = 0; i < matrix.GetLength(0); i++) permutation[i] = i;
+              T p = _zero, pom2, detOfP = _one;
+              int k0 = 0, pom1 = 0;
+              for (int k = 0; k < matrix.GetLength(1) - 1; k++)
+              {
+                p = _zero;
+                for (int i = k; i < matrix.GetLength(0); i++)
+                  if (_compare(_abs(upper[i, k]), p) == Comparison.Greater)
+                  {
+                    p = _abs(upper[i, k]);
+                    k0 = i;
+                  }
+                if (_equate(p, _zero))
+                  throw new Error("The matrix is singular!");
+                pom1 = permutation[k];
+                permutation[k] = permutation[k0];
+                permutation[k0] = pom1;
+                for (int i = 0; i < k; i++)
+                {
+                  pom2 = lower[k, i];
+                  lower[k, i] = lower[k0, i];
+                  lower[k0, i] = pom2;
+                }
+                if (k != k0)
+                  detOfP = _negate(detOfP);
+                for (int i = 0; i < matrix.GetLength(1); i++)
+                {
+                  pom2 = upper[k, i];
+                  upper[k, i] = upper[k0, i];
+                  upper[k0, i] = pom2;
+                }
+                for (int i = k + 1; i < matrix.GetLength(0); i++)
+                {
+                  lower[i, k] = _divide(upper[i, k], upper[k, k]);
+                  for (int j = k; j < matrix.GetLength(1); j++)
+                    upper[i, j] = _subtract(upper[i, j], _multiply(lower[i, k], upper[k, j]));
+                }
+              }
+            };
+        }
+      }
+
+      ///// <summary>Adds two vectors together.</summary>
+      ///// <param name="leftFloats">The first vector of the addition.</param>
+      ///// <param name="rightFloats">The second vector of the addiiton.</param>
+      ///// <returns>The result of the addiion.</returns>
+      //public T[] Add(T[] left, T[] right)
+      //{
+      //  if (left.Length != right.Length)
+      //    throw new Error("invalid dimensions on vector addition.");
+      //  T[] result = new T[left.Length];
+      //  for (int i = 0; i < left.Length; i++)
+      //    result[i] = _add(left[i], right[i]);
+      //  return result;
+      //}
+
+      ///// <summary>Negates all the values in a vector.</summary>
+      ///// <param name="vector">The vector to have its values negated.</param>
+      ///// <returns>The result of the negations.</returns>
+      //public T[] Negate(T[] vector)
+      //{
+      //  T[] result = new T[vector.Length];
+      //  for (int i = 0; i < vector.Length; i++)
+      //    result[i] = _negate(vector[i]);
+      //  return result;
+      //}
+
+      ///// <summary>Subtracts two vectors.</summary>
+      ///// <param name="left">The left vector of the subtraction.</param>
+      ///// <param name="right">The right vector of the subtraction.</param>
+      ///// <returns>The result of the vector subtracton.</returns>
+      //public T[] Subtract(T[] left, T[] right)
+      //{
+      //  T[] result = new T[left.Length];
+      //  if (left.Length != right.Length)
+      //    throw new Error("invalid dimensions on vector subtraction.");
+      //  for (int i = 0; i < left.Length; i++)
+      //    result[i] = _subtract(left[i], right[i]);
+      //  return result;
+      //}
+
+      ///// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+      ///// <param name="left">The vector to have the components multiplied by.</param>
+      ///// <param name="right">The scalars to multiply the vector components by.</param>
+      ///// <returns>The result of the multiplications.</returns>
+      //public T[] Multiply(T[] left, T right)
+      //{
+      //  T[] result = new T[left.Length];
+      //  for (int i = 0; i < left.Length; i++)
+      //    result[i] = _multiply(left[i], right);
+      //  return result;
+      //}
+
+      ///// <summary>Divides all the components of a vector by a scalar.</summary>
+      ///// <param name="left">The vector to have the components divided by.</param>
+      ///// <param name="right">The scalar to divide the vector components by.</param>
+      ///// <returns>The resulting vector after teh divisions.</returns>
+      //public T[] Divide(T[] left, T right)
+      //{
+      //  T[] result = new T[left.Length];
+      //  for (int i = 0; i < left.Length; i++)
+      //    result[i] = _divide(left[i], right);
+      //  return result;
+      //}
+
+      ///// <summary>Computes the dot product between two vectors.</summary>
+      ///// <param name="left">The first vector of the dot product operation.</param>
+      ///// <param name="right">The second vector of the dot product operation.</param>
+      ///// <returns>The result of the dot product operation.</returns>
+      //public T DotProduct(T[] left, T[] right)
+      //{
+      //  if (left.Length != right.Length)
+      //    throw new Error("invalid dimensions on vector dot product.");
+      //  T result = _zero;
+      //  for (int i = 0; i < left.Length; i++)
+      //    result = _add(result, _multiply(left[i], right[i]));
+      //  return result;
+      //}
+
+      ///// <summary>Computes teh cross product of two vectors.</summary>
+      ///// <param name="left">The first vector of the cross product operation.</param>
+      ///// <param name="right">The second vector of the cross product operation.</param>
+      ///// <returns>The result of the cross product operation.</returns>
+      //public T[] CrossProduct(T[] left, T[] right)
+      //{
+      //  if (left.Length != right.Length)
+      //    throw new Error("invalid cross product !(left.Dimensions == right.Dimensions)");
+      //  if (left.Length == 3 || left.Length == 4)
+      //  {
+      //    return new Vector<T>(
+      //      _subtract(_multiply(left[1], right[2]), _multiply(left[2], right[1])),
+      //      _subtract(_multiply(left[2], right[0]), _multiply(left[0], right[2])),
+      //      _subtract(_multiply(left[0], right[1]), _multiply(left[1], right[0])));
+      //  }
+      //  throw new Error("my cross product function is only defined for 3-component vectors.");
+      //}
+
+      ///// <summary>Normalizes a vector.</summary>
+      ///// <param name="vector">The vector to normalize.</param>
+      ///// <returns>The result of the normalization.</returns>
+      //public T[] Normalize(T[] vector)
+      //{
+      //  T length = Vector<T>.Magnitude(vector);
+      //  if (!_equate(length, _zero))
+      //  {
+      //    T[] result = new T[vector.Length];
+      //    for (int i = 0; i < vector.Length; i++)
+      //      result[i] = _divide(vector[i], length);
+      //    return result;
+      //  }
+      //  else
+      //    return new T[vector.Length];
+      //}
+
+      ///// <summary>Computes the length of a vector.</summary>
+      ///// <param name="vector">The vector to calculate the length of.</param>
+      ///// <returns>The computed length of the vector.</returns>
+      //public T Magnitude(T[] vector)
+      //{
+      //  T result = _zero;
+      //  for (int i = 0; i < vector.Length; i++)
+      //    result = _add(result, _multiply(vector[i], vector[i]));
+      //  return _sqrt(result);
+      //}
+
+      ///// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+      ///// <param name="vector">The vector to compute the length squared of.</param>
+      ///// <returns>The computed length squared of the vector.</returns>
+      //public T MagnitudeSquared(T[] vector)
+      //{
+      //  T result = _zero;
+      //  for (int i = 0; i < vector.Length; i++)
+      //    result = _add(result, _multiply(vector[i], vector[i]));
+      //  return result;
+      //}
+
+      ///// <summary>Computes the angle between two vectors.</summary>
+      ///// <param name="first">The first vector to determine the angle between.</param>
+      ///// <param name="second">The second vector to determine the angle between.</param>
+      ///// <returns>The angle between the two vectors in radians.</returns>
+      //public T Angle(T[] first, T[] second)
+      //{
+      //  return _acos(_divide(Vector<T>.DotProduct(first, second), (_multiply(Vector<T>.Magnitude(first), Vector<T>.Magnitude(second)))));
+      //}
+
+      ///// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+      ///// <param name="vector">The vector to rotate.</param>
+      ///// <param name="angle">The angle of the rotation.</param>
+      ///// <param name="x">The x component of the axis vector to rotate about.</param>
+      ///// <param name="y">The y component of the axis vector to rotate about.</param>
+      ///// <param name="z">The z component of the axis vector to rotate about.</param>
+      ///// <returns>The result of the rotation.</returns>
+      //public T[] RotateBy(T[] vector, T angle, T x, T y, T z)
+      //{
+      //  if (vector.Length == 3)
+      //  {
+      //    // Note: the angle is in radians
+      //    T sinHalfAngle = _sin(_divide(angle, _two));
+      //    T cosHalfAngle = _cos(_divide(angle, _two));
+      //    x = _multiply(x, sinHalfAngle);
+      //    y = _multiply(y, sinHalfAngle);
+      //    z = _multiply(z, sinHalfAngle);
+      //    T x2 = _subtract(_add(_multiply(cosHalfAngle, vector[0]), _multiply(y, vector[2])), _multiply(z, vector[1]));
+      //    T y2 = _subtract(_add(_multiply(cosHalfAngle, vector[1]), _multiply(z, vector[0])), _multiply(x, vector[2]));
+      //    T z2 = _subtract(_add(_multiply(cosHalfAngle, vector[2]), _multiply(x, vector[1])), _multiply(y, vector[0]));
+      //    T w2 = _add(_add(_multiply(_negate(x), vector[0]), _multiply(_negate(y), vector[1])), _multiply(_negate(z), vector[2]));
+      //    return new T[] {
+      //      _subtract(_add(_add(_multiply(x, w2), _multiply(cosHalfAngle, x2)), _multiply(y, z2)), _multiply(z, y2)),
+      //      _subtract(_add(_add(_multiply(y, w2), _multiply(cosHalfAngle, y2)), _multiply(z, x2)), _multiply(x, z2)),
+      //      _subtract(_add(_add(_multiply(z, w2), _multiply(cosHalfAngle, z2)), _multiply(x, y2)), _multiply(y, x2)) };
+      //  }
+      //  throw new Error("my RotateBy() function is only defined for 3-component vectors.");
+      //}
+
+      ///// <summary>Computes the linear interpolation between two vectors.</summary>
+      ///// <param name="left">The starting vector of the interpolation.</param>
+      ///// <param name="right">The ending vector of the interpolation.</param>
+      ///// <param name="blend">The ratio 0.0 to 1.0 of the interpolation between the start and end.</param>
+      ///// <returns>The result of the interpolation.</returns>
+      //public T[] Lerp(T[] left, T[] right, T blend)
+      //{
+      //  throw new System.NotImplementedException();
+      //  //float[] leftFloats = left.Floats;
+      //  //float[] rightFloats = right.Floats;
+      //  //if (blend < 0 || blend > 1.0f)
+      //  //	throw new Error("invalid lerp blend value: (blend < 0.0f || blend > 1.0f).");
+      //  //if (leftFloats.Length != rightFloats.Length)
+      //  //	throw new Error("invalid lerp matrix length: (left.Dimensions != right.Dimensions)");
+      //  //Vector<T> result = new Vector<T>(leftFloats.Length);
+      //  //float[] resultFloats = result.Floats;
+      //  //for (int i = 0; i < leftFloats.Length; i++)
+      //  //	resultFloats[i] = leftFloats[i] + blend * (rightFloats[i] - leftFloats[i]);
+      //  //return result;
+      //}
+
+      ///// <summary>Sphereically interpolates between two vectors.</summary>
+      ///// <param name="left">The starting vector of the interpolation.</param>
+      ///// <param name="right">The ending vector of the interpolation.</param>
+      ///// <param name="blend">The ratio 0.0 to 1.0 defining the interpolation distance between the two vectors.</param>
+      ///// <returns>The result of the slerp operation.</returns>
+      //public T[] Slerp(T[] left, T[] right, T blend)
+      //{
+      //  throw new System.NotImplementedException();
+      //  //if (blend < 0 || blend > 1.0f)
+      //  //	throw new Error("invalid slerp blend value: (blend < 0.0f || blend > 1.0f).");
+      //  //float dot = Calc.Clamp(Vector<T>.DotProduct(left, right), -1.0f, 1.0f);
+      //  //float theta = Calc.ArcCos(dot) * blend;
+      //  //return left * Calc.Cos(theta) + (right - left * dot).Normalize() * Calc.Sin(theta);
+      //}
+
+      ///// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      ///// <param name="a">The first vector of the interpolation.</param>
+      ///// <param name="b">The second vector of the interpolation.</param>
+      ///// <param name="c">The thrid vector of the interpolation.</param>
+      ///// <param name="u">The "U" value of the barycentric interpolation equation.</param>
+      ///// <param name="v">The "V" value of the barycentric interpolation equation.</param>
+      ///// <returns>The resulting vector of the barycentric interpolation.</returns>
+      //public T[] Blerp(T[] a, T[] b, T[] c, T u, T v)
+      //{
+      //  throw new System.NotImplementedException();
+      //  //return Vector<T>.Add(Vector<T>.Add(Vector<T>.Multiply(Vector<T>.Subtract(b, a), u), Vector<T>.Multiply(Vector<T>.Subtract(c, a), v)), a);
+      //}
+
+      /// <summary>Does a value equality check.</summary>
+      /// <param name="left">The first vector to check for equality.</param>
+      /// <param name="right">The second vector  to check for equality.</param>
+      /// <returns>True if values are equal, false if not.</returns>
+      public bool EqualsValue(T[] left, T[] right)
+      {
+        if (left.Length != right.Length)
+          return false;
+        for (int i = 0; i < left.Length; i++)
+          if (!_equate(left[i], right[i]))
+            return false;
+        return true;
+      }
+
+      /// <summary>Does a value equality check with leniency.</summary>
+      /// <param name="left">The first vector to check for equality.</param>
+      /// <param name="right">The second vector to check for equality.</param>
+      /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+      /// <returns>True if values are equal, false if not.</returns>
+      public bool EqualsValue(T[] left, T[] right, T leniency)
+      {
+        if (left.Length != right.Length)
+          return false;
+        for (int i = 0; i < left.Length; i++)
+          if (_compare(_abs(_subtract(left[i], right[i])), leniency) == Comparison.Greater)
+            return false;
+        return true;
+      }
+
+      /// <summary>Checks if two matrices are equal by reverences.</summary>
+      /// <param name="left">The left vector of the equality check.</param>
+      /// <param name="right">The right vector of the equality check.</param>
+      /// <returns>True if the references are equal, false if not.</returns>
+      public bool EqualsReference(T[] left, T[] right)
+      {
+        return object.ReferenceEquals(left, right);
+      }
+
+      /// <summary>Checks if two matrices are equal by reverences.</summary>
+      /// <param name="left">The left vector of the equality check.</param>
+      /// <param name="right">The right vector of the equality check.</param>
+      /// <returns>True if the references are equal, false if not.</returns>
+      public bool EqualsReference(Vector<T> left, Vector<T> right)
+      {
+        return EqualsReference(left._vector, right._vector);
+      }
+
+      ///// <summary>Negates all the values in a matrix.</summary>
+      ///// <param name="matrix">The matrix to have its values negated.</param>
+      ///// <returns>The resulting matrix after the negations.</returns>
+      //public T[,] Negate(T[,] matrix)
+      //{
+      //  T[,] result = new T[matrix.GetLength(0), matrix.GetLength(1)];
+      //  for (int i = 0; i < matrix.GetLength(0); i++)
+      //    for (int j = 0; j < matrix.GetLength(1); j++)
+      //      result[i, j] = _negate(matrix[i, j]);
+      //  return result;
+      //}
+
+      ///// <summary>Does standard addition of two matrices.</summary>
+      ///// <param name="left">The left matrix of the addition.</param>
+      ///// <param name="right">The right matrix of the addition.</param>
+      ///// <returns>The resulting matrix after the addition.</returns>
+      //public T[,] Add(T[,] left, T[,] right)
+      //{
+      //  if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+      //    throw new Error("invalid addition (size miss-match).");
+      //  T[,] result = new T[left.GetLength(0), left.GetLength(1)];
+      //  for (int i = 0; i < left.GetLength(0); i++)
+      //    for (int j = 0; j < left.GetLength(1); j++)
+      //      result[i, j] = _add(left[i, j], right[i, j]);
+      //  return result;
+      //}
+
+      ///// <summary>Subtracts a scalar from all the values in a matrix.</summary>
+      ///// <param name="left">The matrix to have the values subtracted from.</param>
+      ///// <param name="right">The scalar to subtract from all the matrix values.</param>
+      ///// <returns>The resulting matrix after the subtractions.</returns>
+      //public T[,] Subtract(T[,] left, T[,] right)
+      //{
+      //  if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+      //    throw new Error("invalid subtraction (size miss-match).");
+      //  T[,] result = new T[left.GetLength(0), left.GetLength(1)];
+      //  for (int i = 0; i < left.GetLength(0); i++)
+      //    for (int j = 0; j < left.GetLength(1); j++)
+      //      result[i, j] = _subtract(left[i, j], right[i, j]);
+      //  return result;
+      //}
+
+      /////// <summary>Subtracts a scalar from all the values in a matrix.</summary>
+      /////// <param name="left">The matrix to have the values subtracted from.</param>
+      /////// <param name="right">The scalar to subtract from all the matrix values.</param>
+      /////// <returns>The resulting matrix after the subtractions.</returns>
+      ////public static Vector Subtract(float[,] left, float[] right)
+      ////{
+      ////  if (!(left.GetLength(1) == 1 && left.GetLength(0) == right.Length))
+      ////    throw new MatrixException("invalid subtraction (size miss-match).");
+      ////  Vector result = new Vector(left.GetLength(0));
+      ////  for (int i = 0; i < result.Dimensions; i++)
+      ////    result[i] = left[i, 0] - right[i];
+      ////  return result;
+      ////}
+
+      ///// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
+      ///// <param name="left">The left matrix of the multiplication.</param>
+      ///// <param name="right">The right matrix of the multiplication.</param>
+      ///// <returns>The resulting matrix of the multiplication.</returns>
+      //public T[,] Multiply(T[,] left, T[,] right)
+      //{
+      //  if (left.GetLength(1) != right.GetLength(0))
+      //    throw new Error("invalid multiplication (size miss-match).");
+      //  T[,] result = new T[left.GetLength(0), right.GetLength(1)];
+      //  for (int i = 0; i < left.GetLength(0); i++)
+      //    for (int j = 0; j < right.GetLength(1); j++)
+      //      for (int k = 0; k < left.GetLength(1); k++)
+      //        result[i, j] = _add(result[i, j], _multiply(left[i, k], right[k, j]));
+      //  return result;
+      //}
+
+      ///// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
+      ///// <param name="left">The left matrix of the multiplication.</param>
+      ///// <param name="right">The right matrix of the multiplication.</param>
+      ///// <returns>The resulting matrix of the multiplication.</returns>
+      //public T[] Multiply(T[,] left, T[] right)
+      //{
+      //  if (left.GetLength(1) != right.GetLength(0))
+      //    throw new Error("invalid multiplication (size miss-match).");
+      //  T[] result = new T[left.GetLength(1)];
+      //  for (int i = 0; i < left.GetLength(0); i++)
+      //    for (int j = 0; j < right.GetLength(1); j++)
+      //      result[i] = _add(result[i], _multiply(left[i, j], right[j]));
+      //  return result;
+      //}
+
+      /////// <summary>Does a standard multiplication between a matrix and a vector.</summary>
+      /////// <param name="left">The left matrix of the multiplication.</param>
+      /////// <param name="right">The right vector of the multiplication.</param>
+      /////// <returns>The resulting matrix/vector of the multiplication.</returns>
+      ////public static Matrix Multiply(float[,] left, float[] right)
+      ////{
+      ////  if (left.GetLength(1) != right.GetLength(0))
+      ////    throw new MatrixException("invalid multiplication (size miss-match).");
+      ////  Matrix result = new Matrix(left.GetLength(0), right.GetLength(1));
+      ////  for (int i = 0; i < result.Rows; i++)
+      ////      for (int k = 0; k < left.GetLength(1); k++)
+      ////        result[i, j] += left[i, k] * right[k];
+      ////  return result;
+      ////}
+
+      ///// <summary>Multiplies all the values in a matrix by a scalar.</summary>
+      ///// <param name="left">The matrix to have the values multiplied.</param>
+      ///// <param name="right">The scalar to multiply the values by.</param>
+      ///// <returns>The resulting matrix after the multiplications.</returns>
+      //public T[,] Multiply(T[,] left, T right)
+      //{
+      //  T[,] result = new T[left.GetLength(0), left.GetLength(1)];
+      //  for (int i = 0; i < left.GetLength(0); i++)
+      //    for (int j = 0; j < left.GetLength(1); j++)
+      //      result[i, j] = _multiply(left[i, j], right);
+      //  return result;
+      //}
+
+      ///// <summary>Applies a power to a square matrix.</summary>
+      ///// <param name="matrix">The matrix to be powered by.</param>
+      ///// <param name="power">The power to apply to the matrix.</param>
+      ///// <returns>The resulting matrix of the power operation.</returns>
+      //public T[,] Power(T[,] matrix, int power)
+      //{
+      //  if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+      //    throw new Error("invalid power (!matrix.IsSquare).");
+      //  if (!(power > -1))
+      //    throw new Error("invalid power !(power > -1)");
+      //  if (power == 0)
+      //    return Matrix<T>.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
+      //  T[,] result = matrix.Clone() as T[,];
+      //  for (int i = 0; i < power; i++)
+      //    result = Matrix<T>.Multiply(result, result);
+      //  return result;
+      //}
+
+      ///// <summary>Divides all the values in the matrix by a scalar.</summary>
+      ///// <param name="matrix">The matrix to divide the values of.</param>
+      ///// <param name="right">The scalar to divide all the matrix values by.</param>
+      ///// <returns>The resulting matrix with the divided values.</returns>
+      //public T[,] Divide(T[,] matrix, T right)
+      //{
+      //  T[,] result = new T[matrix.GetLength(0), matrix.GetLength(1)];
+      //  for (int i = 0; i < matrix.GetLength(0); i++)
+      //    for (int j = 0; j < matrix.GetLength(1); j++)
+      //      result[i, j] = _divide(matrix[i, j], right);
+      //  return result;
+      //}
+
+      ///// <summary>Gets the minor of a matrix.</summary>
+      ///// <param name="matrix">The matrix to get the minor of.</param>
+      ///// <param name="row">The restricted row to form the minor.</param>
+      ///// <param name="column">The restricted column to form the minor.</param>
+      ///// <returns>The minor of the matrix.</returns>
+      //public T[,] Minor(T[,] matrix, int row, int column)
+      //{
+      //  T[,] minor = new T[matrix.GetLength(0) - 1, matrix.GetLength(1) - 1];
+      //  int m = 0, n = 0;
+      //  for (int i = 0; i < matrix.GetLength(0); i++)
+      //  {
+      //    if (i == row) continue;
+      //    n = 0;
+      //    for (int j = 0; j < matrix.GetLength(1); j++)
+      //    {
+      //      if (j == column) continue;
+      //      minor[m, n] = matrix[i, j];
+      //      n++;
+      //    }
+      //    m++;
+      //  }
+      //  return minor;
+      //}
+
+      private static void RowMultiplication(T[,] matrix, int row, T scalar)
+      {
+        for (int j = 0; j < matrix.GetLength(1); j++)
+          matrix[row, j] = _multiply(matrix[row, j], scalar);
+      }
+
+      private static void RowAddition(T[,] matrix, int target, int second, T scalar)
+      {
+        for (int j = 0; j < matrix.GetLength(1); j++)
+          matrix[target, j] = _add(matrix[target, j], _multiply(matrix[second, j], scalar));
+      }
+
+      private static void SwapRows(T[,] matrix, int row1, int row2)
+      {
+        for (int j = 0; j < matrix.GetLength(1); j++)
+        {
+          T temp = matrix[row1, j];
+          matrix[row1, j] = matrix[row2, j];
+          matrix[row2, j] = temp;
+        }
+      }
+
+      ///// <summary>Combines two matrices from left to right 
+      ///// (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+      ///// <param name="left">The left matrix of the concatenation.</param>
+      ///// <param name="right">The right matrix of the concatenation.</param>
+      ///// <returns>The resulting matrix of the concatenation.</returns>
+      //public T[,] ConcatenateRowWise(T[,] left, T[,] right)
+      //{
+      //  if (left.GetLength(0) != right.GetLength(0))
+      //    throw new Error("invalid row-wise concatenation !(left.Rows == right.Rows).");
+      //  T[,] result = new T[left.GetLength(0), left.GetLength(1) + right.GetLength(1)];
+      //  for (int i = 0; i < left.GetLength(0); i++)
+      //    for (int j = 0; j < result.GetLength(1); j++)
+      //    {
+      //      if (j < left.GetLength(1)) result[i, j] = left[i, j];
+      //      else result[i, j] = right[i, j - left.GetLength(1)];
+      //    }
+      //  return result;
+      //}
+
+      ///// <summary>Calculates the determinent of a square matrix.</summary>
+      ///// <param name="matrix">The matrix to calculate the determinent of.</param>
+      ///// <returns>The determinent of the matrix.</returns>
+      //public T Determinent(T[,] matrix)
+      //{
+      //  if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+      //    throw new Error("invalid determinent !(matrix.IsSquare).");
+      //  T det = _one;
+      //  try
+      //  {
+      //    T[,] rref = matrix.Clone() as T[,];
+      //    for (int i = 0; i < matrix.GetLength(0); i++)
+      //    {
+      //      if (_equate(rref[i, i], _zero))
+      //        for (int j = i + 1; j < rref.GetLength(0); j++)
+      //          if (!_equate(rref[j, i], _zero))
+      //          {
+      //            LinearAlgebra_generic<T>.SwapRows(rref, i, j);
+      //            det = _negate(det);
+      //          }
+      //      det = _multiply(det, rref[i, i]);
+      //      LinearAlgebra_generic<T>.RowMultiplication(rref, i, _Invert_Multiplicative(rref[i, i]));
+      //      for (int j = i + 1; j < rref.GetLength(0); j++)
+      //        LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
+      //      for (int j = i - 1; j >= 0; j--)
+      //        LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
+      //    }
+      //    return det;
+      //  }
+      //  catch { throw new Error("determinent computation failed."); }
+      //}
+
+      ///// <summary>Calculates the echelon of a matrix (aka REF).</summary>
+      ///// <param name="matrix">The matrix to calculate the echelon of (aka REF).</param>
+      ///// <returns>The echelon of the matrix (aka REF).</returns>
+      //public T[,] Echelon(T[,] matrix)
+      //{
+      //  try
+      //  {
+      //    T[,] result = matrix.Clone() as T[,];
+      //    for (int i = 0; i < matrix.GetLength(0); i++)
+      //    {
+      //      if (_equate(result[i, i], _zero))
+      //        for (int j = i + 1; j < result.GetLength(0); j++)
+      //          if (!_equate(result[j, i], _zero))
+      //            LinearAlgebra_generic<T>.SwapRows(result, i, j);
+      //      if (_equate(result[i, i], _zero))
+      //        continue;
+      //      if (!_equate(result[i, i], _one))
+      //        for (int j = i + 1; j < result.GetLength(0); j++)
+      //          if (_equate(result[j, i], _one))
+      //            LinearAlgebra_generic<T>.SwapRows(result, i, j);
+      //      LinearAlgebra_generic<T>.RowMultiplication(result, i, _Invert_Multiplicative(result[i, i]));
+      //      for (int j = i + 1; j < result.GetLength(0); j++)
+      //        LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
+      //    }
+      //    return result;
+      //  }
+      //  catch { throw new Error("echelon computation failed."); }
+      //}
+
+      ///// <summary>Calculates the echelon of a matrix and reduces it (aka RREF).</summary>
+      ///// <param name="matrix">The matrix matrix to calculate the reduced echelon of (aka RREF).</param>
+      ///// <returns>The reduced echelon of the matrix (aka RREF).</returns>
+      //public T[,] ReducedEchelon(T[,] matrix)
+      //{
+      //  try
+      //  {
+      //    T[,] result = matrix.Clone() as T[,];
+      //    for (int i = 0; i < matrix.GetLength(0); i++)
+      //    {
+      //      if (_equate(result[i, i], _one))
+      //        for (int j = i + 1; j < result.GetLength(0); j++)
+      //          if (!_equate(result[j, i], _zero))
+      //            LinearAlgebra_generic<T>.SwapRows(result, i, j);
+      //      if (_equate(result[i, i], _zero)) continue;
+      //      if (!_equate(result[i, i], _one))
+      //        for (int j = i + 1; j < result.GetLength(0); j++)
+      //          if (_equate(result[j, i], _one))
+      //            LinearAlgebra_generic<T>.SwapRows(result, i, j);
+      //      LinearAlgebra_generic<T>.RowMultiplication(result, i, _Invert_Multiplicative(result[i, i]));
+      //      for (int j = i + 1; j < result.GetLength(0); j++)
+      //        LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
+      //      for (int j = i - 1; j >= 0; j--)
+      //        LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
+      //    }
+      //    return result;
+      //  }
+      //  catch { throw new Error("reduced echelon calculation failed."); }
+      //}
+
+      ///// <summary>Calculates the inverse of a matrix.</summary>
+      ///// <param name="matrix">The matrix to calculate the inverse of.</param>
+      ///// <returns>The inverse of the matrix.</returns>
+      //public T[,] Inverse(T[,] matrix)
+      //{
+      //  if (_equate(Matrix<T>.Determinent(matrix), _zero))
+      //    throw new Error("inverse calculation failed.");
+      //  try
+      //  {
+      //    T[,] identity = Matrix<T>.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
+      //    T[,] rref = matrix.Clone() as T[,];
+      //    for (int i = 0; i < matrix.GetLength(0); i++)
+      //    {
+      //      if (_equate(rref[i, i], _zero))
+      //        for (int j = i + 1; j < rref.GetLength(0); j++)
+      //          if (!_equate(rref[j, i], _zero))
+      //          {
+      //            LinearAlgebra_generic<T>.SwapRows(rref, i, j);
+      //            LinearAlgebra_generic<T>.SwapRows(identity, i, j);
+      //          }
+      //      LinearAlgebra_generic<T>.RowMultiplication(identity, i, _Invert_Multiplicative(rref[i, i]));
+      //      LinearAlgebra_generic<T>.RowMultiplication(rref, i, _Invert_Multiplicative(rref[i, i]));
+      //      for (int j = i + 1; j < rref.GetLength(0); j++)
+      //      {
+      //        LinearAlgebra_generic<T>.RowAddition(identity, j, i, _negate(rref[j, i]));
+      //        LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
+      //      }
+      //      for (int j = i - 1; j >= 0; j--)
+      //      {
+      //        LinearAlgebra_generic<T>.RowAddition(identity, j, i, _negate(rref[j, i]));
+      //        LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
+      //      }
+      //    }
+      //    return identity;
+      //  }
+      //  catch { throw new Error("inverse calculation failed."); }
+      //}
+
+      ///// <summary>Calculates the adjoint of a matrix.</summary>
+      ///// <param name="matrix">The matrix to calculate the adjoint of.</param>
+      ///// <returns>The adjoint of the matrix.</returns>
+      //public T[,] Adjoint(T[,] matrix)
+      //{
+      //  if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+      //    throw new Error("Adjoint of a non-square matrix does not exists");
+      //  T[,] AdjointMatrix = new T[matrix.GetLength(0), matrix.GetLength(1)];
+      //  for (int i = 0; i < matrix.GetLength(0); i++)
+      //    for (int j = 0; j < matrix.GetLength(1); j++)
+      //      if ((i + j) % 2 == 0)
+      //        AdjointMatrix[i, j] = Matrix<T>.Determinent(Matrix<T>.Minor(matrix, i, j));
+      //      else
+      //        AdjointMatrix[i, j] = _negate(Matrix<T>.Determinent(Matrix<T>.Minor(matrix, i, j)));
+      //  return Matrix<T>.Transpose(AdjointMatrix);
+      //}
+
+      ///// <summary>Returns the transpose of a matrix.</summary>
+      ///// <param name="matrix">The matrix to transpose.</param>
+      ///// <returns>The transpose of the matrix.</returns>
+      //public T[,] Transpose(T[,] matrix)
+      //{
+      //  T[,] transpose = new T[matrix.GetLength(1), matrix.GetLength(0)];
+      //  for (int i = 0; i < transpose.GetLength(0); i++)
+      //    for (int j = 0; j < transpose.GetLength(1); j++)
+      //      transpose[i, j] = matrix[j, i];
+      //  return transpose;
+      //}
+
+      ///// <summary>Decomposes a matrix into lower-upper reptresentation.</summary>
+      ///// <param name="matrix">The matrix to decompose.</param>
+      ///// <param name="lower">The computed lower triangular matrix.</param>
+      ///// <param name="upper">The computed upper triangular matrix.</param>
+      //public void DecomposeLU(T[,] matrix, out T[,] lower, out T[,] upper)
+      //{
+      //  if (!(matrix.GetLength(0) == matrix.GetLength(1)))
+      //    throw new Error("The matrix is not square!");
+      //  lower = Matrix<T>.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
+      //  upper = matrix.Clone() as T[,];
+      //  int[] permutation = new int[matrix.GetLength(0)];
+      //  for (int i = 0; i < matrix.GetLength(0); i++) permutation[i] = i;
+      //  T p = _zero, pom2, detOfP = _one;
+      //  int k0 = 0, pom1 = 0;
+      //  for (int k = 0; k < matrix.GetLength(1) - 1; k++)
+      //  {
+      //    p = _zero;
+      //    for (int i = k; i < matrix.GetLength(0); i++)
+      //      if (_compare(_abs(upper[i, k]), p) == Comparison.Greater)
+      //      {
+      //        p = _abs(upper[i, k]);
+      //        k0 = i;
+      //      }
+      //    if (_equate(p, _zero))
+      //      throw new Error("The matrix is singular!");
+      //    pom1 = permutation[k];
+      //    permutation[k] = permutation[k0];
+      //    permutation[k0] = pom1;
+      //    for (int i = 0; i < k; i++)
+      //    {
+      //      pom2 = lower[k, i];
+      //      lower[k, i] = lower[k0, i];
+      //      lower[k0, i] = pom2;
+      //    }
+      //    if (k != k0)
+      //      detOfP = _negate(detOfP);
+      //    for (int i = 0; i < matrix.GetLength(1); i++)
+      //    {
+      //      pom2 = upper[k, i];
+      //      upper[k, i] = upper[k0, i];
+      //      upper[k0, i] = pom2;
+      //    }
+      //    for (int i = k + 1; i < matrix.GetLength(0); i++)
+      //    {
+      //      lower[i, k] = _divide(upper[i, k], upper[k, k]);
+      //      for (int j = k; j < matrix.GetLength(1); j++)
+      //        upper[i, j] = _subtract(upper[i, j], _multiply(lower[i, k], upper[k, j]));
+      //    }
+      //  }
+      //}
+
+      /// <summary>Does a value equality check.</summary>
+      /// <param name="left">The first matrix to check for equality.</param>
+      /// <param name="right">The second matrix to check for equality.</param>
+      /// <returns>True if values are equal, false if not.</returns>
+      public bool EqualsByValue(T[,] left, T[,] right)
+      {
+        if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+          return false;
+        for (int i = 0; i < left.GetLength(0); i++)
+          for (int j = 0; j < left.GetLength(1); j++)
+            if (!_equate(left[i, j], right[i, j]))
+              return false;
+        return true;
+      }
+
+      /// <summary>Does a value equality check with leniency.</summary>
+      /// <param name="left">The first matrix to check for equality.</param>
+      /// <param name="right">The second matrix to check for equality.</param>
+      /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+      /// <returns>True if values are equal, false if not.</returns>
+      public bool EqualsByValue(T[,] left, T[,] right, T leniency)
+      {
+        if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+          return false;
+        for (int i = 0; i < left.GetLength(0); i++)
+          for (int j = 0; j < left.GetLength(1); j++)
+            if (_compare(_abs(_subtract(left[i, j], right[i, j])), leniency) == Comparison.Greater)
+              return false;
+        return true;
+      }
+
+      /// <summary>Checks if two matrices are equal by reverences.</summary>
+      /// <param name="left">The left matric of the equality check.</param>
+      /// <param name="right">The right matrix of the equality check.</param>
+      /// <returns>True if the references are equal, false if not.</returns>
+      public static bool EqualsByReference(T[,] left, T[,] right)
+      {
+        return object.ReferenceEquals(left, right);
+      }
+    }
+
+    private class LinearAlgebra_unsupported<T> : LinearAlgebra<T>
+    {
+      private LinearAlgebra_unsupported() { _instance = this; }
+      private static LinearAlgebra_unsupported<T> _instance;
+      private static LinearAlgebra_unsupported<T> Instance
+      { get { return _instance ?? new LinearAlgebra_unsupported<T>(); } }
+      internal static LinearAlgebra_unsupported<T> Get { get { return Instance; } }
+
+      /// <summary>Adds two vectors together.</summary>
+      public LinearAlgebra._Vector_Add<T> Vector_Add
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Negates all the values in a vector.</summary>
+      public LinearAlgebra._Vector_Negate<T> Vector_Negate
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Subtracts two vectors.</summary>
+      public LinearAlgebra._Vector_Subtract<T> Vector_Subtract
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
+      public LinearAlgebra._Vector_Multiply<T> Vector_Multiply
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Divides all the components of a vector by a scalar.</summary>
+      public LinearAlgebra._Vector_Divide<T> Vector_Divide
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the dot product between two vectors.</summary>
+      public LinearAlgebra._Vector_DotProduct<T> Vector_DotProduct
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes teh cross product of two vectors.</summary>
+      public LinearAlgebra._Vector_CrossProduct<T> Vector_CrossProduct
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Normalizes a vector.</summary>
+      public LinearAlgebra._Vector_Normalize<T> Vector_Normalize
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the length of a vector.</summary>
+      public LinearAlgebra._Vector_Magnitude<T> Vector_Magnitude
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
+      public LinearAlgebra._Vector_MagnitudeSquared<T> Vector_MagnitudeSquared
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the angle between two vectors.</summary>
+      public LinearAlgebra._Vector_Angle<T> Vector_Angle
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
+      public LinearAlgebra._Vector_RotateBy<T> Vector_RotateBy
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the linear Terpolation between two vectors.</summary>
+      public LinearAlgebra._Vector_Lerp<T> Vector_Lerp
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Sphereically Terpolates between two vectors.</summary>
+      public LinearAlgebra._Vector_Slerp<T> Vector_Slerp
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_Blerp<T> Vector_Blerp
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+
+      /// <summary>Negates all the values in this matrix.</summary>
+      public LinearAlgebra._Matrix_Negate<T> Matrix_Negate
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Does a standard matrix addition.</summary>
+      public LinearAlgebra._Matrix_Add<T> Matrix_Add
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
+      public LinearAlgebra._Matrix_Multiply<T> Matrix_Multiply
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_scalar<T> Matrix_Multiply_scalar
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Divides all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Divide<T> Matrix_Divide
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Gets the minor of a matrix.</summary>
+      public LinearAlgebra._Matrix_Minor<T> Matrix_Minor
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
+      public LinearAlgebra._Matrix_ConcatenateRowWise<T> Matrix_ConcatenateRowWise
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the determinent if this matrix is square.</summary>
+      public LinearAlgebra._Matrix_Determinent<T> Matrix_Determinent
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
+      public LinearAlgebra._Matrix_Echelon<T> Matrix_Echelon
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
+      public LinearAlgebra._Matrix_ReducedEchelon<T> Matrix_ReducedEchelon
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Computes the inverse of this matrix.</summary>
+      public LinearAlgebra._Matrix_Inverse<T> Matrix_Inverse
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Gets the adjoT of this matrix.</summary>
+      public LinearAlgebra._Matrix_Adjoint<T> Matrix_Adjoint
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Transposes this matrix.</summary>
+      public LinearAlgebra._Matrix_Transpose<T> Matrix_Transpose
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Decomposes a matrix to lower/upper components.</summary>
+      public LinearAlgebra._Matrix_DecomposeLU<T> Matrix_DecomposeLU
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Implementations
+
     #region decimal
 
     /// <summary>Adds two vectors together.</summary>
@@ -3363,19 +5353,16 @@ namespace Seven.Mathematics
 
 		#endregion
 
-		/// <summary>Error type for all algebra computations.</summary>
-		public class Error : Seven.Error
+    /// <summary>Error type for all algebra computations.</summary>
+		internal class Error : Seven.Error
 		{
 			public Error(string message) : base(message) { }
 		}
 	}
 
-  /// <summary>High performance non-generic linear algrbra extension methods.</summary>
+  /// <summary>Non-generic linear algrbra extension methods for base C# arrays.</summary>
   public static class LinearAlgebra_Extensions
   {
-    // The following are high performance (non-generic) extension
-    // methods for some primitive types
-
     #region decimal
 
     /// <summary>Adds two vectors together.</summary>
@@ -4477,472 +6464,56 @@ namespace Seven.Mathematics
     #endregion
   }
 
-	#region LinearAlgebra providers
-
-	public class LinearAlgebra_decimal : LinearAlgebra<decimal>
-  {
-    private LinearAlgebra_decimal() { _instance = this; }
-    private static LinearAlgebra_decimal _instance;
-    private static LinearAlgebra_decimal Instance
-    {
-      get
-      {
-        if (_instance == null)
-          return _instance = new LinearAlgebra_decimal();
-        else
-          return _instance;
-      }
-    }
-
-    /// <summary>Gets Arithmetic for "byte" types.</summary>
-    public static LinearAlgebra_decimal Get { get { return Instance; } }
-
-    /// <summary>Adds two vectors together.</summary>
-    public decimal[] Add(decimal[] left, decimal[] right) { return LinearAlgebra.Add(left, right); }
-    /// <summary>Negates all the values in a vector.</summary>
-    public decimal[] Negate(decimal[] vector) { return LinearAlgebra.Negate(vector); }
-    /// <summary>Subtracts two vectors.</summary>
-    public decimal[] Subtract(decimal[] left, decimal[] right) { return LinearAlgebra.Subtract(left, right); }
-    /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
-    public decimal[] Multiply(decimal[] left, decimal right) { return LinearAlgebra.Multiply(left, right); }
-    /// <summary>Divides all the components of a vector by a scalar.</summary>
-    public decimal[] Divide(decimal[] vector, decimal right) { return LinearAlgebra.Divide(vector, right); }
-    /// <summary>Computes the dot product between two vectors.</summary>
-    public decimal DotProduct(decimal[] left, decimal[] right) { return LinearAlgebra.DotProduct(left, right); }
-    /// <summary>Computes teh cross product of two vectors.</summary>
-    public decimal[] CrossProduct(decimal[] left, decimal[] right) { return LinearAlgebra.CrossProduct(left, right); }
-    /// <summary>Normalizes a vector.</summary>
-    public decimal[] Normalize(decimal[] vector) { return LinearAlgebra.Normalize(vector); }
-    /// <summary>Computes the length of a vector.</summary>
-    public decimal Magnitude(decimal[] vector) { return LinearAlgebra.Magnitude(vector); }
-    /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
-    public decimal MagnitudeSquared(decimal[] vector) { return LinearAlgebra.MagnitudeSquared(vector); }
-    /// <summary>Computes the angle between two vectors.</summary>
-    public decimal Angle(decimal[] first, decimal[] second) { return LinearAlgebra.Angle(first, second); }
-    /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
-    public decimal[] RotateBy(decimal[] vector, decimal angle, decimal x, decimal y, decimal z) { return LinearAlgebra.RotateBy(vector, angle, x, y, z); }
-    /// <summary>Computes the linear interpolation between two vectors.</summary>
-    public decimal[] Lerp(decimal[] left, decimal[] right, decimal blend) { return LinearAlgebra.Lerp(left, right, blend); }
-    /// <summary>Sphereically interpolates between two vectors.</summary>
-    public decimal[] Slerp(decimal[] left, decimal[] right, decimal blend) { return LinearAlgebra.Slerp(left, right, blend); }
-    /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
-    public decimal[] Blerp(decimal[] a, decimal[] b, decimal[] c, decimal u, decimal v) { return LinearAlgebra.Blerp(a, b, c, u, v); }
-
-    /// <summary>Negates all the values in this matrix.</summary>
-    public decimal[,] Negate(decimal[,] matrix) { return LinearAlgebra.Negate(matrix); }
-    /// <summary>Does a standard matrix addition.</summary>
-    public decimal[,] Add(decimal[,] left, decimal[,] right) { return LinearAlgebra.Add(left, right); }
-    /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
-    public decimal[,] Multiply(decimal[,] left, decimal[,] right) { return LinearAlgebra.Multiply(left, right); }
-    /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
-    public decimal[,] Multiply(decimal[,] matrix, decimal scalar) { return LinearAlgebra.Multiply(matrix, scalar); }
-    /// <summary>Divides all the values in this matrix by a scalar.</summary>
-    public decimal[,] Divide(decimal[,] left, decimal right) { return LinearAlgebra.Divide(left, right); }
-    /// <summary>Gets the minor of a matrix.</summary>
-    public decimal[,] Minor(decimal[,] matrix, int row, int column) { return LinearAlgebra.Minor(matrix, row, column); }
-    /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-    public decimal[,] ConcatenateRowWise(decimal[,] left, decimal[,] right) { return LinearAlgebra.ConcatenateRowWise(left, right); }
-    /// <summary>Computes the determinent if this matrix is square.</summary>
-    public decimal Determinent(decimal[,] matrix) { return LinearAlgebra.Determinent(matrix); }
-    /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
-    public decimal[,] Echelon(decimal[,] matrix) { return LinearAlgebra.Echelon(matrix); }
-    /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
-    public decimal[,] ReducedEchelon(decimal[,] matrix) { return LinearAlgebra.ReducedEchelon(matrix); }
-    /// <summary>Computes the inverse of this matrix.</summary>
-    public decimal[,] Inverse(decimal[,] matrix) { return LinearAlgebra.Inverse(matrix); }
-    /// <summary>Gets the adjoint of this matrix.</summary>
-    public decimal[,] Adjoint(decimal[,] matrix) { return LinearAlgebra.Adjoint(matrix); }
-    /// <summary>Transposes this matrix.</summary>
-    public decimal[,] Transpose(decimal[,] matrix) { return LinearAlgebra.Transpose(matrix); }
-    /// <summary>Copies this matrix.</summary>
-    public decimal[,] Clone(decimal[,] matrix) { return LinearAlgebra.Clone(matrix); }
-  }
-
-	public class LinearAlgebra_double : LinearAlgebra<double>
-	{
-		private LinearAlgebra_double() { _instance = this; }
-		private static LinearAlgebra_double _instance;
-		private static LinearAlgebra_double Instance
-		{
-			get
-			{
-				if (_instance == null)
-					return _instance = new LinearAlgebra_double();
-				else
-					return _instance;
-			}
-		}
-
-		/// <summary>Gets Arithmetic for "byte" types.</summary>
-		public static LinearAlgebra_double Get { get { return Instance; } }
-
-    /// <summary>Adds two vectors together.</summary>
-    public double[] Add(double[] left, double[] right) { return LinearAlgebra.Add(left, right); }
-    /// <summary>Negates all the values in a vector.</summary>
-    public double[] Negate(double[] vector) { return LinearAlgebra.Negate(vector); }
-    /// <summary>Subtracts two vectors.</summary>
-    public double[] Subtract(double[] left, double[] right) { return LinearAlgebra.Subtract(left, right); }
-    /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
-    public double[] Multiply(double[] left, double right) { return LinearAlgebra.Multiply(left, right); }
-    /// <summary>Divides all the components of a vector by a scalar.</summary>
-    public double[] Divide(double[] vector, double right) { return LinearAlgebra.Divide(vector, right); }
-    /// <summary>Computes the dot product between two vectors.</summary>
-    public double DotProduct(double[] left, double[] right) { return LinearAlgebra.DotProduct(left, right); }
-    /// <summary>Computes teh cross product of two vectors.</summary>
-    public double[] CrossProduct(double[] left, double[] right) { return LinearAlgebra.CrossProduct(left, right); }
-    /// <summary>Normalizes a vector.</summary>
-    public double[] Normalize(double[] vector) { return LinearAlgebra.Normalize(vector); }
-    /// <summary>Computes the length of a vector.</summary>
-    public double Magnitude(double[] vector) { return LinearAlgebra.Magnitude(vector); }
-    /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
-    public double MagnitudeSquared(double[] vector) { return LinearAlgebra.MagnitudeSquared(vector); }
-    /// <summary>Computes the angle between two vectors.</summary>
-    public double Angle(double[] first, double[] second) { return LinearAlgebra.Angle(first, second); }
-    /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
-    public double[] RotateBy(double[] vector, double angle, double x, double y, double z) { return LinearAlgebra.RotateBy(vector, angle, x, y, z); }
-    /// <summary>Computes the linear interpolation between two vectors.</summary>
-    public double[] Lerp(double[] left, double[] right, double blend) { return LinearAlgebra.Lerp(left, right, blend); }
-    /// <summary>Sphereically interpolates between two vectors.</summary>
-    public double[] Slerp(double[] left, double[] right, double blend) { return LinearAlgebra.Slerp(left, right, blend); }
-    /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
-    public double[] Blerp(double[] a, double[] b, double[] c, double u, double v) { return LinearAlgebra.Blerp(a, b, c, u, v); }
-
-		/// <summary>Negates all the values in this matrix.</summary>
-		public double[,] Negate(double[,] matrix) { return LinearAlgebra.Negate(matrix); }
-		/// <summary>Does a standard matrix addition.</summary>
-		public double[,] Add(double[,] left, double[,] right) { return LinearAlgebra.Add(left, right); }
-		/// <summary>Does a standard matrix multiplication (triple for loop).</summary>
-		public double[,] Multiply(double[,] left, double[,] right) { return LinearAlgebra.Multiply(left, right); }
-		/// <summary>Multiplies all the values in this matrix by a scalar.</summary>
-		public double[,] Multiply(double[,] matrix, double scalar) { return LinearAlgebra.Multiply(matrix, scalar); }
-		/// <summary>Divides all the values in this matrix by a scalar.</summary>
-		public double[,] Divide(double[,] left, double right) { return LinearAlgebra.Divide(left, right); }
-		/// <summary>Gets the minor of a matrix.</summary>
-		public double[,] Minor(double[,] matrix, int row, int column) { return LinearAlgebra.Minor(matrix, row, column); }
-		/// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-		public double[,] ConcatenateRowWise(double[,] left, double[,] right) { return LinearAlgebra.ConcatenateRowWise(left, right); }
-		/// <summary>Computes the determinent if this matrix is square.</summary>
-		public double Determinent(double[,] matrix) { return LinearAlgebra.Determinent(matrix); }
-		/// <summary>Computes the echelon form of this matrix (aka REF).</summary>
-		public double[,] Echelon(double[,] matrix) { return LinearAlgebra.Echelon(matrix); }
-		/// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
-		public double[,] ReducedEchelon(double[,] matrix) { return LinearAlgebra.ReducedEchelon(matrix); }
-		/// <summary>Computes the inverse of this matrix.</summary>
-		public double[,] Inverse(double[,] matrix) { return LinearAlgebra.Inverse(matrix); }
-		/// <summary>Gets the adjoint of this matrix.</summary>
-		public double[,] Adjoint(double[,] matrix) { return LinearAlgebra.Adjoint(matrix); }
-		/// <summary>Transposes this matrix.</summary>
-		public double[,] Transpose(double[,] matrix) { return LinearAlgebra.Transpose(matrix); }
-		/// <summary>Copies this matrix.</summary>
-		public double[,] Clone(double[,] matrix) { return LinearAlgebra.Clone(matrix); }
-	}
-
-  public class LinearAlgebra_float : LinearAlgebra<float>
-  {
-    private LinearAlgebra_float() { _instance = this; }
-    private static LinearAlgebra_float _instance;
-    private static LinearAlgebra_float Instance
-    {
-      get
-      {
-        if (_instance == null)
-          return _instance = new LinearAlgebra_float();
-        else
-          return _instance;
-      }
-    }
-
-    /// <summary>Gets Arithmetic for "byte" types.</summary>
-    public static LinearAlgebra_float Get { get { return Instance; } }
-
-    /// <summary>Adds two vectors together.</summary>
-    public float[] Add(float[] left, float[] right) { return LinearAlgebra.Add(left, right); }
-    /// <summary>Negates all the values in a vector.</summary>
-    public float[] Negate(float[] vector) { return LinearAlgebra.Negate(vector); }
-    /// <summary>Subtracts two vectors.</summary>
-    public float[] Subtract(float[] left, float[] right) { return LinearAlgebra.Subtract(left, right); }
-    /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
-    public float[] Multiply(float[] left, float right) { return LinearAlgebra.Multiply(left, right); }
-    /// <summary>Divides all the components of a vector by a scalar.</summary>
-    public float[] Divide(float[] vector, float right) { return LinearAlgebra.Divide(vector, right); }
-    /// <summary>Computes the dot product between two vectors.</summary>
-    public float DotProduct(float[] left, float[] right) { return LinearAlgebra.DotProduct(left, right); }
-    /// <summary>Computes teh cross product of two vectors.</summary>
-    public float[] CrossProduct(float[] left, float[] right) { return LinearAlgebra.CrossProduct(left, right); }
-    /// <summary>Normalizes a vector.</summary>
-    public float[] Normalize(float[] vector) { return LinearAlgebra.Normalize(vector); }
-    /// <summary>Computes the length of a vector.</summary>
-    public float Magnitude(float[] vector) { return LinearAlgebra.Magnitude(vector); }
-    /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
-    public float MagnitudeSquared(float[] vector) { return LinearAlgebra.MagnitudeSquared(vector); }
-    /// <summary>Computes the angle between two vectors.</summary>
-    public float Angle(float[] first, float[] second) { return LinearAlgebra.Angle(first, second); }
-    /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
-    public float[] RotateBy(float[] vector, float angle, float x, float y, float z) { return LinearAlgebra.RotateBy(vector, angle, x, y, z); }
-    /// <summary>Computes the linear interpolation between two vectors.</summary>
-    public float[] Lerp(float[] left, float[] right, float blend) { return LinearAlgebra.Lerp(left, right, blend); }
-    /// <summary>Sphereically interpolates between two vectors.</summary>
-    public float[] Slerp(float[] left, float[] right, float blend) { return LinearAlgebra.Slerp(left, right, blend); }
-    /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
-    public float[] Blerp(float[] a, float[] b, float[] c, float u, float v) { return LinearAlgebra.Blerp(a, b, c, u, v); }
-
-    /// <summary>Negates all the values in this matrix.</summary>
-    public float[,] Negate(float[,] matrix) { return LinearAlgebra.Negate(matrix); }
-    /// <summary>Does a standard matrix addition.</summary>
-    public float[,] Add(float[,] left, float[,] right) { return LinearAlgebra.Add(left, right); }
-    /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
-    public float[,] Multiply(float[,] left, float[,] right) { return LinearAlgebra.Multiply(left, right); }
-    /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
-    public float[,] Multiply(float[,] matrix, float scalar) { return LinearAlgebra.Multiply(matrix, scalar); }
-    /// <summary>Divides all the values in this matrix by a scalar.</summary>
-    public float[,] Divide(float[,] left, float right) { return LinearAlgebra.Divide(left, right); }
-    /// <summary>Gets the minor of a matrix.</summary>
-    public float[,] Minor(float[,] matrix, int row, int column) { return LinearAlgebra.Minor(matrix, row, column); }
-    /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-    public float[,] ConcatenateRowWise(float[,] left, float[,] right) { return LinearAlgebra.ConcatenateRowWise(left, right); }
-    /// <summary>Computes the determinent if this matrix is square.</summary>
-    public float Determinent(float[,] matrix) { return LinearAlgebra.Determinent(matrix); }
-    /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
-    public float[,] Echelon(float[,] matrix) { return LinearAlgebra.Echelon(matrix); }
-    /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
-    public float[,] ReducedEchelon(float[,] matrix) { return LinearAlgebra.ReducedEchelon(matrix); }
-    /// <summary>Computes the inverse of this matrix.</summary>
-    public float[,] Inverse(float[,] matrix) { return LinearAlgebra.Inverse(matrix); }
-    /// <summary>Gets the adjoint of this matrix.</summary>
-    public float[,] Adjoint(float[,] matrix) { return LinearAlgebra.Adjoint(matrix); }
-    /// <summary>Transposes this matrix.</summary>
-    public float[,] Transpose(float[,] matrix) { return LinearAlgebra.Transpose(matrix); }
-    /// <summary>Copies this matrix.</summary>
-    public float[,] Clone(float[,] matrix) { return LinearAlgebra.Clone(matrix); }
-  }
-
-  #region Unfinished long
-
-  //public class LinearAlgebra_long : LinearAlgebra<long>
-  //{
-  //  private LinearAlgebra_long() { _instance = this; }
-  //  private static LinearAlgebra_long _instance;
-  //  private static LinearAlgebra_long Instance
-  //  {
-  //    get
-  //    {
-  //      if (_instance == null)
-  //        return _instance = new LinearAlgebra_long();
-  //      else
-  //        return _instance;
-  //    }
-  //  }
-
-  //  /// <summary>Gets Arithmetic for "byte" types.</summary>
-  //  public static LinearAlgebra_long Get { get { return Instance; } }
-
-  //  /// <summary>Adds two vectors together.</summary>
-  //  public long[] Add(long[] left, long[] right) { return LinearAlgebra.Add(left, right); }
-  //  /// <summary>Negates all the values in a vector.</summary>
-  //  public long[] Negate(long[] vector) { return LinearAlgebra.Negate(vector); }
-  //  /// <summary>Subtracts two vectors.</summary>
-  //  public long[] Subtract(long[] left, long[] right) { return LinearAlgebra.Subtract(left, right); }
-  //  /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
-  //  public long[] Multiply(long[] left, long right) { return LinearAlgebra.Multiply(left, right); }
-  //  /// <summary>Divides all the components of a vector by a scalar.</summary>
-  //  public long[] Divide(long[] vector, long right) { return LinearAlgebra.Divide(vector, right); }
-  //  /// <summary>Computes the dot product between two vectors.</summary>
-  //  public long DotProduct(long[] left, long[] right) { return LinearAlgebra.DotProduct(left, right); }
-  //  /// <summary>Computes teh cross product of two vectors.</summary>
-  //  public long[] CrossProduct(long[] left, long[] right) { return LinearAlgebra.CrossProduct(left, right); }
-  //  /// <summary>Normalizes a vector.</summary>
-  //  public long[] Normalize(long[] vector) { return LinearAlgebra.Normalize(vector); }
-  //  /// <summary>Computes the length of a vector.</summary>
-  //  public long Magnitude(long[] vector) { return LinearAlgebra.Magnitude(vector); }
-  //  /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
-  //  public long MagnitudeSquared(long[] vector) { return LinearAlgebra.MagnitudeSquared(vector); }
-  //  /// <summary>Computes the angle between two vectors.</summary>
-  //  public long Angle(long[] first, long[] second) { return LinearAlgebra.Angle(first, second); }
-  //  /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
-  //  public long[] RotateBy(long[] vector, long angle, long x, long y, long z) { return LinearAlgebra.RotateBy(vector, angle, x, y, z); }
-  //  /// <summary>Computes the linear interpolation between two vectors.</summary>
-  //  public long[] Lerp(long[] left, long[] right, long blend) { return LinearAlgebra.Lerp(left, right, blend); }
-  //  /// <summary>Sphereically interpolates between two vectors.</summary>
-  //  public long[] Slerp(long[] left, long[] right, long blend) { return LinearAlgebra.Slerp(left, right, blend); }
-  //  /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
-  //  public long[] Blerp(long[] a, long[] b, long[] c, long u, long v) { return LinearAlgebra.Blerp(a, b, c, u, v); }
-
-  //  /// <summary>Negates all the values in this matrix.</summary>
-  //  public long[,] Negate(long[,] matrix) { return LinearAlgebra.Negate(matrix); }
-  //  /// <summary>Does a standard matrix addition.</summary>
-  //  public long[,] Add(long[,] left, long[,] right) { return LinearAlgebra.Add(left, right); }
-  //  /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
-  //  public long[,] Multiply(long[,] left, long[,] right) { return LinearAlgebra.Multiply(left, right); }
-  //  /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
-  //  public long[,] Multiply(long[,] matrix, long scalar) { return LinearAlgebra.Multiply(matrix, scalar); }
-  //  /// <summary>Divides all the values in this matrix by a scalar.</summary>
-  //  public long[,] Divide(long[,] left, long right) { return LinearAlgebra.Divide(left, right); }
-  //  /// <summary>Gets the minor of a matrix.</summary>
-  //  public long[,] Minor(long[,] matrix, int row, int column) { return LinearAlgebra.Minor(matrix, row, column); }
-  //  /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-  //  public long[,] ConcatenateRowWise(long[,] left, long[,] right) { return LinearAlgebra.ConcatenateRowWise(left, right); }
-  //  /// <summary>Computes the determinent if this matrix is square.</summary>
-  //  public long Determinent(long[,] matrix) { return LinearAlgebra.Determinent(matrix); }
-  //  /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
-  //  public long[,] Echelon(long[,] matrix) { return LinearAlgebra.Echelon(matrix); }
-  //  /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
-  //  public long[,] ReducedEchelon(long[,] matrix) { return LinearAlgebra.ReducedEchelon(matrix); }
-  //  /// <summary>Computes the inverse of this matrix.</summary>
-  //  public long[,] Inverse(long[,] matrix) { return LinearAlgebra.Inverse(matrix); }
-  //  /// <summary>Gets the adjoint of this matrix.</summary>
-  //  public long[,] Adjoint(long[,] matrix) { return LinearAlgebra.Adjoint(matrix); }
-  //  /// <summary>Transposes this matrix.</summary>
-  //  public long[,] Transpose(long[,] matrix) { return LinearAlgebra.Transpose(matrix); }
-  //  /// <summary>Copies this matrix.</summary>
-  //  public long[,] Clone(long[,] matrix) { return LinearAlgebra.Clone(matrix); }
-  //}
-
-  #endregion
-
-  #region Unfinishhed int
-
-  //public class LinearAlgebra_int : LinearAlgebra<int>
-  //{
-  //  private LinearAlgebra_int() { _instance = this; }
-  //  private static LinearAlgebra_int _instance;
-  //  private static LinearAlgebra_int Instance
-  //  {
-  //    get
-  //    {
-  //      if (_instance == null)
-  //        return _instance = new LinearAlgebra_int();
-  //      else
-  //        return _instance;
-  //    }
-  //  }
-
-  //  /// <summary>Gets Arithmetic for "byte" types.</summary>
-  //  public static LinearAlgebra_int Get { get { return Instance; } }
-
-  //  /// <summary>Adds two vectors together.</summary>
-  //  public int[] Add(int[] left, int[] right) { return LinearAlgebra.Add(left, right); }
-  //  /// <summary>Negates all the values in a vector.</summary>
-  //  public int[] Negate(int[] vector) { return LinearAlgebra.Negate(vector); }
-  //  /// <summary>Subtracts two vectors.</summary>
-  //  public int[] Subtract(int[] left, int[] right) { return LinearAlgebra.Subtract(left, right); }
-  //  /// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
-  //  public int[] Multiply(int[] left, int right) { return LinearAlgebra.Multiply(left, right); }
-  //  /// <summary>Divides all the components of a vector by a scalar.</summary>
-  //  public int[] Divide(int[] vector, int right) { return LinearAlgebra.Divide(vector, right); }
-  //  /// <summary>Computes the dot product between two vectors.</summary>
-  //  public int DotProduct(int[] left, int[] right) { return LinearAlgebra.DotProduct(left, right); }
-  //  /// <summary>Computes teh cross product of two vectors.</summary>
-  //  public int[] CrossProduct(int[] left, int[] right) { return LinearAlgebra.CrossProduct(left, right); }
-  //  /// <summary>Normalizes a vector.</summary>
-  //  public int[] Normalize(int[] vector) { return LinearAlgebra.Normalize(vector); }
-  //  /// <summary>Computes the length of a vector.</summary>
-  //  public int Magnitude(int[] vector) { return LinearAlgebra.Magnitude(vector); }
-  //  /// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
-  //  public int MagnitudeSquared(int[] vector) { return LinearAlgebra.MagnitudeSquared(vector); }
-  //  /// <summary>Computes the angle between two vectors.</summary>
-  //  public int Angle(int[] first, int[] second) { return LinearAlgebra.Angle(first, second); }
-  //  /// <summary>Rotates a vector by the specified axis and rotation values.</summary>
-  //  public int[] RotateBy(int[] vector, int angle, int x, int y, int z) { return LinearAlgebra.RotateBy(vector, angle, x, y, z); }
-  //  /// <summary>Computes the linear interpolation between two vectors.</summary>
-  //  public int[] Lerp(int[] left, int[] right, int blend) { return LinearAlgebra.Lerp(left, right, blend); }
-  //  /// <summary>Sphereically interpolates between two vectors.</summary>
-  //  public int[] Slerp(int[] left, int[] right, int blend) { return LinearAlgebra.Slerp(left, right, blend); }
-  //  /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
-  //  public int[] Blerp(int[] a, int[] b, int[] c, int u, int v) { return LinearAlgebra.Blerp(a, b, c, u, v); }
-
-  //  /// <summary>Negates all the values in this matrix.</summary>
-  //  public int[,] Negate(int[,] matrix) { return LinearAlgebra.Negate(matrix); }
-  //  /// <summary>Does a standard matrix addition.</summary>
-  //  public int[,] Add(int[,] left, int[,] right) { return LinearAlgebra.Add(left, right); }
-  //  /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
-  //  public int[,] Multiply(int[,] left, int[,] right) { return LinearAlgebra.Multiply(left, right); }
-  //  /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
-  //  public int[,] Multiply(int[,] matrix, int scalar) { return LinearAlgebra.Multiply(matrix, scalar); }
-  //  /// <summary>Divides all the values in this matrix by a scalar.</summary>
-  //  public int[,] Divide(int[,] left, int right) { return LinearAlgebra.Divide(left, right); }
-  //  /// <summary>Gets the minor of a matrix.</summary>
-  //  public int[,] Minor(int[,] matrix, int row, int column) { return LinearAlgebra.Minor(matrix, row, column); }
-  //  /// <summary>Combines two matrices from left to right (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-  //  public int[,] ConcatenateRowWise(int[,] left, int[,] right) { return LinearAlgebra.ConcatenateRowWise(left, right); }
-  //  /// <summary>Computes the determinent if this matrix is square.</summary>
-  //  public int Determinent(int[,] matrix) { return LinearAlgebra.Determinent(matrix); }
-  //  /// <summary>Computes the echelon form of this matrix (aka REF).</summary>
-  //  public int[,] Echelon(int[,] matrix) { return LinearAlgebra.Echelon(matrix); }
-  //  /// <summary>Computes the reduced echelon form of this matrix (aka RREF).</summary>
-  //  public int[,] ReducedEchelon(int[,] matrix) { return LinearAlgebra.ReducedEchelon(matrix); }
-  //  /// <summary>Computes the inverse of this matrix.</summary>
-  //  public int[,] Inverse(int[,] matrix) { return LinearAlgebra.Inverse(matrix); }
-  //  /// <summary>Gets the adjoint of this matrix.</summary>
-  //  public int[,] Adjoint(int[,] matrix) { return LinearAlgebra.Adjoint(matrix); }
-  //  /// <summary>Transposes this matrix.</summary>
-  //  public int[,] Transpose(int[,] matrix) { return LinearAlgebra.Transpose(matrix); }
-  //  /// <summary>Copies this matrix.</summary>
-  //  public int[,] Clone(int[,] matrix) { return LinearAlgebra.Clone(matrix); }
-  //}
-
-  #endregion
-
-	#endregion
-
-	/// <summary>Represents a vector with an arbitrary number of components.</summary>
+	/// <summary>Represents a vector with an arbitrary number of components of a generic type.</summary>
 	/// <typeparam name="T">The numeric type of this Vector.</typeparam>
 	public class Vector<T>
-	{
-		// Constants
-    private static T _zero;
-    private static T _one;
-    private static T _two;
+  {
+    #region functionality storage
 
-		// Logic
-    private static Logic._Abs<T> _abs;
-    private static Equate<T> _equate;
-    private static Compare<T> _compare;
-
-		// Arithmetic Operations
-    private static Arithmetic._Negate<T> _negate;
-    private static Arithmetic._Add<T> _add;
-    private static Arithmetic._Subtract<T> _subtract;
-    private static Arithmetic._Multiply<T> _multiply;
-    private static Arithmetic._Divide<T> _divide;
-
-		// Algebra Operations
-    private static Algebra._sqrt<T> _sqrt;
-    private static Algebra._invert_mult<T> _Invert_Multiplicative;
-
-		// Trigonometry
-    private static Trigonometry._sin<T> _sin;
-    private static Trigonometry._cos<T> _cos;
-    private static Trigonometry._arccos<T> _acos;
+    public static readonly LinearAlgebra._Vector_Add<T> _Vector_Add;
+    public static readonly LinearAlgebra._Vector_Negate<T> _Vector_Negate;
+    public static readonly LinearAlgebra._Vector_Subtract<T> _Vector_Subtract;
+    public static readonly LinearAlgebra._Vector_Multiply<T> _Vector_Multiply;
+    public static readonly LinearAlgebra._Vector_Divide<T> _Vector_Divide;
+    public static readonly LinearAlgebra._Vector_DotProduct<T> _Vector_DotProduct;
+    public static readonly LinearAlgebra._Vector_CrossProduct<T> _Vector_CrossProduct;
+    public static readonly LinearAlgebra._Vector_Normalize<T> _Vector_Normalize;
+    public static readonly LinearAlgebra._Vector_Magnitude<T> _Vector_Magnitude;
+    public static readonly LinearAlgebra._Vector_MagnitudeSquared<T> _Vector_MagnitudeSquared;
+    public static readonly LinearAlgebra._Vector_Angle<T> _Vector_Angle;
+    public static readonly LinearAlgebra._Vector_RotateBy<T> _Vector_RotateBy;
+    public static readonly LinearAlgebra._Vector_Lerp<T> _Vector_Lerp;
+    public static readonly LinearAlgebra._Vector_Slerp<T> _Vector_Slerp;
+    public static readonly LinearAlgebra._Vector_Blerp<T> _Vector_Blerp;
+    public static readonly LinearAlgebra._Vector_EqualsValue<T> _Vector_EqualsValue;
+    public static readonly LinearAlgebra._Vector_EqualsValue_leniency<T> _Vector_EqualsValue_leniency;
+    public static readonly LinearAlgebra._Vector_RotateBy_quaternion<T> _Vector_RotateBy_quaternion;
 
     static Vector()
     {
-      // Constants
-      _zero = Constants.Get<T>().factory(0);
-      _one = Constants.Get<T>().factory(1);
-      _two = Constants.Get<T>().factory(2);
-      
-      // Logic
-      _abs = Logic.Get<T>().Abs;
-      _equate = Logic.Get<T>().Equate;
-      _compare = Logic.Get<T>().Compare;
-      
-      // Arithmetic
-      _negate = Arithmetic.Get<T>().Negate;
-      _add = Arithmetic.Get<T>().Add;
-      _subtract = Arithmetic.Get<T>().Subtract;
-      _multiply = Arithmetic.Get<T>().Multiply;
-      _divide = Arithmetic.Get<T>().Divide;
-      
-      // Algebra
-      _sqrt = Algebra.Get<T>().sqrt;
-      _Invert_Multiplicative = Algebra.Get<T>().invert_mult;
-   
-      // Trigonometry
-      _sin = Trigonometry.Get<T>().sin;
-      _cos = Trigonometry.Get<T>().cos;
-      _acos = Trigonometry.Get<T>().arccos;
+      LinearAlgebra<T> linearAlgebra = LinearAlgebra.Get<T>();
+      _Vector_Add = linearAlgebra.Vector_Add;
+      _Vector_Negate = linearAlgebra.Vector_Negate;
+      _Vector_Subtract = linearAlgebra.Vector_Subtract;
+      _Vector_Multiply = linearAlgebra.Vector_Multiply;
+      _Vector_Divide = linearAlgebra.Vector_Divide;
+      _Vector_DotProduct = linearAlgebra.Vector_DotProduct;
+      _Vector_CrossProduct = linearAlgebra.Vector_CrossProduct;
+      _Vector_Normalize = linearAlgebra.Vector_Normalize;
+      _Vector_Magnitude = linearAlgebra.Vector_Magnitude;
+      _Vector_MagnitudeSquared = linearAlgebra.Vector_MagnitudeSquared;
+      _Vector_Angle = linearAlgebra.Vector_Angle;
+      _Vector_RotateBy = linearAlgebra.Vector_RotateBy;
+      _Vector_Lerp = linearAlgebra.Vector_Lerp;
+      _Vector_Slerp = linearAlgebra.Vector_Slerp;
+      _Vector_Blerp = linearAlgebra.Vector_Blerp;
     }
 
+    #endregion
+
+    #region fields and properties
+
+    /// <summary>The array of this vector.</summary>
 		public readonly T[] _vector;
 
 		/// <summary>Sane as accessing index 0.</summary>
@@ -4985,18 +6556,19 @@ namespace Seven.Mathematics
 			set { try { _vector[index] = value; } catch { throw new Error("index out of bounds."); } }
 		}
 
-		/// <summary>Creates a new vector with the given number of components.</summary>
+    #endregion
+
+    #region construction
+
+    /// <summary>Creates a new vector with the given number of components.</summary>
 		/// <param name="dimensions">The number of dimensions this vector will have.</param>
 		public Vector(int dimensions) { try { _vector = new T[dimensions]; } catch { throw new Error("invalid dimensions on vector contruction."); } }
 
 		/// <summary>Creates a vector out of the given values.</summary>
 		/// <param name="vector">The values to initialize the vector to.</param>
-		public Vector(params T[] vector)
-		{
-			_vector = vector;
-		}
+		public Vector(params T[] vector) { _vector = vector; }
 
-		/// <summary>Creates a vector with the given number of components with the values initialized to zeroes.</summary>
+    /// <summary>Creates a vector with the given number of components with the values initialized to zeroes.</summary>
 		/// <param name="dimensions">The number of components in the vector.</param>
 		/// <returns>The newly constructed vector.</returns>
 		public static Vector<T> FactoryZero(int dimensions) { return new Vector<T>(dimensions); }
@@ -5006,20 +6578,24 @@ namespace Seven.Mathematics
 		/// <returns>The newly constructed vector.</returns>
 		public static Vector<T> FactoryOne(int dimensions) { return new Vector<T>(new T[dimensions]); }
 
-		/// <summary>Returns a 3-component vector representing the x-axis.</summary>
-		public static readonly Vector<T> FactoryXAxis = new Vector<T>(_one, _zero, _zero);
-		/// <summary>Returns a 3-component vector representing the y-axis.</summary>
-		public static readonly Vector<T> FactoryYAxis = new Vector<T>(_zero, _one, _zero);
-		/// <summary>Returns a 3-component vector representing the z-axis.</summary>
-		public static readonly Vector<T> FactoryZAxis = new Vector<T>(_zero, _zero, _one);
-		/// <summary>Returns a 3-component vector representing the negative x-axis.</summary>
-		public static readonly Vector<T> FactoryNegXAxis = new Vector<T>(_one, _zero, _zero);
-		/// <summary>Returns a 3-component vector representing the negative y-axis.</summary>
-		public static readonly Vector<T> FactoryNegYAxis = new Vector<T>(_zero, _one, _zero);
-		/// <summary>Returns a 3-component vector representing the negative z-axis.</summary>
-		public static readonly Vector<T> FactoryNegZAxis = new Vector<T>(_zero, _zero, _one);
+    ///// <summary>Returns a 3-component vector representing the x-axis.</summary>
+    //public static readonly Vector<T> Factory_XAxis = new Vector<T>(_one, _zero, _zero);
+    ///// <summary>Returns a 3-component vector representing the y-axis.</summary>
+    //public static readonly Vector<T> Factory_YAxis = new Vector<T>(_zero, _one, _zero);
+    ///// <summary>Returns a 3-component vector representing the z-axis.</summary>
+    //public static readonly Vector<T> Factory_ZAxis = new Vector<T>(_zero, _zero, _one);
+    ///// <summary>Returns a 3-component vector representing the negative x-axis.</summary>
+    //public static readonly Vector<T> Factory_NegXAxis = new Vector<T>(_one, _zero, _zero);
+    ///// <summary>Returns a 3-component vector representing the negative y-axis.</summary>
+    //public static readonly Vector<T> Factory_NegYAxis = new Vector<T>(_zero, _one, _zero);
+    ///// <summary>Returns a 3-component vector representing the negative z-axis.</summary>
+    //public static readonly Vector<T> Factory_NegZAxis = new Vector<T>(_zero, _zero, _one);
 
-		/// <summary>Adds two vectors together.</summary>
+    #endregion
+
+    #region operators
+
+    /// <summary>Adds two vectors together.</summary>
 		/// <param name="left">The first vector of the addition.</param>
 		/// <param name="right">The second vector of the addition.</param>
 		/// <returns>The result of the addition.</returns>
@@ -5067,7 +6643,11 @@ namespace Seven.Mathematics
 		/// <returns>The T[] of the vector.</returns>
 		public static implicit operator Vector<T>(T[] array) { return new Vector<T>(array); }
 
-		/// <summary>Adds two vectors together.</summary>
+    #endregion
+
+    #region instance methods
+
+    /// <summary>Adds two vectors together.</summary>
 		/// <param name="right">The vector to add to this one.</param>
 		/// <returns>The result of the vector.</returns>
 		public Vector<T> Add(Vector<T> right) { return Vector<T>.Add(this, right); }
@@ -5099,11 +6679,11 @@ namespace Seven.Mathematics
 		public Vector<T> Normalize() { return Vector<T>.Normalize(this); }
 		/// <summary>Computes the length of this vector.</summary>
 		/// <returns>The length of this vector.</returns>
-		public T Length() { return Vector<T>.Length(this); }
+		public T Length() { return Vector<T>.Magnitude(this); }
 		/// <summary>Computes the length of this vector, but doesn't square root it for 
 		/// possible optimization purposes.</summary>
 		/// <returns>The squared length of the vector.</returns>
-		public T LengthSquared() { return Vector<T>.LengthSquared(this); }
+		public T LengthSquared() { return Vector<T>.MagnitudeSquared(this); }
 		/// <summary>Check for equality by value.</summary>
 		/// <param name="right">The other vector of the equality check.</param>
 		/// <returns>true if the values were equal, false if not.</returns>
@@ -5137,246 +6717,114 @@ namespace Seven.Mathematics
 		/// <summary>Rotates a vector by a quaternion.</summary>
 		/// <param name="rotation">The quaternion to rotate the 3-component vector by.</param>
 		/// <returns>The result of the rotation.</returns>
-		//public Vector<T> RotateBy(Quaternion<T> rotation) { return Vector<T>.RotateBy(this, rotation); }
+    //public Vector<T> RotateBy(Quaternion<T> rotation) { return Vector<T>.RotateBy(this, rotation); }
 
-		/// <summary>Adds two vectors together.</summary>
+    #endregion
+
+    #region static methods
+
+    /// <summary>Adds two vectors together.</summary>
 		/// <param name="leftFloats">The first vector of the addition.</param>
 		/// <param name="rightFloats">The second vector of the addiiton.</param>
 		/// <returns>The result of the addiion.</returns>
-		public static Vector<T> Add(T[] left, T[] right)
-		{
-			if (left.Length != right.Length)
-				throw new Error("invalid dimensions on vector addition.");
-			T[] result = new T[left.Length];
-			for (int i = 0; i < left.Length; i++)
-				result[i] = _add(left[i], right[i]);
-			return result;
-		}
-
+		public static Vector<T> Add(T[] left, T[] right) { return _Vector_Add(left, right); }
 		/// <summary>Adds two vectors together.</summary>
 		/// <param name="left">The first vector of the addition.</param>
 		/// <param name="right">The second vector of the addiiton.</param>
 		/// <returns>The result of the addiion.</returns>
-		public static Vector<T> Add(Vector<T> left, Vector<T> right)
-		{
-			return Vector<T>.Add(left._vector, right._vector);
-		}
-
+		public static Vector<T> Add(Vector<T> left, Vector<T> right) { return _Vector_Add(left._vector, right._vector); }
 		/// <summary>Negates all the values in a vector.</summary>
 		/// <param name="vector">The vector to have its values negated.</param>
 		/// <returns>The result of the negations.</returns>
-		public static T[] Negate(T[] vector)
-		{
-			Vector<T> result = new T[vector.Length];
-			for (int i = 0; i < vector.Length; i++)
-				result[i] = _negate(vector[i]);
-			return result;
-		}
-
+		public static T[] Negate(T[] vector) { return _Vector_Negate(vector); }
 		/// <summary>Negates all the values in a vector.</summary>
 		/// <param name="vector">The vector to have its values negated.</param>
 		/// <returns>The result of the negations.</returns>
-		public static Vector<T> Negate(Vector<T> vector)
-		{
-			return Vector<T>.Negate(vector._vector);
-		}
-
+		public static Vector<T> Negate(Vector<T> vector) { return _Vector_Negate(vector); }
 		/// <summary>Subtracts two vectors.</summary>
 		/// <param name="left">The left vector of the subtraction.</param>
 		/// <param name="right">The right vector of the subtraction.</param>
 		/// <returns>The result of the vector subtracton.</returns>
-		public static T[] Subtract(T[] left, T[] right)
-		{
-			T[] result = new T[left.Length];
-			if (left.Length != right.Length)
-				throw new Error("invalid dimensions on vector subtraction.");
-			for (int i = 0; i < left.Length; i++)
-				result[i] = _subtract(left[i], right[i]);
-			return result;
-		}
-
+		public static T[] Subtract(T[] left, T[] right) { return _Vector_Subtract(left, right); }
 		/// <summary>Subtracts two vectors.</summary>
 		/// <param name="left">The left vector of the subtraction.</param>
 		/// <param name="right">The right vector of the subtraction.</param>
 		/// <returns>The result of the vector subtracton.</returns>
-		public static Vector<T> Subtract(Vector<T> left, Vector<T> right)
-		{
-			return Vector<T>.Subtract(left._vector, right._vector);
-		}
-
+		public static Vector<T> Subtract(Vector<T> left, Vector<T> right) { return _Vector_Add(left._vector, right._vector); }
 		/// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
 		/// <param name="left">The vector to have the components multiplied by.</param>
 		/// <param name="right">The scalars to multiply the vector components by.</param>
 		/// <returns>The result of the multiplications.</returns>
-		public static T[] Multiply(T[] left, T right)
-		{
-			T[] result = new T[left.Length];
-			for (int i = 0; i < left.Length; i++)
-				result[i] = _multiply(left[i], right);
-			return result;
-		}
-
+		public static T[] Multiply(T[] left, T right) { return _Vector_Multiply(left, right); }
 		/// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
 		/// <param name="left">The vector to have the components multiplied by.</param>
 		/// <param name="right">The scalars to multiply the vector components by.</param>
 		/// <returns>The result of the multiplications.</returns>
-		public static Vector<T> Multiply(Vector<T> left, T right)
-		{
-			return Vector<T>.Multiply(left._vector, right);
-		}
-
+		public static Vector<T> Multiply(Vector<T> left, T right) { return _Vector_Multiply(left._vector, right); }
 		/// <summary>Divides all the components of a vector by a scalar.</summary>
 		/// <param name="left">The vector to have the components divided by.</param>
 		/// <param name="right">The scalar to divide the vector components by.</param>
 		/// <returns>The resulting vector after teh divisions.</returns>
-		public static T[] Divide(T[] left, T right)
-		{
-			T[] result = new T[left.Length];
-			for (int i = 0; i < left.Length; i++)
-				result[i] = _divide(left[i], right);
-			return result;
-		}
-
+		public static T[] Divide(T[] left, T right) { return _Vector_Divide(left, right); }
 		/// <summary>Divides all the components of a vector by a scalar.</summary>
 		/// <param name="left">The vector to have the components divided by.</param>
 		/// <param name="right">The scalar to divide the vector components by.</param>
 		/// <returns>The resulting vector after teh divisions.</returns>
-		public static Vector<T> Divide(Vector<T> left, T right)
-		{
-			return Vector<T>.Divide(left._vector, right);
-		}
-
+		public static Vector<T> Divide(Vector<T> left, T right) { return _Vector_Divide(left, right); }
 		/// <summary>Computes the dot product between two vectors.</summary>
 		/// <param name="left">The first vector of the dot product operation.</param>
 		/// <param name="right">The second vector of the dot product operation.</param>
 		/// <returns>The result of the dot product operation.</returns>
-		public static T DotProduct(T[] left, T[] right)
-		{
-			if (left.Length != right.Length)
-				throw new Error("invalid dimensions on vector dot product.");
-			T result = _zero;
-			for (int i = 0; i < left.Length; i++)
-				result = _add(result, _multiply(left[i], right[i]));
-			return result;
-		}
-
+		public static T DotProduct(T[] left, T[] right) { return _Vector_DotProduct(left, right); }
 		/// <summary>Computes the dot product between two vectors.</summary>
 		/// <param name="left">The first vector of the dot product operation.</param>
 		/// <param name="right">The second vector of the dot product operation.</param>
 		/// <returns>The result of the dot product operation.</returns>
-		public static T DotProduct(Vector<T> left, Vector<T> right)
-		{
-			return Vector<T>.DotProduct(left._vector, right._vector);
-		}
-
+		public static T DotProduct(Vector<T> left, Vector<T> right) { return _Vector_DotProduct(left._vector, right._vector); }
 		/// <summary>Computes teh cross product of two vectors.</summary>
 		/// <param name="left">The first vector of the cross product operation.</param>
 		/// <param name="right">The second vector of the cross product operation.</param>
 		/// <returns>The result of the cross product operation.</returns>
-		public static T[] CrossProduct(T[] left, T[] right)
-		{
-			if (left.Length != right.Length)
-				throw new Error("invalid cross product !(left.Dimensions == right.Dimensions)");
-			if (left.Length == 3 || left.Length == 4)
-			{
-				return new Vector<T>(
-					_subtract(_multiply(left[1], right[2]), _multiply(left[2], right[1])),
-					_subtract(_multiply(left[2], right[0]), _multiply(left[0], right[2])),
-					_subtract(_multiply(left[0], right[1]), _multiply(left[1], right[0])));
-			}
-			throw new Error("my cross product function is only defined for 3-component vectors.");
-		}
-
+		public static T[] CrossProduct(T[] left, T[] right) { return _Vector_CrossProduct(left, right); }
 		/// <summary>Computes teh cross product of two vectors.</summary>
 		/// <param name="left">The first vector of the cross product operation.</param>
 		/// <param name="right">The second vector of the cross product operation.</param>
 		/// <returns>The result of the cross product operation.</returns>
-		public static Vector<T> CrossProduct(Vector<T> left, Vector<T> right)
-		{
-			return Vector<T>.CrossProduct(left._vector, right._vector);
-		}
-
+		public static Vector<T> CrossProduct(Vector<T> left, Vector<T> right) { return _Vector_CrossProduct(left, right); }
 		/// <summary>Normalizes a vector.</summary>
 		/// <param name="vector">The vector to normalize.</param>
 		/// <returns>The result of the normalization.</returns>
-		public static T[] Normalize(T[] vector)
-		{
-			T length = Vector<T>.Length(vector);
-			if (!_equate(length, _zero))
-			{
-				T[] result = new T[vector.Length];
-				for (int i = 0; i < vector.Length; i++)
-					result[i] = _divide(vector[i], length);
-				return result;
-			}
-			else
-				return new T[vector.Length];
-		}
-
+		public static T[] Normalize(T[] vector) { return _Vector_Normalize(vector); }
 		/// <summary>Normalizes a vector.</summary>
 		/// <param name="vector">The vector to normalize.</param>
 		/// <returns>The result of the normalization.</returns>
-		public static Vector<T> Normalize(Vector<T> vector)
-		{
-			return Vector<T>.Normalize(vector._vector);
-		}
-
+		public static Vector<T> Normalize(Vector<T> vector) { return _Vector_Normalize(vector._vector); }
 		/// <summary>Computes the length of a vector.</summary>
 		/// <param name="vector">The vector to calculate the length of.</param>
 		/// <returns>The computed length of the vector.</returns>
-		public static T Length(T[] vector)
-		{
-			T result = _zero;
-			for (int i = 0; i < vector.Length; i++)
-				result = _add(result, _multiply(vector[i], vector[i]));
-			return _sqrt(result);
-		}
-
+		public static T Magnitude(T[] vector) { return _Vector_Magnitude(vector); }
 		/// <summary>Computes the length of a vector.</summary>
 		/// <param name="vector">The vector to calculate the length of.</param>
 		/// <returns>The computed length of the vector.</returns>
-		public static T Length(Vector<T> vector)
-		{
-			return Vector<T>.Length(vector._vector);
-		}
-
+		public static T Magnitude(Vector<T> vector) { return _Vector_Magnitude(vector); }
 		/// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
 		/// <param name="vector">The vector to compute the length squared of.</param>
 		/// <returns>The computed length squared of the vector.</returns>
-		public static T LengthSquared(T[] vector)
-		{
-			T result = _zero;
-			for (int i = 0; i < vector.Length; i++)
-				result = _add(result, _multiply(vector[i], vector[i]));
-			return result;
-		}
-
+    public static T MagnitudeSquared(T[] vector) { return _Vector_MagnitudeSquared(vector); }
 		/// <summary>Computes the length of a vector but doesn't square root it for efficiency (length remains squared).</summary>
 		/// <param name="vector">The vector to compute the length squared of.</param>
 		/// <returns>The computed length squared of the vector.</returns>
-		public static T LengthSquared(Vector<T> vector)
-		{
-			return Vector<T>.LengthSquared(vector._vector);
-		}
-
+    public static T MagnitudeSquared(Vector<T> vector) { return _Vector_MagnitudeSquared(vector._vector); }
 		/// <summary>Computes the angle between two vectors.</summary>
 		/// <param name="first">The first vector to determine the angle between.</param>
 		/// <param name="second">The second vector to determine the angle between.</param>
 		/// <returns>The angle between the two vectors in radians.</returns>
-		public static T Angle(T[] first, T[] second)
-		{
-			return _acos(_divide(Vector<T>.DotProduct(first, second), (_multiply(Vector<T>.Length(first), Vector<T>.Length(second)))));
-		}
-
+		public static T Angle(T[] first, T[] second) { return _Vector_Angle(first, second); }
 		/// <summary>Computes the angle between two vectors.</summary>
 		/// <param name="first">The first vector to determine the angle between.</param>
 		/// <param name="second">The second vector to determine the angle between.</param>
 		/// <returns>The angle between the two vectors in radians.</returns>
-		public static T Angle(Vector<T> first, Vector<T> second)
-		{
-			return Vector<T>.Angle(first._vector, second._vector);
-		}
-
+		public static T Angle(Vector<T> first, Vector<T> second) { return _Vector_Angle(first._vector, second._vector); }
 		/// <summary>Rotates a vector by the specified axis and rotation values.</summary>
 		/// <param name="vector">The vector to rotate.</param>
 		/// <param name="angle">The angle of the rotation.</param>
@@ -5384,28 +6832,7 @@ namespace Seven.Mathematics
 		/// <param name="y">The y component of the axis vector to rotate about.</param>
 		/// <param name="z">The z component of the axis vector to rotate about.</param>
 		/// <returns>The result of the rotation.</returns>
-		public static T[] RotateBy(T[] vector, T angle, T x, T y, T z)
-		{
-			if (vector.Length == 3)
-			{
-				// Note: the angle is in radians
-				T sinHalfAngle = _sin(_divide(angle, _two));
-				T cosHalfAngle = _cos(_divide(angle, _two));
-				x = _multiply(x, sinHalfAngle);
-				y = _multiply(y, sinHalfAngle);
-				z = _multiply(z, sinHalfAngle);
-				T x2 = _subtract(_add(_multiply(cosHalfAngle, vector[0]), _multiply(y, vector[2])), _multiply(z, vector[1]));
-				T y2 = _subtract(_add(_multiply(cosHalfAngle, vector[1]), _multiply(z, vector[0])), _multiply(x, vector[2]));
-				T z2 = _subtract(_add(_multiply(cosHalfAngle, vector[2]), _multiply(x, vector[1])), _multiply(y, vector[0]));
-				T w2 = _add(_add(_multiply(_negate(x), vector[0]), _multiply(_negate(y), vector[1])), _multiply(_negate(z), vector[2]));
-				return new T[] {
-					_subtract(_add(_add(_multiply(x, w2), _multiply(cosHalfAngle, x2)), _multiply(y, z2)), _multiply(z, y2)),
-					_subtract(_add(_add(_multiply(y, w2), _multiply(cosHalfAngle, y2)), _multiply(z, x2)), _multiply(x, z2)),
-					_subtract(_add(_add(_multiply(z, w2), _multiply(cosHalfAngle, z2)), _multiply(x, y2)), _multiply(y, x2)) };
-			}
-			throw new Error("my RotateBy() function is only defined for 3-component vectors.");
-		}
-
+		public static T[] RotateBy(T[] vector, T angle, T x, T y, T z) { return _Vector_RotateBy(vector, angle, x, y, z); }
 		/// <summary>Rotates a vector by the specified axis and rotation values.</summary>
 		/// <param name="vector">The vector to rotate.</param>
 		/// <param name="angle">The angle of the rotation.</param>
@@ -5413,80 +6840,36 @@ namespace Seven.Mathematics
 		/// <param name="y">The y component of the axis vector to rotate about.</param>
 		/// <param name="z">The z component of the axis vector to rotate about.</param>
 		/// <returns>The result of the rotation.</returns>
-		public static Vector<T> RotateBy(Vector<T> vector, T angle, T x, T y, T z)
-		{
-			return Vector<T>.RotateBy(vector._vector, angle, x, y, z);
-		}
-
+		public static Vector<T> RotateBy(Vector<T> vector, T angle, T x, T y, T z) { return _Vector_RotateBy(vector._vector, angle, x, y, z); }
 		/// <summary>Rotates a vector by a quaternion.</summary>
 		/// <param name="vector">The vector to rotate.</param>
 		/// <param name="rotation">The quaternion to rotate the 3-component vector by.</param>
 		/// <returns>The result of the rotation.</returns>
-		public static Vector<T> RotateBy(Vector<T> vector, Quaternion<T> rotation)
-		{
-			throw new System.NotImplementedException();
-			//if (vector.Dimensions == 3)
-			//	return Quaternion<T>.Rotate(rotation, vector);
-			//else
-			//	throw new Exception("my quaternion rotations are only defined for 3-component vectors.");
-		}
-
+		public static Vector<T> RotateBy(Vector<T> vector, Quaternion<T> rotation) { return _Vector_RotateBy_quaternion(vector._vector, rotation); }
 		/// <summary>Computes the linear interpolation between two vectors.</summary>
 		/// <param name="left">The starting vector of the interpolation.</param>
 		/// <param name="right">The ending vector of the interpolation.</param>
 		/// <param name="blend">The ratio 0.0 to 1.0 of the interpolation between the start and end.</param>
 		/// <returns>The result of the interpolation.</returns>
-		public static T[] Lerp(T[] left, T[] right, T blend)
-		{
-			throw new System.NotImplementedException();
-			//float[] leftFloats = left.Floats;
-			//float[] rightFloats = right.Floats;
-			//if (blend < 0 || blend > 1.0f)
-			//	throw new Error("invalid lerp blend value: (blend < 0.0f || blend > 1.0f).");
-			//if (leftFloats.Length != rightFloats.Length)
-			//	throw new Error("invalid lerp matrix length: (left.Dimensions != right.Dimensions)");
-			//Vector<T> result = new Vector<T>(leftFloats.Length);
-			//float[] resultFloats = result.Floats;
-			//for (int i = 0; i < leftFloats.Length; i++)
-			//	resultFloats[i] = leftFloats[i] + blend * (rightFloats[i] - leftFloats[i]);
-			//return result;
-		}
-
+		public static T[] Lerp(T[] left, T[] right, T blend) { return _Vector_Lerp(left, right, blend); }
 		/// <summary>Computes the linear interpolation between two vectors.</summary>
 		/// <param name="left">The starting vector of the interpolation.</param>
 		/// <param name="right">The ending vector of the interpolation.</param>
 		/// <param name="blend">The ratio 0.0 to 1.0 of the interpolation between the start and end.</param>
 		/// <returns>The result of the interpolation.</returns>
-		public static Vector<T> Lerp(Vector<T> left, Vector<T> right, T blend)
-		{
-			return Vector<T>.Lerp(left._vector, right._vector, blend);
-		}
-
+		public static Vector<T> Lerp(Vector<T> left, Vector<T> right, T blend) { return _Vector_Lerp(left._vector, right._vector, blend); }
 		/// <summary>Sphereically interpolates between two vectors.</summary>
 		/// <param name="left">The starting vector of the interpolation.</param>
 		/// <param name="right">The ending vector of the interpolation.</param>
 		/// <param name="blend">The ratio 0.0 to 1.0 defining the interpolation distance between the two vectors.</param>
 		/// <returns>The result of the slerp operation.</returns>
-		public static T[] Slerp(T[] left, T[] right, T blend)
-		{
-			throw new System.NotImplementedException();
-			//if (blend < 0 || blend > 1.0f)
-			//	throw new Error("invalid slerp blend value: (blend < 0.0f || blend > 1.0f).");
-			//float dot = Calc.Clamp(Vector<T>.DotProduct(left, right), -1.0f, 1.0f);
-			//float theta = Calc.ArcCos(dot) * blend;
-			//return left * Calc.Cos(theta) + (right - left * dot).Normalize() * Calc.Sin(theta);
-		}
-
+		public static T[] Slerp(T[] left, T[] right, T blend) { return _Vector_Slerp(left, right, blend); }
 		/// <summary>Sphereically interpolates between two vectors.</summary>
 		/// <param name="left">The starting vector of the interpolation.</param>
 		/// <param name="right">The ending vector of the interpolation.</param>
 		/// <param name="blend">The ratio 0.0 to 1.0 defining the interpolation distance between the two vectors.</param>
 		/// <returns>The result of the slerp operation.</returns>
-		public static Vector<T> Slerp(Vector<T> left, Vector<T> right, T blend)
-		{
-			return Vector<T>.Slerp(left._vector, right._vector, blend);
-		}
-
+		public static Vector<T> Slerp(Vector<T> left, Vector<T> right, T blend) { return _Vector_Slerp(left._vector, right._vector, blend); }
 		/// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
 		/// <param name="a">The first vector of the interpolation.</param>
 		/// <param name="b">The second vector of the interpolation.</param>
@@ -5494,12 +6877,7 @@ namespace Seven.Mathematics
 		/// <param name="u">The "U" value of the barycentric interpolation equation.</param>
 		/// <param name="v">The "V" value of the barycentric interpolation equation.</param>
 		/// <returns>The resulting vector of the barycentric interpolation.</returns>
-		public static T[] Blerp(T[] a, T[] b, T[] c, T u, T v)
-		{
-			throw new System.NotImplementedException();
-			//return Vector<T>.Add(Vector<T>.Add(Vector<T>.Multiply(Vector<T>.Subtract(b, a), u), Vector<T>.Multiply(Vector<T>.Subtract(c, a), v)), a);
-		}
-
+		public static T[] Blerp(T[] a, T[] b, T[] c, T u, T v) { return _Vector_Blerp(a, b, c, u, v); }
 		/// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
 		/// <param name="a">The first vector of the interpolation.</param>
 		/// <param name="b">The second vector of the interpolation.</param>
@@ -5507,60 +6885,35 @@ namespace Seven.Mathematics
 		/// <param name="u">The "U" value of the barycentric interpolation equation.</param>
 		/// <param name="v">The "V" value of the barycentric interpolation equation.</param>
 		/// <returns>The resulting vector of the barycentric interpolation.</returns>
-		public static Vector<T> Blerp(Vector<T> a, Vector<T> b, Vector<T> c, T u, T v)
-		{
-			return Vector<T>.Blerp(a._vector, b._vector, c._vector, u, v);
-		}
-
+		public static Vector<T> Blerp(Vector<T> a, Vector<T> b, Vector<T> c, T u, T v) { return _Vector_Blerp(a._vector, b._vector, c._vector, u, v); }
 		/// <summary>Does a value equality check.</summary>
 		/// <param name="left">The first vector to check for equality.</param>
 		/// <param name="right">The second vector  to check for equality.</param>
 		/// <returns>True if values are equal, false if not.</returns>
-		public static bool EqualsValue(T[] left, T[] right)
-		{
-			if (left.Length != right.Length)
-				return false;
-			for (int i = 0; i < left.Length; i++)
-				if (!_equate(left[i], right[i]))
-					return false;
-			return true;
-		}
-
+		public static bool EqualsValue(T[] left, T[] right) { return _Vector_EqualsValue(left, right); }
 		/// <summary>Does a value equality check.</summary>
 		/// <param name="left">The first vector to check for equality.</param>
 		/// <param name="right">The second vector  to check for equality.</param>
 		/// <returns>True if values are equal, false if not.</returns>
-		public static bool EqualsValue(Vector<T> left, Vector<T> right)
-		{
-			return Vector<T>.EqualsValue(left._vector, right._vector);
-		}
-
+		public static bool EqualsValue(Vector<T> left, Vector<T> right) { return _Vector_EqualsValue(left._vector, right._vector); }
 		/// <summary>Does a value equality check with leniency.</summary>
 		/// <param name="left">The first vector to check for equality.</param>
 		/// <param name="right">The second vector to check for equality.</param>
 		/// <param name="leniency">How much the values can vary but still be considered equal.</param>
 		/// <returns>True if values are equal, false if not.</returns>
-		public static bool EqualsValue(T[] left, T[] right, T leniency)
-		{
-			if (left.Length != right.Length)
-				return false;
-			for (int i = 0; i < left.Length; i++)
-				if (_compare(_abs(_subtract(left[i], right[i])), leniency) == Comparison.Greater)
-					return false;
-			return true;
-		}
-
+		public static bool EqualsValue(T[] left, T[] right, T leniency) { return _Vector_EqualsValue_leniency(left, right, leniency); }
 		/// <summary>Does a value equality check with leniency.</summary>
 		/// <param name="left">The first vector to check for equality.</param>
 		/// <param name="right">The second vector to check for equality.</param>
 		/// <param name="leniency">How much the values can vary but still be considered equal.</param>
 		/// <returns>True if values are equal, false if not.</returns>
-		public static bool EqualsValue(Vector<T> left, Vector<T> right, T leniency)
-		{
-			return Vector<T>.EqualsValue(left._vector, right._vector, leniency);
-		}
+    public static bool EqualsValue(Vector<T> left, Vector<T> right, T leniency) { return _Vector_EqualsValue_leniency(left._vector, right._vector, leniency); }
 
-		/// <summary>Checks if two matrices are equal by reverences.</summary>
+    #endregion
+
+    #region overrides
+
+    /// <summary>Checks if two matrices are equal by reverences.</summary>
 		/// <param name="left">The left vector of the equality check.</param>
 		/// <param name="right">The right vector of the equality check.</param>
 		/// <returns>True if the references are equal, false if not.</returns>
@@ -5578,14 +6931,6 @@ namespace Seven.Mathematics
 			return EqualsReference(left._vector, right._vector);
 		}
 
-		///// <summary>Converts the vector into a matrix.</summary>
-		///// <param name="vector">The vecotr to convert.</param>
-		///// <returns>The matrix of the conversion.</returns>
-		//public static Matrix_Flattened ToMatrix(Vector<T> vector)
-		//{
-		//	return new Matrix_Flattened(vector.Dimensions, 1, vector.Floats);
-		//}
-
 		/// <summary>Prints out a string representation of this matrix.</summary>
 		/// <returns>A string representing this matrix.</returns>
 		public override string ToString()
@@ -5596,14 +6941,7 @@ namespace Seven.Mathematics
 
 		/// <summary>Computes a hash code from the values of this matrix.</summary>
 		/// <returns>A hash code for the matrix.</returns>
-		public override int GetHashCode()
-		{
-			// return base.GetHashCode();
-			int hash = _vector[0].GetHashCode();
-			for (int i = 1; i < _vector.Length; i++)
-				hash ^= _vector[i].GetHashCode();
-			return hash;
-		}
+		public override int GetHashCode() { return this._vector.GetHashCode(); }
 
 		/// <summary>Does an equality check by reference.</summary>
 		/// <param name="right">The object to compare to.</param>
@@ -5612,15 +6950,12 @@ namespace Seven.Mathematics
 		{
 			if (!(right is Vector<T>)) return false;
 			return Vector<T>.EqualsReference(this, (Vector<T>)right);
-		}
+    }
 
-		private class Error : LinearAlgebra.Error
-		{
-			public Error(string message) : base(message) { }
-		}
-	}
+    #endregion
+  }
 
-	/// <summary>Implements a 4-component [x, y, z, w] quaternion. X, Y, and Z represent the axis of rotation, and W is the rotation ammount.</summary>
+  /// <summary>Implements a 4-component [x, y, z, w] quaternion. X, Y, and Z represent the axis of rotation, and W is the rotation ammount.</summary>
 	/// <typeparam name="T">The numeric type of this Quaternion.</typeparam>
 	public class Quaternion<T>
 	{
@@ -6130,7 +7465,7 @@ namespace Seven.Mathematics
 			return false;
 		}
 
-		public class Error : LinearAlgebra.Error
+		internal class Error : LinearAlgebra.Error
 		{
 			public Error(string message) : base(message) { }
 		}

@@ -312,7 +312,6 @@ namespace Testing
       Random random = new Random();
 
       Matrix<double> M = new Matrix<double>(4, 4);
-
       for (int i = 0; i < M.Rows; i++)
         for (int j = 0; j < M.Columns; j++)
           M[i, j] = random.NextDouble();

@@ -3,8 +3,6 @@
 // LISCENSE: See "LISCENSE.txt" in th root project directory.
 // SUPPORT: See "README.txt" in the root project directory.
 
-using System;
-
 namespace Seven.Mathematics
 {
   /// <summary>Supplies trigonometry mathematics for generic types.</summary>
@@ -109,7 +107,7 @@ namespace Seven.Mathematics
 
 		public float sin(float angle)
 		{
-			return (float)Math.Sin(angle);
+      return (float)System.Math.Sin(angle);
 
 			// THE FOLLOWING IS PERSONAL SIN FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
 			// THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -171,7 +169,7 @@ namespace Seven.Mathematics
 
 		public float cos(float angle)
 		{
-			return (float)Math.Cos(angle);
+			return (float)System.Math.Cos(angle);
 
 			// THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
 			// THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -245,7 +243,7 @@ namespace Seven.Mathematics
 
 		public float tan(float angle)
 		{
-			return (float)Math.Tan(angle);
+      return (float)System.Math.Tan(angle);
 
 			// THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
 			// THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -257,7 +255,7 @@ namespace Seven.Mathematics
 
 		public float sec(float angle)
 		{
-			return 1.0f / (float)Math.Cos(angle);
+      return 1.0f / (float)System.Math.Cos(angle);
 
 			// THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
 			// THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -269,7 +267,7 @@ namespace Seven.Mathematics
 
 		public float csc(float angle)
 		{
-			return 1.0f / (float)Math.Sin(angle);
+      return 1.0f / (float)System.Math.Sin(angle);
 
 			// THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
 			// THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -281,7 +279,7 @@ namespace Seven.Mathematics
 
 		public float cot(float angle)
 		{
-			return 1.0f / (float)Math.Tan(angle);
+      return 1.0f / (float)System.Math.Tan(angle);
 
 			// THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
 			// THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -293,37 +291,37 @@ namespace Seven.Mathematics
 
 		public float arcsin(float sinRatio)
 		{
-			return (float)Math.Asin(sinRatio);
+      return (float)System.Math.Asin(sinRatio);
 			//I haven't made a custom ArcSin function yet...
 		}
 
 		public float arccos(float cosRatio)
 		{
-			return (float)Math.Acos(cosRatio);
+      return (float)System.Math.Acos(cosRatio);
 			//I haven't made a custom ArcCos function yet...
 		}
 
 		public float arctan(float tanRatio)
 		{
-			return (float)Math.Atan(tanRatio);
+      return (float)System.Math.Atan(tanRatio);
 			//I haven't made a custom ArcTan function yet...
 		}
 
 		public float arccsc(float cscRatio)
 		{
-			return (float)Math.Asin(1.0f / cscRatio);
+      return (float)System.Math.Asin(1.0f / cscRatio);
 			//I haven't made a custom ArcCsc function yet...
 		}
 
 		public float arcsec(float secRatio)
 		{
-			return (float)Math.Acos(1.0f / secRatio);
+      return (float)System.Math.Acos(1.0f / secRatio);
 			//I haven't made a custom ArcSec function yet...
 		}
 
 		public float arccot(float cotRatio)
 		{
-			return (float)Math.Atan(1.0f / cotRatio);
+      return (float)System.Math.Atan(1.0f / cotRatio);
 			//I haven't made a custom ArcCot function yet...
 		}
 	}
@@ -357,7 +355,7 @@ namespace Seven.Mathematics
 
     public double sin(double angle)
     {
-      return Math.Sin(angle);
+      return System.Math.Sin(angle);
 
       // THE FOLLOWING IS PERSONAL SIN FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
       // THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -419,7 +417,7 @@ namespace Seven.Mathematics
 
     public double cos(double angle)
     {
-      return Math.Cos(angle);
+      return System.Math.Cos(angle);
 
       // THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
       // THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -493,7 +491,7 @@ namespace Seven.Mathematics
 
     public double tan(double angle)
     {
-      return Math.Tan(angle);
+      return System.Math.Tan(angle);
 
       // THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
       // THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -505,7 +503,7 @@ namespace Seven.Mathematics
 
     public double sec(double angle)
     {
-      return 1.0f / (double)Math.Cos(angle);
+      return 1.0f / (double)System.Math.Cos(angle);
 
       // THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
       // THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -517,7 +515,7 @@ namespace Seven.Mathematics
 
     public double csc(double angle)
     {
-      return 1.0d / Math.Sin(angle);
+      return 1.0d / System.Math.Sin(angle);
 
       // THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
       // THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -529,7 +527,7 @@ namespace Seven.Mathematics
 
     public double cot(double angle)
     {
-      return 1.0d / Math.Tan(angle);
+      return 1.0d / System.Math.Tan(angle);
 
       // THE FOLLOWING IS MY PERSONAL FUNCTION. IT WORKS BUT IT IS NOT AS FAST AS
       // THE SYSTEM FUNCTION IN ITS CURRENT STATE
@@ -541,37 +539,37 @@ namespace Seven.Mathematics
 
     public double arcsin(double sinRatio)
     {
-      return Math.Asin(sinRatio);
+      return System.Math.Asin(sinRatio);
       //I haven't made a custom ArcSin function yet...
     }
 
     public double arccos(double cosRatio)
     {
-      return Math.Acos(cosRatio);
+      return System.Math.Acos(cosRatio);
       //I haven't made a custom ArcCos function yet...
     }
 
     public double arctan(double tanRatio)
     {
-      return Math.Atan(tanRatio);
+      return System.Math.Atan(tanRatio);
       //I haven't made a custom ArcTan function yet...
     }
 
     public double arccsc(double cscRatio)
     {
-      return Math.Asin(1.0d / cscRatio);
+      return System.Math.Asin(1.0d / cscRatio);
       //I haven't made a custom ArcCsc function yet...
     }
 
     public double arcsec(double secRatio)
     {
-      return Math.Acos(1.0d / secRatio);
+      return System.Math.Acos(1.0d / secRatio);
       //I haven't made a custom ArcSec function yet...
     }
 
     public double arccot(double cotRatio)
     {
-      return Math.Atan(1.0d / cotRatio);
+      return System.Math.Atan(1.0d / cotRatio);
       //I haven't made a custom ArcCot function yet...
     }
   }

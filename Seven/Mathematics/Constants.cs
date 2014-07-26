@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Seven
+// https://github.com/53V3N1X/SevenFramework
+// LISCENSE: See "LISCENSE.txt" in th root project directory.
+// SUPPORT: See "README.txt" in the root project directory.
 
 namespace Seven.Mathematics
 {
@@ -22,19 +21,19 @@ namespace Seven.Mathematics
 	public static class Constants
 	{
 		public const decimal pi_decimal = 3.1415926535897932384626433832795028841971693993751M;
-		public const double pi_double =   3.1415926535897932384626433832795028841971693993751d;
-		public const float pi_float =     3.1415926535897932384626433832795028841971693993751f;
+		public const double pi_double = (double)pi_decimal;
+    public const float pi_float = (float)pi_decimal;
 
 		public const decimal e_decimal = 2.7182818284590452353602874713527M;
-		public const double e_double =   2.7182818284590452353602874713527d;
-		public const float e_float =     2.7182818284590452353602874713527f;
+		public const double e_double = (double)e_decimal;
+		public const float e_float = (float)e_decimal;
 
 		public static Seven.Structures.Map<object, System.Type> _constants =
 			new Seven.Structures.Map_Linked<object, System.Type>(
 				(System.Type left, System.Type right) => { return left == right; },
 				(System.Type type) => { return type.GetHashCode(); })
 				{
-					//{ typeof(int), Constants_int.Get },
+					{ typeof(int), Constants_int.Get },
 					{ typeof(double), Constants_double.Get },
 					{ typeof(float), Constants_float.Get },
 					{ typeof(decimal), Constants_decimal.Get },
@@ -48,6 +47,12 @@ namespace Seven.Mathematics
 			try { return _constants[typeof(T)] as Constants<T>; }
 			catch { throw new Error("Algebra does not yet exist for " + typeof(T).ToString()); }
 		}
+
+    /// <summary>Error type for all algebra computations.</summary>
+    public class Error : Seven.Error
+    {
+      public Error(string message) : base(message) { }
+    }
 	}
 
 	public class Constants_decimal : Constants<decimal>
@@ -130,4 +135,58 @@ namespace Seven.Mathematics
 		public float factory(double value) { return (float)value; }
 		public float factory(decimal value) { return (float)value; }
 	}
+
+  public class Constants_long : Constants<long>
+  {
+    private Constants_long() { _instance = this; }
+    private static Constants_long _instance;
+    private static Constants_long Instance
+    {
+      get
+      {
+        if (_instance == null)
+          return _instance = new Constants_long();
+        else
+          return _instance;
+      }
+    }
+
+    /// <summary>Gets Arithmetic for "int" types.</summary>
+    public static Constants_long Get { get { return Instance; } }
+
+    public long e { get { throw new Constants.Error("constant e cannot be represented as a long"); } }
+    public long pi { get { throw new Constants.Error("constant e cannot be represented as a long"); } }
+
+    public long factory(int value) { return value; }
+    public long factory(float value) { return (long)value; }
+    public long factory(double value) { return (long)value; }
+    public long factory(decimal value) { return (long)value; }
+  }
+
+  public class Constants_int : Constants<int>
+  {
+    private Constants_int() { _instance = this; }
+    private static Constants_int _instance;
+    private static Constants_int Instance
+    {
+      get
+      {
+        if (_instance == null)
+          return _instance = new Constants_int();
+        else
+          return _instance;
+      }
+    }
+
+    /// <summary>Gets Arithmetic for "int" types.</summary>
+    public static Constants_int Get { get { return Instance; } }
+
+    public int e { get { throw new Constants.Error("constant e cannot be represented as an int"); } }
+    public int pi { get { throw new Constants.Error("constant e cannot be represented as an int"); } }
+
+    public int factory(int value) { return value; }
+    public int factory(float value) { return (int)value; }
+    public int factory(double value) { return (int)value; }
+    public int factory(decimal value) { return (int)value; }
+  }
 }

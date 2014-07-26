@@ -33,9 +33,6 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Equate.cs" />
     <Compile Include="Fraction.cs" />
     <Compile Include="Mathematics\Algebra.cs" />
@@ -57,6 +54,7 @@
     <Compile Include="Structures\Array.cs" />
     <Compile Include="Structures\AvlTree.cs" />
     <Compile Include="Structures\BTree.cs" />
+    <Compile Include="Structures\Deque.cs" />
     <Compile Include="Structures\Foreach.cs" />
     <Compile Include="Structures\Graph.cs" />
     <Compile Include="Structures\Map.cs" />
