@@ -34,49 +34,6 @@ namespace Seven.Mathematics
 		public delegate T _Divide<T>(T left, T right);
 		public delegate T _Power<T>(T left, T right);
 
-		// COPY THESE DEFINITIONS INTO CLASSES NEEDING ARITHMETIC
-		//private static Arithmetic.Negate<T> _negate = Arithmetic.Get<T>().Negate;
-		//private static Arithmetic.Add<T> _add = Arithmetic.Get<T>().Add;
-		//private static Arithmetic.Subtract<T> _subtract = Arithmetic.Get<T>().Subtract;
-		//private static Arithmetic.Multiply<T> _multiply = Arithmetic.Get<T>().Multiply;
-		//private static Arithmetic.Divide<T> _divide = Arithmetic.Get<T>().Divide;
-		//private static Arithmetic.Power<T> _power = Arithmetic.Get<T>().Power;
-
-		public static Arithmetic<int> _int
-    { get { return (Arithmetic<int>)Arithmetic_int.Get; } }
-    public static Arithmetic<int> GetArithmetic(this int integer)
-    { return (Arithmetic<int>)Arithmetic_int.Get; }
-
-    public static Arithmetic<double> _double
-    { get { return (Arithmetic<double>)Arithmetic_double.Get; } }
-    public static Arithmetic<double> GetArithmetic(this double integer)
-    { return (Arithmetic<double>)Arithmetic_double.Get; }
-
-    public static Arithmetic<float> _float
-    { get { return (Arithmetic<float>)Arithmetic_float.Get; } }
-    public static Arithmetic<float> GetArithmetic(this float integer)
-    { return (Arithmetic<float>)Arithmetic_float.Get; }
-
-    public static Arithmetic<short> _short
-    { get { return (Arithmetic<short>)Arithmetic_short.Get; } }
-    public static Arithmetic<short> GetArithmetic(this short integer)
-    { return (Arithmetic<short>)Arithmetic_short.Get; }
-
-    public static Arithmetic<long> _long
-    { get { return (Arithmetic<long>)Arithmetic_long.Get; } }
-    public static Arithmetic<long> GetArithmetic(this long integer)
-    { return (Arithmetic<long>)Arithmetic_long.Get; }
-
-    public static Arithmetic<decimal> _decimal
-    { get { return (Arithmetic<decimal>)Arithmetic_decimal.Get; } }
-    public static Arithmetic<decimal> GetArithmetic(this decimal integer)
-    { return (Arithmetic<decimal>)Arithmetic_decimal.Get; }
-
-    public static Arithmetic<byte> _byte
-    { get { return (Arithmetic<byte>)Arithmetic_byte.Get; } }
-    public static Arithmetic<byte> GetArithmetic(this byte byteeger)
-    { return (Arithmetic<byte>)Arithmetic_byte.Get; }
-
 		public static Seven.Structures.Map<object, System.Type> _arithmetics =
 			new Seven.Structures.Map_Linked<object, System.Type>(
 				(System.Type left, System.Type right) => { return left == right; },

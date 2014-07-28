@@ -50,10 +50,14 @@ namespace Seven.Mathematics
     LinearAlgebra._Matrix_Negate<T> Matrix_Negate { get; }
 		/// <summary>Does a standard matrix addition.</summary>
     LinearAlgebra._Matrix_Add<T> Matrix_Add { get; }
+    /// <summary>Does a standard matrix subtraction.</summary>
+    LinearAlgebra._Matrix_Subtract<T> Matrix_Subtract { get; }
 		/// <summary>Does a standard matrix multiplication (triple for loop).</summary>
     LinearAlgebra._Matrix_Multiply<T> Matrix_Multiply { get; }
 		/// <summary>Multiplies all the values in this matrix by a scalar.</summary>
     LinearAlgebra._Matrix_Multiply_scalar<T> Matrix_Multiply_scalar { get; }
+    /// <summary>Premultiplies a vector by a matrix.</summary>
+    LinearAlgebra._Matrix_Multiply_vector<T> Matrix_Multiply_vector { get; }
 		/// <summary>Divides all the values in this matrix by a scalar.</summary>
     LinearAlgebra._Matrix_Divide<T> Matrix_Divide { get; }
 		/// <summary>Gets the minor of a matrix.</summary>
@@ -102,7 +106,9 @@ namespace Seven.Mathematics
 
 		public delegate T[,] _Matrix_Negate<T>(T[,] matrix);
 		public delegate T[,] _Matrix_Add<T>(T[,] left, T[,] right);
+    public delegate T[,] _Matrix_Subtract<T>(T[,] left, T[,] right);
 		public delegate T[,] _Matrix_Multiply<T>(T[,] left, T[,] right);
+    public delegate T[] _Matrix_Multiply_vector<T>(T[,] matrix, T[] right);
 		public delegate T[,] _Matrix_Multiply_scalar<T>(T[,] matrix, T right);
 		public delegate T[,] _Matrix_Divide<T>(T[,] left, T right);
 		public delegate T[,] _Matrix_Minor<T>(T[,] matrix, int row, int column);
@@ -208,10 +214,14 @@ namespace Seven.Mathematics
       public LinearAlgebra._Matrix_Negate<decimal> Matrix_Negate { get { return LinearAlgebra.Negate; } }
       /// <summary>Does a standard matrix addition.</summary>
       public LinearAlgebra._Matrix_Add<decimal> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix subtraction.</summary>
+      public LinearAlgebra._Matrix_Subtract<decimal> Matrix_Subtract { get { return LinearAlgebra.Subtract; } }
       /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
       public LinearAlgebra._Matrix_Multiply<decimal> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
       /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Multiply_scalar<decimal> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Premultiplies a vector by a matrix.</summary>
+      public LinearAlgebra._Matrix_Multiply_vector<decimal> Matrix_Multiply_vector { get { return LinearAlgebra.Multiply; } }
       /// <summary>Divides all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Divide<decimal> Matrix_Divide { get { return LinearAlgebra.Divide; } }
       /// <summary>Gets the minor of a matrix.</summary>
@@ -287,10 +297,14 @@ namespace Seven.Mathematics
       public LinearAlgebra._Matrix_Negate<double> Matrix_Negate { get { return LinearAlgebra.Negate; } }
       /// <summary>Does a standard matrix addition.</summary>
       public LinearAlgebra._Matrix_Add<double> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix subtraction.</summary>
+      public LinearAlgebra._Matrix_Subtract<double> Matrix_Subtract { get { return LinearAlgebra.Subtract; } }
       /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
       public LinearAlgebra._Matrix_Multiply<double> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
       /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Multiply_scalar<double> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Premultiplies a vector by a matrix.</summary>
+      public LinearAlgebra._Matrix_Multiply_vector<double> Matrix_Multiply_vector { get { return LinearAlgebra.Multiply; } }
       /// <summary>Divides all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Divide<double> Matrix_Divide { get { return LinearAlgebra.Divide; } }
       /// <summary>Gets the minor of a matrix.</summary>
@@ -366,10 +380,14 @@ namespace Seven.Mathematics
       public LinearAlgebra._Matrix_Negate<float> Matrix_Negate { get { return LinearAlgebra.Negate; } }
       /// <summary>Does a standard matrix addition.</summary>
       public LinearAlgebra._Matrix_Add<float> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix subtraction.</summary>
+      public LinearAlgebra._Matrix_Subtract<float> Matrix_Subtract { get { return LinearAlgebra.Subtract; } }
       /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
       public LinearAlgebra._Matrix_Multiply<float> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
       /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Multiply_scalar<float> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Premultiplies a vector by a matrix.</summary>
+      public LinearAlgebra._Matrix_Multiply_vector<float> Matrix_Multiply_vector { get { return LinearAlgebra.Multiply; } }
       /// <summary>Divides all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Divide<float> Matrix_Divide { get { return LinearAlgebra.Divide; } }
       /// <summary>Gets the minor of a matrix.</summary>
@@ -445,10 +463,14 @@ namespace Seven.Mathematics
       public LinearAlgebra._Matrix_Negate<long> Matrix_Negate { get { return LinearAlgebra.Negate; } }
       /// <summary>Does a standard matrix addition.</summary>
       public LinearAlgebra._Matrix_Add<long> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix subtraction.</summary>
+      public LinearAlgebra._Matrix_Subtract<long> Matrix_Subtract { get { return LinearAlgebra.Subtract; } }
       /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
       public LinearAlgebra._Matrix_Multiply<long> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
       /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Multiply_scalar<long> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Premultiplies a vector by a matrix.</summary>
+      public LinearAlgebra._Matrix_Multiply_vector<long> Matrix_Multiply_vector { get { return LinearAlgebra.Multiply; } }
       /// <summary>Divides all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Divide<long> Matrix_Divide { get { return LinearAlgebra.Divide; } }
       /// <summary>Gets the minor of a matrix.</summary>
@@ -524,10 +546,14 @@ namespace Seven.Mathematics
       public LinearAlgebra._Matrix_Negate<int> Matrix_Negate { get { return LinearAlgebra.Negate; } }
       /// <summary>Does a standard matrix addition.</summary>
       public LinearAlgebra._Matrix_Add<int> Matrix_Add { get { return LinearAlgebra.Add; } }
+      /// <summary>Does a standard matrix subtraction.</summary>
+      public LinearAlgebra._Matrix_Subtract<int> Matrix_Subtract { get { return LinearAlgebra.Subtract; } }
       /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
       public LinearAlgebra._Matrix_Multiply<int> Matrix_Multiply { get { return LinearAlgebra.Multiply; } }
       /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Multiply_scalar<int> Matrix_Multiply_scalar { get { return LinearAlgebra.Multiply; } }
+      /// <summary>Premultiplies a vector by a matrix.</summary>
+      public LinearAlgebra._Matrix_Multiply_vector<int> Matrix_Multiply_vector { get { return LinearAlgebra.Multiply; } }
       /// <summary>Divides all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Divide<int> Matrix_Divide { get { return LinearAlgebra.Divide; } }
       /// <summary>Gets the minor of a matrix.</summary>
@@ -936,6 +962,25 @@ namespace Seven.Mathematics
         }
       }
 
+      /// <summary>Does a standard matrix addition.</summary>
+      public LinearAlgebra._Matrix_Subtract<T> Matrix_Subtract
+      {
+        get
+        {
+          return
+            (T[,] left, T[,] right) =>
+            {
+              if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+                throw new Error("invalid subtraction (size miss-match).");
+              T[,] result = new T[left.GetLength(0), left.GetLength(1)];
+              for (int i = 0; i < result.GetLength(0); i++)
+                for (int j = 0; j < result.GetLength(1); j++)
+                  result[i, j] = _subtract(left[i, j], right[i, j]);
+              return result;
+            };
+        }
+      }
+
       /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
       public LinearAlgebra._Matrix_Multiply<T> Matrix_Multiply
       {
@@ -968,6 +1013,25 @@ namespace Seven.Mathematics
               for (int i = 0; i < left.GetLength(0); i++)
                 for (int j = 0; j < left.GetLength(1); j++)
                   result[i, j] = _multiply(left[i, j], right);
+              return result;
+            };
+        }
+      }
+
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_vector<T> Matrix_Multiply_vector
+      {
+        get
+        {
+          return
+            (T[,] left, T[] right) =>
+            {
+              if (left.GetLength(1) != right.GetLength(0))
+                throw new Error("invalid multiplication (size miss-match).");
+              T[] result = new T[left.GetLength(1)];
+              for (int i = 0; i < left.GetLength(0); i++)
+                for (int j = 0; j < right.GetLength(1); j++)
+                  result[i] = _add(result[i], _multiply(left[i, j], right[j]));
               return result;
             };
         }
@@ -2071,11 +2135,17 @@ namespace Seven.Mathematics
       /// <summary>Does a standard matrix addition.</summary>
       public LinearAlgebra._Matrix_Add<T> Matrix_Add
       { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Does a standard matrix subtraction.</summary>
+      public LinearAlgebra._Matrix_Subtract<T> Matrix_Subtract
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
       /// <summary>Does a standard matrix multiplication (triple for loop).</summary>
       public LinearAlgebra._Matrix_Multiply<T> Matrix_Multiply
       { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
       /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Multiply_scalar<T> Matrix_Multiply_scalar
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Multiplies all the values in this matrix by a scalar.</summary>
+      public LinearAlgebra._Matrix_Multiply_vector<T> Matrix_Multiply_vector
       { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
       /// <summary>Divides all the values in this matrix by a scalar.</summary>
       public LinearAlgebra._Matrix_Divide<T> Matrix_Divide
@@ -2759,6 +2829,253 @@ namespace Seven.Mathematics
       }
     }
 
+    /// <summary>Computes the length of quaternion.</summary>
+    /// <param name="quaternion">The quaternion to compute the length of.</param>
+    /// <returns>The length of the given quaternion.</returns>
+    public static decimal Magnitude(Quaternion<decimal> quaternion)
+    {
+      return Algebra.SquareRoot(
+          (quaternion.X * quaternion.X +
+          quaternion.Y * quaternion.Y +
+          quaternion.Z * quaternion.Z +
+          quaternion.W * quaternion.W));
+    }
+
+    /// <summary>Computes the length of a quaternion, but doesn't square root it
+    /// for optimization possibilities.</summary>
+    /// <param name="quaternion">The quaternion to compute the length squared of.</param>
+    /// <returns>The squared length of the given quaternion.</returns>
+    public static decimal MagnitudeSquared(Quaternion<decimal> quaternion)
+    {
+      return
+        quaternion.X * quaternion.X +
+        quaternion.Y * quaternion.Y +
+        quaternion.Z * quaternion.Z +
+        quaternion.W * quaternion.W;
+    }
+
+    /// <summary>Gets the conjugate of the quaternion.</summary>
+    /// <param name="quaternion">The quaternion to conjugate.</param>
+    /// <returns>The conjugate of teh given quaternion.</returns>
+    public static Quaternion<decimal> Conjugate(Quaternion<decimal> quaternion)
+    {
+      return new Quaternion<decimal>(
+        -quaternion.X,
+        -quaternion.Y,
+        -quaternion.Z,
+        quaternion.W);
+    }
+
+    /// <summary>Adds two quaternions together.</summary>
+    /// <param name="left">The first quaternion of the addition.</param>
+    /// <param name="right">The second quaternion of the addition.</param>
+    /// <returns>The result of the addition.</returns>
+    public static Quaternion<decimal> Add(Quaternion<decimal> left, Quaternion<decimal> right)
+    {
+      return new Quaternion<decimal>(
+        left.X + right.X,
+        left.Y + right.Y,
+        left.Z + right.Z,
+        left.W + right.W);
+    }
+
+    /// <summary>Subtracts two quaternions.</summary>
+    /// <param name="left">The left quaternion of the subtraction.</param>
+    /// <param name="right">The right quaternion of the subtraction.</param>
+    /// <returns>The resulting quaternion after the subtraction.</returns>
+    public static Quaternion<decimal> Subtract(Quaternion<decimal> left, Quaternion<decimal> right)
+    {
+      return new Quaternion<decimal>(
+        left.X - right.X,
+        left.Y - right.Y,
+        left.Z - right.Z,
+        left.W - right.W);
+    }
+
+    /// <summary>Multiplies two quaternions together.</summary>
+    /// <param name="left">The first quaternion of the multiplication.</param>
+    /// <param name="right">The second quaternion of the multiplication.</param>
+    /// <returns>The resulting quaternion after the multiplication.</returns>
+    public static Quaternion<decimal> Multiply(Quaternion<decimal> left, Quaternion<decimal> right)
+    {
+      return new Quaternion<decimal>(
+        left.X * right.W + left.W * right.X + left.Y * right.Z - left.Z * right.Y,
+        left.Y * right.W + left.W * right.Y + left.Z * right.X - left.X * right.Z,
+        left.Z * right.W + left.W * right.Z + left.X * right.Y - left.Y * right.X,
+        left.W * right.W - left.X * right.X - left.Y * right.Y - left.Z * right.Z);
+    }
+
+    /// <summary>Multiplies all the values of the quaternion by a scalar value.</summary>
+    /// <param name="left">The quaternion of the multiplication.</param>
+    /// <param name="right">The scalar of the multiplication.</param>
+    /// <returns>The result of multiplying all the values in the quaternion by the scalar.</returns>
+    public static Quaternion<decimal> Multiply(Quaternion<decimal> left, decimal right)
+    {
+      return new Quaternion<decimal>(
+        left.X * right,
+        left.Y * right,
+        left.Z * right,
+        left.W * right);
+    }
+
+    ///// <summary>Pre-multiplies a 3-component vector by a quaternion.</summary>
+    ///// <param name="left">The quaternion to pre-multiply the vector by.</param>
+    ///// <param name="right">The vector to be multiplied.</param>
+    ///// <returns>The resulting quaternion of the multiplication.</returns>
+    //public static Quaternion<T> Multiply(Quaternion<T> left, Vector right)
+    //{
+    //	throw new NotImplementedException();
+    //	//if (right.Dimensions == 3)
+    //	//{
+    //	//	return new Quaternion<T>(
+    //	//		left.W * right.X + left.Y * right.Z - left.Z * right.Y,
+    //	//		left.W * right.Y + left.Z * right.X - left.X * right.Z,
+    //	//		left.W * right.Z + left.X * right.Y - left.Y * right.X,
+    //	//		-left.X * right.X - left.Y * right.Y - left.Z * right.Z);
+    //	//}
+    //	//else
+    //	//	throw new Error("my quaternion rotations are only defined for 3-component vectors.");
+    //}
+
+    /// <summary>Normalizes the quaternion.</summary>
+    /// <param name="quaternion">The quaternion to normalize.</param>
+    /// <returns>The normalization of the given quaternion.</returns>
+    public static Quaternion<decimal> Normalize(Quaternion<decimal> quaternion)
+    {
+      decimal normalizer = Quaternion<decimal>.Magnitude(quaternion);
+      if (normalizer != 0M)
+        return quaternion * (1M / normalizer);
+      else
+        return Quaternion<decimal>.FactoryIdentity;
+    }
+
+    /// <summary>Inverts a quaternion.</summary>
+    /// <param name="quaternion">The quaternion to find the inverse of.</param>
+    /// <returns>The inverse of the given quaternion.</returns>
+    public static Quaternion<decimal> Invert(Quaternion<decimal> quaternion)
+    {
+      decimal normalizer = Quaternion<decimal>.MagnitudeSquared(quaternion);
+      if (normalizer == 0M)
+        return new Quaternion<decimal>(quaternion.X, quaternion.Y, quaternion.Z, quaternion.W);
+      normalizer = 1M / normalizer;
+      return new Quaternion<decimal>(
+        -quaternion.X * normalizer,
+        -quaternion.Y * normalizer,
+        -quaternion.Z * normalizer,
+        quaternion.W * normalizer);
+    }
+
+    /// <summary>Lenearly interpolates between two quaternions.</summary>
+    /// <param name="left">The starting point of the interpolation.</param>
+    /// <param name="right">The ending point of the interpolation.</param>
+    /// <param name="blend">The ratio 0.0-1.0 of how far to interpolate between the left and right quaternions.</param>
+    /// <returns>The result of the interpolation.</returns>
+    public static Quaternion<decimal> Lerp(Quaternion<decimal> left, Quaternion<decimal> right, decimal blend)
+    {
+      if (blend < 0M || blend > 1M)
+        throw new Error("invalid blending value during lerp !(blend < 0.0f || blend > 1.0f).");
+      if (Quaternion<decimal>.MagnitudeSquared(left) == 0M)
+      {
+        if (Quaternion<decimal>.MagnitudeSquared(right) == 0M)
+          return Quaternion<decimal>.FactoryIdentity;
+        else
+          return new Quaternion<decimal>(right.X, right.Y, right.Z, right.W);
+      }
+      else if (Quaternion<decimal>.MagnitudeSquared(right) == 0M)
+        return new Quaternion<decimal>(left.X, left.Y, left.Z, left.W);
+      Quaternion<decimal> result = new Quaternion<decimal>(
+        1M - blend * left.X + blend * right.X,
+        1M - blend * left.Y + blend * right.Y,
+        1M - blend * left.Z + blend * right.Z,
+        1M - blend * left.W + blend * right.W);
+      if (Quaternion<decimal>.MagnitudeSquared(result) > 0M)
+        return Quaternion<decimal>.Normalize(result);
+      else
+        return Quaternion<decimal>.FactoryIdentity;
+    }
+
+    /// <summary>Sphereically interpolates between two quaternions.</summary>
+    /// <param name="left">The starting point of the interpolation.</param>
+    /// <param name="right">The ending point of the interpolation.</param>
+    /// <param name="blend">The ratio of how far to interpolate between the left and right quaternions.</param>
+    /// <returns>The result of the interpolation.</returns>
+    public static Quaternion<decimal> Slerp(Quaternion<decimal> left, Quaternion<decimal> right, decimal blend)
+    {
+      throw new System.NotImplementedException();
+      //if (_compare(blend, _zero) == Comparison.Less || _compare(blend, _one) == Comparison.Greater)
+      //	throw new Error("invalid blending value during lerp !(blend < 0.0f || blend > 1.0f).");
+      //if (_equate(Quaternion<T>.MagnitudeSquared(left), _zero))
+      //{
+      //	if (_equate(Quaternion<T>.MagnitudeSquared(right), _zero))
+      //		return FactoryIdentity;
+      //	else
+      //		return new Quaternion<T>(right.X, right.Y, right.Z, right.W);
+      //}
+      //else if (_equate(Quaternion<T>.MagnitudeSquared(right), _zero))
+      //	return new Quaternion<T>(left.X, left.Y, left.Z, left.W);
+      //float cosHalfAngle = left.X * right.X + left.Y * right.Y + left.Z * right.Z + left.W * right.W;
+      //if (cosHalfAngle >= 1.0f || cosHalfAngle <= -1.0f)
+      //	return new Quaternion<T>(left.X, left.Y, left.Z, left.W);
+      //else if (cosHalfAngle < 0.0f)
+      //{
+      //	right = new Quaternion<T>(-left.X, -left.Y, -left.Z, -left.W);
+      //	cosHalfAngle = -cosHalfAngle;
+      //}
+      //float halfAngle = (float)Math.Acos(cosHalfAngle);
+      //float sinHalfAngle = Calc.Sin(halfAngle);
+      //float blendA = Calc.Sin(halfAngle * (_subtract(_one, blend)) / sinHalfAngle;
+      //float blendB = Calc.Sin(halfAngle * blend) / sinHalfAngle;
+      //Quaternion<T> result = new Quaternion<T>(
+      //	blendA * left.X + blendB * right.X,
+      //	blendA * left.Y + blendB * right.Y,
+      //	blendA * left.Z + blendB * right.Z,
+      //	blendA * left.W + blendB * right.W);
+      //if (_compare(Quaternion<T>.MagnitudeSquared(result), _zero) == Comparison.Greater)
+      //	return Quaternion<T>.Normalize(result);
+      //else
+      //	return Quaternion<T>.FactoryIdentity;
+    }
+
+    ///// <summary>Rotates a vector by a quaternion [v' = qvq'].</summary>
+    ///// <param name="rotation">The quaternion to rotate the vector by.</param>
+    ///// <param name="vector">The vector to be rotated by.</param>
+    ///// <returns>The result of the rotation.</returns>
+    //public static Vector Rotate(Quaternion<T> rotation, Vector vector)
+    //{
+    //	throw new NotImplementedException();
+    //	//if (vector.Dimensions != 3)
+    //	//	throw new Error("my quaternion rotations are only defined for 3-component vectors.");
+    //	//Quaternion<T> answer = Quaternion<T>.Multiply(Quaternion<T>.Multiply(rotation, vector), Quaternion<T>.Conjugate(rotation));
+    //	//return new Vector(answer.X, answer.Y, answer.Z);
+    //}
+
+    /// <summary>Does a value equality check.</summary>
+    /// <param name="left">The first quaternion to check for equality.</param>
+    /// <param name="right">The second quaternion  to check for equality.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(Quaternion<decimal> left, Quaternion<decimal> right)
+    {
+      return
+        left.X == right.X &&
+        left.Y == right.Y &&
+        left.Z == right.Z &&
+        left.W == right.W;
+    }
+
+    /// <summary>Does a value equality check with leniency.</summary>
+    /// <param name="left">The first quaternion to check for equality.</param>
+    /// <param name="right">The second quaternion to check for equality.</param>
+    /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(Quaternion<decimal> left, Quaternion<decimal> right, decimal leniency)
+    {
+      return
+        Logic.Abs(left.X - right.X) < leniency &&
+        Logic.Abs(left.Y - right.Y) < leniency &&
+        Logic.Abs(left.Z - right.Z) < leniency &&
+        Logic.Abs(left.W - right.W) < leniency;
+    }
+
     #endregion
 
 		#region double
@@ -3007,9 +3324,12 @@ namespace Seven.Mathematics
 		/// <returns>The resulting matrix after the negations.</returns>
 		public static double[,] Negate(double[,] matrix)
 		{
-			double[,] result = new double[matrix.GetLength(0), matrix.GetLength(1)];
-			for (int i = 0; i < matrix.GetLength(0); i++)
-				for (int j = 0; j < matrix.GetLength(1); j++)
+      int matrix_row = matrix.GetLength(0);
+      int matrix_col = matrix.GetLength(1);
+
+			double[,] result = new double[matrix_row, matrix_col];
+      for (int i = 0; i < matrix_row; i++)
+        for (int j = 0; j < matrix_col; j++)
 					result[i, j] = -matrix[i, j];
 			return result;
 		}
@@ -3020,11 +3340,15 @@ namespace Seven.Mathematics
 		/// <returns>The resulting matrix after the addition.</returns>
 		public static double[,] Add(double[,] left, double[,] right)
 		{
-			if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+      int left_row = left.GetLength(0);
+      int left_col = left.GetLength(1);
+
+			if (left_row != right.GetLength(0) || left_col != right.GetLength(1))
 				throw new Error("invalid addition (size miss-match).");
-			double[,] result = new double[left.GetLength(0), left.GetLength(1)];
-			for (int i = 0; i < result.GetLength(0); i++)
-				for (int j = 0; j < result.GetLength(1); j++)
+
+			double[,] result = new double[left_row, left_col];
+			for (int i = 0; i < left_row; i++)
+				for (int j = 0; j < left_col; j++)
 					result[i, j] = left[i, j] + right[i, j];
 			return result;
 		}
@@ -3035,11 +3359,15 @@ namespace Seven.Mathematics
 		/// <returns>The resulting matrix after the subtractions.</returns>
 		public static double[,] Subtract(double[,] left, double[,] right)
 		{
-			if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+      int left_row = left.GetLength(0);
+      int left_col = left.GetLength(1);
+      
+			if (left_row != right.GetLength(0) || left_col != right.GetLength(1))
 				throw new Error("invalid subtraction (size miss-match).");
-			double[,] result = new double[left.GetLength(0), left.GetLength(1)];
-			for (int i = 0; i < result.GetLength(0); i++)
-				for (int j = 0; j < result.GetLength(1); j++)
+
+			double[,] result = new double[left_row, left_col];
+			for (int i = 0; i < left_row; i++)
+				for (int j = 0; j < left_col; j++)
 					result[i, j] = left[i, j] - right[i, j];
 			return result;
 		}
@@ -3050,12 +3378,17 @@ namespace Seven.Mathematics
 		/// <returns>The resulting matrix of the multiplication.</returns>
 		public static double[,] Multiply(double[,] left, double[,] right)
 		{
-			if (left.GetLength(1) != right.GetLength(0))
+      int left_row = left.GetLength(0);
+      int left_col = left.GetLength(1);
+      int right_col = right.GetLength(1);
+
+      if (left_col != right.GetLength(0))
 				throw new LinearAlgebra.Error("invalid multiplication (size miss-match).");
-			double[,] result = new double[left.GetLength(0), right.GetLength(1)];
-			for (int i = 0; i < result.GetLength(0); i++)
-				for (int j = 0; j < result.GetLength(1); j++)
-					for (int k = 0; k < left.GetLength(1); k++)
+
+			double[,] result = new double[left_row, right_col];
+			for (int i = 0; i < left_row; i++)
+				for (int j = 0; j < right_col; j++)
+					for (int k = 0; k < left_col; k++)
 						result[i, j] += left[i, k] * right[k, j];
 			return result;
 		}
@@ -3066,12 +3399,15 @@ namespace Seven.Mathematics
     /// <returns>The resulting matrix of the multiplication.</returns>
     public static double[] Multiply(double[,] left, double[] right)
     {
+      int left_row = left.GetLength(0);
+      int left_col = left.GetLength(1);
+
       if (left.GetLength(1) != right.GetLength(0))
         throw new Error("invalid multiplication (size miss-match).");
       double[] result = new double[left.GetLength(1)];
-      for (int i = 0; i < left.GetLength(0); i++)
-        for (int j = 0; j < right.GetLength(1); j++)
-          result[i] = result[i] + left[i, j] * right[j];
+      for (int i = 0; i < left_row; i++)
+        for (int j = 0; j < left_col; j++)
+          result[i] += + left[i, j] * right[j];
       return result;
     }
 
@@ -3081,9 +3417,12 @@ namespace Seven.Mathematics
 		/// <returns>The resulting matrix after the multiplications.</returns>
 		public static double[,] Multiply(double[,] left, double right)
 		{
-			double[,] result = new double[left.GetLength(0), left.GetLength(1)];
-			for (int i = 0; i < left.GetLength(0); i++)
-				for (int j = 0; j < left.GetLength(1); j++)
+      int left_row = left.GetLength(0);
+      int left_col = left.GetLength(1);
+
+			double[,] result = new double[left_row, left_col];
+			for (int i = 0; i < left_row; i++)
+				for (int j = 0; j < left_col; j++)
 					result[i, j] = left[i, j] * right;
 			return result;
 		}
@@ -5366,8 +5705,8 @@ namespace Seven.Mathematics
     #region decimal
 
     /// <summary>Adds two vectors together.</summary>
-    /// <param name="leftFloats">The first vector of the addition.</param>
-    /// <param name="rightFloats">The second vector of the addiiton.</param>
+    /// <param name="left">The first vector of the addition.</param>
+    /// <param name="right">The second vector of the addiiton.</param>
     /// <returns>The result of the addiion.</returns>
     public static decimal[] Add(this decimal[] left, decimal[] right)
     { return LinearAlgebra.Add(left, right); }
@@ -6468,8 +6807,6 @@ namespace Seven.Mathematics
 	/// <typeparam name="T">The numeric type of this Vector.</typeparam>
 	public class Vector<T>
   {
-    #region functionality storage
-
     public static readonly LinearAlgebra._Vector_Add<T> _Vector_Add;
     public static readonly LinearAlgebra._Vector_Negate<T> _Vector_Negate;
     public static readonly LinearAlgebra._Vector_Subtract<T> _Vector_Subtract;
@@ -6508,10 +6845,6 @@ namespace Seven.Mathematics
       _Vector_Slerp = linearAlgebra.Vector_Slerp;
       _Vector_Blerp = linearAlgebra.Vector_Blerp;
     }
-
-    #endregion
-
-    #region fields and properties
 
     /// <summary>The array of this vector.</summary>
 		public readonly T[] _vector;
@@ -6556,10 +6889,6 @@ namespace Seven.Mathematics
 			set { try { _vector[index] = value; } catch { throw new Error("index out of bounds."); } }
 		}
 
-    #endregion
-
-    #region construction
-
     /// <summary>Creates a new vector with the given number of components.</summary>
 		/// <param name="dimensions">The number of dimensions this vector will have.</param>
 		public Vector(int dimensions) { try { _vector = new T[dimensions]; } catch { throw new Error("invalid dimensions on vector contruction."); } }
@@ -6590,10 +6919,6 @@ namespace Seven.Mathematics
     //public static readonly Vector<T> Factory_NegYAxis = new Vector<T>(_zero, _one, _zero);
     ///// <summary>Returns a 3-component vector representing the negative z-axis.</summary>
     //public static readonly Vector<T> Factory_NegZAxis = new Vector<T>(_zero, _zero, _one);
-
-    #endregion
-
-    #region operators
 
     /// <summary>Adds two vectors together.</summary>
 		/// <param name="left">The first vector of the addition.</param>
@@ -6639,13 +6964,9 @@ namespace Seven.Mathematics
 		/// <returns>The T[] of the vector.</returns>
 		public static implicit operator T[](Vector<T> vector) { return vector._vector; }
 		/// <summary>Implicit conversions from Vector to T[].</summary>
-		/// <param name="vector">The Vector to be converted to a T[].</param>
+		/// <param name="array">The Vector to be converted to a T[].</param>
 		/// <returns>The T[] of the vector.</returns>
 		public static implicit operator Vector<T>(T[] array) { return new Vector<T>(array); }
-
-    #endregion
-
-    #region instance methods
 
     /// <summary>Adds two vectors together.</summary>
 		/// <param name="right">The vector to add to this one.</param>
@@ -6719,13 +7040,9 @@ namespace Seven.Mathematics
 		/// <returns>The result of the rotation.</returns>
     //public Vector<T> RotateBy(Quaternion<T> rotation) { return Vector<T>.RotateBy(this, rotation); }
 
-    #endregion
-
-    #region static methods
-
     /// <summary>Adds two vectors together.</summary>
-		/// <param name="leftFloats">The first vector of the addition.</param>
-		/// <param name="rightFloats">The second vector of the addiiton.</param>
+		/// <param name="left">The first vector of the addition.</param>
+		/// <param name="right">The second vector of the addiiton.</param>
 		/// <returns>The result of the addiion.</returns>
 		public static Vector<T> Add(T[] left, T[] right) { return _Vector_Add(left, right); }
 		/// <summary>Adds two vectors together.</summary>
@@ -6909,10 +7226,6 @@ namespace Seven.Mathematics
 		/// <returns>True if values are equal, false if not.</returns>
     public static bool EqualsValue(Vector<T> left, Vector<T> right, T leniency) { return _Vector_EqualsValue_leniency(left._vector, right._vector, leniency); }
 
-    #endregion
-
-    #region overrides
-
     /// <summary>Checks if two matrices are equal by reverences.</summary>
 		/// <param name="left">The left vector of the equality check.</param>
 		/// <param name="right">The right vector of the equality check.</param>
@@ -6951,11 +7264,9 @@ namespace Seven.Mathematics
 			if (!(right is Vector<T>)) return false;
 			return Vector<T>.EqualsReference(this, (Vector<T>)right);
     }
-
-    #endregion
   }
 
-  /// <summary>Implements a 4-component [x, y, z, w] quaternion. X, Y, and Z represent the axis of rotation, and W is the rotation ammount.</summary>
+  /// <summary>Standard 4-component quaternion [x, y, z, w]. W is the rotation ammount.</summary>
 	/// <typeparam name="T">The numeric type of this Quaternion.</typeparam>
 	public class Quaternion<T>
 	{
@@ -7054,42 +7365,50 @@ namespace Seven.Mathematics
 		/// <param name="left">The first quaternion of the addition.</param>
 		/// <param name="right">The second quaternion of the addition.</param>
 		/// <returns>The result of the addition.</returns>
-		public static Quaternion<T> operator +(Quaternion<T> left, Quaternion<T> right) { return Quaternion<T>.Add(left, right); }
+		public static Quaternion<T> operator +(Quaternion<T> left, Quaternion<T> right)
+    { return Quaternion<T>.Add(left, right); }
 		/// <summary>Subtracts two quaternions.</summary>
 		/// <param name="left">The left quaternion of the subtraction.</param>
 		/// <param name="right">The right quaternion of the subtraction.</param>
 		/// <returns>The resulting quaternion after the subtraction.</returns>
-		public static Quaternion<T> operator -(Quaternion<T> left, Quaternion<T> right) { return Quaternion<T>.Subtract(left, right); }
+		public static Quaternion<T> operator -(Quaternion<T> left, Quaternion<T> right)
+    { return Quaternion<T>.Subtract(left, right); }
 		/// <summary>Multiplies two quaternions together.</summary>
 		/// <param name="left">The first quaternion of the multiplication.</param>
 		/// <param name="right">The second quaternion of the multiplication.</param>
 		/// <returns>The resulting quaternion after the multiplication.</returns>
-		public static Quaternion<T> operator *(Quaternion<T> left, Quaternion<T> right) { return Quaternion<T>.Multiply(left, right); }
+		public static Quaternion<T> operator *(Quaternion<T> left, Quaternion<T> right)
+    { return Quaternion<T>.Multiply(left, right); }
 		/// <summary>Pre-multiplies a 3-component vector by a quaternion.</summary>
 		/// <param name="left">The quaternion to pre-multiply the vector by.</param>
 		/// <param name="vector">The vector to be multiplied.</param>
 		/// <returns>The resulting quaternion of the multiplication.</returns>
-		//public static Quaternion<T> operator *(Quaternion<T> left, Vector right) { return Quaternion<T>.Multiply(left, right); }
+		//public static Quaternion<T> operator *(Quaternion<T> left, Vector right)
+    //{ return Quaternion<T>.Multiply(left, right); }
 		/// <summary>Multiplies all the values of the quaternion by a scalar value.</summary>
 		/// <param name="left">The quaternion of the multiplication.</param>
 		/// <param name="right">The scalar of the multiplication.</param>
 		/// <returns>The result of multiplying all the values in the quaternion by the scalar.</returns>
-		public static Quaternion<T> operator *(Quaternion<T> left, T right) { return Quaternion<T>.Multiply(left, right); }
+		public static Quaternion<T> operator *(Quaternion<T> left, T right)
+    { return Quaternion<T>.Multiply(left, right); }
 		/// <summary>Multiplies all the values of the quaternion by a scalar value.</summary>
 		/// <param name="left">The scalar of the multiplication.</param>
 		/// <param name="right">The quaternion of the multiplication.</param>
 		/// <returns>The result of multiplying all the values in the quaternion by the scalar.</returns>
-		public static Quaternion<T> operator *(T left, Quaternion<T> right) { return Quaternion<T>.Multiply(right, left); }
+		public static Quaternion<T> operator *(T left, Quaternion<T> right)
+    { return Quaternion<T>.Multiply(right, left); }
 		/// <summary>Checks for equality by value. (beware float errors)</summary>
 		/// <param name="left">The first quaternion of the equality check.</param>
 		/// <param name="right">The second quaternion of the equality check.</param>
 		/// <returns>true if the values were deemed equal, false if not.</returns>
-		public static bool operator ==(Quaternion<T> left, Quaternion<T> right) { return Quaternion<T>.Equals(left, right); }
+		public static bool operator ==(Quaternion<T> left, Quaternion<T> right)
+    { return Quaternion<T>.Equals(left, right); }
 		/// <summary>Checks for anti-equality by value. (beware float errors)</summary>
 		/// <param name="left">The first quaternion of the anti-equality check.</param>
 		/// <param name="right">The second quaternion of the anti-equality check.</param>
 		/// <returns>false if the values were deemed equal, true if not.</returns>
-		public static bool operator !=(Quaternion<T> left, Quaternion<T> right) { return !Quaternion<T>.Equals(left, right); }
+		public static bool operator !=(Quaternion<T> left, Quaternion<T> right)
+    { return !Quaternion<T>.Equals(left, right); }
 
 		/// <summary>Computes the length of quaternion.</summary>
 		/// <returns>The length of the given quaternion.</returns>
@@ -7501,6 +7820,23 @@ namespace Seven.Mathematics
     private static Trigonometry._cos<T> _cos = Trigonometry.Get<T>().cos;
     private static Trigonometry._arccos<T> _acos = Trigonometry.Get<T>().arccos;
 
+    public static readonly LinearAlgebra._Matrix_Negate<T> _Matrix_Negate;
+    public static readonly LinearAlgebra._Matrix_Add<T> _Matrix_Add;
+    public static readonly LinearAlgebra._Matrix_Subtract<T> _Matrix_Subtract;
+    public static readonly LinearAlgebra._Matrix_Multiply<T> _Matrix_Multiply;
+    public static readonly LinearAlgebra._Matrix_Multiply_scalar<T> _Matrix_Multiply_scalar;
+    public static readonly LinearAlgebra._Matrix_Multiply_vector<T> _Matrix_Multiply_vector;
+    public static readonly LinearAlgebra._Matrix_Divide<T> _Matrix_Divide;
+    public static readonly LinearAlgebra._Matrix_Minor<T> _Matrix_Minor;
+    public static readonly LinearAlgebra._Matrix_ConcatenateRowWise<T> _Matrix_ConcatenateRowWise;
+    public static readonly LinearAlgebra._Matrix_Determinent<T> _Matrix_Determinent;
+    public static readonly LinearAlgebra._Matrix_Echelon<T> _Matrix_Echelon;
+    public static readonly LinearAlgebra._Matrix_ReducedEchelon<T> _Matrix_ReducedEchelon;
+    public static readonly LinearAlgebra._Matrix_Inverse<T> _Matrix_Inverse;
+    public static readonly LinearAlgebra._Matrix_Adjoint<T> _Matrix_Adjoint;
+    public static readonly LinearAlgebra._Matrix_Transpose<T> _Matrix_Transpose;
+    public static readonly LinearAlgebra._Matrix_DecomposeLU<T> _Matrix_DecomposeLU;
+
     static Matrix()
     {
       // Constants
@@ -7528,6 +7864,24 @@ namespace Seven.Mathematics
       _sin = Trigonometry.Get<T>().sin;
       _cos = Trigonometry.Get<T>().cos;
       _acos = Trigonometry.Get<T>().arccos;
+
+      LinearAlgebra<T> linearAlgebra = LinearAlgebra.Get<T>();
+      _Matrix_Negate = linearAlgebra.Matrix_Negate;
+      _Matrix_Add = linearAlgebra.Matrix_Add;
+      _Matrix_Subtract = linearAlgebra.Matrix_Subtract;
+      _Matrix_Multiply = linearAlgebra.Matrix_Multiply;
+      _Matrix_Multiply_scalar = linearAlgebra.Matrix_Multiply_scalar;
+      _Matrix_Multiply_vector = linearAlgebra.Matrix_Multiply_vector;
+      _Matrix_Divide = linearAlgebra.Matrix_Divide;
+      _Matrix_Minor = linearAlgebra.Matrix_Minor;
+      _Matrix_ConcatenateRowWise = linearAlgebra.Matrix_ConcatenateRowWise;
+      _Matrix_Determinent = linearAlgebra.Matrix_Determinent;
+      _Matrix_Echelon = linearAlgebra.Matrix_Echelon;
+      _Matrix_ReducedEchelon = linearAlgebra.Matrix_ReducedEchelon;
+      _Matrix_Inverse = linearAlgebra.Matrix_Inverse;
+      _Matrix_Adjoint = linearAlgebra.Matrix_Adjoint;
+      _Matrix_Transpose = linearAlgebra.Matrix_Transpose;
+      _Matrix_DecomposeLU = linearAlgebra.Matrix_DecomposeLU;
     }
 
     public readonly T[,] _matrix;
@@ -7748,27 +8102,27 @@ namespace Seven.Mathematics
     /// <summary>Negates all the values in a matrix.</summary>
     /// <param name="matrix">The matrix to have its values negated.</param>
     /// <returns>The resulting matrix after the negations.</returns>
-    public static Matrix<T> operator -(Matrix<T> matrix) { return Matrix<T>.Negate(matrix); }
+    public static Matrix<T> operator -(Matrix<T> matrix) { return _Matrix_Negate(matrix); }
     /// <summary>Does a standard matrix addition.</summary>
     /// <param name="left">The left matrix of the addition.</param>
     /// <param name="right">The right matrix of the addition.</param>
     /// <returns>The resulting matrix after teh addition.</returns>
-    public static Matrix<T> operator +(Matrix<T> left, Matrix<T> right) { return Matrix<T>.Add(left, right); }
+    public static Matrix<T> operator +(Matrix<T> left, Matrix<T> right) { return _Matrix_Add(left, right); }
     /// <summary>Does a standard matrix subtraction.</summary>
     /// <param name="left">The left matrix of the subtraction.</param>
     /// <param name="right">The right matrix of the subtraction.</param>
     /// <returns>The result of the matrix subtraction.</returns>
-    public static Matrix<T> operator -(Matrix<T> left, Matrix<T> right) { return Matrix<T>.Subtract(left, right); }
+    public static Matrix<T> operator -(Matrix<T> left, Matrix<T> right) { return _Matrix_Subtract(left, right); }
     /// <summary>Multiplies a vector by a matrix.</summary>
     /// <param name="left">The matrix of the multiplication.</param>
     /// <param name="right">The vector of the multiplication.</param>
     /// <returns>The resulting vector after the multiplication.</returns>
-    public static Vector<T> operator *(Matrix<T> left, Vector<T> right) { return Matrix<T>.Multiply(left, right); }
+    public static Vector<T> operator *(Matrix<T> left, Vector<T> right) { return _Matrix_Multiply_vector(left._matrix, right._vector); }
     /// <summary>Does a standard matrix multiplication.</summary>
     /// <param name="left">The left matrix of the multiplication.</param>
     /// <param name="right">The right matrix of the multiplication.</param>
     /// <returns>The resulting matrix after the multiplication.</returns>
-    public static Matrix<T> operator *(Matrix<T> left, Matrix<T> right) { return Matrix<T>.Multiply(left, right); }
+    public static Matrix<T> operator *(Matrix<T> left, Matrix<T> right) { return _Matrix_Multiply(left._matrix, right._matrix); }
     /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
     /// <param name="left">The matrix to have its values multiplied.</param>
     /// <param name="right">The scalar to multiply the values by.</param>
@@ -7862,71 +8216,32 @@ namespace Seven.Mathematics
     /// <summary>Negates all the values in a matrix.</summary>
     /// <param name="matrix">The matrix to have its values negated.</param>
     /// <returns>The resulting matrix after the negations.</returns>
-    public static T[,] Negate(T[,] matrix)
-    {
-      T[,] result = new T[matrix.GetLength(0), matrix.GetLength(1)];
-      for (int i = 0; i < matrix.GetLength(0); i++)
-        for (int j = 0; j < matrix.GetLength(1); j++)
-          result[i, j] = _negate(matrix[i, j]);
-      return result;
-    }
+    public static T[,] Negate(T[,] matrix) { return _Matrix_Negate(matrix); }
 
     /// <summary>Negates all the values in a matrix.</summary>
     /// <param name="matrix">The matrix to have its values negated.</param>
     /// <returns>The resulting matrix after the negations.</returns>
-    public static Matrix<T> Negate(Matrix<T> matrix)
-    {
-      return new Matrix<T>(Matrix<T>.Negate(matrix._matrix));
-    }
-
+    public static Matrix<T> Negate(Matrix<T> matrix) { return _Matrix_Negate(matrix._matrix); }
     /// <summary>Does standard addition of two matrices.</summary>
     /// <param name="left">The left matrix of the addition.</param>
     /// <param name="right">The right matrix of the addition.</param>
     /// <returns>The resulting matrix after the addition.</returns>
-    public static T[,] Add(T[,] left, T[,] right)
-    {
-      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-        throw new Error("invalid addition (size miss-match).");
-      T[,] result = new T[left.GetLength(0), left.GetLength(1)];
-      for (int i = 0; i < left.GetLength(0); i++)
-        for (int j = 0; j < left.GetLength(1); j++)
-          result[i, j] = _add(left[i, j], right[i, j]);
-      return result;
-    }
-
+    public static T[,] Add(T[,] left, T[,] right) { return _Matrix_Add(left, right); }
     /// <summary>Does standard addition of two matrices.</summary>
     /// <param name="left">The left matrix of the addition.</param>
     /// <param name="right">The right matrix of the addition.</param>
     /// <returns>The resulting matrix after the addition.</returns>
-    public static Matrix<T> Add(Matrix<T> left, Matrix<T> right)
-    {
-      return new Matrix<T>(Matrix<T>.Add(left._matrix, right._matrix));
-    }
-
+    public static Matrix<T> Add(Matrix<T> left, Matrix<T> right) { return _Matrix_Add(left, right); }
     /// <summary>Subtracts a scalar from all the values in a matrix.</summary>
     /// <param name="left">The matrix to have the values subtracted from.</param>
     /// <param name="right">The scalar to subtract from all the matrix values.</param>
     /// <returns>The resulting matrix after the subtractions.</returns>
-    public static T[,] Subtract(T[,] left, T[,] right)
-    {
-      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-        throw new Error("invalid subtraction (size miss-match).");
-      T[,] result = new T[left.GetLength(0), left.GetLength(1)];
-      for (int i = 0; i < left.GetLength(0); i++)
-        for (int j = 0; j < left.GetLength(1); j++)
-          result[i, j] = _subtract(left[i, j], right[i, j]);
-      return result;
-    }
-
+    public static T[,] Subtract(T[,] left, T[,] right) { return _Matrix_Subtract(left, right); }
     /// <summary>Subtracts a scalar from all the values in a matrix.</summary>
     /// <param name="left">The matrix to have the values subtracted from.</param>
     /// <param name="right">The scalar to subtract from all the matrix values.</param>
     /// <returns>The resulting matrix after the subtractions.</returns>
-    public static Matrix<T> Subtract(Matrix<T> left, Matrix<T> right)
-    {
-      return new Matrix<T>(Matrix<T>.Subtract(left._matrix, right._matrix));
-    }
-
+    public static Matrix<T> Subtract(Matrix<T> left, Matrix<T> right) { return _Matrix_Subtract(left._matrix, right._matrix); }
     ///// <summary>Subtracts a scalar from all the values in a matrix.</summary>
     ///// <param name="left">The matrix to have the values subtracted from.</param>
     ///// <param name="right">The scalar to subtract from all the matrix values.</param>
@@ -7940,56 +8255,26 @@ namespace Seven.Mathematics
     //    result[i] = left[i, 0] - right[i];
     //  return result;
     //}
-
     /// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
     /// <param name="left">The left matrix of the multiplication.</param>
     /// <param name="right">The right matrix of the multiplication.</param>
     /// <returns>The resulting matrix of the multiplication.</returns>
-    public static T[,] Multiply(T[,] left, T[,] right)
-    {
-      if (left.GetLength(1) != right.GetLength(0))
-        throw new Error("invalid multiplication (size miss-match).");
-      T[,] result = new T[left.GetLength(0), right.GetLength(1)];
-      for (int i = 0; i < left.GetLength(0); i++)
-        for (int j = 0; j < right.GetLength(1); j++)
-          for (int k = 0; k < left.GetLength(1); k++)
-            result[i, j] = _add(result[i, j], _multiply(left[i, k], right[k, j]));
-      return result;
-    }
-
+    public static T[,] Multiply(T[,] left, T[,] right) { return _Matrix_Multiply(left, right); }
     /// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
     /// <param name="left">The left matrix of the multiplication.</param>
     /// <param name="right">The right matrix of the multiplication.</param>
     /// <returns>The resulting matrix of the multiplication.</returns>
-    public static Matrix<T> Multiply(Matrix<T> left, Matrix<T> right)
-    {
-      return new Matrix<T>(Matrix<T>.Multiply(left._matrix, right._matrix));
-    }
-
+    public static Matrix<T> Multiply(Matrix<T> left, Matrix<T> right) { return _Matrix_Multiply(left._matrix, right._matrix); }
     /// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
     /// <param name="left">The left matrix of the multiplication.</param>
     /// <param name="right">The right matrix of the multiplication.</param>
     /// <returns>The resulting matrix of the multiplication.</returns>
-    public static T[] Multiply(T[,] left, T[] right)
-    {
-      if (left.GetLength(1) != right.GetLength(0))
-        throw new Error("invalid multiplication (size miss-match).");
-      T[] result = new T[left.GetLength(1)];
-      for (int i = 0; i < left.GetLength(0); i++)
-        for (int j = 0; j < right.GetLength(1); j++)
-            result[i] = _add(result[i], _multiply(left[i, j], right[j]));
-      return result;
-    }
-
+    public static T[] Multiply(T[,] left, T[] right) { return _Matrix_Multiply_vector(left, right); }
     /// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
     /// <param name="left">The left matrix of the multiplication.</param>
     /// <param name="right">The right matrix of the multiplication.</param>
     /// <returns>The resulting matrix of the multiplication.</returns>
-    public static Vector<T> Multiply(Matrix<T> left, Vector<T> right)
-    {
-      return new Vector<T>(Matrix<T>.Multiply(left._matrix, right._vector));
-    }
-
+    public static Vector<T> Multiply(Matrix<T> left, Vector<T> right) { return _Matrix_Multiply_vector(left._matrix, right._vector); }
     ///// <summary>Does a standard multiplication between a matrix and a vector.</summary>
     ///// <param name="left">The left matrix of the multiplication.</param>
     ///// <param name="right">The right vector of the multiplication.</param>
@@ -8004,29 +8289,16 @@ namespace Seven.Mathematics
     //        result[i, j] += left[i, k] * right[k];
     //  return result;
     //}
-
     /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
     /// <param name="left">The matrix to have the values multiplied.</param>
     /// <param name="right">The scalar to multiply the values by.</param>
     /// <returns>The resulting matrix after the multiplications.</returns>
-    public static T[,] Multiply(T[,] left, T right)
-    {
-      T[,] result = new T[left.GetLength(0), left.GetLength(1)];
-      for (int i = 0; i < left.GetLength(0); i++)
-        for (int j = 0; j < left.GetLength(1); j++)
-          result[i, j] = _multiply(left[i, j], right);
-      return result;
-    }
-
+    public static T[,] Multiply(T[,] left, T right) { return _Matrix_Multiply_scalar(left, right); }
     /// <summary>Multiplies all the values in a matrix by a scalar.</summary>
     /// <param name="left">The matrix to have the values multiplied.</param>
     /// <param name="right">The scalar to multiply the values by.</param>
     /// <returns>The resulting matrix after the multiplications.</returns>
-    public static Matrix<T> Multiply(Matrix<T> left, T right)
-    {
-      return new Matrix<T>(Matrix<T>.Multiply(left._matrix, right));
-    }
-
+    public static Matrix<T> Multiply(Matrix<T> left, T right) { return _Matrix_Multiply_scalar(left._matrix, right); }
     /// <summary>Applies a power to a square matrix.</summary>
     /// <param name="matrix">The matrix to be powered by.</param>
     /// <param name="power">The power to apply to the matrix.</param>
