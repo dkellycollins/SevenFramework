@@ -6,6 +6,10 @@ using Seven.Structures;
 
 using System.Diagnostics;
 
+using System.Linq.Expressions;
+using Seven.Mathematics.Symbolics;
+using Seven.Mathematics.Symbolics.Tools;
+
 namespace Testing
 {
   class Program
@@ -33,6 +37,8 @@ namespace Testing
       else
         return Comparison.Equal;
     }
+
+    protected delegate double del3(double p1, double p2, double p3);
 
     static void Main(string[] args)
     {
@@ -431,6 +437,29 @@ namespace Testing
       Console.WriteLine();
       Quaternion<float> Q_float2 = Q_float + Q_float;
       Console.WriteLine("    q + 2 (aka 2q):\n      [x " + string.Format("{0:0.00}", Q_float2.X) + ", y " + string.Format("{0:0.00}", Q_float2.Y) + ", z " + string.Format("{0:0.00}", Q_float2.Z) + ", w " + string.Format("{0:0.00}", Q_float2.W) + "]");
+      Console.WriteLine();
+
+      Console.WriteLine("  Symbolics--------------------------------");
+      Console.WriteLine();
+
+      //Type the function you want to differentiate
+      Expression<function_3<double>> function = (x, y, z) => Math.Pow(x, 3) * y - Math.Pow(x, y) + 5 * z;
+      var node = Expressions2Tree.Parse(function);
+      Console.WriteLine("    Differentiation:");
+      Console.WriteLine("      F(x,y,z) = " + node);
+
+      // Differentiation
+      Console.Write("      dF/dx = ");
+      var result = ComputerAlgebra.Differentiate(node, variable: "x");
+      Console.WriteLine(result);
+
+      Console.Write("      dF/dy = ");
+      result = ComputerAlgebra.Differentiate(node, variable: "y");
+      Console.WriteLine(result);
+
+      Console.Write("      dF/dz = ");
+      result = ComputerAlgebra.Differentiate(node, variable: "z");
+      Console.WriteLine(result);
 
       Console.WriteLine();
       Console.WriteLine("============================================");

@@ -27,12 +27,16 @@ namespace Seven
     private int _numerator;
     private int _denominator;
 
+    /// <summary>Constructs a fraction from an int.</summary>
+    /// <param name="integer">The int to represent as a fraction.</param>
     public Fraction64(int integer)
     {
       this._numerator = integer;
       this._denominator = 1;
     }
 
+    /// <summary>Constructs a fracion from a double.</summary>
+    /// <param name="rational">The double to represent as a fraction.</param>
     public Fraction64(double rational)
     {
       if (rational > int.MaxValue)
@@ -51,7 +55,7 @@ namespace Seven
         {
           checked
           {
-            if (rational % 1 == 0)	// if whole number
+            if (rational % 1 == 0)
             {
               this._numerator = (int)rational;
               this._denominator = 1;
@@ -62,7 +66,7 @@ namespace Seven
               double temp_rational = rational;
               int multiple = 1;
               string temp_string = rational.ToString();
-              while (temp_string.IndexOf("E") > 0)	// if in the form like 12E-9
+              while (temp_string.IndexOf("E") > 0)
               {
                 temp_rational *= 10;
                 multiple *= 10;
@@ -128,12 +132,26 @@ namespace Seven
               double temp_rational = rational;
               int multiple = 1;
               string temp_string = rational.ToString();
-              while (temp_string.IndexOf("E") > 0)	// if in the form like 12E-9
+
+              if (temp_string.Contains("E"))
               {
-                temp_rational *= 10;
-                multiple *= 10;
-                temp_string = temp_rational.ToString();
+                while (temp_string.IndexOf("E") > 0)	// if in the form like 12E-9
+                {
+                  temp_rational *= 10;
+                  multiple *= 10;
+                  temp_string = temp_rational.ToString();
+                }
               }
+              else if (temp_string.Contains("e"))
+              {
+                while (temp_string.IndexOf("e") > 0)	// if in the form like 12e-9
+                {
+                  temp_rational *= 10;
+                  multiple *= 10;
+                  temp_string = temp_rational.ToString();
+                }
+              }
+
               int j = 0;
               while (temp_string[j] != '.')
                 j++;
@@ -197,22 +215,22 @@ namespace Seven
     /// <param name="left">The left operand of the addition.</param>
     /// <param name="right">The right operand of the addition.</param>
     /// <returns>The result of the addition.</returns>
-    public static Fraction64 operator +(Fraction64 left, Fraction64 right) { return (Fraction64.Add(left, right)); }
+    public static Fraction64 operator +(Fraction64 left, Fraction64 right) { return Fraction64.Add(left, right); }
     /// <summary>Subtracts two operands.</summary>
     /// <param name="left">The left operand of the subtraction.</param>
     /// <param name="right">The right operand of the subtraction.</param>
     /// <returns>The result of the subtraction.</returns>
-    public static Fraction64 operator -(Fraction64 left, Fraction64 right) { return (Fraction64.Add(left, -right)); }
+    public static Fraction64 operator -(Fraction64 left, Fraction64 right) { return Fraction64.Add(left, -right); }
     /// <summary>Multiplies two operands together.</summary>
     /// <param name="left">The left operand of the multiplication.</param>
     /// <param name="right">The right operand of the multiplication.</param>
     /// <returns>The result of the multiplication.</returns>
-    public static Fraction64 operator *(Fraction64 left, Fraction64 right) { return (Fraction64.Multiply(left, right)); }
+    public static Fraction64 operator *(Fraction64 left, Fraction64 right) { return Fraction64.Multiply(left, right); }
     /// <summary>Divides two operands.</summary>
     /// <param name="left">The left operand of the division.</param>
     /// <param name="right">The right operand of the division.</param>
     /// <returns>The result of the division.</returns>
-    public static Fraction64 operator /(Fraction64 left, Fraction64 right) { return (Fraction64.Multiply(left, Inverse(right))); }
+    public static Fraction64 operator /(Fraction64 left, Fraction64 right) { return Fraction64.Multiply(left, Inverse(right)); }
     /// <summary>Checks for equality between two fractions.</summary>
     /// <param name="left">The first operand of the equality check.</param>
     /// <param name="right">The second operand of the equality check.</param>
@@ -254,7 +272,7 @@ namespace Seven
     /// <summary>Implicitly converts an int into a fraction.</summary>
     /// <param name="literal">The integer to convert into a fraction.</param>
     /// <returns>The resulting fraction representation.</returns>
-    public static implicit operator Fraction64(string literal) { return new Fraction64(literal); }
+    public static explicit operator Fraction64(string literal) { return new Fraction64(literal); }
     /// <summary>Implicitly converts an int into a fraction.</summary>
     /// <param name="fraction">The integer to convert into a fraction.</param>
     /// <returns>The resulting fraction representation.</returns>

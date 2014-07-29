@@ -41,8 +41,8 @@ namespace Seven.Mathematics
 		public delegate T _invert_mult<T>(T value);
 		public delegate T _invert_add<T>(T value);
 
-		private static Seven.Structures.Map<object, System.Type> _algebras =
-			new Seven.Structures.Map_Linked<object, System.Type>(
+		private static Map<object, System.Type> _algebras =
+			new Map_Linked<object, System.Type>(
 				(System.Type left, System.Type right) => { return left == right; },
 				(System.Type type) => { return type.GetHashCode(); })
 				{
@@ -546,6 +546,20 @@ namespace Seven.Mathematics
     }
 
     #endregion
+    
+    #endregion
+
+    #region Method Signatures
+
+    internal static System.Reflection.MemberInfo[] _powerMethods =
+      new System.Reflection.MemberInfo[]
+    {
+      ((function_2<decimal>)Algebra.Power).Method,
+      ((function_2<double>)Algebra.Power).Method,
+      ((function_2<float>)Algebra.Power).Method,
+      ((function_2<long>)Algebra.Power).Method,
+      ((function_2<int>)Algebra.Power).Method,
+    };
 
     #endregion
 

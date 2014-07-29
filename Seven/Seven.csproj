@@ -45,6 +45,47 @@
     <Compile Include="Error.cs" />
     <Compile Include="Mathematics\Arithmetic.cs" />
     <Compile Include="Mathematics\Functions.cs" />
+    <Compile Include="Mathematics\Symbolics\ComputerAlgebra.cs" />
+    <Compile Include="Mathematics\Symbolics\Regression\ConsoleGui.cs" />
+    <Compile Include="Mathematics\Symbolics\Regression\RegressionAlgorithm.cs" />
+    <Compile Include="Mathematics\Symbolics\Regression\RegressionStopCondition.cs" />
+    <Compile Include="Mathematics\Symbolics\Resolution\UnificationService.cs" />
+    <Compile Include="Mathematics\Symbolics\SampleGenerator.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\ConstantNode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\FunctionNode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\INode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\ITermNode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\Node.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\PredicateNode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\SkolemPredicateNode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\TermNode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Nodes\VariableNode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Op\BinaryOp.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Op\MultpleOp.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Op\TernaryOp.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Op\UnaryOp.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\RulesCollection\AlgebraicRules.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\RulesCollection\DifferentiationRules.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\RulesCollection\LogicRules.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\RulesCollection\RegressionRules.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\RulesCollection\ResolutionRule.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\RulesCollection\Tags.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Rules\BasicSelector.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Rules\ComplexSelector.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Rules\Generated.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Rules\ModInput.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Rules\Rule.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Rules\SelectClauseNode.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Rules\SelectOutput.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Rules\WhereOutput.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Tools\CABoolean.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Tools\Exceptions.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Tools\Expressions2LogicTree.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Tools\Expressions2Tree.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Tools\Helper.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Tools\NodeElementNames.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Tools\RulesLibrary.cs" />
+    <Compile Include="Mathematics\Symbolics\Tree\Tools\Tree2Expression.cs" />
     <Compile Include="Mathematics\Trigonometry.cs" />
     <Compile Include="Mathematics\Tween.cs" />
     <Compile Include="Parallels\BackgroundThread.cs" />
@@ -75,6 +116,7 @@
     <Compile Include="Structures\Tree.cs" />
     <Compile Include="Structures\Trie.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

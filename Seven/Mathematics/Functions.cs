@@ -40,61 +40,56 @@ namespace Seven.Mathematics
   /// <returns>The value of the function given the parameters.</returns>
   public delegate T function_4<T>(T a, T b, T c, T d);
 
-  ////public interface Function_xyz
-  ////{
-  ////  double this[double x, double y] { get; }
-  ////}
-
-  //public class Function_Delegate_xy : Function_xy
+  //public class Function_1<T>
   //{
-  //  private function_xy function;
+  //  private function_1<T> function;
 
-  //  public double this[double arg] { get { return function(arg); } }
+  //  public T this[T arg] { get { return function(arg); } }
 
-  //  public Function_Delegate_xy(function_xy func)
+  //  public Function_1(function_1<T> func)
   //  {
   //    this.function = func;
   //  }
 
-  //  /// <summary>Constructs functions from standard equation patterns.</summary>
-  //  public static class Factory
-  //  {
-  //    /// <summary>Constructs a linear equation "y = a * x + b".</summary>
-  //    /// <param name="a">The coeficient of x.</param>
-  //    /// <param name="b">The constant.</param>
-  //    /// <returns>The constructed linear equation.</returns>
-  //    public static Function_Delegate_xy Linear(double a, double b)
-  //    {
-  //      return new Function_Delegate_xy((double x) => { return a * x + b; });
-  //    }
+  //  ///// <summary>Constructs functions from standard equation patterns.</summary>
+  //  //public static class Factory
+  //  //{
+  //  //  /// <summary>Constructs a linear equation "y = a * x + b".</summary>
+  //  //  /// <param name="a">The coeficient of x.</param>
+  //  //  /// <param name="b">The constant.</param>
+  //  //  /// <returns>The constructed linear equation.</returns>
+  //  //  public static Function_1<double> Linear(double a, double b)
+  //  //  {
+  //  //    return new Function_1<T>((double x) => { return a * x + b; });
+  //  //  }
 
-  //    /// <summary>Constructs a quadratic equation "y = a * x ^ 2 + b * x + c".</summary>
-  //    /// <param name="a">The coefficient of x ^ 2.</param>
-  //    /// <param name="b">The coefficient of x.</param>
-  //    /// <param name="c">The constant.</param>
-  //    /// <returns>The constructed quadratic equation.</returns>
-  //    public static Function_Delegate_xy Quadratic(double a, double b, double c)
-  //    {
-  //      return new Function_Delegate_xy((double x) => { return a * (x * x) + x * b + c; });
-  //    }
-  //  }
+  //  //  /// <summary>Constructs a quadratic equation "y = a * x ^ 2 + b * x + c".</summary>
+  //  //  /// <param name="a">The coefficient of x ^ 2.</param>
+  //  //  /// <param name="b">The coefficient of x.</param>
+  //  //  /// <param name="c">The constant.</param>
+  //  //  /// <returns>The constructed quadratic equation.</returns>
+  //  //  public static Function_1<T> Quadratic(double a, double b, double c)
+  //  //  {
+  //  //    return new Function_1<T>((double x) => { return a * (x * x) + x * b + c; });
+  //  //  }
+  //  //}
 
   //  /// <summary>Estimates the derives this function.</summary>
   //  /// <returns>The dirivation of this function.</returns>
   //  /// <remarks>WARNING. Calling this function often can cause memory overflow.</remarks>
-  //  public Function_Delegate_xy Derive()
+  //  public Function_1<T> Derive()
   //  {
   //    const double h = 10e-6;
 
   //    return new Function_Delegate_xy(
   //      (double x) =>
-  //        {
-  //          double h2 = h * 2;
-  //          return
-  //            (function(x - h2) - function(x + h2) +
-  //            (function(x + h) - function(x - h)) * 8) /
-  //            (h2 * 6);
-  //        });
+  //      {
+  //        double h2 = h * 2;
+  //        return
+  //          (function(x - h2) - function(x + h2) +
+  //          (function(x + h) - function(x - h)) * 8) /
+  //          (h2 * 6);
+  //      });
   //  }
 
   //  /// <summary>Derives this function at a given point.</summary>
@@ -106,13 +101,13 @@ namespace Seven.Mathematics
 
   //    double h2 = h * 2;
 
-  //    return 
+  //    return
   //      (function(x - h2) - function(x + h2) +
   //      (function(x + h) - function(x - h)) * 8) /
   //      (h2 * 6);
-          
+
   //  }
-    
+
   //  //public Function_Delegate_xy calculate_definite_integral_of_f(double initial_step_size)
   //  //{
   //  //  // This algorithm calculates the definite integral of a function
