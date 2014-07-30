@@ -12,21 +12,19 @@ namespace Seven.Mathematics
   public interface Algebra<T>
   {
     /// <summary>Computes the natural log of the operand.</summary>
-    T ln(T value);
+    Algebra._ln<T> ln { get; }
     /// <summary>Computes the log of an operand using the base of the other operand.</summary>
-    T log(T value, T _base);
+    Algebra._log<T> log { get; }
 		/// <summary>Computes the square root of a given value.</summary>
-		T sqrt(T value);
+    Algebra._sqrt<T> sqrt { get; }
 		/// <summary>Takes one operand to the root of the other.</summary>
-		T root(T _base, T root);
+    Algebra._root<T> root { get; }
     /// <summary>Computes the exponential of the eperand.</summary>
-    T exp(T value);
+    Algebra._exp<T> exp { get; }
     /// <summary>Computes the prime factors of a given value.</summary>
-    T[] factorPrimes(T value);
+    Algebra._factorPrimes<T> factorPrimes { get; }
 		/// <summary>Computes the reciprocal of the operand.</summary>
-		T invert_mult(T value);
-		/// <summary>Computes the additive inverse of the operand.</summary>
-		T invert_add(T value);
+    Algebra._invert_mult<T> invert_mult { get; }
   }
 
   /// <summary>Provides extensions for the Algebra interface.</summary>
@@ -50,21 +48,63 @@ namespace Seven.Mathematics
           { typeof(float), Algebra_float.Get },
 				};
 
-    public static void Add<T>(Algebra<T> _algebra)
+    public static void Set<T>(Algebra<T> _algebra)
     {
-      if (_algebras.Contains(typeof(T)))
-        throw new Error("algebra already exists for " + typeof(T));
-      else
-        _algebras.Add(typeof(T), _algebra);
+      _algebras[typeof(T)] = _algebra;
+    }
+
+    public static bool Contains<T>()
+    {
+      return _algebras.Contains(typeof(T));
     }
 
 		public static Algebra<T> Get<T>()
 		{
-			try { return (Algebra<T>)_algebras[typeof(T)]; }
-			catch { throw new Error("Could not load algebra for " + typeof(T)); }
+      object temp;
+      if (_algebras.TryGet(typeof(T), out temp))
+        return temp as Algebra<T>;
+      else
+        return Algebra_unsupported<T>.Get;
+      //return (Algebra<T>)_algebras[typeof(T)];
+      //catch { throw new Error("Could not load algebra for " + typeof(T)); }
 		}
 
     #region Libraries
+
+    private class Algebra_decimal : Algebra<decimal>
+    {
+      private Algebra_decimal() { _instance = this; }
+      private static Algebra_decimal _instance;
+      private static Algebra_decimal Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new Algebra_decimal();
+          else
+            return _instance;
+        }
+      }
+
+      public static Algebra_decimal Get { get { return Instance; } }
+
+      public Algebra._ln<decimal> ln
+      { get { return Algebra.ln; } }
+      public Algebra._log<decimal> log
+      { get { return Algebra.log; } }
+      public Algebra._sqrt<decimal> sqrt
+      { get { return Algebra.sqrt; } }
+      public Algebra._root<decimal> root
+      { get { return Algebra.root; } }
+      public Algebra._exp<decimal> exp
+      { get { return Algebra.exp; } }
+      public Algebra._factorPrimes<decimal> factorPrimes
+      { get { return Algebra.factorPrimes; } }
+      public Algebra._invert_mult<decimal> invert_mult
+      { get { return Algebra.invert_mult; } }
+      public Algebra._invert_add<decimal> invert_add
+      { get { return Algebra.invert_add; } }
+    }
 
     private class Algebra_double : Algebra<double>
     {
@@ -83,14 +123,22 @@ namespace Seven.Mathematics
 
       public static Algebra_double Get { get { return Instance; } }
 
-      public double ln(double value) { throw new System.NotImplementedException(); }
-      public double log(double value, double _base) { return System.Math.Log(value, _base); }
-      public double sqrt(double value) { return System.Math.Sqrt(value); }
-      public double root(double _base, double root) { throw new System.NotImplementedException(); }
-      public double exp(double value) { throw new System.NotImplementedException(); }
-      public double[] factorPrimes(double value) { throw new System.NotImplementedException(); }
-      public double invert_mult(double value) { return 1.0d / value; }
-      public double invert_add(double value) { return -value; }
+      public Algebra._ln<double> ln
+      { get { return Algebra.ln; } }
+      public Algebra._log<double> log
+      { get { return Algebra.log; } }
+      public Algebra._sqrt<double> sqrt
+      { get { return Algebra.sqrt; } }
+      public Algebra._root<double> root
+      { get { return Algebra.root; } }
+      public Algebra._exp<double> exp
+      { get { return Algebra.exp; } }
+      public Algebra._factorPrimes<double> factorPrimes
+      { get { return Algebra.factorPrimes; } }
+      public Algebra._invert_mult<double> invert_mult
+      { get { return Algebra.invert_mult; } }
+      public Algebra._invert_add<double> invert_add
+      { get { return Algebra.invert_add; } }
     }
 
     private class Algebra_float : Algebra<float>
@@ -110,17 +158,60 @@ namespace Seven.Mathematics
 
       public static Algebra_float Get { get { return Instance; } }
 
-      public float ln(float value) { throw new System.NotImplementedException(); }
-      public float log(float value, float _base) { return (float)System.Math.Log(value, _base); }
-      public float sqrt(float value) { return (float)System.Math.Sqrt(value); }
-      public float root(float _base, float root) { throw new System.NotImplementedException(); }
-      public float exp(float value) { throw new System.NotImplementedException(); }
-      public float[] factorPrimes(float value) { throw new System.NotImplementedException(); }
-      public float invert_mult(float value) { return 1.0f / value; }
-      public float invert_add(float value) { return -value; }
+      public Algebra._ln<float> ln
+      { get { return Algebra.ln; } }
+      public Algebra._log<float> log
+      { get { return Algebra.log; } }
+      public Algebra._sqrt<float> sqrt
+      { get { return Algebra.sqrt; } }
+      public Algebra._root<float> root
+      { get { return Algebra.root; } }
+      public Algebra._exp<float> exp
+      { get { return Algebra.exp; } }
+      public Algebra._factorPrimes<float> factorPrimes
+      { get { return Algebra.factorPrimes; } }
+      public Algebra._invert_mult<float> invert_mult
+      { get { return Algebra.invert_mult; } }
+      public Algebra._invert_add<float> invert_add
+      { get { return Algebra.invert_add; } }
     }
 
-    private class Algebra_int //: Algebra<int>
+    private class Algebra_long : Algebra<long>
+    {
+      private Algebra_long() { _instance = this; }
+      private static Algebra_long _instance;
+      private static Algebra_long Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new Algebra_long();
+          else
+            return _instance;
+        }
+      }
+
+      public static Algebra_long Get { get { return Instance; } }
+
+      public Algebra._ln<long> ln
+      { get { return Algebra.ln; } }
+      public Algebra._log<long> log
+      { get { return Algebra.log; } }
+      public Algebra._sqrt<long> sqrt
+      { get { return Algebra.sqrt; } }
+      public Algebra._root<long> root
+      { get { return Algebra.root; } }
+      public Algebra._exp<long> exp
+      { get { return Algebra.exp; } }
+      public Algebra._factorPrimes<long> factorPrimes
+      { get { return Algebra.factorPrimes; } }
+      public Algebra._invert_mult<long> invert_mult
+      { get { return Algebra.invert_mult; } }
+      public Algebra._invert_add<long> invert_add
+      { get { return Algebra.invert_add; } }
+    }
+
+    private class Algebra_int : Algebra<int>
     {
       private Algebra_int() { _instance = this; }
       private static Algebra_int _instance;
@@ -134,6 +225,60 @@ namespace Seven.Mathematics
             return _instance;
         }
       }
+
+      public static Algebra_int Get { get { return Instance; } }
+
+      public Algebra._ln<int> ln
+      { get { return Algebra.ln; } }
+      public Algebra._log<int> log
+      { get { return Algebra.log; } }
+      public Algebra._sqrt<int> sqrt
+      { get { return Algebra.sqrt; } }
+      public Algebra._root<int> root
+      { get { return Algebra.root; } }
+      public Algebra._exp<int> exp
+      { get { return Algebra.exp; } }
+      public Algebra._factorPrimes<int> factorPrimes
+      { get { return Algebra.factorPrimes; } }
+      public Algebra._invert_mult<int> invert_mult
+      { get { return Algebra.invert_mult; } }
+      public Algebra._invert_add<int> invert_add
+      { get { return Algebra.invert_add; } }
+    }
+
+    private class Algebra_unsupported<T> : Algebra<T>
+    {
+      private Algebra_unsupported() { _instance = this; }
+      private static Algebra_unsupported<T> _instance;
+      private static Algebra_unsupported<T> Instance
+      {
+        get
+        {
+          if (_instance == null)
+            return _instance = new Algebra_unsupported<T>();
+          else
+            return _instance;
+        }
+      }
+
+      public static Algebra_unsupported<T> Get { get { return Instance; } }
+
+      public Algebra._ln<T> ln
+      { get { throw new Error("there is no implementation of algebra for " + typeof(T)); } }
+      public Algebra._log<T> log
+      { get { throw new Error("there is no implementation of algebra for " + typeof(T)); } }
+      public Algebra._sqrt<T> sqrt
+      { get { throw new Error("there is no implementation of algebra for " + typeof(T)); } }
+      public Algebra._root<T> root
+      { get { throw new Error("there is no implementation of algebra for " + typeof(T)); } }
+      public Algebra._exp<T> exp
+      { get { throw new Error("there is no implementation of algebra for " + typeof(T)); } }
+      public Algebra._factorPrimes<T> factorPrimes
+      { get { throw new Error("there is no implementation of algebra for " + typeof(T)); } }
+      public Algebra._invert_mult<T> invert_mult
+      { get { throw new Error("there is no implementation of algebra for " + typeof(T)); } }
+      public Algebra._invert_add<T> invert_add
+      { get { throw new Error("there is no implementation of algebra for " + typeof(T)); } }
     }
 
     #endregion
@@ -142,12 +287,47 @@ namespace Seven.Mathematics
 
     #region decimal
 
+    public static decimal ln(decimal value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static decimal log(decimal value, decimal _base)
+    {
+      return (decimal)System.Math.Log((double)value, (double)_base);
+    }
+
+    public static decimal root(decimal _base, decimal root)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static decimal exp(decimal value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static decimal[] factorPrimes(decimal value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static decimal invert_mult(decimal value)
+    {
+      return 1.0M / value;
+    }
+
+    public static decimal invert_add(decimal value)
+    {
+      return -value;
+    }
+
     public static bool IsPrime(decimal candidate)
     {
       if (candidate % 1 == 0)
       {
         if (candidate == 2) return true;
-        decimal squareRoot = Algebra.SquareRoot(candidate);
+        decimal squareRoot = Algebra.sqrt(candidate);
         for (int divisor = 3; divisor <= squareRoot; divisor += 2)
           if ((candidate % divisor) == 0)
             return false;
@@ -173,14 +353,9 @@ namespace Seven.Mathematics
       return factors;
     }
 
-    public static decimal SquareRoot(decimal number)
+    public static decimal sqrt(decimal number)
     {
       return (decimal)System.Math.Sqrt((double)number);
-    }
-
-    public static decimal Power(decimal number, decimal power)
-    {
-      return (decimal)System.Math.Pow((double)number, (double)power);
     }
 
     private static decimal GreatestCommonDenominator(decimal first, decimal second)
@@ -223,12 +398,47 @@ namespace Seven.Mathematics
 
     #region double
 
+    public static double ln(double value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static double log(double value, double _base)
+    {
+      return (double)System.Math.Log((double)value, (double)_base);
+    }
+
+    public static double root(double _base, double root)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static double exp(double value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static double[] factorPrimes(double value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static double invert_mult(double value)
+    {
+      return 1.0d / value;
+    }
+
+    public static double invert_add(double value)
+    {
+      return -value;
+    }
+
     public static bool IsPrime(double candidate)
     {
       if (candidate % 1 == 0)
       {
         if (candidate == 2) return true;
-        double squareRoot = (double)Algebra.SquareRoot(candidate);
+        double squareRoot = (double)Algebra.sqrt(candidate);
         for (int divisor = 3; divisor <= squareRoot; divisor += 2)
           if ((candidate % divisor) == 0)
             return false;
@@ -257,15 +467,9 @@ namespace Seven.Mathematics
       return factors;
     }
 
-    public static double SquareRoot(double number)
+    public static double sqrt(double number)
     {
       return System.Math.Sqrt(number);
-    }
-
-    public static double Power(double number, double power)
-    {
-      return System.Math.Pow(number, power);
-      // I have not written my own version of this function yet, just use the System for now...
     }
 
     private static double GreatestCommonDenominator(double first, double second)
@@ -308,12 +512,47 @@ namespace Seven.Mathematics
 
     #region float
 
+    public static float ln(float value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static float log(float value, float _base)
+    {
+      return (float)System.Math.Log((float)value, (float)_base);
+    }
+
+    public static float root(float _base, float root)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static float exp(float value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static float[] factorPrimes(float value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static float invert_mult(float value)
+    {
+      return 1.0f / value;
+    }
+
+    public static float invert_add(float value)
+    {
+      return -value;
+    }
+
     public static bool IsPrime(float candidate)
     {
       if (candidate % 1 == 0)
       {
         if (candidate == 2) return true;
-        float squareRoot = (float)Algebra.SquareRoot(candidate);
+        float squareRoot = (float)Algebra.sqrt(candidate);
         for (int divisor = 3; divisor <= squareRoot; divisor += 2)
           if ((candidate % divisor) == 0)
             return false;
@@ -342,15 +581,9 @@ namespace Seven.Mathematics
       return factors;
     }
 
-    public static float SquareRoot(float number)
+    public static float sqrt(float number)
     {
       return (float)System.Math.Sqrt(number);
-    }
-
-    public static float Power(float number, float power)
-    {
-      return (float)System.Math.Pow(number, power);
-      // I have not written my own version of this function yet, just use the System for now...
     }
 
     private static float GreatestCommonDenominator(float first, float second)
@@ -393,12 +626,47 @@ namespace Seven.Mathematics
 
     #region long
 
+    public static long ln(long value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static long log(long value, long _base)
+    {
+      return (long)System.Math.Log((long)value, (long)_base);
+    }
+
+    public static long root(long _base, long root)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static long exp(long value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static long[] factorPrimes(long value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static long invert_mult(long value)
+    {
+      throw new Error("rational mathematics required");
+    }
+
+    public static long invert_add(long value)
+    {
+      return -value;
+    }
+
     public static bool IsPrime(long candidate)
     {
       if (candidate % 1 == 0)
       {
         if (candidate == 2) return true;
-        long squareRoot = (long)Algebra.SquareRoot(candidate);
+        long squareRoot = (long)Algebra.sqrt(candidate);
         for (int divisor = 3; divisor <= squareRoot; divisor += 2)
           if ((candidate % divisor) == 0)
             return false;
@@ -427,15 +695,9 @@ namespace Seven.Mathematics
       return factors;
     }
 
-    public static long SquareRoot(long number)
+    public static long sqrt(long number)
     {
       return (long)System.Math.Sqrt(number);
-    }
-
-    public static long Power(long number, long power)
-    {
-      return (long)System.Math.Pow(number, power);
-      // I have not written my own version of this function yet, just use the System for now...
     }
 
     private static long GreatestCommonDenominator(long first, long second)
@@ -478,10 +740,46 @@ namespace Seven.Mathematics
 
     #region int
 
+    public static int ln(int value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static int log(int value, int _base)
+    {
+      return (int)System.Math.Log((int)value, (int)_base);
+    }
+
+    public static int root(int _base, int root)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static int exp(int value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static int[] factorPrimes(int value)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public static int invert_mult(int value)
+    {
+      throw new Error("rational mathematics required");
+    }
+
+    public static int invert_add(int value)
+    {
+      return -value;
+    }
+
+
     public static bool IsPrime(int candidate)
     {
       if (candidate == 2) return true;
-      int squareRoot = (int)Algebra.SquareRoot(candidate);
+      int squareRoot = (int)Algebra.sqrt(candidate);
       for (int divisor = 3; divisor <= squareRoot; divisor += 2)
         if ((candidate % divisor) == 0)
           return false;
@@ -503,15 +801,9 @@ namespace Seven.Mathematics
       return factors;
     }
 
-    public static int SquareRoot(int number)
+    public static int sqrt(int number)
     {
       return (int)System.Math.Sqrt(number);
-      // I have not written my own version of this function yet, just use the System for now...
-    }
-
-    public static int Power(int number, int power)
-    {
-      return (int)System.Math.Pow(number, power);
       // I have not written my own version of this function yet, just use the System for now...
     }
 
@@ -551,15 +843,87 @@ namespace Seven.Mathematics
 
     #region Method Signatures
 
-    internal static System.Reflection.MemberInfo[] _powerMethods =
+    // This region is for storing reflection properties
+
+    internal static System.Reflection.MemberInfo[] _lnMethods =
       new System.Reflection.MemberInfo[]
     {
-      ((function_2<decimal>)Algebra.Power).Method,
-      ((function_2<double>)Algebra.Power).Method,
-      ((function_2<float>)Algebra.Power).Method,
-      ((function_2<long>)Algebra.Power).Method,
-      ((function_2<int>)Algebra.Power).Method,
+      ((_ln<decimal>)Algebra.ln).Method,
+      ((_ln<double>)Algebra.ln).Method,
+      ((_ln<float>)Algebra.ln).Method,
+      ((_ln<long>)Algebra.ln).Method,
+      ((_ln<int>)Algebra.ln).Method,
     };
+
+    internal static System.Reflection.MemberInfo[] _logMethods =
+      new System.Reflection.MemberInfo[]
+    {
+      ((_log<decimal>)Algebra.log).Method,
+      ((_log<double>)Algebra.log).Method,
+      ((_log<float>)Algebra.log).Method,
+      ((_log<long>)Algebra.log).Method,
+      ((_log<int>)Algebra.log).Method,
+    };
+
+    internal static System.Reflection.MemberInfo[] _sqrtMethods =
+      new System.Reflection.MemberInfo[]
+    {
+      ((_sqrt<decimal>)Algebra.sqrt).Method,
+      ((_sqrt<double>)Algebra.sqrt).Method,
+      ((_sqrt<float>)Algebra.sqrt).Method,
+      ((_sqrt<long>)Algebra.sqrt).Method,
+      ((_sqrt<int>)Algebra.sqrt).Method,
+    };
+
+    internal static System.Reflection.MemberInfo[] _rootMethods =
+      new System.Reflection.MemberInfo[]
+    {
+      ((_root<decimal>)Algebra.root).Method,
+      ((_root<double>)Algebra.root).Method,
+      ((_root<float>)Algebra.root).Method,
+      ((_root<long>)Algebra.root).Method,
+      ((_root<int>)Algebra.root).Method,
+    };
+
+    internal static System.Reflection.MemberInfo[] _expMethods =
+      new System.Reflection.MemberInfo[]
+    {
+      ((_exp<decimal>)Algebra.exp).Method,
+      ((_exp<double>)Algebra.exp).Method,
+      ((_exp<float>)Algebra.exp).Method,
+      ((_exp<long>)Algebra.exp).Method,
+      ((_exp<int>)Algebra.exp).Method,
+    };
+
+    internal static System.Reflection.MemberInfo[] _factorPrimesMethods =
+      new System.Reflection.MemberInfo[]
+    {
+      ((_factorPrimes<decimal>)Algebra.factorPrimes).Method,
+      ((_factorPrimes<double>)Algebra.factorPrimes).Method,
+      ((_factorPrimes<float>)Algebra.factorPrimes).Method,
+      ((_factorPrimes<long>)Algebra.factorPrimes).Method,
+      ((_factorPrimes<int>)Algebra.factorPrimes).Method,
+    };
+
+    internal static System.Reflection.MemberInfo[] _invertMethods =
+      new System.Reflection.MemberInfo[]
+    {
+      ((_invert_mult<decimal>)Algebra.invert_mult).Method,
+      ((_invert_mult<double>)Algebra.invert_mult).Method,
+      ((_invert_mult<float>)Algebra.invert_mult).Method,
+      ((_invert_mult<long>)Algebra.invert_mult).Method,
+      ((_invert_mult<int>)Algebra.invert_mult).Method,
+    };
+
+    //internal static System.Reflection.MemberInfo[] _factorPrimesMethods =
+    //  new System.Reflection.MemberInfo[]
+    //{
+    //  ((_invert_mult<decimal>)Algebra.invert_mult).Method,
+    //  ((_invert_mult<double>)Algebra.invert_mult).Method,
+    //  ((_invert_mult<float>)Algebra.invert_mult).Method,
+    //  ((_invert_mult<long>)Algebra.invert_mult).Method,
+    //  ((_invert_mult<int>)Algebra.invert_mult).Method,
+    //};
 
     #endregion
 

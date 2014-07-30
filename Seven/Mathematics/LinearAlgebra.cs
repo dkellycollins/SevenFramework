@@ -40,9 +40,9 @@ namespace Seven.Mathematics
     /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
     LinearAlgebra._Vector_Blerp<T> Vector_Blerp { get; }
     /// <summary>Checks for equality between two vectors.</summary>
-    //LinearAlgebra._Vector_EqualsValue<T> Vector_EqualsValue { get; }
+    LinearAlgebra._Vector_EqualsValue<T> Vector_EqualsValue { get; }
     /// <summary>Checks for equality between two vectors with a leniency.</summary>
-    //LinearAlgebra._Vector_EqualsValue_leniency<T> Vector_EqualsValue_leniency { get; }
+    LinearAlgebra._Vector_EqualsValue_leniency<T> Vector_EqualsValue_leniency { get; }
     /// <summary>Rotates a vector by a quaternion.</summary>
     //LinearAlgebra._Vector_RotateBy_quaternion<T> Vector_RotateBy_quaternion { get; }
     
@@ -218,6 +218,10 @@ namespace Seven.Mathematics
       public LinearAlgebra._Vector_Slerp<decimal> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
       /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
       public LinearAlgebra._Vector_Blerp<decimal> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+      /// <summary>Checks for equality by value.</summary>
+      public LinearAlgebra._Vector_EqualsValue<decimal> Vector_EqualsValue { get { return LinearAlgebra.EqualsValue; } }
+      /// <summary>Checks for equality by value with leniency.</summary>
+      public LinearAlgebra._Vector_EqualsValue_leniency<decimal> Vector_EqualsValue_leniency { get { return LinearAlgebra.EqualsValue; } }
 
       /// <summary>Negates all the values in this matrix.</summary>
       public LinearAlgebra._Matrix_Negate<decimal> Matrix_Negate { get { return LinearAlgebra.Negate; } }
@@ -254,9 +258,9 @@ namespace Seven.Mathematics
       /// <summary>Decomposes a matrix to lower/upper components.</summary>
       public LinearAlgebra._Matrix_DecomposeLU<decimal> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
       /// <summary>Dtermines equality but value.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue<decimal> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue<decimal> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsValue; } }
       /// <summary>Determines equality by value with leniency.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue_leniency<decimal> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue_leniency<decimal> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsValue; } }
     }
 
     private class LinearAlgebra_double : LinearAlgebra<double>
@@ -307,6 +311,10 @@ namespace Seven.Mathematics
       public LinearAlgebra._Vector_Slerp<double> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
       /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
       public LinearAlgebra._Vector_Blerp<double> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+      /// <summary>Checks for equality by value.</summary>
+      public LinearAlgebra._Vector_EqualsValue<double> Vector_EqualsValue { get { return LinearAlgebra.EqualsValue; } }
+      /// <summary>Checks for equality by value with leniency.</summary>
+      public LinearAlgebra._Vector_EqualsValue_leniency<double> Vector_EqualsValue_leniency { get { return LinearAlgebra.EqualsValue; } }
 
       /// <summary>Negates all the values in this matrix.</summary>
       public LinearAlgebra._Matrix_Negate<double> Matrix_Negate { get { return LinearAlgebra.Negate; } }
@@ -343,9 +351,9 @@ namespace Seven.Mathematics
       /// <summary>Decomposes a matrix to lower/upper components.</summary>
       public LinearAlgebra._Matrix_DecomposeLU<double> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
       /// <summary>Dtermines equality but value.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue<double> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue<double> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsValue; } }
       /// <summary>Determines equality by value with leniency.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue_leniency<double> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue_leniency<double> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsValue; } }
     }
 
     private class LinearAlgebra_float : LinearAlgebra<float>
@@ -396,6 +404,10 @@ namespace Seven.Mathematics
       public LinearAlgebra._Vector_Slerp<float> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
       /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
       public LinearAlgebra._Vector_Blerp<float> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+      /// <summary>Checks for equality by value.</summary>
+      public LinearAlgebra._Vector_EqualsValue<float> Vector_EqualsValue { get { return LinearAlgebra.EqualsValue; } }
+      /// <summary>Checks for equality by value with leniency.</summary>
+      public LinearAlgebra._Vector_EqualsValue_leniency<float> Vector_EqualsValue_leniency { get { return LinearAlgebra.EqualsValue; } }
 
       /// <summary>Negates all the values in this matrix.</summary>
       public LinearAlgebra._Matrix_Negate<float> Matrix_Negate { get { return LinearAlgebra.Negate; } }
@@ -432,9 +444,9 @@ namespace Seven.Mathematics
       /// <summary>Decomposes a matrix to lower/upper components.</summary>
       public LinearAlgebra._Matrix_DecomposeLU<float> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
       /// <summary>Dtermines equality but value.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue<float> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue<float> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsValue; } }
       /// <summary>Determines equality by value with leniency.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue_leniency<float> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue_leniency<float> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsValue; } }
     }
 
     private class LinearAlgebra_long : LinearAlgebra<long>
@@ -485,6 +497,10 @@ namespace Seven.Mathematics
       public LinearAlgebra._Vector_Slerp<long> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
       /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
       public LinearAlgebra._Vector_Blerp<long> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+      /// <summary>Checks for equality by value.</summary>
+      public LinearAlgebra._Vector_EqualsValue<long> Vector_EqualsValue { get { return LinearAlgebra.EqualsValue; } }
+      /// <summary>Checks for equality by value with leniency.</summary>
+      public LinearAlgebra._Vector_EqualsValue_leniency<long> Vector_EqualsValue_leniency { get { return LinearAlgebra.EqualsValue; } }
 
       /// <summary>Negates all the values in this matrix.</summary>
       public LinearAlgebra._Matrix_Negate<long> Matrix_Negate { get { return LinearAlgebra.Negate; } }
@@ -521,9 +537,9 @@ namespace Seven.Mathematics
       /// <summary>Decomposes a matrix to lower/upper components.</summary>
       public LinearAlgebra._Matrix_DecomposeLU<long> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
       /// <summary>Dtermines equality but value.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue<long> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue<long> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsValue; } }
       /// <summary>Determines equality by value with leniency.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue_leniency<long> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue_leniency<long> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsValue; } }
     }
 
     private class LinearAlgebra_int : LinearAlgebra<int>
@@ -574,6 +590,10 @@ namespace Seven.Mathematics
       public LinearAlgebra._Vector_Slerp<int> Vector_Slerp { get { return LinearAlgebra.Slerp; } }
       /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
       public LinearAlgebra._Vector_Blerp<int> Vector_Blerp { get { return LinearAlgebra.Blerp; } }
+      /// <summary>Checks for equality by value.</summary>
+      public LinearAlgebra._Vector_EqualsValue<int> Vector_EqualsValue { get { return LinearAlgebra.EqualsValue; } }
+      /// <summary>Checks for equality by value with leniency.</summary>
+      public LinearAlgebra._Vector_EqualsValue_leniency<int> Vector_EqualsValue_leniency { get { return LinearAlgebra.EqualsValue; } }
 
       /// <summary>Negates all the values in this matrix.</summary>
       public LinearAlgebra._Matrix_Negate<int> Matrix_Negate { get { return LinearAlgebra.Negate; } }
@@ -610,9 +630,9 @@ namespace Seven.Mathematics
       /// <summary>Decomposes a matrix to lower/upper components.</summary>
       public LinearAlgebra._Matrix_DecomposeLU<int> Matrix_DecomposeLU { get { return LinearAlgebra.DecomposeLU; } }
       /// <summary>Dtermines equality but value.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue<int> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue<int> Matrix_EqualsByValue { get { return LinearAlgebra.EqualsValue; } }
       /// <summary>Determines equality by value with leniency.</summary>
-      public LinearAlgebra._Matrix_EqualsByValue_leniency<int> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsByValue; } }
+      public LinearAlgebra._Matrix_EqualsByValue_leniency<int> Matrix_EqualsByValue_leniency { get { return LinearAlgebra.EqualsValue; } }
     }
 
     private class LinearAlgebra_generic<T> : LinearAlgebra<T>
@@ -961,6 +981,42 @@ namespace Seven.Mathematics
             {
               throw new System.NotImplementedException();
               //return Vector<T>.Add(Vector<T>.Add(Vector<T>.Multiply(Vector<T>.Subtract(b, a), u), Vector<T>.Multiply(Vector<T>.Subtract(c, a), v)), a);
+            };
+        }
+      }
+
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_EqualsValue<T> Vector_EqualsValue
+      {
+        get
+        {
+          return
+            (T[] left, T[] right) =>
+            {
+              if (left.GetLength(0) != right.GetLength(0))
+                return false;
+              for (int i = 0; i < left.GetLength(0); i++)
+                if (!_equate(left[i], right[i]))
+                  return false;
+              return true;
+            };
+        }
+      }
+
+      /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
+      public LinearAlgebra._Vector_EqualsValue_leniency<T> Vector_EqualsValue_leniency
+      {
+        get
+        {
+          return
+            (T[] left, T[] right, T leniency) =>
+            {
+              if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+                return false;
+              for (int i = 0; i < left.GetLength(0); i++)
+                if (_compare(_abs(_subtract(left[i], right[i])), leniency) == Comparison.Greater)
+                  return false;
+              return true;
             };
         }
       }
@@ -1492,176 +1548,6 @@ namespace Seven.Mathematics
         return EqualsReference(left._vector, right._vector);
       }
 
-      ///// <summary>Negates all the values in a matrix.</summary>
-      ///// <param name="matrix">The matrix to have its values negated.</param>
-      ///// <returns>The resulting matrix after the negations.</returns>
-      //public T[,] Negate(T[,] matrix)
-      //{
-      //  T[,] result = new T[matrix.GetLength(0), matrix.GetLength(1)];
-      //  for (int i = 0; i < matrix.GetLength(0); i++)
-      //    for (int j = 0; j < matrix.GetLength(1); j++)
-      //      result[i, j] = _negate(matrix[i, j]);
-      //  return result;
-      //}
-
-      ///// <summary>Does standard addition of two matrices.</summary>
-      ///// <param name="left">The left matrix of the addition.</param>
-      ///// <param name="right">The right matrix of the addition.</param>
-      ///// <returns>The resulting matrix after the addition.</returns>
-      //public T[,] Add(T[,] left, T[,] right)
-      //{
-      //  if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-      //    throw new Error("invalid addition (size miss-match).");
-      //  T[,] result = new T[left.GetLength(0), left.GetLength(1)];
-      //  for (int i = 0; i < left.GetLength(0); i++)
-      //    for (int j = 0; j < left.GetLength(1); j++)
-      //      result[i, j] = _add(left[i, j], right[i, j]);
-      //  return result;
-      //}
-
-      ///// <summary>Subtracts a scalar from all the values in a matrix.</summary>
-      ///// <param name="left">The matrix to have the values subtracted from.</param>
-      ///// <param name="right">The scalar to subtract from all the matrix values.</param>
-      ///// <returns>The resulting matrix after the subtractions.</returns>
-      //public T[,] Subtract(T[,] left, T[,] right)
-      //{
-      //  if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
-      //    throw new Error("invalid subtraction (size miss-match).");
-      //  T[,] result = new T[left.GetLength(0), left.GetLength(1)];
-      //  for (int i = 0; i < left.GetLength(0); i++)
-      //    for (int j = 0; j < left.GetLength(1); j++)
-      //      result[i, j] = _subtract(left[i, j], right[i, j]);
-      //  return result;
-      //}
-
-      /////// <summary>Subtracts a scalar from all the values in a matrix.</summary>
-      /////// <param name="left">The matrix to have the values subtracted from.</param>
-      /////// <param name="right">The scalar to subtract from all the matrix values.</param>
-      /////// <returns>The resulting matrix after the subtractions.</returns>
-      ////public static Vector Subtract(float[,] left, float[] right)
-      ////{
-      ////  if (!(left.GetLength(1) == 1 && left.GetLength(0) == right.Length))
-      ////    throw new MatrixException("invalid subtraction (size miss-match).");
-      ////  Vector result = new Vector(left.GetLength(0));
-      ////  for (int i = 0; i < result.Dimensions; i++)
-      ////    result[i] = left[i, 0] - right[i];
-      ////  return result;
-      ////}
-
-      ///// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
-      ///// <param name="left">The left matrix of the multiplication.</param>
-      ///// <param name="right">The right matrix of the multiplication.</param>
-      ///// <returns>The resulting matrix of the multiplication.</returns>
-      //public T[,] Multiply(T[,] left, T[,] right)
-      //{
-      //  if (left.GetLength(1) != right.GetLength(0))
-      //    throw new Error("invalid multiplication (size miss-match).");
-      //  T[,] result = new T[left.GetLength(0), right.GetLength(1)];
-      //  for (int i = 0; i < left.GetLength(0); i++)
-      //    for (int j = 0; j < right.GetLength(1); j++)
-      //      for (int k = 0; k < left.GetLength(1); k++)
-      //        result[i, j] = _add(result[i, j], _multiply(left[i, k], right[k, j]));
-      //  return result;
-      //}
-
-      ///// <summary>Does a standard (triple for looped) multiplication between matrices.</summary>
-      ///// <param name="left">The left matrix of the multiplication.</param>
-      ///// <param name="right">The right matrix of the multiplication.</param>
-      ///// <returns>The resulting matrix of the multiplication.</returns>
-      //public T[] Multiply(T[,] left, T[] right)
-      //{
-      //  if (left.GetLength(1) != right.GetLength(0))
-      //    throw new Error("invalid multiplication (size miss-match).");
-      //  T[] result = new T[left.GetLength(1)];
-      //  for (int i = 0; i < left.GetLength(0); i++)
-      //    for (int j = 0; j < right.GetLength(1); j++)
-      //      result[i] = _add(result[i], _multiply(left[i, j], right[j]));
-      //  return result;
-      //}
-
-      /////// <summary>Does a standard multiplication between a matrix and a vector.</summary>
-      /////// <param name="left">The left matrix of the multiplication.</param>
-      /////// <param name="right">The right vector of the multiplication.</param>
-      /////// <returns>The resulting matrix/vector of the multiplication.</returns>
-      ////public static Matrix Multiply(float[,] left, float[] right)
-      ////{
-      ////  if (left.GetLength(1) != right.GetLength(0))
-      ////    throw new MatrixException("invalid multiplication (size miss-match).");
-      ////  Matrix result = new Matrix(left.GetLength(0), right.GetLength(1));
-      ////  for (int i = 0; i < result.Rows; i++)
-      ////      for (int k = 0; k < left.GetLength(1); k++)
-      ////        result[i, j] += left[i, k] * right[k];
-      ////  return result;
-      ////}
-
-      ///// <summary>Multiplies all the values in a matrix by a scalar.</summary>
-      ///// <param name="left">The matrix to have the values multiplied.</param>
-      ///// <param name="right">The scalar to multiply the values by.</param>
-      ///// <returns>The resulting matrix after the multiplications.</returns>
-      //public T[,] Multiply(T[,] left, T right)
-      //{
-      //  T[,] result = new T[left.GetLength(0), left.GetLength(1)];
-      //  for (int i = 0; i < left.GetLength(0); i++)
-      //    for (int j = 0; j < left.GetLength(1); j++)
-      //      result[i, j] = _multiply(left[i, j], right);
-      //  return result;
-      //}
-
-      ///// <summary>Applies a power to a square matrix.</summary>
-      ///// <param name="matrix">The matrix to be powered by.</param>
-      ///// <param name="power">The power to apply to the matrix.</param>
-      ///// <returns>The resulting matrix of the power operation.</returns>
-      //public T[,] Power(T[,] matrix, int power)
-      //{
-      //  if (!(matrix.GetLength(0) == matrix.GetLength(1)))
-      //    throw new Error("invalid power (!matrix.IsSquare).");
-      //  if (!(power > -1))
-      //    throw new Error("invalid power !(power > -1)");
-      //  if (power == 0)
-      //    return Matrix<T>.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
-      //  T[,] result = matrix.Clone() as T[,];
-      //  for (int i = 0; i < power; i++)
-      //    result = Matrix<T>.Multiply(result, result);
-      //  return result;
-      //}
-
-      ///// <summary>Divides all the values in the matrix by a scalar.</summary>
-      ///// <param name="matrix">The matrix to divide the values of.</param>
-      ///// <param name="right">The scalar to divide all the matrix values by.</param>
-      ///// <returns>The resulting matrix with the divided values.</returns>
-      //public T[,] Divide(T[,] matrix, T right)
-      //{
-      //  T[,] result = new T[matrix.GetLength(0), matrix.GetLength(1)];
-      //  for (int i = 0; i < matrix.GetLength(0); i++)
-      //    for (int j = 0; j < matrix.GetLength(1); j++)
-      //      result[i, j] = _divide(matrix[i, j], right);
-      //  return result;
-      //}
-
-      ///// <summary>Gets the minor of a matrix.</summary>
-      ///// <param name="matrix">The matrix to get the minor of.</param>
-      ///// <param name="row">The restricted row to form the minor.</param>
-      ///// <param name="column">The restricted column to form the minor.</param>
-      ///// <returns>The minor of the matrix.</returns>
-      //public T[,] Minor(T[,] matrix, int row, int column)
-      //{
-      //  T[,] minor = new T[matrix.GetLength(0) - 1, matrix.GetLength(1) - 1];
-      //  int m = 0, n = 0;
-      //  for (int i = 0; i < matrix.GetLength(0); i++)
-      //  {
-      //    if (i == row) continue;
-      //    n = 0;
-      //    for (int j = 0; j < matrix.GetLength(1); j++)
-      //    {
-      //      if (j == column) continue;
-      //      minor[m, n] = matrix[i, j];
-      //      n++;
-      //    }
-      //    m++;
-      //  }
-      //  return minor;
-      //}
-
       private static void RowMultiplication(T[,] matrix, int row, T scalar)
       {
         for (int j = 0; j < matrix.GetLength(1); j++)
@@ -1683,234 +1569,6 @@ namespace Seven.Mathematics
           matrix[row2, j] = temp;
         }
       }
-
-      ///// <summary>Combines two matrices from left to right 
-      ///// (result.Rows = left.Rows && result.Columns = left.Columns + right.Columns).</summary>
-      ///// <param name="left">The left matrix of the concatenation.</param>
-      ///// <param name="right">The right matrix of the concatenation.</param>
-      ///// <returns>The resulting matrix of the concatenation.</returns>
-      //public T[,] ConcatenateRowWise(T[,] left, T[,] right)
-      //{
-      //  if (left.GetLength(0) != right.GetLength(0))
-      //    throw new Error("invalid row-wise concatenation !(left.Rows == right.Rows).");
-      //  T[,] result = new T[left.GetLength(0), left.GetLength(1) + right.GetLength(1)];
-      //  for (int i = 0; i < left.GetLength(0); i++)
-      //    for (int j = 0; j < result.GetLength(1); j++)
-      //    {
-      //      if (j < left.GetLength(1)) result[i, j] = left[i, j];
-      //      else result[i, j] = right[i, j - left.GetLength(1)];
-      //    }
-      //  return result;
-      //}
-
-      ///// <summary>Calculates the determinent of a square matrix.</summary>
-      ///// <param name="matrix">The matrix to calculate the determinent of.</param>
-      ///// <returns>The determinent of the matrix.</returns>
-      //public T Determinent(T[,] matrix)
-      //{
-      //  if (!(matrix.GetLength(0) == matrix.GetLength(1)))
-      //    throw new Error("invalid determinent !(matrix.IsSquare).");
-      //  T det = _one;
-      //  try
-      //  {
-      //    T[,] rref = matrix.Clone() as T[,];
-      //    for (int i = 0; i < matrix.GetLength(0); i++)
-      //    {
-      //      if (_equate(rref[i, i], _zero))
-      //        for (int j = i + 1; j < rref.GetLength(0); j++)
-      //          if (!_equate(rref[j, i], _zero))
-      //          {
-      //            LinearAlgebra_generic<T>.SwapRows(rref, i, j);
-      //            det = _negate(det);
-      //          }
-      //      det = _multiply(det, rref[i, i]);
-      //      LinearAlgebra_generic<T>.RowMultiplication(rref, i, _Invert_Multiplicative(rref[i, i]));
-      //      for (int j = i + 1; j < rref.GetLength(0); j++)
-      //        LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
-      //      for (int j = i - 1; j >= 0; j--)
-      //        LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
-      //    }
-      //    return det;
-      //  }
-      //  catch { throw new Error("determinent computation failed."); }
-      //}
-
-      ///// <summary>Calculates the echelon of a matrix (aka REF).</summary>
-      ///// <param name="matrix">The matrix to calculate the echelon of (aka REF).</param>
-      ///// <returns>The echelon of the matrix (aka REF).</returns>
-      //public T[,] Echelon(T[,] matrix)
-      //{
-      //  try
-      //  {
-      //    T[,] result = matrix.Clone() as T[,];
-      //    for (int i = 0; i < matrix.GetLength(0); i++)
-      //    {
-      //      if (_equate(result[i, i], _zero))
-      //        for (int j = i + 1; j < result.GetLength(0); j++)
-      //          if (!_equate(result[j, i], _zero))
-      //            LinearAlgebra_generic<T>.SwapRows(result, i, j);
-      //      if (_equate(result[i, i], _zero))
-      //        continue;
-      //      if (!_equate(result[i, i], _one))
-      //        for (int j = i + 1; j < result.GetLength(0); j++)
-      //          if (_equate(result[j, i], _one))
-      //            LinearAlgebra_generic<T>.SwapRows(result, i, j);
-      //      LinearAlgebra_generic<T>.RowMultiplication(result, i, _Invert_Multiplicative(result[i, i]));
-      //      for (int j = i + 1; j < result.GetLength(0); j++)
-      //        LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
-      //    }
-      //    return result;
-      //  }
-      //  catch { throw new Error("echelon computation failed."); }
-      //}
-
-      ///// <summary>Calculates the echelon of a matrix and reduces it (aka RREF).</summary>
-      ///// <param name="matrix">The matrix matrix to calculate the reduced echelon of (aka RREF).</param>
-      ///// <returns>The reduced echelon of the matrix (aka RREF).</returns>
-      //public T[,] ReducedEchelon(T[,] matrix)
-      //{
-      //  try
-      //  {
-      //    T[,] result = matrix.Clone() as T[,];
-      //    for (int i = 0; i < matrix.GetLength(0); i++)
-      //    {
-      //      if (_equate(result[i, i], _one))
-      //        for (int j = i + 1; j < result.GetLength(0); j++)
-      //          if (!_equate(result[j, i], _zero))
-      //            LinearAlgebra_generic<T>.SwapRows(result, i, j);
-      //      if (_equate(result[i, i], _zero)) continue;
-      //      if (!_equate(result[i, i], _one))
-      //        for (int j = i + 1; j < result.GetLength(0); j++)
-      //          if (_equate(result[j, i], _one))
-      //            LinearAlgebra_generic<T>.SwapRows(result, i, j);
-      //      LinearAlgebra_generic<T>.RowMultiplication(result, i, _Invert_Multiplicative(result[i, i]));
-      //      for (int j = i + 1; j < result.GetLength(0); j++)
-      //        LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
-      //      for (int j = i - 1; j >= 0; j--)
-      //        LinearAlgebra_generic<T>.RowAddition(result, j, i, _negate(result[j, i]));
-      //    }
-      //    return result;
-      //  }
-      //  catch { throw new Error("reduced echelon calculation failed."); }
-      //}
-
-      ///// <summary>Calculates the inverse of a matrix.</summary>
-      ///// <param name="matrix">The matrix to calculate the inverse of.</param>
-      ///// <returns>The inverse of the matrix.</returns>
-      //public T[,] Inverse(T[,] matrix)
-      //{
-      //  if (_equate(Matrix<T>.Determinent(matrix), _zero))
-      //    throw new Error("inverse calculation failed.");
-      //  try
-      //  {
-      //    T[,] identity = Matrix<T>.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
-      //    T[,] rref = matrix.Clone() as T[,];
-      //    for (int i = 0; i < matrix.GetLength(0); i++)
-      //    {
-      //      if (_equate(rref[i, i], _zero))
-      //        for (int j = i + 1; j < rref.GetLength(0); j++)
-      //          if (!_equate(rref[j, i], _zero))
-      //          {
-      //            LinearAlgebra_generic<T>.SwapRows(rref, i, j);
-      //            LinearAlgebra_generic<T>.SwapRows(identity, i, j);
-      //          }
-      //      LinearAlgebra_generic<T>.RowMultiplication(identity, i, _Invert_Multiplicative(rref[i, i]));
-      //      LinearAlgebra_generic<T>.RowMultiplication(rref, i, _Invert_Multiplicative(rref[i, i]));
-      //      for (int j = i + 1; j < rref.GetLength(0); j++)
-      //      {
-      //        LinearAlgebra_generic<T>.RowAddition(identity, j, i, _negate(rref[j, i]));
-      //        LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
-      //      }
-      //      for (int j = i - 1; j >= 0; j--)
-      //      {
-      //        LinearAlgebra_generic<T>.RowAddition(identity, j, i, _negate(rref[j, i]));
-      //        LinearAlgebra_generic<T>.RowAddition(rref, j, i, _negate(rref[j, i]));
-      //      }
-      //    }
-      //    return identity;
-      //  }
-      //  catch { throw new Error("inverse calculation failed."); }
-      //}
-
-      ///// <summary>Calculates the adjoint of a matrix.</summary>
-      ///// <param name="matrix">The matrix to calculate the adjoint of.</param>
-      ///// <returns>The adjoint of the matrix.</returns>
-      //public T[,] Adjoint(T[,] matrix)
-      //{
-      //  if (!(matrix.GetLength(0) == matrix.GetLength(1)))
-      //    throw new Error("Adjoint of a non-square matrix does not exists");
-      //  T[,] AdjointMatrix = new T[matrix.GetLength(0), matrix.GetLength(1)];
-      //  for (int i = 0; i < matrix.GetLength(0); i++)
-      //    for (int j = 0; j < matrix.GetLength(1); j++)
-      //      if ((i + j) % 2 == 0)
-      //        AdjointMatrix[i, j] = Matrix<T>.Determinent(Matrix<T>.Minor(matrix, i, j));
-      //      else
-      //        AdjointMatrix[i, j] = _negate(Matrix<T>.Determinent(Matrix<T>.Minor(matrix, i, j)));
-      //  return Matrix<T>.Transpose(AdjointMatrix);
-      //}
-
-      ///// <summary>Returns the transpose of a matrix.</summary>
-      ///// <param name="matrix">The matrix to transpose.</param>
-      ///// <returns>The transpose of the matrix.</returns>
-      //public T[,] Transpose(T[,] matrix)
-      //{
-      //  T[,] transpose = new T[matrix.GetLength(1), matrix.GetLength(0)];
-      //  for (int i = 0; i < transpose.GetLength(0); i++)
-      //    for (int j = 0; j < transpose.GetLength(1); j++)
-      //      transpose[i, j] = matrix[j, i];
-      //  return transpose;
-      //}
-
-      ///// <summary>Decomposes a matrix into lower-upper reptresentation.</summary>
-      ///// <param name="matrix">The matrix to decompose.</param>
-      ///// <param name="lower">The computed lower triangular matrix.</param>
-      ///// <param name="upper">The computed upper triangular matrix.</param>
-      //public void DecomposeLU(T[,] matrix, out T[,] lower, out T[,] upper)
-      //{
-      //  if (!(matrix.GetLength(0) == matrix.GetLength(1)))
-      //    throw new Error("The matrix is not square!");
-      //  lower = Matrix<T>.FactoryIdentity(matrix.GetLength(0), matrix.GetLength(1));
-      //  upper = matrix.Clone() as T[,];
-      //  int[] permutation = new int[matrix.GetLength(0)];
-      //  for (int i = 0; i < matrix.GetLength(0); i++) permutation[i] = i;
-      //  T p = _zero, pom2, detOfP = _one;
-      //  int k0 = 0, pom1 = 0;
-      //  for (int k = 0; k < matrix.GetLength(1) - 1; k++)
-      //  {
-      //    p = _zero;
-      //    for (int i = k; i < matrix.GetLength(0); i++)
-      //      if (_compare(_abs(upper[i, k]), p) == Comparison.Greater)
-      //      {
-      //        p = _abs(upper[i, k]);
-      //        k0 = i;
-      //      }
-      //    if (_equate(p, _zero))
-      //      throw new Error("The matrix is singular!");
-      //    pom1 = permutation[k];
-      //    permutation[k] = permutation[k0];
-      //    permutation[k0] = pom1;
-      //    for (int i = 0; i < k; i++)
-      //    {
-      //      pom2 = lower[k, i];
-      //      lower[k, i] = lower[k0, i];
-      //      lower[k0, i] = pom2;
-      //    }
-      //    if (k != k0)
-      //      detOfP = _negate(detOfP);
-      //    for (int i = 0; i < matrix.GetLength(1); i++)
-      //    {
-      //      pom2 = upper[k, i];
-      //      upper[k, i] = upper[k0, i];
-      //      upper[k0, i] = pom2;
-      //    }
-      //    for (int i = k + 1; i < matrix.GetLength(0); i++)
-      //    {
-      //      lower[i, k] = _divide(upper[i, k], upper[k, k]);
-      //      for (int j = k; j < matrix.GetLength(1); j++)
-      //        upper[i, j] = _subtract(upper[i, j], _multiply(lower[i, k], upper[k, j]));
-      //    }
-      //  }
-      //}
 
       /// <summary>Does a value equality check.</summary>
       /// <param name="left">The first matrix to check for equality.</param>
@@ -2006,6 +1664,12 @@ namespace Seven.Mathematics
       /// <summary>Interpolates between three vectors using barycentric coordinates.</summary>
       public LinearAlgebra._Vector_Blerp<T> Vector_Blerp
       { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Checks for equality by value.</summary>
+      public LinearAlgebra._Vector_EqualsValue<T> Vector_EqualsValue
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
+      /// <summary>Checks for equality by value with leniency.</summary>
+      public LinearAlgebra._Vector_EqualsValue_leniency<T> Vector_EqualsValue_leniency
+      { get { throw new Error("a linear algebra for " + typeof(T) + " could not be found or created"); } }
 
       /// <summary>Negates all the values in this matrix.</summary>
       public LinearAlgebra._Matrix_Negate<T> Matrix_Negate
@@ -2074,9 +1738,11 @@ namespace Seven.Mathematics
 
     #region decimal
 
+    #region Vector
+
     /// <summary>Adds two vectors together.</summary>
-    /// <param name="leftFloats">The first vector of the addition.</param>
-    /// <param name="rightFloats">The second vector of the addiiton.</param>
+    /// <param name="left">The first vector of the addition.</param>
+    /// <param name="right">The second vector of the addiiton.</param>
     /// <returns>The result of the addiion.</returns>
     public static decimal[] Add(decimal[] left, decimal[] right)
     {
@@ -2294,6 +1960,39 @@ namespace Seven.Mathematics
       return LinearAlgebra.Add(LinearAlgebra.Add(LinearAlgebra.Multiply(LinearAlgebra.Subtract(b, a), u),
         LinearAlgebra.Multiply(LinearAlgebra.Subtract(c, a), v)), a);
     }
+
+    /// <summary>Does a value equality check.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(decimal[] left, decimal[] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (left[i] != right[i])
+          return false;
+      return true;
+    }
+
+    /// <summary>Does a value equality check with leniency.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(decimal[] left, decimal[] right, decimal leniency)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (Logic.Abs(left[i] - right[i]) > leniency)
+          return false;
+      return true;
+    }
+
+    #endregion
+
+    #region Matrix
 
     /// <summary>Constructs a new identity-matrix of the given dimensions.</summary>
     /// <param name="rows">The number of rows of the matrix.</param>
@@ -2720,7 +2419,7 @@ namespace Seven.Mathematics
     /// <param name="left">The first matrix to check for equality.</param>
     /// <param name="right">The second matrix to check for equality.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(decimal[,] left, decimal[,] right)
+    public static bool EqualsValue(decimal[,] left, decimal[,] right)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -2736,7 +2435,7 @@ namespace Seven.Mathematics
     /// <param name="right">The second matrix to check for equality.</param>
     /// <param name="leniency">How much the values can vary but still be considered equal.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(decimal[,] left, decimal[,] right, decimal leniency)
+    public static bool EqualsValue(decimal[,] left, decimal[,] right, decimal leniency)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -2747,12 +2446,16 @@ namespace Seven.Mathematics
       return true;
     }
 
+    #endregion
+
+    #region Quaterion
+
     /// <summary>Computes the length of quaternion.</summary>
     /// <param name="quaternion">The quaternion to compute the length of.</param>
     /// <returns>The length of the given quaternion.</returns>
     public static decimal Magnitude(Quaternion<decimal> quaternion)
     {
-      return Algebra.SquareRoot(
+      return Algebra.sqrt(
           (quaternion.X * quaternion.X +
           quaternion.Y * quaternion.Y +
           quaternion.Z * quaternion.Z +
@@ -2996,7 +2699,11 @@ namespace Seven.Mathematics
 
     #endregion
 
-		#region double
+    #endregion
+
+    #region double
+
+    #region Vector
 
     /// <summary>Adds two vectors together.</summary>
     /// <param name="leftFloats">The first vector of the addition.</param>
@@ -3218,6 +2925,39 @@ namespace Seven.Mathematics
       return LinearAlgebra.Add(LinearAlgebra.Add(LinearAlgebra.Multiply(LinearAlgebra.Subtract(b, a), u), 
         LinearAlgebra.Multiply(LinearAlgebra.Subtract(c, a), v)), a);
     }
+
+    /// <summary>Does a value equality check.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(double[] left, double[] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (left[i] != right[i])
+          return false;
+      return true;
+    }
+
+    /// <summary>Does a value equality check with leniency.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(double[] left, double[] right, double leniency)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (Logic.Abs(left[i] - right[i]) > leniency)
+          return false;
+      return true;
+    }
+
+    #endregion
+
+    #region Matrix
 
     /// <summary>Constructs a new identity-matrix of the given dimensions.</summary>
 		/// <param name="rows">The number of rows of the matrix.</param>
@@ -3666,7 +3406,7 @@ namespace Seven.Mathematics
     /// <param name="left">The first matrix to check for equality.</param>
     /// <param name="right">The second matrix to check for equality.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(double[,] left, double[,] right)
+    public static bool EqualsValue(double[,] left, double[,] right)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -3682,7 +3422,7 @@ namespace Seven.Mathematics
     /// <param name="right">The second matrix to check for equality.</param>
     /// <param name="leniency">How much the values can vary but still be considered equal.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(double[,] left, double[,] right, double leniency)
+    public static bool EqualsValue(double[,] left, double[,] right, double leniency)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -3693,9 +3433,13 @@ namespace Seven.Mathematics
       return true;
     }
 
-		#endregion
+    #endregion
+
+    #endregion
 
     #region float
+
+    #region Vector
 
     /// <summary>Adds two vectors together.</summary>
     /// <param name="leftFloats">The first vector of the addition.</param>
@@ -3917,6 +3661,39 @@ namespace Seven.Mathematics
       return LinearAlgebra.Add(LinearAlgebra.Add(LinearAlgebra.Multiply(LinearAlgebra.Subtract(b, a), u),
         LinearAlgebra.Multiply(LinearAlgebra.Subtract(c, a), v)), a);
     }
+
+    /// <summary>Does a value equality check.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(float[] left, float[] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (left[i] != right[i])
+          return false;
+      return true;
+    }
+
+    /// <summary>Does a value equality check with leniency.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(float[] left, float[] right, float leniency)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (Logic.Abs(left[i] - right[i]) > leniency)
+          return false;
+      return true;
+    }
+
+    #endregion
+
+    #region Matrix
 
     /// <summary>Constructs a new identity-matrix of the given dimensions.</summary>
     /// <param name="rows">The number of rows of the matrix.</param>
@@ -4343,7 +4120,7 @@ namespace Seven.Mathematics
     /// <param name="left">The first matrix to check for equality.</param>
     /// <param name="right">The second matrix to check for equality.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(float[,] left, float[,] right)
+    public static bool EqualsValue(float[,] left, float[,] right)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -4359,7 +4136,7 @@ namespace Seven.Mathematics
     /// <param name="right">The second matrix to check for equality.</param>
     /// <param name="leniency">How much the values can vary but still be considered equal.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(float[,] left, float[,] right, float leniency)
+    public static bool EqualsValue(float[,] left, float[,] right, float leniency)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -4372,7 +4149,11 @@ namespace Seven.Mathematics
 
     #endregion
 
+    #endregion
+
     #region long
+
+    #region Vector
 
     /// <summary>Adds two vectors together.</summary>
     /// <param name="leftFloats">The first vector of the addition.</param>
@@ -4597,6 +4378,39 @@ namespace Seven.Mathematics
       return LinearAlgebra.Add(LinearAlgebra.Add(LinearAlgebra.Multiply(LinearAlgebra.Subtract(b, a), u),
         LinearAlgebra.Multiply(LinearAlgebra.Subtract(c, a), v)), a);
     }
+
+    /// <summary>Does a value equality check.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(long[] left, long[] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (left[i] != right[i])
+          return false;
+      return true;
+    }
+
+    /// <summary>Does a value equality check with leniency.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(long[] left, long[] right, long leniency)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (Logic.Abs(left[i] - right[i]) > leniency)
+          return false;
+      return true;
+    }
+
+    #endregion
+
+    #region Matrix
 
     /// <summary>Constructs a new identity-matrix of the given dimensions.</summary>
     /// <param name="rows">The number of rows of the matrix.</param>
@@ -5023,7 +4837,7 @@ namespace Seven.Mathematics
     /// <param name="left">The first matrix to check for equality.</param>
     /// <param name="right">The second matrix to check for equality.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(long[,] left, long[,] right)
+    public static bool EqualsValue(long[,] left, long[,] right)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -5039,7 +4853,7 @@ namespace Seven.Mathematics
     /// <param name="right">The second matrix to check for equality.</param>
     /// <param name="leniency">How much the values can vary but still be considered equal.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(long[,] left, long[,] right, long leniency)
+    public static bool EqualsValue(long[,] left, long[,] right, long leniency)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -5052,7 +4866,11 @@ namespace Seven.Mathematics
 
     #endregion
 
+    #endregion
+
     #region int
+
+    #region Vector
 
     /// <summary>Adds two vectors together.</summary>
     /// <param name="leftFloats">The first vector of the addition.</param>
@@ -5277,6 +5095,39 @@ namespace Seven.Mathematics
       return LinearAlgebra.Add(LinearAlgebra.Add(LinearAlgebra.Multiply(LinearAlgebra.Subtract(b, a), u),
         LinearAlgebra.Multiply(LinearAlgebra.Subtract(c, a), v)), a);
     }
+
+    /// <summary>Does a value equality check.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(int[] left, int[] right)
+    {
+      if (left.GetLength(0) != right.GetLength(0))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (left[i] != right[i])
+          return false;
+      return true;
+    }
+
+    /// <summary>Does a value equality check with leniency.</summary>
+    /// <param name="left">The first matrix to check for equality.</param>
+    /// <param name="right">The second matrix to check for equality.</param>
+    /// <param name="leniency">How much the values can vary but still be considered equal.</param>
+    /// <returns>True if values are equal, false if not.</returns>
+    public static bool EqualsValue(int[] left, int[] right, int leniency)
+    {
+      if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
+        return false;
+      for (int i = 0; i < left.GetLength(0); i++)
+        if (Logic.Abs(left[i] - right[i]) > leniency)
+          return false;
+      return true;
+    }
+
+    #endregion
+
+    #region Matrix
 
     /// <summary>Constructs a new identity-matrix of the given dimensions.</summary>
     /// <param name="rows">The number of rows of the matrix.</param>
@@ -5703,7 +5554,7 @@ namespace Seven.Mathematics
     /// <param name="left">The first matrix to check for equality.</param>
     /// <param name="right">The second matrix to check for equality.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(int[,] left, int[,] right)
+    public static bool EqualsValue(int[,] left, int[,] right)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -5719,7 +5570,7 @@ namespace Seven.Mathematics
     /// <param name="right">The second matrix to check for equality.</param>
     /// <param name="leniency">How much the values can vary but still be considered equal.</param>
     /// <returns>True if values are equal, false if not.</returns>
-    public static bool EqualsByValue(int[,] left, int[,] right, int leniency)
+    public static bool EqualsValue(int[,] left, int[,] right, int leniency)
     {
       if (left.GetLength(0) != right.GetLength(0) || left.GetLength(1) != right.GetLength(1))
         return false;
@@ -5732,7 +5583,9 @@ namespace Seven.Mathematics
 
     #endregion
 
-		#endregion
+    #endregion
+
+    #endregion
 
     /// <summary>Error type for all algebra computations.</summary>
 		internal class Error : Seven.Error
@@ -6849,24 +6702,24 @@ namespace Seven.Mathematics
 	/// <typeparam name="T">The numeric type of this Vector.</typeparam>
 	public class Vector<T>
   {
-    public static readonly LinearAlgebra._Vector_Add<T> _Vector_Add;
-    public static readonly LinearAlgebra._Vector_Negate<T> _Vector_Negate;
-    public static readonly LinearAlgebra._Vector_Subtract<T> _Vector_Subtract;
-    public static readonly LinearAlgebra._Vector_Multiply<T> _Vector_Multiply;
-    public static readonly LinearAlgebra._Vector_Divide<T> _Vector_Divide;
-    public static readonly LinearAlgebra._Vector_DotProduct<T> _Vector_DotProduct;
-    public static readonly LinearAlgebra._Vector_CrossProduct<T> _Vector_CrossProduct;
-    public static readonly LinearAlgebra._Vector_Normalize<T> _Vector_Normalize;
-    public static readonly LinearAlgebra._Vector_Magnitude<T> _Vector_Magnitude;
-    public static readonly LinearAlgebra._Vector_MagnitudeSquared<T> _Vector_MagnitudeSquared;
-    public static readonly LinearAlgebra._Vector_Angle<T> _Vector_Angle;
-    public static readonly LinearAlgebra._Vector_RotateBy<T> _Vector_RotateBy;
-    public static readonly LinearAlgebra._Vector_Lerp<T> _Vector_Lerp;
-    public static readonly LinearAlgebra._Vector_Slerp<T> _Vector_Slerp;
-    public static readonly LinearAlgebra._Vector_Blerp<T> _Vector_Blerp;
-    public static readonly LinearAlgebra._Vector_EqualsValue<T> _Vector_EqualsValue;
-    public static readonly LinearAlgebra._Vector_EqualsValue_leniency<T> _Vector_EqualsValue_leniency;
-    public static readonly LinearAlgebra._Vector_RotateBy_quaternion<T> _Vector_RotateBy_quaternion;
+    private static readonly LinearAlgebra._Vector_Add<T> _Vector_Add;
+    private static readonly LinearAlgebra._Vector_Negate<T> _Vector_Negate;
+    private static readonly LinearAlgebra._Vector_Subtract<T> _Vector_Subtract;
+    private static readonly LinearAlgebra._Vector_Multiply<T> _Vector_Multiply;
+    private static readonly LinearAlgebra._Vector_Divide<T> _Vector_Divide;
+    private static readonly LinearAlgebra._Vector_DotProduct<T> _Vector_DotProduct;
+    private static readonly LinearAlgebra._Vector_CrossProduct<T> _Vector_CrossProduct;
+    private static readonly LinearAlgebra._Vector_Normalize<T> _Vector_Normalize;
+    private static readonly LinearAlgebra._Vector_Magnitude<T> _Vector_Magnitude;
+    private static readonly LinearAlgebra._Vector_MagnitudeSquared<T> _Vector_MagnitudeSquared;
+    private static readonly LinearAlgebra._Vector_Angle<T> _Vector_Angle;
+    private static readonly LinearAlgebra._Vector_RotateBy<T> _Vector_RotateBy;
+    private static readonly LinearAlgebra._Vector_Lerp<T> _Vector_Lerp;
+    private static readonly LinearAlgebra._Vector_Slerp<T> _Vector_Slerp;
+    private static readonly LinearAlgebra._Vector_Blerp<T> _Vector_Blerp;
+    private static readonly LinearAlgebra._Vector_EqualsValue<T> _Vector_EqualsValue;
+    private static readonly LinearAlgebra._Vector_EqualsValue_leniency<T> _Vector_EqualsValue_leniency;
+    private static readonly LinearAlgebra._Vector_RotateBy_quaternion<T> _Vector_RotateBy_quaternion;
 
     static Vector()
     {
@@ -6886,6 +6739,8 @@ namespace Seven.Mathematics
       _Vector_Lerp = linearAlgebra.Vector_Lerp;
       _Vector_Slerp = linearAlgebra.Vector_Slerp;
       _Vector_Blerp = linearAlgebra.Vector_Blerp;
+      _Vector_EqualsValue = linearAlgebra.Vector_EqualsValue;
+      _Vector_EqualsValue_leniency = linearAlgebra.Vector_EqualsValue_leniency;
     }
 
     /// <summary>The array of this vector.</summary>
@@ -7109,7 +6964,7 @@ namespace Seven.Mathematics
 		/// <param name="left">The left vector of the subtraction.</param>
 		/// <param name="right">The right vector of the subtraction.</param>
 		/// <returns>The result of the vector subtracton.</returns>
-		public static Vector<T> Subtract(Vector<T> left, Vector<T> right) { return _Vector_Add(left._vector, right._vector); }
+		public static Vector<T> Subtract(Vector<T> left, Vector<T> right) { return _Vector_Subtract(left._vector, right._vector); }
 		/// <summary>Multiplies all the components of a vecotr by a scalar.</summary>
 		/// <param name="left">The vector to have the components multiplied by.</param>
 		/// <param name="right">The scalars to multiply the vector components by.</param>

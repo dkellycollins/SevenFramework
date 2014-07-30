@@ -20,7 +20,8 @@ namespace Seven.Parallels
     public ReaderWriterLock()
     {
       _lock = new object();
-      _readers = 0; _writers = 0;
+      _readers = 0;
+      _writers = 0;
     }
     
     /// <summary>Thread safe enterance for readers.</summary>

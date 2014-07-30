@@ -11,6 +11,14 @@ namespace Seven.Structures
 
   public class Tree_Linked<T> : Tree<T>
   {
+    private class Node<T>
+    {
+      
+
+    }
+
+
+
     System.Collections.IEnumerator 
       System.Collections.IEnumerable.GetEnumerator()
     {

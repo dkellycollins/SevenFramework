@@ -43,6 +43,21 @@ namespace Seven.Structures
       _equate = equate;
     }
 
+    /// <summary>Adds a node to the graph.</summary>
+    /// <param name="node">The node to be added.</param>
+    public void Add(T node)
+    {
+      if (_nodes == null)
+        this._nodes = new Node[] { new Node(node) };
+      else
+      {
+        Node[] nodes = new Node[this._nodes.Length + 1];
+        Array.Copy(this._nodes, nodes, this._nodes.Length);
+        nodes[nodes.Length - 1] = new Node(node);
+        this._nodes = nodes;
+      }
+    }
+
     /// <summary>Adds an edge to this graph.</summary>
     /// <param name="from">The starting point of the edge.</param>
     /// <param name="to">The ending point of the edge.</param>
