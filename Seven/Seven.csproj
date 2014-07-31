@@ -115,8 +115,12 @@
     <Compile Include="Structures\Stack.cs" />
     <Compile Include="Structures\Tree.cs" />
     <Compile Include="Structures\Trie.cs" />
+    <Compile Include="Unsafe\Pointer.cs" />
+    <Compile Include="Unsafe\Unsafe.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
